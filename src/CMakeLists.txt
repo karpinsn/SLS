@@ -1,10 +1,39 @@
+#	-----------------------------------------------------------------------------
+# 	2010 Nik Karpinsky
+#	LGPL 2010
+#	-----------------------------------------------------------------------------
+
+cmake_minimum_required(VERSION 2.6)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/CMakeModules )
+
+# Set package properties
+project(Holoencoder)
+
+###
+# CMake Modules Paths
+
+###
+# Perform build configuration of dependencies
+
+# Set up QT4
+find_package(Qt4 COMPONENTS QtCore QtGui QtOpenGL REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(DevIL REQUIRED)
+
+include(${QT_USE_FILE})
+
+#	-----------------------------------------------------------------------------
+#	List all of the sources to be compiled
+#	-----------------------------------------------------------------------------
+
 set(SOURCES
 	
 	Application.cpp
 	MainWindow.cpp
 	OpenGLWidget.cpp
 	ShaderFacade.cpp
-	Holoviewer.cpp
 	Holoencoder.cpp
 	Camera.cpp
 	PointCloudMesh.cpp
@@ -13,7 +42,6 @@ set(SOURCES
 	MainWindow.h
 	OpenGLWidget.h
 	ShaderFacade.h
-	Holoviewer.h
 	Holoencoder.h
 	AOpenGLContext.h
 	Camera.h
@@ -26,7 +54,7 @@ set(SOURCES
 	glm/gtc/matrix_transform.hpp
 	)
 	
-set(UIS ui/Holoprojector.ui)	
+set(UIS ui/Holoencoder.ui)	
 	
 set(MOCS
 	MainWindow.h)	

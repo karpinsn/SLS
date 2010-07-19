@@ -27,6 +27,32 @@ void MainWindowController::onEncodeButton()
 	//m_mainWindow->m_holoViewer->setHoloImage(m_mainWindow->m_holoImage);
 }
 
+void MainWindowController::onOpenXYZM()
+{
+	QStringList files = QFileDialog::getOpenFileNames(m_mainWindow, "Select XYZM Files to Open", "/home", "Images (*.png *.jpg)");
+	
+	QStringList::const_iterator fileIterator;
+	
+	for (fileIterator = files.constBegin(); fileIterator != files.constEnd(); fileIterator++)
+	{
+		QListWidgetItem *xyzmFileWidget = new QListWidgetItem();
+		xyzmFileWidget->setText(fileIterator->toLocal8Bit().constData());
+		m_mainWindow->fileList->addItem(xyzmFileWidget);
+	}
+	
+	//	If we dont have a currently selected item then selected the first in the list
+	if (NULL == m_mainWindow->fileList->currentItem())
+	{
+		m_mainWindow->fileList->setCurrentRow(0);
+	}
+}
+
+void MainWindowController::selectXYZM(QListWidgetItem* current, QListWidgetItem* previous)
+{
+	//	Display the new XYZM file
+	cout << "New file selected" << endl;
+}
+
 MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
 {
 	//	Create room for a 3 color holoimage
@@ -35,20 +61,9 @@ MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
 	
 	// Sets up the interface elements from Designer file
 	setupUi(this);
-	/*
-	// Setup the decoder widget
-	glLayout->removeWidget(glDecoderView);
-	glDecoderView->setParent(0);
-	glDecoderView = NULL;
-	
-	m_holoViewer = new Holoviewer();
-	m_viewerWidget = new OpenGLWidget(this, m_holoViewer, QColor::fromRgb(255, 255, 255, 0));
-	m_viewerWidget->setMinimumSize(512, 512);
-	m_viewerWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-	glLayout->insertWidget(0, m_viewerWidget);*/
 	
 	// Setup the encoder widget
-	glLayout->removeWidget(glView);
+	horizontalLayout_3->removeWidget(glView);
 	glView->setParent(0);
 	glView = NULL;
 	
@@ -56,7 +71,7 @@ MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
 	m_glWidget = new OpenGLWidget(this, m_holoEncoder, QColor::fromRgb(0, 0, 0, 0));
 	m_glWidget->setMinimumSize(512, 512);
 	m_glWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-	glLayout->insertWidget(0, m_glWidget);
+	horizontalLayout_3->insertWidget(0, m_glWidget);
 }
 
 MainWindow::~MainWindow()
@@ -67,4 +82,6 @@ void MainWindow::connectSignalsWithController(QObject* controller)
 {
 	// Connect the interface events (signals) to the controller class object
 	connect(encodeButton, SIGNAL(clicked()), controller, SLOT(onEncodeButton()));
+	connect(fileList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), controller, SLOT(selectXYZM(QListWidgetItem*, QListWidgetItem*)));
+	connect(actionOpenXYZM, SIGNAL(triggered()), controller, SLOT(onOpenXYZM()));
 }

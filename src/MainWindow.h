@@ -3,13 +3,14 @@
 
 #include <iostream>
 #include <QtGui/QWidget>
+#include <qfiledialog.h>
+#include <QListWidgetItem>
 
 //	Qt auto generated headers
-#include "ui_Holoprojector.h"
+#include "ui_Holoencoder.h"
 
 #include "OpenGLWidget.h"
 #include "Holoencoder.h"
-#include "Holoviewer.h"
 #include "ImageIO.h"
 
 class MainWindowController;
@@ -27,6 +28,8 @@ public:
 	
 public slots:
 	void onEncodeButton();
+	void onOpenXYZM();
+	void selectXYZM(QListWidgetItem* current, QListWidgetItem* previous);
 
 private:
 	MainWindow* m_mainWindow;
@@ -48,7 +51,6 @@ private:
 	OpenGLWidget* m_glWidget;
 	OpenGLWidget* m_viewerWidget;
 	
-	Holoviewer* m_holoViewer;
 	Holoencoder* m_holoEncoder;
 	
 	unsigned char* m_holoImage;

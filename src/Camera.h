@@ -2,10 +2,11 @@
 
 #include <QtOpenGL/QGLWidget>
 
-#include <math.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/type_ptr.hpp>
 
-#include "Matrix.h"
-#include "Vector.h"
+#include <math.h>
 
 using namespace std;
 
@@ -48,8 +49,8 @@ protected:
     GLfloat   tb_currPos[2];
     GLfloat   tb_prevPos[2];
     
-	Matrix*   tb_transform;
-    Matrix*   tb_accuTransform;
+	glm::mat4   tb_transform;
+    glm::mat4   tb_accuTransform;
 
 	float	  m_viewLength;
     GLuint    tb_width;
@@ -61,5 +62,4 @@ protected:
     void _zoom(float dx, float dy);
     void _twist(float dx, float dy);
     void _pan(float dx, float dy);
-    void _atRotate(float x,  float y,  float z,  float angle);
 };

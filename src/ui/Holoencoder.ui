@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>671</width>
-    <height>614</height>
+    <width>739</width>
+    <height>560</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,35 +19,34 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_8">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <layout class="QHBoxLayout" name="glLayout">
-        <item>
-         <widget class="QWidget" name="glView" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>512</width>
-            <height>512</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>512</width>
-            <height>512</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QWidget" name="glView" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>512</width>
+          <height>512</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>512</width>
+          <height>512</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="QListWidget" name="fileList"/>
+        </item>
         <item>
          <widget class="QPushButton" name="encodeButton">
           <property name="text">
@@ -66,7 +65,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>671</width>
+     <width>739</width>
      <height>22</height>
     </rect>
    </property>
@@ -74,11 +73,11 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionOpen_XYZ"/>
+    <addaction name="actionOpenXYZM"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
-  <action name="actionOpen_XYZ">
+  <action name="actionOpenXYZM">
    <property name="text">
     <string>Open XYZ</string>
    </property>

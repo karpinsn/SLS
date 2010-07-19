@@ -1,22 +1,18 @@
-#	-----------------------------------------------------------------------------
+#	---------------------------------------------------------------------------------------
 # 	2010 Nik Karpinsky
 #	LGPL 2010
-#	-----------------------------------------------------------------------------
+#	---------------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 2.6)
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/CMakeModules )
 
 # Set package properties
 project(Holoencoder)
 
-###
-# CMake Modules Paths
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/../CMakeModules")
+SET(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/${PROJECT_NAME}")
 
-###
-# Perform build configuration of dependencies
-
-# Set up QT4
+#	-----------------------------------------
+# 	Perform build configuration of dependencies
 find_package(Qt4 COMPONENTS QtCore QtGui QtOpenGL REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
@@ -24,9 +20,9 @@ find_package(DevIL REQUIRED)
 
 include(${QT_USE_FILE})
 
-#	-----------------------------------------------------------------------------
+#	---------------------------------------------------------------------------------------
 #	List all of the sources to be compiled
-#	-----------------------------------------------------------------------------
+#	---------------------------------------------------------------------------------------
 
 set(SOURCES
 	
@@ -36,19 +32,19 @@ set(SOURCES
 	ShaderFacade.cpp
 	Holoencoder.cpp
 	Camera.cpp
-	PointCloudMesh.cpp
 	ImageIO.cpp
+	XYZFileIO.cpp
+	XYZMesh.cpp
 	
 	MainWindow.h
 	OpenGLWidget.h
 	ShaderFacade.h
 	Holoencoder.h
-	AOpenGLContext.h
 	Camera.h
-	Matrix.h
-	Vector.h
-	PointCloudMesh.h
 	ImageIO.h
+	XYZFileIO.h
+	XYZMesh.h
+	XYZPoint.h
 	
 	glm/glm.hpp
 	glm/gtc/matrix_transform.hpp
@@ -56,12 +52,11 @@ set(SOURCES
 	
 set(UIS ui/Holoencoder.ui)	
 	
-set(MOCS
-	MainWindow.h)	
+set(MOCS MainWindow.h)	
 
-#	-----------------------------------------------------------------------------
+#	---------------------------------------------------------------------------------------
 #							Qt generation
-#	-----------------------------------------------------------------------------
+#	---------------------------------------------------------------------------------------
 
 # Let QT pre-process the files and add the generated files to the source list
 qt4_wrap_ui(GENERATED_SOURCES ${UIS})
@@ -74,52 +69,13 @@ include_directories(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${IL_INCLUDE_DIR})
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}") 
 
-#	-----------------------------------------------------------------------------
-#							Copy Shaders to build
-#	-----------------------------------------------------------------------------
-
-message(STATUS "Copying shaders to the build directory")
-
-get_target_property(APP_LOCATION ${PROJECT_NAME} LOCATION)
-message(${PROJECT_BINARY_DIR})
-get_filename_component(APP_PATH ${APP_LOCATION} PATH)
-message(${APP_PATH}/../Shaders/)
-
-add_custom_command(TARGET ${PROJECT_NAME}
-				   POST_BUILD
-				   COMMAND ${CMAKE_COMMAND}
-				   ARGS -E make_directory ${APP_PATH}/../Shaders/
-				   COMMENT "Creating directory: ${APP_PATH}/../Shaders/")
-
-message(STATUS "Looking for shaders in the following directory: " ${CMAKE_CURRENT_SOURCE_DIR})
-file(GLOB SHADERS_TO_COPY
-        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/Shaders/ "Shaders/*.frag" "Shaders/*.vert")
-
-message(STATUS "Copying the following shaders: " ${SHADERS_TO_COPY})
-foreach(FILENAME ${SHADERS_TO_COPY})
-   	set(SRC "${CMAKE_CURRENT_SOURCE_DIR}/Shaders/${FILENAME}")
-   	set(DST "${APP_PATH}/../Shaders/${FILENAME}")
-
-	message("SRC " ${SRC})
-	message("DST " ${DST})
-
-	# Copy the shader to the directory
-   	add_custom_command(TARGET ${PROJECT_NAME}
-   					   POST_BUILD
-					   COMMAND ${CMAKE_COMMAND} 
-    				   ARGS -E copy ${SRC} ${DST})
-endforeach(FILENAME)
-
-#	-----------------------------------------------------------------------------
+#	---------------------------------------------------------------------------------------
 #							Build the app
-#	-----------------------------------------------------------------------------
+#	---------------------------------------------------------------------------------------
 
 # Build and link the app!
 
-# The executable must be a different name than the project for Eclipse
-set(EXECUTABLE_NAME ${PROJECT_NAME}Main) 
-
-add_executable(${EXECUTABLE_NAME}
+add_executable(${PROJECT_NAME}
 	MACOSX_BUNDLE
 	WIN32
 	${SOURCES}
@@ -129,8 +85,48 @@ add_executable(${EXECUTABLE_NAME}
 	${MOCS}
 	${RESOURCES})
 
-target_link_libraries(${EXECUTABLE_NAME} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${QT_LIBRARIES} ${IL_LIBRARIES} ${ILU_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${QT_LIBRARIES} ${IL_LIBRARIES} ${ILU_LIBRARIES})
 
-install (TARGETS ${EXECUTABLE_NAME}
+#	---------------------------------------------------------------------------------------
+#							Copy Shaders to build
+#	---------------------------------------------------------------------------------------
+
+message(STATUS "Setting up shader copy commands")
+
+set(SHADER_OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/Shaders")
+message("Shaders will be copied to: ${SHADER_OUTPUT}")
+
+add_custom_command(TARGET ${PROJECT_NAME}
+				   POST_BUILD
+				   COMMAND ${CMAKE_COMMAND}
+				   ARGS -E make_directory ${SHADER_OUTPUT}
+				   COMMENT "Creating directory: ${SHADER_OUTPUT}")
+
+message(STATUS "Looking for shaders in the following directory: " ${CMAKE_CURRENT_SOURCE_DIR})
+file(GLOB SHADERS_TO_COPY
+        RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/Shaders/" 
+		"Shaders/*.frag" "Shaders/*.vert")
+
+message(STATUS "Copying the following shaders: " ${SHADERS_TO_COPY})
+foreach(FILENAME ${SHADERS_TO_COPY})
+   	set(SRC "${CMAKE_CURRENT_SOURCE_DIR}/Shaders/${FILENAME}")
+   	set(DST "${SHADER_OUTPUT}/${FILENAME}")
+
+	message("SRC " ${SRC})
+	message("DST " ${DST})
+
+	# Copy the shader to the directory
+   	add_custom_command(TARGET ${PROJECT_NAME}
+   					   POST_BUILD
+					   COMMAND ${CMAKE_COMMAND} 
+    				   ARGS -E copy "${SRC}" "${DST}"
+					   COMMENT "Copying ${SRC} to ${DST}")
+endforeach(FILENAME)
+
+#	---------------------------------------------------------------------------------------
+#							Install
+#	---------------------------------------------------------------------------------------
+
+install (TARGETS ${PROJECT_NAME}
 		RUNTIME DESTINATION bin/
 		BUNDLE DESTINATION ./ )

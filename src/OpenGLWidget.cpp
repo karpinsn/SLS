@@ -1,6 +1,6 @@
 #include "OpenGLWidget.h"
 
-OpenGLWidget::OpenGLWidget(QWidget *parent, AOpenGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+OpenGLWidget::OpenGLWidget(QWidget *parent, Holoencoder* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
 	m_glContext = glContext;
 	m_clearColor = clearColor;

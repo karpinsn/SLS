@@ -8,14 +8,13 @@
 #include <glew.h>
 #include <QtOpenGL/QGLWidget>
 
-#include "AOpenGLContext.h"
 #include "ShaderFacade.h"
-#include "Matrix.h"
 #include "Camera.h"
+#include "XYZMesh.h"
 
 using namespace std;
 
-class Holoencoder : public AOpenGLContext 
+class Holoencoder 
 {
 private:
 	ShaderFacade m_encoderShader;
@@ -39,9 +38,7 @@ public:
 	virtual void resize(int width, int height);
 	virtual void mousePressEvent(int mouseX, int mouseY);
 	virtual void mouseMoveEvent(int mouseX, int mouseY);
-	
-private:
-	void _drawBoundingCube(void);
+	void setCurrentMesh(XYZMesh* current);
 };
 
 #endif

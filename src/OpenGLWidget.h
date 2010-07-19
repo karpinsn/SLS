@@ -9,17 +9,17 @@
 #include <QtGui>
 #include <iostream>
 
-#include "AOpenGLContext.h"
+#include "Holoencoder.h"
 #include "Camera.h"
 
 class OpenGLWidget : public QGLWidget
 {
 private:
-	AOpenGLContext* m_glContext;
+	Holoencoder		*m_glContext;
 	
 	QColor			m_clearColor;
 public:
-	OpenGLWidget(QWidget* parent, AOpenGLContext* glContext, QColor clearColor);
+	OpenGLWidget(QWidget* parent, Holoencoder* glContext, QColor clearColor);
 	~OpenGLWidget();
 
 	QSize minimumSizeHint() const;

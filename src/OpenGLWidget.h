@@ -10,18 +10,21 @@
 #include <iostream>
 
 #include "Holoencoder.h"
+#include "Holodecoder.h"
 #include "Camera.h"
+#include "AbstractGLContext.h"
 
 class OpenGLWidget : public QGLWidget
 {
 private:
-	Holoencoder		*m_glContext;
+	AbstractGLContext		*m_glContext;
 	
-	QColor			m_clearColor;
+	QColor					m_clearColor;
 public:
-	OpenGLWidget(QWidget* parent, Holoencoder* glContext, QColor clearColor);
+	OpenGLWidget(QWidget* parent, AbstractGLContext* glContext, QColor clearColor);
 	~OpenGLWidget();
 
+	void updateScene();
 	QSize minimumSizeHint() const;
 	QSize sizeHint() const;
 	

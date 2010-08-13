@@ -7,17 +7,18 @@
 
 #include <QtOpenGL/QGLWidget>
 
+#include "AbstractMesh.h"
 #include "XYZPoint.h"
 
 using namespace std;
 
-class XYZMesh
+class XYZMesh : public AbstractMesh
 {
 public:
 	XYZMesh(int meshWidth, int meshHeight, XYZPoint *meshPoints);
 	~XYZMesh(void);
 
-	void draw(void);
+	virtual void draw(void);
 	int getMeshWidth(void);
 	int getMeshHeight(void);
 	int getMeshSize(void);

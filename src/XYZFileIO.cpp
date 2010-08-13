@@ -8,7 +8,7 @@ XYZFileIO::~XYZFileIO()
 {
 }
 
-XYZMesh* XYZFileIO::newMeshFromFile(const string &fileName)
+AbstractMesh* XYZFileIO::newMeshFromFile(const string &fileName)
 {
 	XYZMesh *mesh;
 
@@ -59,8 +59,12 @@ XYZMesh* XYZFileIO::newMeshFromFile(const string &fileName)
 
 			XYZPoint *points = new XYZPoint[meshSize];
 			
+			float scalingFactor = header.meshHeight > header.meshWidth ? header.meshHeight : header.meshWidth;
+			
 			for(int point = 0; point < meshSize; point++)
 			{
+				vertices[point] /= scalingFactor;
+				
 				points[point].vertex = vertices[point];
 				points[point].textureVertex = textureVertices[point];
 				//	If the point is valid then store 255 otherwise store 0

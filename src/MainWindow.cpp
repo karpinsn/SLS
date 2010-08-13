@@ -12,24 +12,39 @@ MainWindowController::~MainWindowController()
 
 void MainWindowController::showWidget()
 {
-	ilInit();
 	m_mainWindow->show();
 }
 
 void MainWindowController::onEncodeButton()
 {
 	std::cout << "Encode Button Pushed" << std::endl;
-	m_mainWindow->m_holoEncoder->encode(m_mainWindow->m_holoImage);
+	//GLuint texID = m_mainWindow->m_holoEncoder->encode(m_mainWindow->m_holoImage);
 	
 	ImageIO io;
-	io.saveRGBImage("/Users/Karpinsn/Workspace/3DMVLab/HoloimageViewer/trunk/Holoimage.png", m_mainWindow->m_holoImage, 512, 512);
+	io.saveRGBImage("/Users/Karpinsn/Holoimage.png", 512, 512);
+	io.saveAviFile("/Users/Karpinsn/HoloVideo.mpg", 512, 512, 30);
+	
+	XYZFileIO fileIO;
+	
+	for(int itemNumber = 0; itemNumber < m_mainWindow->fileList->count(); itemNumber++)
+	{
+		QListWidgetItem *item = m_mainWindow->fileList->item(itemNumber);
+	
+		AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toStdString());
+		m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
+		
+		GLuint texID = m_mainWindow->m_holoEncoder->encode();
+		io.saveAviFileWriteFrame(texID, 512, 512);
+	}
+	
+	io.saveAviFileFinish();
 	
 	//m_mainWindow->m_holoViewer->setHoloImage(m_mainWindow->m_holoImage);
 }
 
 void MainWindowController::onOpenXYZM()
 {
-	QStringList files = QFileDialog::getOpenFileNames(m_mainWindow, "Select XYZM Files to Open", "/home", "Images (*.png *.jpg)");
+	QStringList files = QFileDialog::getOpenFileNames(m_mainWindow, "Select XYZM Files to Open", "/home", "Images (*.xyzm)");
 	
 	QStringList::const_iterator fileIterator;
 	
@@ -51,6 +66,11 @@ void MainWindowController::selectXYZM(QListWidgetItem* current, QListWidgetItem*
 {
 	//	Display the new XYZM file
 	cout << "New file selected" << endl;
+	
+	XYZFileIO fileIO;
+	AbstractMesh* currentMesh = fileIO.newMeshFromFile(current->text().toStdString());
+	m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
+	m_mainWindow->m_glWidget->updateScene();
 }
 
 MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
@@ -68,6 +88,7 @@ MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
 	glView = NULL;
 	
 	m_holoEncoder = new Holoencoder();
+	m_holoDecoder = new Holodecoder();
 	m_glWidget = new OpenGLWidget(this, m_holoEncoder, QColor::fromRgb(0, 0, 0, 0));
 	m_glWidget->setMinimumSize(512, 512);
 	m_glWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);

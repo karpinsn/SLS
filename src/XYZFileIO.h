@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "AbstractMesh.h"
 #include "XYZMesh.h"
 
 using namespace std;
@@ -14,13 +15,11 @@ struct XYZHeader
 	int meshHeight;
 };
 
-
-
 class XYZFileIO
 {
 public:
 	XYZFileIO(void);
 	~XYZFileIO(void);
 
-	XYZMesh* newMeshFromFile(const string &fileName);
+	AbstractMesh* newMeshFromFile(const string &fileName);
 };

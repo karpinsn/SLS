@@ -15,8 +15,8 @@ SET(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/${PROJECT_NAME}")
 # 	Perform build configuration of dependencies
 find_package(Qt4 COMPONENTS QtCore QtGui QtOpenGL REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(DevIL REQUIRED)
 
 include(${QT_USE_FILE})
 
@@ -35,6 +35,8 @@ set(SOURCES
 	ImageIO.cpp
 	XYZFileIO.cpp
 	XYZMesh.cpp
+	Holodecoder.cpp
+	PointCloudMesh.cpp
 	
 	MainWindow.h
 	OpenGLWidget.h
@@ -45,7 +47,11 @@ set(SOURCES
 	XYZFileIO.h
 	XYZMesh.h
 	XYZPoint.h
-	
+	AbstractMesh.h
+	Holodecoder.h
+	PointCloudMesh.h
+	AbstractGLContext.h	
+
 	glm/glm.hpp
 	glm/gtc/matrix_transform.hpp
 	)
@@ -65,7 +71,7 @@ qt4_wrap_cpp(GENERATED_SOURCES ${MOCS})
 source_group("Generated Sources - Do Not Edit" FILES ${GENERATED_SOURCES})
 
 # Make sure the compiler can find the pre-processed files from qt4_wrap_ui
-include_directories(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${IL_INCLUDE_DIR})
+include_directories(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${OpenCV_INCLUDE_DIRS})
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}") 
 
@@ -85,7 +91,7 @@ add_executable(${PROJECT_NAME}
 	${MOCS}
 	${RESOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${QT_LIBRARIES} ${IL_LIBRARIES} ${ILU_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${QT_LIBRARIES} ${OpenCV_LIBS})
 
 #	---------------------------------------------------------------------------------------
 #							Copy Shaders to build

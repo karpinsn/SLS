@@ -1,64 +1,118 @@
 #include "ImageIO.h"
 
-bool ImageIO::loadOpenGLTexture2D(const string &filename, GLuint *textureName, GLint internalFormat)
+ImageIO::ImageIO(void)
 {
-	ILuint texid = 0;
-	ilGenImages(1, &texid);
-	ilBindImage(texid);
-	bool success = ilLoadImage(filename.c_str());
+	m_videoWriterInUse = false;
+	m_imageWidth = 1;
+	m_imageHeight = 1;
 	
-	if (success)
-	{
-		success = ilConvertImage(internalFormat, IL_UNSIGNED_BYTE);
-		if (success)
-		{
-			//	Generate and bind the texture
-			glGenTextures(1, textureName); 
-			glBindTexture(GL_TEXTURE_2D, *textureName);
-			
-			//	Use linear interpolation and then generate the mipmap
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
-			gluBuild2DMipmaps(GL_TEXTURE_2D, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH),
-							  ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), 
-							  GL_UNSIGNED_BYTE, ilGetData());
-		}
-	}
-	
-	//	Since the image is a texture we can now delete the image
-	ilDeleteImages(1, &texid);
-	
-	return success;
+	m_imageHandle = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_8U, 3);
 }
 
-bool ImageIO::saveRGBImage(const string &filename, GLvoid *imageData, unsigned int imageWidth, unsigned int imageHeight)
+ImageIO::~ImageIO()
 {
-	ILuint texid = 0;
-	ilGenImages(1, &texid);
-	ilBindImage(texid);
-
-	bool success = ilTexImage(imageWidth, imageHeight, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, imageData);
-	if (success)
+	if (m_videoWriterInUse) 
 	{
-		success = ilSetData(imageData);
-		if (success)
-		{
-			success = ilSaveImage(filename.c_str());
-		}
+		clog << "Video writer stream not properly closed. Closing video writer stream" << endl;
+		cvReleaseVideoWriter(&m_videoWriterHandle);
 	}
-	
-	return success;
+	cvReleaseImage(&m_imageHandle);
 }
 
-bool ImageIO::saveGrayScaleImage(const string &filename, unsigned char *imageData, unsigned int imageWidth, unsigned int imageHeight)
+bool ImageIO::saveRGBImage(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight)
 {
-	unsigned char grayScaleData[imageHeight * imageWidth * 3];
-	for (unsigned int pixel = 0; pixel < imageHeight * imageWidth; pixel++)
+	ensureImageSize(imageWidth, imageHeight);
+	
+	glReadBuffer(GL_FRONT);
+	glReadPixels(0, 0, imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, m_imageHandle->imageData);
+	
+	//	Flip the image and convert to BGR since that is how OpenCV is looking for it
+	cvFlip(m_imageHandle, 0);
+	cvCvtColor(m_imageHandle, m_imageHandle, CV_RGB2BGR);
+	
+	return cvSaveImage(filename.c_str(), m_imageHandle);
+}
+
+bool ImageIO::saveRGBImage(const string &filename, GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight)
+{	
+	textureToImageHandle(textureID, imageWidth, imageHeight);
+	
+	return cvSaveImage(filename.c_str(), m_imageHandle);
+}
+
+bool ImageIO::saveAviFile(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps)
+{
+	bool openedVideoWriter = false;
+	
+	if(!m_videoWriterInUse)
 	{
-		grayScaleData[pixel * 3] = imageData[pixel];
-		grayScaleData[pixel * 3 + 1] = imageData[pixel];
-		grayScaleData[pixel * 3 + 2] = imageData[pixel];
+		m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), CV_FOURCC('P', 'I', 'M', '1'), fps, cvSize(videoWidth, videoHeight), 1);
+		m_videoWriterInUse = true;
+		
+		openedVideoWriter = m_videoWriterInUse;
+	}
+	else
+	{
+		clog << "A video stream is already in use. Cannot open another one till the first one is closed" << endl;
+	}
+
+	return openedVideoWriter;
+}
+
+bool ImageIO::saveAviFileWriteFrame(GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight)
+{	
+	if (m_videoWriterInUse) 
+	{
+		textureToImageHandle(textureID, imageWidth, imageHeight);
+		cvWriteFrame(m_videoWriterHandle, m_imageHandle);
+	}
+	else 
+	{
+		clog << "Unable to write frame out to file as no current video writer handle exists" << endl;
+	}
+
+	return m_videoWriterInUse;
+}
+
+bool ImageIO::saveAviFileFinish(void)
+{
+	bool successfullyClosed = false;
+	
+	if (m_videoWriterInUse)
+	{
+		cvReleaseVideoWriter(&m_videoWriterHandle);
+		m_videoWriterInUse = false;
+		successfullyClosed = true;
+	}
+	else 
+	{
+		clog << "Attempt to close video writer before it was opened" << endl;
 	}
 	
-	return saveRGBImage(filename, grayScaleData, imageWidth, imageHeight);
+	return successfullyClosed;
+}
+
+void ImageIO::textureToImageHandle(GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight)
+{
+	ensureImageSize(imageWidth, imageHeight);
+	
+	//	Bind the texture and stream into the image handle
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, m_imageHandle->imageData);
+	
+	//	Flip the image and convert to BGR since that is how OpenCV is looking for it
+	cvFlip(m_imageHandle, 0);
+	cvCvtColor(m_imageHandle, m_imageHandle, CV_RGB2BGR);
+}
+
+void ImageIO::ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight)
+{
+	//	Check and see if the image is the correct size. If it is do nothing
+	if (m_imageWidth != imageWidth && m_imageHeight != imageHeight)
+	{
+		cvReleaseImage(&m_imageHandle);
+		m_imageHandle = cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_8U, 3);
+		m_imageWidth = imageWidth;
+		m_imageHeight = imageHeight;
+	}
 }

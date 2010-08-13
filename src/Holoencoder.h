@@ -10,11 +10,12 @@
 
 #include "ShaderFacade.h"
 #include "Camera.h"
-#include "XYZMesh.h"
+#include "AbstractMesh.h"
+#include "AbstractGLContext.h"
 
 using namespace std;
 
-class Holoencoder 
+class Holoencoder : public AbstractGLContext
 {
 private:
 	ShaderFacade m_encoderShader;
@@ -28,17 +29,31 @@ private:
 	int m_translateY;
 	
 	Camera* m_camera;
-	
 	glm::mat4 m_cameraProjectionMatrix;
 	
+	AbstractMesh* m_currentMesh;
+	
+	//	Render to texture items
+	GLuint m_holoimageFBO;
+	GLuint m_holoimageRBO;
+	GLuint m_holoimageTextureID;
+	
+	bool m_hasBeenInit;
+	
 public:
+	Holoencoder(void);
+	
 	virtual void init();
     virtual void draw(void);
-	void encode(unsigned char* holoImage);
+	GLuint encode();
 	virtual void resize(int width, int height);
 	virtual void mousePressEvent(int mouseX, int mouseY);
 	virtual void mouseMoveEvent(int mouseX, int mouseY);
-	void setCurrentMesh(XYZMesh* current);
+	void setCurrentMesh(AbstractMesh* current);
+	
+private:
+	void initFBO(void);
+	
 };
 
 #endif

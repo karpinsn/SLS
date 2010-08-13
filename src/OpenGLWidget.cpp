@@ -1,6 +1,6 @@
 #include "OpenGLWidget.h"
 
-OpenGLWidget::OpenGLWidget(QWidget *parent, Holoencoder* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+OpenGLWidget::OpenGLWidget(QWidget *parent, AbstractGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
 	m_glContext = glContext;
 	m_clearColor = clearColor;
@@ -40,6 +40,11 @@ void OpenGLWidget::initializeGL()
 	glShadeModel(GL_SMOOTH);
 }
 
+void OpenGLWidget::updateScene()
+{
+	updateGL();
+}
+
 void OpenGLWidget::paintGL()
 {
 	glMatrixMode(GL_MODELVIEW);
@@ -75,16 +80,13 @@ void OpenGLWidget::resizeGL(int width, int height)
 void OpenGLWidget::mousePressEvent(QMouseEvent *event)
 {
 	std::cout << "Mouse Pressed: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
-	
 	m_glContext->mousePressEvent(event->pos().x(), event->pos().y());
-	//m_camera->mouseMotion(event->pos().x(), event->pos().y());
 	updateGL();
 }
 
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *event)
 {
 	std::cout << "Mouse Moved: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
-	//m_camera->mouseMotion(event->pos().x(), event->pos().y());
 	m_glContext->mouseMoveEvent(event->pos().x(), event->pos().y());
 	updateGL();
 }
@@ -92,6 +94,5 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *event)
 void OpenGLWidget::mouseReleaseEvent(QMouseEvent* event)
 {
 	std::cout << "Mouse Released: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
-	//m_camera->mouseRelease(event->pos().x(), event->pos().y());
 	updateGL();
 }

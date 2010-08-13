@@ -11,7 +11,10 @@
 
 #include "OpenGLWidget.h"
 #include "Holoencoder.h"
+#include "Holodecoder.h"
 #include "ImageIO.h"
+#include "AbstractMesh.h"
+#include "XYZFileIO.h"
 
 class MainWindowController;
 class MainWindow;
@@ -44,6 +47,8 @@ public:
 	MainWindow(QMainWindow* parent);
 	~MainWindow();
 	
+	void glInit(void);
+	
 	// Connect up the signals with the controller
 	void connectSignalsWithController(QObject* controller);
 	
@@ -52,6 +57,7 @@ private:
 	OpenGLWidget* m_viewerWidget;
 	
 	Holoencoder* m_holoEncoder;
+	Holodecoder* m_holoDecoder;
 	
 	unsigned char* m_holoImage;
 };

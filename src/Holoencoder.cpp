@@ -1,62 +1,111 @@
 #include "Holoencoder.h"
 
-void Holoencoder::init()
+Holoencoder::Holoencoder(void)
 {
-	m_encoderShader.init("Shaders/Holoencoder.vert", "Shaders/Holoencoder.frag");
-	
-	m_translateX = 0;
-	m_translateY = 0;
-	m_width = 512;
-	m_height = 512;
+	m_hasBeenInit = false;
+}
 
-	m_camera = new Camera();
-	m_camera->initRotatedCam(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+void Holoencoder::init()
+{	
+	if(!m_hasBeenInit)
+	{
+		m_translateX = 0;
+		m_translateY = 0;
+		m_width = 512;
+		m_height = 512;
 	
-	//	Define the camera projection matrix
-	m_cameraProjectionMatrix = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
-										 0.0f, 1.0f, 0.0f, 0.0f,
-										 0.0f, 0.0f, 1.0f, 0.0f,
-										 0.0f, 0.0f, -1.0f, 1.0f);
+		m_currentMesh = NULL;
+		initFBO();
+	
+		m_encoderShader.init("Shaders/Holoencoder.vert", "Shaders/Holoencoder.frag");
+
+		m_camera = new Camera();
+		m_camera->initRotatedCam(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	
+		//	Define the camera projection matrix
+		m_cameraProjectionMatrix = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
+											 0.0f, 1.0f, 0.0f, 0.0f,
+											 0.0f, 0.0f, 1.0f, 0.0f,
+											 0.0f, 0.0f, -1.0f, 1.0f);
+		
+		m_hasBeenInit = true;
+	}
+}
+
+void Holoencoder::initFBO()
+{
+	//	Create the texture object that we will be rendering to
+	glGenTextures(1, &m_holoimageTextureID);
+	glBindTexture(GL_TEXTURE_2D, m_holoimageTextureID);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // automatic mipmap
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	//	Need to create a render buffer object for the depth buffer
+	glGenRenderbuffersEXT(1, &m_holoimageRBO);
+	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, m_holoimageRBO);
+	glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, m_width, m_height);
+	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0);
+	
+	//	Create a framebuffer object
+	glGenFramebuffersEXT(1, &m_holoimageFBO);
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
+	
+	//	Attach the texture to the FBO color attachment point
+	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_holoimageTextureID, 0);
+	
+	//	Attach the renderbuffer to the depth attachment point
+	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, m_holoimageRBO);
+	
+	//	Check the FBO Status and make sure that it is complete
+	GLenum status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+	if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
+	{
+		clog << "Holoimage FBO not correctly created" << endl;
+	}
+	
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 }
 
 void Holoencoder::draw(void)
 {	
-	m_camera->applyMatrix();
-	//	Draw the meshes
-	//_drawBoundingCube();
-	
-	glm::mat4 cameraModelViewMatrix = m_cameraProjectionMatrix;
 	glPushMatrix();
-
-	//	Need to perform the operation on both the model view and cameraModelView
-	glTranslatef((float)m_translateX/(float)m_width, (float)m_translateY/(float)m_height, 0.0f);
-	cameraModelViewMatrix = glm::translate(cameraModelViewMatrix, glm::vec3((float)m_translateX/(float)m_width, (float)m_translateY/(float)m_height, 0.0f));
-
+	
+	m_camera->applyMatrix();
+	
+	//	Draw the currentMesh
+	glm::mat4 cameraModelViewMatrix = m_cameraProjectionMatrix;
+	
 	m_encoderShader.bind();
 	GLint projectorModelViewLoc = glGetUniformLocation(m_encoderShader.shaderID(), "projectorModelView");
-	glUniformMatrix4fv(projectorModelViewLoc, 16, false, glm::value_ptr(cameraModelViewMatrix));//m_cameraModelView.m);
+	projectorModelViewLoc = glGetUniformLocation(m_encoderShader.shaderID(), "projectorModelView");
+	glUniformMatrix4fv(projectorModelViewLoc, 1, false, glm::value_ptr(cameraModelViewMatrix));
 	
-	GLUquadric* quad = gluNewQuadric();
-	gluSphere(quad, .5f, 128, 128);
+	if(NULL != m_currentMesh)
+	{
+		m_currentMesh->draw();
+	}
+	
 	m_encoderShader.unbind();
 	
 	glPopMatrix();
-	cameraModelViewMatrix = m_cameraProjectionMatrix;
-	
-	m_encoderShader.bind();
-	
-	projectorModelViewLoc = glGetUniformLocation(m_encoderShader.shaderID(), "projectorModelView");
-	glUniformMatrix4fv(projectorModelViewLoc, 16, false, glm::value_ptr(cameraModelViewMatrix));
-
-	GLUquadric* quad2 = gluNewQuadric();
-	gluSphere(quad2, .5f, 128, 128);
-	m_encoderShader.unbind();
 }
 
-void Holoencoder::encode(unsigned char* holoImage)
-{
-	glReadBuffer( GL_FRONT );
-	glReadPixels(0, 0, 512, 512, GL_RGB, GL_UNSIGNED_BYTE, holoImage);
+GLuint Holoencoder::encode()
+{	
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	draw();
+	
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+	
+	return m_holoimageTextureID;
 }
 
 void Holoencoder::resize(int width, int height)
@@ -64,6 +113,7 @@ void Holoencoder::resize(int width, int height)
 	m_width = width;
 	m_height = height;
 	glOrtho(-1.0, 1.0, -1.0, 1.0, 0.0, 100.0);
+	//glOrtho(0.0, 1.0, 0.0, 1.0, 0.0, 100.0);
 }
 
 void Holoencoder::mousePressEvent(int mouseX, int mouseY)
@@ -76,4 +126,15 @@ void Holoencoder::mouseMoveEvent(int mouseX, int mouseY)
 {
 	m_translateX = mouseX - m_previousX;
 	m_translateY = -(mouseY - m_previousY);
+}
+
+void Holoencoder::setCurrentMesh(AbstractMesh* current)
+{
+	if(NULL != m_currentMesh)
+	{
+		//	Make sure to delete the current mesh if its not null
+		delete m_currentMesh;
+	}
+	
+	m_currentMesh = current;
 }

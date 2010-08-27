@@ -82,7 +82,6 @@ void Holoencoder::draw(void)
 	
 	m_encoderShader.bind();
 	GLint projectorModelViewLoc = glGetUniformLocation(m_encoderShader.shaderID(), "projectorModelView");
-	projectorModelViewLoc = glGetUniformLocation(m_encoderShader.shaderID(), "projectorModelView");
 	glUniformMatrix4fv(projectorModelViewLoc, 1, false, glm::value_ptr(cameraModelViewMatrix));
 	
 	if(NULL != m_currentMesh)

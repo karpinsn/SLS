@@ -2,10 +2,16 @@
 #ifndef _OPENGLWIDGET_H_
 #define _OPENGLWIDGET_H_
 
-#include <glew.h>
+#ifdef __APPLE__
+	#include <glew.h>
+	#include <QtOpenGL/QGLWidget>
+#else
+	#include <GL/glew.h>
+	#include <windows.h>
+	#include <QtOpenGL/QGLWidget>
+#endif
 
 #include <QtCore/QTimer>
-#include <QtOpenGL/QGLWidget>
 #include <QtGui>
 #include <iostream>
 
@@ -14,19 +20,29 @@
 #include "Camera.h"
 #include "AbstractGLContext.h"
 
+class Holodecoder;
+
 class OpenGLWidget : public QGLWidget
 {
 private:
 	AbstractGLContext		*m_glContext;
 	
 	QColor					m_clearColor;
+	
+	QTime movieTimer;
+	ImageIO m_aviIO;
+	Holodecoder* m_holoDecoder;
+	
 public:
 	OpenGLWidget(QWidget* parent, AbstractGLContext* glContext, QColor clearColor);
 	~OpenGLWidget();
 
 	void updateScene();
+	void setNewGLContext(AbstractGLContext* glContext);
 	QSize minimumSizeHint() const;
 	QSize sizeHint() const;
+	
+	void playMovie(Holodecoder* decoder);
 	
 protected:
 	void initializeGL();
@@ -35,6 +51,8 @@ protected:
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent* event);
+	
+	void timerEvent(QTimerEvent* event);
 };
 
 #endif

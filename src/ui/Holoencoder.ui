@@ -74,12 +74,18 @@
      <string>File</string>
     </property>
     <addaction name="actionOpenXYZM"/>
+    <addaction name="actionOpen_Holovideo"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <action name="actionOpenXYZM">
    <property name="text">
     <string>Open XYZ</string>
+   </property>
+  </action>
+  <action name="actionOpen_Holovideo">
+   <property name="text">
+    <string>Open Holovideo</string>
    </property>
   </action>
  </widget>

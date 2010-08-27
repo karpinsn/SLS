@@ -3,6 +3,7 @@
 ImageIO::ImageIO(void)
 {
 	m_videoWriterInUse = false;
+	m_videoReaderInUse = false;
 	m_imageWidth = 1;
 	m_imageHeight = 1;
 	
@@ -27,7 +28,7 @@ bool ImageIO::saveRGBImage(const string &filename, const unsigned int imageWidth
 	glReadPixels(0, 0, imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, m_imageHandle->imageData);
 	
 	//	Flip the image and convert to BGR since that is how OpenCV is looking for it
-	cvFlip(m_imageHandle, 0);
+	//cvFlip(m_imageHandle, 0);
 	cvCvtColor(m_imageHandle, m_imageHandle, CV_RGB2BGR);
 	
 	return cvSaveImage(filename.c_str(), m_imageHandle);
@@ -46,7 +47,7 @@ bool ImageIO::saveAviFile(const string &filename, const unsigned int videoWidth,
 	
 	if(!m_videoWriterInUse)
 	{
-		m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), CV_FOURCC('P', 'I', 'M', '1'), fps, cvSize(videoWidth, videoHeight), 1);
+		m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), -1, fps, cvSize(videoWidth, videoHeight), 1);
 		m_videoWriterInUse = true;
 		
 		openedVideoWriter = m_videoWriterInUse;
@@ -87,6 +88,63 @@ bool ImageIO::saveAviFileFinish(void)
 	else 
 	{
 		clog << "Attempt to close video writer before it was opened" << endl;
+	}
+	
+	return successfullyClosed;
+}
+
+bool ImageIO::readAviFile(const string &filename)
+{
+	bool openedVideoReader = false;
+	
+	if(!m_videoReaderInUse)
+	{
+		m_videoReaderHandle = cvCaptureFromAVI(filename.c_str());
+		m_videoReaderInUse = true;
+		
+		openedVideoReader = m_videoReaderInUse;
+	}
+	else
+	{
+		clog << "A video reader is already in use. Cannot open another one till the first one is closed" << endl;
+	}
+	
+	return openedVideoReader;
+}
+
+IplImage* ImageIO::readAviFileFrame()
+{
+	IplImage *frame = NULL;
+	
+	if(m_videoReaderInUse)
+	{
+		frame = cvQueryFrame(m_videoReaderHandle);
+		//cvFlip(frame, 0);
+		
+		//cvSaveImage("/Users/Karpinsn/Documents/Grad School/Data/Holovideo/Frame.png", frame);
+	}
+	else 
+	{
+		clog << "Unable to read frame as no current video reader handle exists" << endl;
+	}
+
+	return frame;
+}
+
+
+bool ImageIO::readAviFileFinish(void)
+{
+	bool successfullyClosed = false;
+	
+	if (m_videoReaderInUse)
+	{
+		cvReleaseCapture(&m_videoReaderHandle);
+		m_videoReaderInUse = false;
+		successfullyClosed = true;
+	}
+	else 
+	{
+		clog << "Attempt to close video reader before it was opened" << endl;
 	}
 	
 	return successfullyClosed;

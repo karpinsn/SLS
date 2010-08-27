@@ -21,8 +21,8 @@ void MainWindowController::onEncodeButton()
 	//GLuint texID = m_mainWindow->m_holoEncoder->encode(m_mainWindow->m_holoImage);
 	
 	ImageIO io;
-	io.saveRGBImage("/Users/Karpinsn/Holoimage.png", 512, 512);
-	io.saveAviFile("/Users/Karpinsn/HoloVideo.mpg", 512, 512, 30);
+	//io.saveRGBImage("/Users/Karpinsn/Holoimage.png", 512, 512);
+	io.saveAviFile("C:/Users/Nikolaus Karpinsky/Data/HoloVideo.avi", 512, 512, 30);
 	
 	XYZFileIO fileIO;
 	
@@ -37,6 +37,7 @@ void MainWindowController::onEncodeButton()
 		io.saveAviFileWriteFrame(texID, 512, 512);
 	}
 	
+	clog << "Encoding complete" << endl;
 	io.saveAviFileFinish();
 	
 	//m_mainWindow->m_holoViewer->setHoloImage(m_mainWindow->m_holoImage);
@@ -73,6 +74,15 @@ void MainWindowController::selectXYZM(QListWidgetItem* current, QListWidgetItem*
 	m_mainWindow->m_glWidget->updateScene();
 }
 
+void MainWindowController::playVideo(void)
+{
+	m_mainWindow->m_glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
+	m_mainWindow->m_glWidget->playMovie(m_mainWindow->m_holoDecoder);
+	
+	//m_videoThread = new HolovideoThread(m_mainWindow->m_holoDecoder, m_mainWindow->m_glWidget);
+	//m_videoThread->start();
+}
+
 MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
 {
 	//	Create room for a 3 color holoimage
@@ -88,11 +98,11 @@ MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
 	glView = NULL;
 	
 	m_holoEncoder = new Holoencoder();
-	m_holoDecoder = new Holodecoder();
 	m_glWidget = new OpenGLWidget(this, m_holoEncoder, QColor::fromRgb(0, 0, 0, 0));
 	m_glWidget->setMinimumSize(512, 512);
 	m_glWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	horizontalLayout_3->insertWidget(0, m_glWidget);
+	m_holoDecoder = new Holodecoder(m_glWidget);
 }
 
 MainWindow::~MainWindow()
@@ -105,4 +115,5 @@ void MainWindow::connectSignalsWithController(QObject* controller)
 	connect(encodeButton, SIGNAL(clicked()), controller, SLOT(onEncodeButton()));
 	connect(fileList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), controller, SLOT(selectXYZM(QListWidgetItem*, QListWidgetItem*)));
 	connect(actionOpenXYZM, SIGNAL(triggered()), controller, SLOT(onOpenXYZM()));
+	connect(actionOpen_Holovideo, SIGNAL(triggered()), controller, SLOT(playVideo()));
 }

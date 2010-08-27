@@ -40,6 +40,12 @@ void OpenGLWidget::initializeGL()
 	glShadeModel(GL_SMOOTH);
 }
 
+void OpenGLWidget::setNewGLContext(AbstractGLContext* glContext)
+{
+	m_glContext = glContext;
+	m_glContext->init();
+}
+
 void OpenGLWidget::updateScene()
 {
 	updateGL();
@@ -94,5 +100,51 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *event)
 void OpenGLWidget::mouseReleaseEvent(QMouseEvent* event)
 {
 	std::cout << "Mouse Released: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
+	updateGL();
+}
+
+void OpenGLWidget::timerEvent(QTimerEvent* event)
+{
+	int elapsed = movieTimer.elapsed();
+	
+	if(elapsed >= 33)
+	{
+		movieTimer.restart();
+		//	Need to fetch the next frame
+		
+		IplImage* frame = m_aviIO.readAviFileFrame();
+
+		if(frame)
+		{
+			m_holoDecoder->setBackHoloBuffer(frame);
+			m_holoDecoder->swapBuffers();		
+		}
+		else 
+		{
+			//killTimer(event->id);
+		}
+
+	}
+	updateGL();
+}
+
+void OpenGLWidget::playMovie(Holodecoder* decoder)
+{
+	m_holoDecoder = decoder;
+	bool fileOpened = m_aviIO.readAviFile("/Users/Karpinsn/Documents/Grad School/Data/Holovideo/HoloVideo.avi");
+	
+	if(fileOpened)
+	{
+		
+		IplImage *frame = m_aviIO.readAviFileFrame();
+		if(frame)
+		{
+			m_holoDecoder->setBackHoloBuffer(frame);
+			m_holoDecoder->swapBuffers();
+			movieTimer.start();
+			startTimer(0);
+		}
+	}
+	
 	updateGL();
 }

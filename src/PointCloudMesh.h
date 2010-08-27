@@ -2,9 +2,12 @@
 #define POINT_CLOUD_MESH_HEADER
 
 #ifdef __APPLE__
-	#include <GLUT/glut.h>
+	#include <glew.h>
+	#include <QtOpenGL/QGLWidget>
 #else
-	#include <GL/gl.h>
+	#include <GL/glew.h>
+	#include <windows.h>
+	#include <QtOpenGL/QGLWidget>
 #endif
 
 #include <stdio.h>

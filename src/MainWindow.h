@@ -12,6 +12,7 @@
 #include "OpenGLWidget.h"
 #include "Holoencoder.h"
 #include "Holodecoder.h"
+#include "HolovideoThread.h"
 #include "ImageIO.h"
 #include "AbstractMesh.h"
 #include "XYZFileIO.h"
@@ -34,8 +35,11 @@ public slots:
 	void onOpenXYZM();
 	void selectXYZM(QListWidgetItem* current, QListWidgetItem* previous);
 
+	void playVideo(void);
+	
 private:
 	MainWindow* m_mainWindow;
+	HolovideoThread* m_videoThread;
 };
 
 class MainWindow : public QMainWindow, private Ui::MainWindow

@@ -1,12 +1,18 @@
 #ifndef _Holoencoder_H
 #define _Holoencoder_H
 
+#ifdef __APPLE__
+	#include <glew.h>
+	#include <QtOpenGL/QGLWidget>
+#else
+	#include <GL/glew.h>
+	#include <windows.h>
+	#include <QtOpenGL/QGLWidget>
+#endif
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/type_ptr.hpp>
-
-#include <glew.h>
-#include <QtOpenGL/QGLWidget>
 
 #include "ShaderFacade.h"
 #include "Camera.h"

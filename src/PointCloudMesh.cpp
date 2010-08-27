@@ -24,6 +24,22 @@ void PointCloudMesh::initMesh(void)
 
 void PointCloudMesh::Draw()
 {
+	/*
+	glPolygonMode(GL_FRONT, GL_POINT);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_meshVBOID);			//	Bind the vertex coordinates
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshIBOID);	//	Bind the indices
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, 0);
+
+	glDrawElements(GL_TRIANGLE_STRIP, elementCount, GL_UNSIGNED_INT, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, m_meshVBOID);			//	Unbind the vertex coordinates
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshIBOID);	//	Unbind the indices
+	 */
+	
 	glPolygonMode(GL_FRONT, GL_POINT);
 	glBindBuffer(GL_ARRAY_BUFFER, m_meshVBOID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshIBOID);

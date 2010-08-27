@@ -1,7 +1,14 @@
 #ifndef _ShaderFacade_H
 #define _ShaderFacade_H
 
-#include <glew.h>
+#ifdef __APPLE__
+	#include <glew.h>
+	#include <QtOpenGL/QGLWidget>
+#else
+	#include <GL/glew.h>
+	#include <windows.h>
+	#include <QtOpenGL/QGLWidget>
+#endif
 
 #include <string>
 #include <iostream>
@@ -29,7 +36,7 @@ private:
 	unsigned int shader_id;
 	unsigned int shader_vp;
 	unsigned int shader_fp;
-    bool b_shader_created;
+    //bool b_shader_created;
 
 	char* _loadShaderSource(const string &filename);
 	bool _validateShader(GLuint shader, const string &filename);

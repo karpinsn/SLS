@@ -37,7 +37,6 @@ set(SOURCES
 	XYZMesh.cpp
 	Holodecoder.cpp
 	PointCloudMesh.cpp
-	HolovideoThread.cpp
 	
 	MainWindow.h
 	OpenGLWidget.h
@@ -51,8 +50,7 @@ set(SOURCES
 	AbstractMesh.h
 	Holodecoder.h
 	PointCloudMesh.h
-	AbstractGLContext.h
-	HolovideoThread.h	
+	AbstractGLContext.h	
 
 	glm/glm.hpp
 	glm/gtc/matrix_transform.hpp

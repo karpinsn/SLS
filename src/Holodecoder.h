@@ -36,15 +36,11 @@ private:
 	
 	bool m_hasBeenInit;
 	
-	bool frontBufferFull;
-	
 	//	Front and back buffers for drawing
 	GLuint m_bufferIds[2];		//	PBO Buffers for the holoimage
 	int m_frontBufferIndex;		//	Index of the front buffer in m_bufferIds
 	
 	OpenGLWidget* m_glContext;
-	
-	QMutex m_glMutex;
 	
 public:
 	Holodecoder(OpenGLWidget* glContext);
@@ -60,8 +56,9 @@ public:
 	void swapBuffers(void);
 	
 private:
-	void lockAndMakeCurrent(void);
-	void unlock(void);
+	void initShaders(void);
+	void initHoloBuffers(void);
+	
 	void printGLErrors(void);
 	int DATA_SIZE;
 	GLubyte* imageData;

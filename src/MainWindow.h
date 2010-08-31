@@ -5,6 +5,7 @@
 #include <QtGui/QWidget>
 #include <qfiledialog.h>
 #include <QListWidgetItem>
+#include <QProgressDialog>
 
 //	Qt auto generated headers
 #include "ui_Holoencoder.h"
@@ -12,7 +13,6 @@
 #include "OpenGLWidget.h"
 #include "Holoencoder.h"
 #include "Holodecoder.h"
-#include "HolovideoThread.h"
 #include "ImageIO.h"
 #include "AbstractMesh.h"
 #include "XYZFileIO.h"
@@ -39,7 +39,6 @@ public slots:
 	
 private:
 	MainWindow* m_mainWindow;
-	HolovideoThread* m_videoThread;
 };
 
 class MainWindow : public QMainWindow, private Ui::MainWindow
@@ -62,8 +61,6 @@ private:
 	
 	Holoencoder* m_holoEncoder;
 	Holodecoder* m_holoDecoder;
-	
-	unsigned char* m_holoImage;
 };
 
 #endif

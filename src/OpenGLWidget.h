@@ -42,7 +42,7 @@ public:
 	QSize minimumSizeHint() const;
 	QSize sizeHint() const;
 	
-	void playMovie(Holodecoder* decoder);
+	void playMovie(string movieFile, Holodecoder* decoder);
 	
 protected:
 	void initializeGL();

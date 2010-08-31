@@ -18,16 +18,20 @@ void MainWindowController::showWidget()
 void MainWindowController::onEncodeButton()
 {
 	std::cout << "Encode Button Pushed" << std::endl;
-	//GLuint texID = m_mainWindow->m_holoEncoder->encode(m_mainWindow->m_holoImage);
 	
 	ImageIO io;
-	//io.saveRGBImage("/Users/Karpinsn/Holoimage.png", 512, 512);
-	io.saveAviFile("C:/Users/Nikolaus Karpinsky/Data/HoloVideo.avi", 512, 512, 30);
+	io.saveAviFile("/Users/Karpinsn/Documents/Grad School/Data/Holovideo/HoloVideoTest.avi", 512, 512, 30);
 	
 	XYZFileIO fileIO;
 	
+	//	Inform the user of the progress
+	QProgressDialog progress("Encoding frames...", "Cancel", 0, m_mainWindow->fileList->count(), m_mainWindow);
+	
 	for(int itemNumber = 0; itemNumber < m_mainWindow->fileList->count(); itemNumber++)
 	{
+		//	Increase the progress
+		progress.setValue(itemNumber);
+		
 		QListWidgetItem *item = m_mainWindow->fileList->item(itemNumber);
 	
 		AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toStdString());
@@ -35,7 +39,17 @@ void MainWindowController::onEncodeButton()
 		
 		GLuint texID = m_mainWindow->m_holoEncoder->encode();
 		io.saveAviFileWriteFrame(texID, 512, 512);
+		
+		if (progress.wasCanceled())
+		{
+			clog << "Encoding canceled" << endl;
+			//	Break out of the loop. This will close the avi handle.
+			break;
+		}
 	}
+	
+	//	Last one done!
+	progress.setValue(m_mainWindow->fileList->count());
 	
 	clog << "Encoding complete" << endl;
 	io.saveAviFileFinish();
@@ -59,7 +73,10 @@ void MainWindowController::onOpenXYZM()
 	//	If we dont have a currently selected item then selected the first in the list
 	if (NULL == m_mainWindow->fileList->currentItem())
 	{
-		m_mainWindow->fileList->setCurrentRow(0);
+		if(m_mainWindow->fileList->count() > 0)
+		{
+			m_mainWindow->fileList->setCurrentRow(0);
+		}
 	}
 }
 
@@ -76,19 +93,17 @@ void MainWindowController::selectXYZM(QListWidgetItem* current, QListWidgetItem*
 
 void MainWindowController::playVideo(void)
 {
-	m_mainWindow->m_glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
-	m_mainWindow->m_glWidget->playMovie(m_mainWindow->m_holoDecoder);
-	
-	//m_videoThread = new HolovideoThread(m_mainWindow->m_holoDecoder, m_mainWindow->m_glWidget);
-	//m_videoThread->start();
+	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holovideo to Open", "/home", "Images (*.avi)");
+		
+	if(!file.isEmpty())
+	{
+		m_mainWindow->m_glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
+		m_mainWindow->m_glWidget->playMovie(file.toStdString(), m_mainWindow->m_holoDecoder);
+	}
 }
 
 MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
-{
-	//	Create room for a 3 color holoimage
-	m_holoImage = new unsigned char [3 * 512 * 512];
-	memset(m_holoImage, 0, 512*512*3);
-	
+{	
 	// Sets up the interface elements from Designer file
 	setupUi(this);
 	

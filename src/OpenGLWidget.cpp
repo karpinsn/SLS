@@ -128,10 +128,10 @@ void OpenGLWidget::timerEvent(QTimerEvent* event)
 	updateGL();
 }
 
-void OpenGLWidget::playMovie(Holodecoder* decoder)
+void OpenGLWidget::playMovie(string movieFile, Holodecoder* decoder)
 {
 	m_holoDecoder = decoder;
-	bool fileOpened = m_aviIO.readAviFile("/Users/Karpinsn/Documents/Grad School/Data/Holovideo/HoloVideo.avi");
+	bool fileOpened = m_aviIO.readAviFile(movieFile.c_str());
 	
 	if(fileOpened)
 	{

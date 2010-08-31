@@ -19,42 +19,48 @@ void MainWindowController::onEncodeButton()
 {
 	std::cout << "Encode Button Pushed" << std::endl;
 	
-	ImageIO io;
-	io.saveAviFile("/Users/Karpinsn/Documents/Grad School/Data/Holovideo/HoloVideoTest.avi", 512, 512, 30);
+	QString fileName = QFileDialog::getSaveFileName(m_mainWindow, "Save File", "/", "Video (*.avi)");
 	
-	XYZFileIO fileIO;
-	
-	//	Inform the user of the progress
-	QProgressDialog progress("Encoding frames...", "Cancel", 0, m_mainWindow->fileList->count(), m_mainWindow);
-	
-	for(int itemNumber = 0; itemNumber < m_mainWindow->fileList->count(); itemNumber++)
+	if(!fileName.isEmpty())
 	{
-		//	Increase the progress
-		progress.setValue(itemNumber);
+		ImageIO io;
+		bool canSaveFile = io.saveAviFile(fileName.toStdString(), 512, 512, 30);
 		
-		QListWidgetItem *item = m_mainWindow->fileList->item(itemNumber);
-	
-		AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toStdString());
-		m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
-		
-		GLuint texID = m_mainWindow->m_holoEncoder->encode();
-		io.saveAviFileWriteFrame(texID, 512, 512);
-		
-		if (progress.wasCanceled())
+		if(canSaveFile)
 		{
-			clog << "Encoding canceled" << endl;
-			//	Break out of the loop. This will close the avi handle.
-			break;
+			XYZFileIO fileIO;
+			
+			//	Inform the user of the progress
+			QProgressDialog progress("Encoding frames...", "Cancel", 0, m_mainWindow->fileList->count(), m_mainWindow);
+			
+			for(int itemNumber = 0; itemNumber < m_mainWindow->fileList->count(); itemNumber++)
+			{
+				//	Increase the progress
+				progress.setValue(itemNumber);
+				
+				QListWidgetItem *item = m_mainWindow->fileList->item(itemNumber);
+				
+				AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toStdString());
+				m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
+				
+				GLuint texID = m_mainWindow->m_holoEncoder->encode();
+				io.saveAviFileWriteFrame(texID, 512, 512);
+				
+				if (progress.wasCanceled())
+				{
+					clog << "Encoding canceled" << endl;
+					//	Break out of the loop. This will close the avi handle.
+					break;
+				}
+			}
+			
+			//	Last one done!
+			progress.setValue(m_mainWindow->fileList->count());
+			
+			clog << "Encoding complete" << endl;
+			io.saveAviFileFinish();
 		}
 	}
-	
-	//	Last one done!
-	progress.setValue(m_mainWindow->fileList->count());
-	
-	clog << "Encoding complete" << endl;
-	io.saveAviFileFinish();
-	
-	//m_mainWindow->m_holoViewer->setHoloImage(m_mainWindow->m_holoImage);
 }
 
 void MainWindowController::onOpenXYZM()

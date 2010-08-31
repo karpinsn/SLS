@@ -24,14 +24,14 @@ void MainWindowController::onEncodeButton()
 	if(!fileName.isEmpty())
 	{
 		ImageIO io;
-		bool canSaveFile = io.saveAviFile(fileName.toStdString(), 512, 512, 30);
+		bool canSaveFile = io.saveAviFile(fileName.toAscii().constData(), 512, 512, 30);
 		
 		if(canSaveFile)
 		{
 			XYZFileIO fileIO;
 			
 			//	Inform the user of the progress
-			QProgressDialog progress("Encoding frames...", "Cancel", 0, m_mainWindow->fileList->count(), m_mainWindow);
+			QProgressDialog progress("Encoding frames...", 0, 0, m_mainWindow->fileList->count(), m_mainWindow);
 			
 			for(int itemNumber = 0; itemNumber < m_mainWindow->fileList->count(); itemNumber++)
 			{
@@ -40,18 +40,11 @@ void MainWindowController::onEncodeButton()
 				
 				QListWidgetItem *item = m_mainWindow->fileList->item(itemNumber);
 				
-				AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toStdString());
+				AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toAscii().constData());
 				m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
 				
 				GLuint texID = m_mainWindow->m_holoEncoder->encode();
 				io.saveAviFileWriteFrame(texID, 512, 512);
-				
-				if (progress.wasCanceled())
-				{
-					clog << "Encoding canceled" << endl;
-					//	Break out of the loop. This will close the avi handle.
-					break;
-				}
 			}
 			
 			//	Last one done!
@@ -65,7 +58,7 @@ void MainWindowController::onEncodeButton()
 
 void MainWindowController::onOpenXYZM()
 {
-	QStringList files = QFileDialog::getOpenFileNames(m_mainWindow, "Select XYZM Files to Open", "/home", "Images (*.xyzm)");
+	QStringList files = QFileDialog::getOpenFileNames(m_mainWindow, "Select XYZM Files to Open", "/", "Images (*.xyzm)");
 	
 	QStringList::const_iterator fileIterator;
 	
@@ -92,14 +85,14 @@ void MainWindowController::selectXYZM(QListWidgetItem* current, QListWidgetItem*
 	cout << "New file selected" << endl;
 	
 	XYZFileIO fileIO;
-	AbstractMesh* currentMesh = fileIO.newMeshFromFile(current->text().toStdString());
+	AbstractMesh* currentMesh = fileIO.newMeshFromFile(current->text().toAscii().constData());
 	m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
 	m_mainWindow->m_glWidget->updateScene();
 }
 
 void MainWindowController::playVideo(void)
 {
-	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holovideo to Open", "/home", "Images (*.avi)");
+	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holovideo to Open", "/", "Images (*.avi)");
 		
 	if(!file.isEmpty())
 	{

@@ -37,6 +37,7 @@ set(SOURCES
 	XYZMesh.cpp
 	Holodecoder.cpp
 	PointCloudMesh.cpp
+	Arcball.cpp
 	
 	MainWindow.h
 	OpenGLWidget.h
@@ -51,6 +52,7 @@ set(SOURCES
 	Holodecoder.h
 	PointCloudMesh.h
 	AbstractGLContext.h	
+	Arcball.h
 
 	glm/glm.hpp
 	glm/gtc/matrix_transform.hpp

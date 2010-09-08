@@ -18,6 +18,7 @@
 #include "Camera.h"
 #include "AbstractMesh.h"
 #include "AbstractGLContext.h"
+#include "Arcball.h"
 
 using namespace std;
 
@@ -35,6 +36,7 @@ private:
 	int m_translateY;
 	
 	Camera* m_camera;
+	Arcball* m_controller;
 	glm::mat4 m_cameraProjectionMatrix;
 	
 	AbstractMesh* m_currentMesh;
@@ -45,6 +47,10 @@ private:
 	GLuint m_holoimageTextureID;
 	
 	bool m_hasBeenInit;
+	
+	glm::mat4 m_transform;
+	glm::mat4 m_lastRotation;
+	glm::mat4 m_thisRotation;
 	
 public:
 	Holoencoder(void);

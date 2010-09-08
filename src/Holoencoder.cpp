@@ -3,6 +3,7 @@
 Holoencoder::Holoencoder(void)
 {
 	m_hasBeenInit = false;
+	m_controller = new Arcball(512, 512);
 }
 
 void Holoencoder::init()
@@ -80,6 +81,9 @@ void Holoencoder::draw(void)
 	//	Draw the currentMesh
 	glm::mat4 cameraModelViewMatrix = m_cameraProjectionMatrix;
 	
+	glMultMatrixf(glm::value_ptr(m_transform));
+	cameraModelViewMatrix = cameraModelViewMatrix * m_transform;
+	
 	m_encoderShader.bind();
 	GLint projectorModelViewLoc = glGetUniformLocation(m_encoderShader.shaderID(), "projectorModelView");
 	glUniformMatrix4fv(projectorModelViewLoc, 1, false, glm::value_ptr(cameraModelViewMatrix));
@@ -119,12 +123,27 @@ void Holoencoder::mousePressEvent(int mouseX, int mouseY)
 {
 	m_previousX = mouseX;
 	m_previousY = mouseY;
+	
+	m_lastRotation = m_thisRotation;
+	m_controller->click(glm::vec2(mouseX, mouseY));
+	//m_controller->mousePressEvent(mouseX, mouseY);
 }
 
 void Holoencoder::mouseMoveEvent(int mouseX, int mouseY)
 {
 	m_translateX = mouseX - m_previousX;
 	m_translateY = -(mouseY - m_previousY);
+	
+	glm::quat drawQuat;
+	m_controller->drag(glm::vec2(mouseX, mouseY), drawQuat);						// Update End Vector And Get Rotation As Quaternion
+	
+	drawQuat = glm::normalize(drawQuat);						//	Normalize the Quat before casting
+	m_thisRotation = glm::mat4_cast(drawQuat);
+			
+	m_thisRotation = m_thisRotation * m_lastRotation;
+	m_transform = m_thisRotation;
+	
+	//m_controller->mouseMoveEvent(mouseX, mouseY);
 }
 
 void Holoencoder::setCurrentMesh(AbstractMesh* current)

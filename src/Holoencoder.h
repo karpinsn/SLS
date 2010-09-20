@@ -29,12 +29,6 @@ private:
 	int m_width;
 	int m_height;
 	
-	int m_previousX;
-	int m_previousY;
-	
-	int m_translateX;
-	int m_translateY;
-	
 	Camera* m_camera;
 	Arcball* m_controller;
 	glm::mat4 m_cameraProjectionMatrix;

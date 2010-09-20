@@ -2,12 +2,10 @@
 #define IMAGE_IO_HEADER
 
 #ifdef __APPLE__
-	#include <glew.h>
-	#include <QtOpenGL/QGLWidget>
+	#include <OpenGL/gl.h>
 #else
-	#include <GL/glew.h>
 	#include <windows.h>
-	#include <QtOpenGL/QGLWidget>
+	#include <gl.h>
 #endif
 
 #include <iostream>
@@ -34,9 +32,13 @@ public:
 	ImageIO(void);
 	~ImageIO();
 	
+	//	Save Image Methods
 	bool saveRGBImage(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight);
 	bool saveRGBImage(const string &filename, GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight);
 
+	//	Read Image Methods
+	IplImage* readImage(const string &filename);
+	
 	//	Save Avi File Methods
 	bool saveAviFile(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps);
 	bool saveAviFileWriteFrame(GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight);

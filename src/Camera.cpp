@@ -11,6 +11,7 @@ Camera::Camera()
     tb_width = 1;
     tb_height = 1;
 	m_currentView = 0;
+	tb_mode = 2;
 }
 
 Camera::~Camera(void)

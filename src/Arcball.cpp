@@ -1,86 +1,94 @@
-#include "Arcball.h"                                            // ArcBall header
+#include "Arcball.h"                                   
 
-void Arcball::mapToSphere(const glm::vec2& NewPt, glm::vec3& NewVec) const
+Arcball::Arcball(GLfloat width, GLfloat height)
 {
-	glm::vec2 TempPt;
-    GLfloat length;
-	
-    //Copy paramter into temp point
-    TempPt = NewPt;
-	
-    //Adjust point coords and scale down to range of [-1 ... 1]
-    TempPt.x  =        (TempPt.x * this->AdjustWidth)  - 1.0f;
-    TempPt.y  = 1.0f - (TempPt.y * this->AdjustHeight);
-	
-    //Compute the square of the length of the vector to the point from the center
-    //length      = (TempPt.x * TempPt.x) + (TempPt.y * TempPt.y);
-	length = glm::length(TempPt);
-	
-    //If the point is mapped outside of the sphere... (length > radius squared)
-    if (length > 1.0f)
-    {
-		//	Normalize the vector
-        NewVec.z = 0.0f;
-		glm::normalize(NewVec);
-    }
-    else    //Else it's on the inside
-    {
-        //Return a vector to a point mapped inside the sphere sqrt(radius squared - length)
-        NewVec.x = TempPt.x;
-        NewVec.y = TempPt.y;
-        NewVec.z = glm::sqrt(1.0f - length);
-    }
-}
-
-//Create/Destroy
-Arcball::Arcball(GLfloat NewWidth, GLfloat NewHeight)
-{
-    //Clear initial values
+    //	Clear initial values
 	m_startVector = glm::vec3(0.0f);
 	m_endVector = glm::vec3(0.0f);
 	
-    //Set initial bounds
-    this->setBounds(NewWidth, NewHeight);
+    //	Set initial bounds
+    this->setBounds(width, height);
 }
 
-//Mouse down
-void Arcball::click(const glm::vec2& NewPt)
+void Arcball::mousePressEvent(const GLint mouseX, const GLint mouseY)
 {
-    //Map the point to the sphere
-    this->mapToSphere(NewPt, m_startVector);
+	m_lastRotation = m_thisRotation;
+    
+	//	Map the point to the sphere
+    m_startVector = this->mapPointToSphere(glm::vec2(mouseX, mouseY));
 }
 
-//Mouse drag, calculate rotation
-void Arcball::drag(const glm::vec2& NewPt, glm::quat& NewRot)
+void Arcball::mouseMoveEvent(const GLint mouseX, const GLint mouseY)
 {
-    //Map the point to the sphere
-    this->mapToSphere(NewPt, m_endVector);
+	glm::quat drawQuat;
 	
-    //Return the quaternion equivalent to the rotation
-    if (true)
+    //Map the point to the sphere
+    m_endVector = this->mapPointToSphere(glm::vec2(mouseX, mouseY));
+	
+	//Compute the vector perpendicular to the begin and end vectors
+	glm::vec3 perpendicular = glm::cross(m_startVector, m_endVector);
+	
+	//Compute the length of the perpendicular vector
+	if (glm::length(perpendicular) > Epsilon)    //	if its non-zero
+	{
+		//We're ok, so return the perpendicular vector as the transform after all
+		drawQuat.x = perpendicular.x;
+		drawQuat.y = perpendicular.y;
+		drawQuat.z = perpendicular.z;
+		//In the quaternion values, w is cosine (theta / 2), where theta is rotation angle
+		drawQuat.w = glm::dot(this->m_startVector, m_endVector);
+	}
+	else                               //	if its zero
+	{
+		//The begin and end vectors coincide, so return an identity transform
+		drawQuat = glm::quat();
+	}
+	
+	drawQuat = glm::normalize(drawQuat);						//	Normalize the Quat before casting
+	m_thisRotation = glm::mat4_cast(drawQuat);
+	
+	m_thisRotation = m_thisRotation * m_lastRotation;
+	m_transform = m_thisRotation;
+}
+
+glm::mat4 Arcball::getTransform(void)
+{
+	return m_transform;
+}
+
+void Arcball::applyTransform(void)
+{
+	glMultMatrixf(glm::value_ptr(m_transform));
+}
+
+glm::vec3 Arcball::mapPointToSphere(const glm::vec2& point) const
+{
+	glm::vec3 mappedVector(0.0f);
+	
+    //	Adjust point coords and scale down to range of [-1 ... 1]
+    mappedVector.x  =        (point.x * m_adjustWidth)  - 1.0f;
+    mappedVector.y  = 1.0f - (point.y * m_adjustHeight);
+	
+    //	Compute the length of the vector to see if it is inside or outside the circle
+	GLfloat length = glm::length(mappedVector);
+	
+    if (length > 1.0f)	//	It's on the outside
     {
-		glm::vec3  Perp;
-		
-        //Compute the vector perpendicular to the begin and end vectors
-        Perp = glm::cross(m_startVector, m_endVector);
-		
-        //Compute the length of the perpendicular vector
-        if (glm::length(Perp) > Epsilon)    //if its non-zero
-        {
-            //We're ok, so return the perpendicular vector as the transform after all
-            NewRot.x = Perp.x;
-            NewRot.y = Perp.y;
-            NewRot.z = Perp.z;
-            //In the quaternion values, w is cosine (theta / 2), where theta is rotation angle
-            NewRot.w = glm::dot(this->m_startVector, m_endVector);
-        }
-        else                                    //if its zero
-        {
-            //The begin and end vectors coincide, so return an identity transform
-            NewRot.x = 
-            NewRot.y = 
-            NewRot.z = 
-            NewRot.w = 0.0f;
-        }
+		//	Normalize the vector
+		mappedVector = glm::normalize(mappedVector);
     }
+    else				//	It's on the inside
+    {
+        //	Return a vector to a point mapped inside the sphere sqrt(radius squared - length)
+        mappedVector.z = glm::sqrt(1.0f - length);
+    }
+	
+	return mappedVector;
+}
+
+void Arcball::setBounds(GLfloat width, GLfloat height)
+{		
+	//	Set adjustment factor for width & height
+	this->m_adjustWidth  = 1.0f / ((width  - 1.0f) * 0.5f);
+	this->m_adjustHeight = 1.0f / ((height - 1.0f) * 0.5f);
 }

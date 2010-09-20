@@ -3,6 +3,7 @@
 Holodecoder::Holodecoder(OpenGLWidget* glContext)
 {
 	m_glContext = glContext;
+	m_controller = new Arcball(512, 512);
 	m_hasBeenInit = false;
 	DATA_SIZE = 512 * 512 * 4;
 }
@@ -61,6 +62,8 @@ void Holodecoder::initHoloBuffers(void)
 
 void Holodecoder::draw(void)
 {
+	glPushMatrix();
+	
 	m_camera->applyMatrix();
 	
 	glColor3f(0.0f, 1.0f, 0.0f);
@@ -68,25 +71,31 @@ void Holodecoder::draw(void)
 	m_decoderShader.bind();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_holoImageTex);
+	
 	//	Draw a plane of pixels
+	m_controller->applyTransform();
 	m_mesh->Draw();
 	m_decoderShader.unbind();
+
+	glPopMatrix();
 }
 
 void Holodecoder::resize(int width, int height)
 {
-	m_camera->reshape(width, height);
+	//m_camera->reshape(width, height);
 	glOrtho(-1.0, 1.0, -1.0, 1.0, 0.0, 100.0);
 }
 
 void Holodecoder::mousePressEvent(int mouseX, int mouseY)
 {
-	m_camera->mousePressed(mouseX, mouseY);
+	//m_camera->mousePressed(mouseX, mouseY);
+	m_controller->mousePressEvent(mouseX, mouseY);
 }
 
 void Holodecoder::mouseMoveEvent(int mouseX, int mouseY)
 {
-	m_camera->mouseMotion(mouseX, mouseY);
+	//m_camera->mouseMotion(mouseX, mouseY);
+	m_controller->mouseMoveEvent(mouseX, mouseY);
 }
 
 void Holodecoder::setHoloImage(GLuint holoImageTex)

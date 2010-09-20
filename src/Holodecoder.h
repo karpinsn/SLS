@@ -21,6 +21,8 @@
 
 #include "OpenGLWidget.h"
 
+#include "Arcball.h"
+
 class OpenGLWidget;
 
 class Holodecoder : public AbstractGLContext
@@ -28,6 +30,7 @@ class Holodecoder : public AbstractGLContext
 private:
 	ShaderFacade m_decoderShader;
 	Camera* m_camera;
+	Arcball* m_controller;
 	
 	PointCloudMesh* m_mesh;
 	GLuint m_holoImageTex;

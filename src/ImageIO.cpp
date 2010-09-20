@@ -41,6 +41,23 @@ bool ImageIO::saveRGBImage(const string &filename, GLuint textureID, const unsig
 	return cvSaveImage(filename.c_str(), m_imageHandle);
 }
 
+IplImage* ImageIO::readImage(const string &filename)
+{
+	IplImage* image = cvLoadImage(filename.c_str());
+	
+	if(!image)
+	{
+		clog << "Unable to read image: " << filename << endl;
+	}
+	else
+	{
+		cvCvtColor(image, image, CV_BGR2RGB);
+	}
+
+	
+	return image;
+}
+
 bool ImageIO::saveAviFile(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps)
 {
 	bool openedVideoWriter = false;

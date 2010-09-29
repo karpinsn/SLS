@@ -83,6 +83,24 @@ void ShaderFacade::unbind()
 	glUseProgram(0);
 }
 
+void ShaderFacade::uniform(const string name, const int data)
+{
+	bind();
+	
+	GLuint location = glGetUniformLocation(shader_id, name.c_str());
+	glUniform1i(location, data);
+	
+	unbind();
+}
+
+void ShaderFacade::uniform(const string name, const float data)
+{
+	bind();
+	GLuint location = glGetUniformLocation(shader_id, name.c_str());
+	glUniform1f(location, data);
+	unbind();
+}
+
 char* ShaderFacade::_loadShaderSource(const string &filename)
 {
 	char* shaderSource;

@@ -29,7 +29,6 @@ set(SOURCES
 	Application.cpp
 	MainWindow.cpp
 	OpenGLWidget.cpp
-	ShaderFacade.cpp
 	Holoencoder.cpp
 	Camera.cpp
 	ImageIO.cpp
@@ -37,11 +36,16 @@ set(SOURCES
 	XYZMesh.cpp
 	Holodecoder.cpp
 	PointCloudMesh.cpp
+	TriMesh.cpp
 	Arcball.cpp
-	
+	OGLStatus.cpp
+	Logger.cpp	
+	ShaderFacade.cpp
+	FBOFacade.cpp
+	TextureFacade.cpp
+
 	MainWindow.h
 	OpenGLWidget.h
-	ShaderFacade.h
 	Holoencoder.h
 	Camera.h
 	ImageIO.h
@@ -51,8 +55,14 @@ set(SOURCES
 	AbstractMesh.h
 	Holodecoder.h
 	PointCloudMesh.h
+	TriMesh.h
 	AbstractGLContext.h	
 	Arcball.h
+	OGLStatus.h
+	Logger.h
+	ShaderFacade.h
+	FBOFacade.h
+	TextureFacade.h
 
 	glm/glm.hpp
 	glm/gtc/matrix_transform.hpp

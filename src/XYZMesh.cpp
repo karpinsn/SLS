@@ -33,11 +33,6 @@ void XYZMesh::draw(void)
 			XYZPoint f1 = m_meshPoints[id1];
 			XYZPoint f2 = m_meshPoints[id2];
 			XYZPoint f3 = m_meshPoints[id3];
-					
-			if(i * j > 1282)
-			{
-				int i = lineNo;
-			}
 
 			if (f0.valid && f1.valid && f2.valid)
 			{

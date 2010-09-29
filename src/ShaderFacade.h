@@ -32,6 +32,9 @@ public:
 	
 	unsigned int shaderID();
 	
+	void uniform(const string name, const int data);
+	void uniform(const string name, const float data);
+	
 private:
 	unsigned int shader_id;
 	unsigned int shader_vp;

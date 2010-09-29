@@ -13,13 +13,18 @@
 #include <QMutex>
 #include <cv.h>
 
+#include "TriMesh.h"
 #include "PointCloudMesh.h"
 #include "Camera.h"
-#include "ShaderFacade.h"
 #include "ImageIO.h"
 #include "AbstractGLContext.h"
 
+#include "ShaderFacade.h"
+#include "TextureFacade.h"
+#include "FBOFacade.h"
+
 #include "OpenGLWidget.h"
+#include "OGLStatus.h"
 
 #include "Arcball.h"
 
@@ -29,10 +34,26 @@ class Holodecoder : public AbstractGLContext
 {
 private:
 	ShaderFacade m_decoderShader;
+	
+	ShaderFacade m_phaseCalculator;
+	ShaderFacade m_phaseFilter;
+	ShaderFacade m_normalCalculator;
+	ShaderFacade m_finalRender;
+	
+	GLenum m_phaseMap0AttachPoint;
+	GLenum m_phaseMap1AttachPoint;
+	GLenum m_normalMapAttachPoint;
+	
+	TextureFacade m_phaseMap0;
+	TextureFacade m_phaseMap1;
+	TextureFacade m_normalMap;
+	
+	FBOFacade m_imageProcessor;
+	
 	Camera* m_camera;
 	Arcball* m_controller;
 	
-	PointCloudMesh* m_mesh;
+	TriMesh* m_mesh;
 	GLuint m_holoImageTex;
 	
 	bool haveHoloImage;
@@ -60,9 +81,10 @@ public:
 	
 private:
 	void initShaders(void);
+	void _initTextures(GLuint width, GLuint height);
 	void initHoloBuffers(void);
+	void _initLighting(void);
 	
-	void printGLErrors(void);
 	int DATA_SIZE;
 	GLubyte* imageData;
 };

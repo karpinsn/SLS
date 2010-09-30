@@ -18,5 +18,5 @@ void main(void)
 
 	float phaseA = atan((I1 - 127.5), (I2 - 127.5)) + (2.0 * pi * I3);
 
-	gl_FragColor.x = phaseA;
+	gl_FragData[0].x = phaseA;
 }

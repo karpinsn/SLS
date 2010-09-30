@@ -79,8 +79,30 @@ void Holoencoder::draw(void)
 	//	Draw the currentMesh
 	glm::mat4 cameraModelViewMatrix = m_cameraProjectionMatrix;
 	
+	
+	
+	glm::mat4 translateMatrix = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
+										  0.0f, 1.0f, 0.0f, 0.0f,
+										  0.0f, 0.0f, 1.0f, 0.0f,
+										  0.0f, -.1f, 0.7f, 1.0f);
+	
+	glm::mat4 scaleMatrix	  = glm::mat4(2.0f, 0.0f, 0.0f, 0.0f,
+										  0.0f, 2.0f, 0.0f, 0.0f,
+										  0.0f, 0.0f, 2.0f, 0.0f,
+										  0.0f, 0.0f, 0.0f, 1.0f);
+	
 	m_controller->applyTransform();
-	cameraModelViewMatrix = cameraModelViewMatrix * m_controller->getTransform();
+	
+	
+	//glTranslatef(0.0f, 0.0f, 0.8f);
+	glMultMatrixf(glm::value_ptr(translateMatrix));
+	glMultMatrixf(glm::value_ptr(scaleMatrix));
+	//glTranslatef(0.0f, -0.1f, 0.7f);
+	//glScalef(2.4f, 2.4f, 2.4f);
+	
+	cameraModelViewMatrix = cameraModelViewMatrix * m_controller->getTransform() * translateMatrix * scaleMatrix;
+	
+	
 	
 	m_encoderShader.bind();
 	GLint projectorModelViewLoc = glGetUniformLocation(m_encoderShader.shaderID(), "projectorModelView");
@@ -112,7 +134,7 @@ void Holoencoder::resize(int width, int height)
 {
 	m_width = width;
 	m_height = height;
-	glOrtho(-1.0, 1.0, -1.0, 1.0, 0.0, 100.0);
+	glOrtho(-1.0, 1.0, -1.0, 1.0, 0.001, 1000.0);
 	//glOrtho(0.0, 1.0, 0.0, 1.0, 0.0, 100.0);
 }
 

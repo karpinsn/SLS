@@ -86,10 +86,8 @@ void ShaderFacade::unbind()
 void ShaderFacade::uniform(const string name, const int data)
 {
 	bind();
-	
 	GLuint location = glGetUniformLocation(shader_id, name.c_str());
-	glUniform1i(location, data);
-	
+	glUniform1i(location, data);	
 	unbind();
 }
 

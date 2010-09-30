@@ -33,21 +33,21 @@ void Holodecoder::initShaders(void)
 	//	Create the shaders
 	m_decoderShader.init("Shaders/Holodecoder.vert", "Shaders/Holodecoder.frag");
 	m_decoderShader.uniform("holoImage", 0);
-	
+
 	m_phaseCalculator.init("Shaders/PhaseCalculator.vert", "Shaders/PhaseCalculator.frag");
 	m_phaseCalculator.uniform("holoImage", 0);
-	
+
 	m_phaseFilter.init("Shaders/MedianFilter3x3.vert", "Shaders/MedianFilter3x3.frag");
 	m_phaseFilter.uniform("image", 0);
 	m_phaseFilter.uniform("width", 512.0f);
 	m_phaseFilter.uniform("height", 512.0f);
-	
+
 	m_normalCalculator.init("Shaders/NormalCalculator.vert", "Shaders/NormalCalculator.frag");
 	m_normalCalculator.uniform("phaseA", 0);
-	
+
 	m_finalRender.init("Shaders/FinalRender.vert", "Shaders/FinalRender.frag");
 	m_finalRender.uniform("normals", 0);
-	m_finalRender.uniform("holoImage", 1);
+	m_finalRender.uniform("phaseMap", 1);
 	
 	OGLStatus::logOGLErrors("Holodecoder - initShaders()");
 }
@@ -128,12 +128,14 @@ void Holodecoder::draw(void)
 	}
 	m_imageProcessor.unbind();
 	
+	glMatrixMode(GL_MODELVIEW);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
 	
 	m_camera->applyMatrix();
 	
 	glColor3f(0.0f, 1.0f, 0.0f);
-	
+		
 	m_finalRender.bind();
 	{
 		glActiveTexture(GL_TEXTURE0);

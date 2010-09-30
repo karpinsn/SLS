@@ -10,7 +10,7 @@ void main()
 	//	Constants for encoding
 	float pi = 3.14159265;
 	float stepHeight = .2;
-	float P = 180.0;
+	float P = 256.0;
 	float T = P/4.5;
 	
 	fringe = vec4((1.0 - sin(pi * 2.0 * x)) * .5, (1.0 - cos(pi * 2.0 * x)) * .5, ((floor(x) * cos(2.0*pi*x/T)) * stepHeight) + stepHeight, 1.0);

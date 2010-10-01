@@ -1,12 +1,22 @@
-#ifndef _Holoviewer_H
-#define _Holoviewer_H
+/*
+ Filename:		Holodecoder.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/01/09
+ Last Edited:	09/01/09
+ 
+ Revision Log:
+ 09/01/09 - Nik Karpinsky - Original creation.
+ */
+
+#ifndef _HOLODECODER_H_
+#define _HOLODECODER_H_
 
 #ifdef __APPLE__
 	#include <glew.h>
 	#include <QtOpenGL/QGLWidget>
-#else
-	#include <GL/glew.h>
+#else _WIN32
 	#include <windows.h>
+	#include <GL/glew.h>
 	#include <QtOpenGL/QGLWidget>
 #endif
 
@@ -89,4 +99,4 @@ private:
 	GLubyte* imageData;
 };
 
-#endif
+#endif	// _HOLODECODER_H_

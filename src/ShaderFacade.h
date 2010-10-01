@@ -1,12 +1,22 @@
-#ifndef _ShaderFacade_H
-#define _ShaderFacade_H
+/*
+ Filename:		ShaderFacade.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/20/10
+ Last Edited:	09/20/10
+ 
+ Revision Log:
+ 09/20/10 - Nik Karpinsky - Original creation.
+ */
+
+#ifndef _SHADER_FACADE_H_
+#define _SHADER_FACADE_H_
 
 #ifdef __APPLE__
 	#include <glew.h>
 	#include <QtOpenGL/QGLWidget>
-#else
-	#include <GL/glew.h>
+#else _WIN32
 	#include <windows.h>
+	#include <GL/glew.h>
 	#include <QtOpenGL/QGLWidget>
 #endif
 
@@ -46,4 +56,4 @@ private:
 	bool _validateProgram(GLuint program);
 };
 
-#endif
+#endif	// _SHADER_FACADE_H_

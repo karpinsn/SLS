@@ -1,6 +1,24 @@
-#pragma once
+/*
+ Filename:		Camera.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/30/10
+ Last Edited:	09/30/10
+ 
+ Revision Log:
+ 09/30/10 - Nik Karpinsky - Original creation.
+ */
 
-#include <QtOpenGL/QGLWidget>
+#ifndef _CAMERA_H_
+#define _CAMERA_H_
+
+#ifdef __APPLE__
+	#include <glew.h>
+	#include <QtOpenGL/QGLWidget>
+#else _WIN32
+	#include <windows.h>
+	#include <GL/glew.h>
+	#include <QtOpenGL/QGLWidget>
+#endif
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -63,3 +81,5 @@ protected:
     void _twist(float dx, float dy);
     void _pan(float dx, float dy);
 };
+
+#endif	// _CAMERA_H_

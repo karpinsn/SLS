@@ -1,15 +1,28 @@
-#ifndef IMAGE_IO_HEADER
-#define IMAGE_IO_HEADER
+/*
+ Filename:		ImageIO.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/30/10
+ Last Edited:	09/30/10
+ 
+ Revision Log:
+ 09/30/10 - Nik Karpinsky - Original creation.
+ */
+
+#ifndef _IMAGE_IO_H_
+#define _IMAGE_IO_H_
 
 #ifdef __APPLE__
-	#include <OpenGL/gl.h>
-#else
+	#include <glew.h>
+	#include <QtOpenGL/QGLWidget>
+#else _WIN32
 	#include <windows.h>
-	#include <gl.h>
+	#include <GL/glew.h>
+	#include <QtOpenGL/QGLWidget>
 #endif
 
 #include <iostream>
 #include <string>
+
 #include <cv.h>
 #include <highgui.h>
 
@@ -54,4 +67,4 @@ private:
 	void ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight);
 };
 
-#endif // IMAGE_IO_HEADER
+#endif // _IMAGE_IO_H_

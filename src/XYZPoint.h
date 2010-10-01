@@ -1,5 +1,3 @@
-#pragma once
-
 /*
 	Filename:		XYZPoint.h
 	Author:			Nikolaus Karpinsky
@@ -9,6 +7,9 @@
 	Revision Log:
 		09/01/09 - Nik Karpinsky - Original creation.
 */
+
+#ifndef _XYZ_POINT_H_
+#define _XYZ_POINT_H_
 
 #include <glm/glm.hpp>
 
@@ -38,3 +39,5 @@ struct XYZPoint
 	//	Normal vector of the point.
 	glm::vec4 normalVector;
 };
+
+#endif	// _XYZ_POINT_H_

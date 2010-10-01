@@ -1,13 +1,22 @@
+/*
+ Filename:		OpenGLWidget.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/30/10
+ Last Edited:	09/30/10
+ 
+ Revision Log:
+ 09/30/10 - Nik Karpinsky - Original creation.
+ */
 
-#ifndef _OPENGLWIDGET_H_
-#define _OPENGLWIDGET_H_
+#ifndef _OPEN_GL_WIDGET_H_
+#define _OPEN_GL_WIDGET_H_
 
 #ifdef __APPLE__
 	#include <glew.h>
 	#include <QtOpenGL/QGLWidget>
-#else
-	#include <GL/glew.h>
+#else _WIN32
 	#include <windows.h>
+	#include <GL/glew.h>
 	#include <QtOpenGL/QGLWidget>
 #endif
 
@@ -55,4 +64,4 @@ protected:
 	void timerEvent(QTimerEvent* event);
 };
 
-#endif
+#endif	// _OPEN_GL_WIDGET_H_

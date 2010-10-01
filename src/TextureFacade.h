@@ -1,10 +1,11 @@
 /*
- *  TextureFacade.h
- *  Holoencoder
- *
- *  Created by Nikolaus Karpinsky on 9/20/10.
- *  Copyright 2010 ISU. All rights reserved.
- *
+ Filename:		TextureFacade.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/20/10
+ Last Edited:	09/20/10
+ 
+ Revision Log:
+ 09/20/10 - Nik Karpinsky - Original creation.
  */
 
 #ifndef _TEXTURE_FACADE_H_
@@ -43,4 +44,4 @@ public:
 	//void* getDataPointer();						//	Caution should be used when using this method
 };
 
-#endif
+#endif	// _TEXTURE_FACADE_H_

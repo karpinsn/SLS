@@ -1,10 +1,23 @@
-#ifndef TRI_MESH_HEADER
-#define TRI_MESH_HEADER
+/*
+ Filename:		TriMesh.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/01/09
+ Last Edited:	09/01/09
+ 
+ Revision Log:
+ 09/01/09 - Nik Karpinsky - Original creation.
+ */
+
+#ifndef _TRI_MESH_H_
+#define _TRI_MESH_H_
 
 #ifdef __APPLE__
-	#include <GLUT/glut.h>
-#else
-	#include <GL/gl.h>
+	#include <glew.h>
+	#include <QtOpenGL/QGLWidget>
+#else _WIN32
+	#include <windows.h>
+	#include <GL/glew.h>
+	#include <QtOpenGL/QGLWidget>
 #endif
 
 #include <stdio.h>
@@ -40,4 +53,4 @@ public:
 	void Draw();
 };
 
-#endif // TRI_MESH_HEADER
+#endif // _TRI_MESH_H_

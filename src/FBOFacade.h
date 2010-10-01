@@ -1,10 +1,11 @@
 /*
- *  RenderTextureFacade.h
- *  Holoencoder
- *
- *  Created by Nikolaus Karpinsky on 9/20/10.
- *  Copyright 2010 ISU. All rights reserved.
- *
+ Filename:		FBOFacade.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/20/10
+ Last Edited:	09/20/10
+ 
+ Revision Log:
+ 09/20/10 - Nik Karpinsky - Original creation.
  */
 
 #ifndef _FBO_FACADE_H_
@@ -38,4 +39,4 @@ private:
 	void _cacheQuad(void);
 };
 
-#endif
+#endif	// _FBO_FACADE_H_

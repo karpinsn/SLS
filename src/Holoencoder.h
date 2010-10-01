@@ -1,12 +1,22 @@
-#ifndef _Holoencoder_H
-#define _Holoencoder_H
+/*
+ Filename:		Holoencoder.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/30/10
+ Last Edited:	09/30/10
+ 
+ Revision Log:
+ 09/30/10 - Nik Karpinsky - Original creation.
+ */
+
+#ifndef _HOLOENCODER_H_
+#define _HOLOENCODER_H_
 
 #ifdef __APPLE__
 	#include <glew.h>
 	#include <QtOpenGL/QGLWidget>
-#else
-	#include <GL/glew.h>
+#else _WIN32
 	#include <windows.h>
+	#include <GL/glew.h>
 	#include <QtOpenGL/QGLWidget>
 #endif
 
@@ -62,4 +72,4 @@ private:
 	
 };
 
-#endif
+#endif	// _HOLOENCODER_H_

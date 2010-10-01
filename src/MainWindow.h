@@ -1,5 +1,15 @@
-#ifndef _MAINWINDOW_H_
-#define _MAINWINDOW_H_
+/*
+ Filename:		MainWindow.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/30/10
+ Last Edited:	09/30/10
+ 
+ Revision Log:
+ 09/30/10 - Nik Karpinsky - Original creation.
+ */
+
+#ifndef _MAIN_WINDOW_H_
+#define _MAIN_WINDOW_H_
 
 #include <iostream>
 #include <QtGui/QWidget>
@@ -63,4 +73,4 @@ private:
 	Holodecoder* m_holoDecoder;
 };
 
-#endif
+#endif	// _MAIN_WINDOW_H_

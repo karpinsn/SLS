@@ -1,7 +1,22 @@
-#ifndef _Arcball_h
-#define _Arcball_h
+/*
+ Filename:		Arcball.h
+ Author:		Nikolaus Karpinsky
+ Date Created:	09/01/09
+ Last Edited:	09/01/09
+ 
+ Revision Log:
+ 09/01/09 - Nik Karpinsky - Original creation.
+ */
 
-#include <QtOpenGL/QGLWidget>
+#ifndef _ARCBALL_H_
+#define _ARCBALL_H_
+
+#ifdef __APPLE__
+	#include <QtOpenGL/QGLWidget>
+#else _WIN32
+	#include <windows.h>
+	#include <QtOpenGL/QGLWidget>
+#endif
 
 #include <glm/glm.hpp>
 #include <glm/gtc/Quaternion.hpp>
@@ -39,5 +54,5 @@ private:
 	inline void setBounds(GLfloat width, GLfloat height);
 };
 
-#endif
+#endif	// _ARCBALL_H_
 

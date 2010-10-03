@@ -72,18 +72,22 @@ const GLenum TextureFacade::getTextureTarget(void) const
 
 void TextureFacade::transferToTexture(const void* data) 
 {
-	size_t dataSize = m_width * m_height * sizeof(float) * 4;
+	size_t dataSize = m_width * m_height * sizeof(uchar) * 4;
     
 	bind();
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, m_PBOId);
 	glBufferData(GL_PIXEL_UNPACK_BUFFER_ARB, dataSize, NULL, GL_STREAM_DRAW);
 	
-	void* ioMem = glMapBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY);
-	memcpy(ioMem, data, dataSize);
 	
-	glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER_ARB);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, GL_RGBA, GL_FLOAT, 0);
-	glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+	GLubyte* ptr = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
+	
+	if(ptr)
+	{
+		memcpy(ptr, data, dataSize);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 512, 512, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+		glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
+		glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+	}
 	
 	OGLStatus::logOGLErrors("TextureFacade - transferToTexture()");
 }

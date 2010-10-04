@@ -42,6 +42,8 @@ private:
 	ImageIO m_aviIO;
 	Holodecoder* m_holoDecoder;
 	
+	bool					m_glContextRequiresInit;
+	
 public:
 	OpenGLWidget(QWidget* parent, AbstractGLContext* glContext, QColor clearColor);
 	~OpenGLWidget();

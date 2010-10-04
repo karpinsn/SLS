@@ -2,8 +2,6 @@
 
 TriMesh::TriMesh(int width, int height)
 {	
-	_generateTexturedVertices();
-	_generateIndices();
 }
 
 TriMesh::~TriMesh()
@@ -14,6 +12,9 @@ TriMesh::~TriMesh()
 
 void TriMesh::initMesh(void)
 {
+	_generateTexturedVertices();
+	_generateIndices();
+	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	_cacheTriMesh();

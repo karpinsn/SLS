@@ -2,6 +2,7 @@
 
 OpenGLWidget::OpenGLWidget(QWidget *parent, AbstractGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
+	m_glContextRequiresInit = true;
 	m_glContext = glContext;
 	m_clearColor = clearColor;
 }
@@ -29,13 +30,16 @@ void OpenGLWidget::initializeGL()
 	}
 	std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << endl;
 	
-	m_glContext->init();
+	if(m_glContextRequiresInit)
+	{
+		m_glContextRequiresInit = false;
+		m_glContext->init();
+	}
 	
 	// Set the clear color
 	qglClearColor(m_clearColor);
 	
 	// Set up the rest of the rendering
-	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glShadeModel(GL_SMOOTH);
 }
@@ -43,16 +47,28 @@ void OpenGLWidget::initializeGL()
 void OpenGLWidget::setNewGLContext(AbstractGLContext* glContext)
 {
 	m_glContext = glContext;
-	m_glContext->init();
+	m_glContextRequiresInit = true;
 }
 
 void OpenGLWidget::updateScene()
 {
+	if(m_glContextRequiresInit)
+	{
+		m_glContextRequiresInit = false;
+		m_glContext->init();
+	}
+	
 	updateGL();
 }
 
 void OpenGLWidget::paintGL()
 {
+	if(m_glContextRequiresInit)
+	{
+		m_glContextRequiresInit = false;
+		m_glContext->init();
+	}
+	
 	glMatrixMode(GL_MODELVIEW);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -72,6 +88,12 @@ void OpenGLWidget::paintGL()
 
 void OpenGLWidget::resizeGL(int width, int height)
 {
+	if(m_glContextRequiresInit)
+	{
+		m_glContextRequiresInit = false;
+		m_glContext->init();
+	}
+	
 	//m_camera->reshape(512, 512);
 	glViewport(0, 0, 512, 512);
 	

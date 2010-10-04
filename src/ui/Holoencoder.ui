@@ -66,7 +66,7 @@
      <x>0</x>
      <y>0</y>
      <width>708</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -78,6 +78,20 @@
    </widget>
    <addaction name="menuFile"/>
   </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionRotate"/>
+   <addaction name="actionZoom"/>
+   <addaction name="actionPan"/>
+  </widget>
   <action name="actionOpenXYZM">
    <property name="text">
     <string>Open XYZ</string>
@@ -86,6 +100,42 @@
   <action name="actionOpen_Holovideo">
    <property name="text">
     <string>Open Holovideo</string>
+   </property>
+  </action>
+  <action name="actionRotate">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../../../Downloads/cam-ToolOrbitLarge.png</normaloff>../../../../Downloads/cam-ToolOrbitLarge.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rotate</string>
+   </property>
+   <property name="toolTip">
+    <string>Rotate</string>
+   </property>
+  </action>
+  <action name="actionZoom">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../../../Downloads/cam-ToolZoomLarge.png</normaloff>../../../../Downloads/cam-ToolZoomLarge.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom</string>
+   </property>
+   <property name="toolTip">
+    <string>zoom</string>
+   </property>
+  </action>
+  <action name="actionPan">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../../../Downloads/cam-ToolPanLarge.png</normaloff>../../../../Downloads/cam-ToolPanLarge.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pan</string>
+   </property>
+   <property name="toolTip">
+    <string>pan</string>
    </property>
   </action>
  </widget>

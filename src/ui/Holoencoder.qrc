@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="../../resources/images/" lang="Tools">
+    <file alias="Zoom Tool">../../resources/images/ZoomTool.png</file>
+    <file alias="Orbit Tool">../../resources/images/OrbitTool.png</file>
+    <file alias="Pan Tool">../../resources/images/PanTool.png</file>
+  </qresource>
+</RCC>

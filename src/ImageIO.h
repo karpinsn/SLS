@@ -61,6 +61,7 @@ public:
 	bool readAviFile(const string &filename);
 	IplImage* readAviFileFrame();
 	bool readAviFileFinish(void);
+	bool aviFileOpen(void);
 	
 private:
 	void textureToImageHandle(GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight);

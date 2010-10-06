@@ -2,7 +2,6 @@
 
 OpenGLWidget::OpenGLWidget(QWidget *parent, AbstractGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
-	m_glContextRequiresInit = true;
 	m_glContext = glContext;
 	m_clearColor = clearColor;
 }
@@ -29,12 +28,9 @@ void OpenGLWidget::initializeGL()
 		cout << "Failed to init GLEW: " << glewGetErrorString(err) << endl;
 	}
 	std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << endl;
-	
-	if(m_glContextRequiresInit)
-	{
-		m_glContextRequiresInit = false;
-		m_glContext->init();
-	}
+
+	m_glDecoder->init();
+	m_glEncoder->init();
 	
 	// Set the clear color
 	qglClearColor(m_clearColor);
@@ -47,28 +43,15 @@ void OpenGLWidget::initializeGL()
 void OpenGLWidget::setNewGLContext(AbstractGLContext* glContext)
 {
 	m_glContext = glContext;
-	m_glContextRequiresInit = true;
 }
 
 void OpenGLWidget::updateScene()
 {
-	if(m_glContextRequiresInit)
-	{
-		m_glContextRequiresInit = false;
-		m_glContext->init();
-	}
-	
 	updateGL();
 }
 
 void OpenGLWidget::paintGL()
 {
-	if(m_glContextRequiresInit)
-	{
-		m_glContextRequiresInit = false;
-		m_glContext->init();
-	}
-	
 	glMatrixMode(GL_MODELVIEW);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -88,13 +71,6 @@ void OpenGLWidget::paintGL()
 
 void OpenGLWidget::resizeGL(int width, int height)
 {
-	if(m_glContextRequiresInit)
-	{
-		m_glContextRequiresInit = false;
-		m_glContext->init();
-	}
-	
-	//m_camera->reshape(512, 512);
 	glViewport(0, 0, 512, 512);
 	
 	glMatrixMode(GL_PROJECTION);
@@ -103,6 +79,11 @@ void OpenGLWidget::resizeGL(int width, int height)
 	m_glContext->resize(512, 512);
 	
 	glMatrixMode(GL_MODELVIEW);
+}
+
+void OpenGLWidget::cameraSelectMode(int mode)
+{
+	m_glContext->cameraSelectMode(mode);
 }
 
 void OpenGLWidget::mousePressEvent(QMouseEvent *event)
@@ -152,19 +133,23 @@ void OpenGLWidget::timerEvent(QTimerEvent* event)
 
 void OpenGLWidget::playMovie(string movieFile, Holodecoder* decoder)
 {
+	m_movieFilename = movieFile;
 	m_holoDecoder = decoder;
-	bool fileOpened = m_aviIO.readAviFile(movieFile.c_str());
 	
-	if(fileOpened)
+	if(!m_aviIO.aviFileOpen())
 	{
+		bool fileOpened = m_aviIO.readAviFile(m_movieFilename.c_str());
 		
-		IplImage *frame = m_aviIO.readAviFileFrame();
-		if(frame)
+		if(fileOpened)
 		{
-			m_holoDecoder->setBackHoloBuffer(frame);
-			m_holoDecoder->swapBuffers();
-			movieTimer.start();
-			startTimer(0);
+			IplImage *frame = m_aviIO.readAviFileFrame();
+			if(frame)
+			{
+				m_holoDecoder->setBackHoloBuffer(frame);
+				m_holoDecoder->swapBuffers();
+				movieTimer.start();
+				startTimer(0);
+			}
 		}
 	}
 	

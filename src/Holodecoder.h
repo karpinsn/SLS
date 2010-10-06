@@ -81,6 +81,7 @@ public:
 	virtual void init(void);
 	virtual void draw(void);
 	virtual void resize(int width, int height);
+	virtual void cameraSelectMode(int mode);
 	virtual void mousePressEvent(int mouseX, int mouseY);
 	virtual void mouseMoveEvent(int mouseX, int mouseY);
 	

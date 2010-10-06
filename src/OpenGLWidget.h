@@ -42,7 +42,7 @@ private:
 	ImageIO m_aviIO;
 	Holodecoder* m_holoDecoder;
 	
-	bool					m_glContextRequiresInit;
+	string					m_movieFilename;
 	
 public:
 	OpenGLWidget(QWidget* parent, AbstractGLContext* glContext, QColor clearColor);
@@ -55,14 +55,17 @@ public:
 	
 	void playMovie(string movieFile, Holodecoder* decoder);
 	
+	AbstractGLContext		*m_glDecoder;
+	AbstractGLContext		*m_glEncoder;
+	
 protected:
 	void initializeGL();
 	void paintGL();
 	void resizeGL(int width, int height);
+	void cameraSelectMode(int mode);
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent* event);
-	
 	void timerEvent(QTimerEvent* event);
 };
 

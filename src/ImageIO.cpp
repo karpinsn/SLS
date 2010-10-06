@@ -167,6 +167,11 @@ bool ImageIO::readAviFileFinish(void)
 	return successfullyClosed;
 }
 
+bool ImageIO::aviFileOpen(void)
+{
+	return m_videoReaderInUse;
+}
+
 void ImageIO::textureToImageHandle(GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight)
 {
 	ensureImageSize(imageWidth, imageHeight);

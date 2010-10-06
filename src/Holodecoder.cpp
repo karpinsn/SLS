@@ -15,11 +15,11 @@ void Holodecoder::init()
 		_initTextures(512, 512);
 		_initLighting();
 		
-		//m_mesh = new PointCloudMesh(512, 512, 4);
 		m_mesh = new TriMesh(512, 512);
 		m_camera = new Camera();
 		m_camera->init(0.0f, 0.5f, 1.0f, 0.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f);
-	
+		m_camera->setMode(1);
+		
 		m_mesh->initMesh();
 		haveHoloImage = false;
 		m_hasBeenInit = true;
@@ -105,6 +105,7 @@ void Holodecoder::draw(void)
 	glMatrixMode(GL_MODELVIEW);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
+	glLoadIdentity();
 	
 	m_camera->applyMatrix();
 	
@@ -130,20 +131,25 @@ void Holodecoder::draw(void)
 
 void Holodecoder::resize(int width, int height)
 {
-	//m_camera->reshape(width, height);
+	m_camera->reshape(width, height);
 	glOrtho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+}
+
+void Holodecoder::cameraSelectMode(int mode)
+{
+	m_camera->setMode(mode);
 }
 
 void Holodecoder::mousePressEvent(int mouseX, int mouseY)
 {
-	//m_camera->mousePressed(mouseX, mouseY);
-	m_controller->mousePressEvent(mouseX, mouseY);
+	m_camera->mousePressed(mouseX, mouseY);
+	//m_controller->mousePressEvent(mouseX, mouseY);
 }
 
 void Holodecoder::mouseMoveEvent(int mouseX, int mouseY)
 {
-	//m_camera->mouseMotion(mouseX, mouseY);
-	m_controller->mouseMoveEvent(mouseX, mouseY);
+	m_camera->mouseMotion(mouseX, mouseY);
+	//m_controller->mouseMoveEvent(mouseX, mouseY);
 }
 
 void Holodecoder::setBackHoloBuffer(IplImage* image)
@@ -208,4 +214,6 @@ void Holodecoder::_initLighting(void)
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 }

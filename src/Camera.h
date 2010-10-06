@@ -42,7 +42,12 @@ class Camera
 {
 	
 public:
-    Camera();
+	static const int ROTATE_MODE = 1;
+	static const int ZOOM_MODE = 2;
+	static const int PAN_MODE = 3;
+	static const int TWIST_MODE = 4;
+
+	Camera();
     ~Camera(void);
 
 /* functions */

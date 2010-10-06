@@ -8,8 +8,8 @@ Camera::Camera()
     tb_prevPos[0] = 0.0f;
     tb_prevPos[1] = 0.0f;
     tb_moving = GL_FALSE;
-    tb_width = 1;
-    tb_height = 1;
+    tb_width = 512;
+    tb_height = 512;
 	m_currentView = 0;
 	tb_mode = 2;
 }
@@ -22,11 +22,12 @@ void Camera::init()
 {
     /* put the identity in the trackball transform */
     glPushMatrix();
-    glLoadIdentity();
-    glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_transform));
-    glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_accuTransform));
+		glLoadIdentity();
+		glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_transform));
+		glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_accuTransform));
     glPopMatrix();
 	m_viewLength = glm::value_ptr(tb_accuTransform)[14];	//	TODO come back and fix this
+	m_viewLength = 1.0;
 }
 
 void Camera::init(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
@@ -36,12 +37,13 @@ void Camera::init(float eyeX, float eyeY, float eyeZ, float centerX, float cente
     glLoadIdentity();
 	
 	//	Set to the identity
-	tb_transform = glm::mat4();
+	glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_transform));
 	
 	gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
     glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_accuTransform));
     glPopMatrix();
 	m_viewLength = glm::value_ptr(tb_accuTransform)[14];
+		m_viewLength = .3;
 }
 
 void Camera::initRotatedCam(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
@@ -51,13 +53,14 @@ void Camera::initRotatedCam(float eyeX, float eyeY, float eyeZ, float centerX, f
     glLoadIdentity();
 	
 	//	Set to the identity
-	tb_transform = glm::mat4();
+	glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_transform));
 	
 	gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
 	glRotatef(-30.0f, 0.0f, 1.0f, 0.0f);
-    glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_accuTransform));
+		glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_accuTransform));
     glPopMatrix();
 	m_viewLength = glm::value_ptr(tb_accuTransform)[14];
+		m_viewLength = 2.0;
 }
 
 void Camera::setMode(int mode)
@@ -71,25 +74,27 @@ void Camera::applyMatrix()
 {
   // multiple the current one with the previous transformation
   glPushMatrix();
-  glLoadIdentity();
+  {
+	  glLoadIdentity();
 	
-	float accRotation[16];
-	for(int i=0; i<16;i++)
-	{
-		accRotation[i] = glm::value_ptr(tb_accuTransform)[i];
-	}
-	// make accRotation as a rotation only matrix
-  accRotation[12] = 0.0;
-  accRotation[13] = 0.0;
-  accRotation[14] = 0.0;
+	  float accRotation[16];
+	  for(int i=0; i<16;i++)
+	  {
+			accRotation[i] = glm::value_ptr(tb_accuTransform)[i];
+	  }
+	  // make accRotation as a rotation only matrix
+	  accRotation[12] = 0.0;
+	  accRotation[13] = 0.0;
+	  accRotation[14] = 0.0;
 	
-  glTranslatef(glm::value_ptr(tb_accuTransform)[12], glm::value_ptr(tb_accuTransform)[13], glm::value_ptr(tb_accuTransform)[14]); // Translation later
-  glMultMatrixf(glm::value_ptr(tb_transform));                     // Addition transformation second
-  glMultMatrixf(accRotation);                      // Pure rotation first
+	  glTranslatef(glm::value_ptr(tb_accuTransform)[12], glm::value_ptr(tb_accuTransform)[13], glm::value_ptr(tb_accuTransform)[14]); // Translation later
+	  glMultMatrixf(glm::value_ptr(tb_transform));                     // Addition transformation second
+	  glMultMatrixf(accRotation);                      // Pure rotation first
 
-  glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_accuTransform));
+	  tb_transform = glm::mat4();
+	  glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(tb_accuTransform));
   
-	
+  }
   glPopMatrix();
   // Set to the current matrix
   glMultMatrixf(glm::value_ptr(tb_accuTransform));
@@ -106,7 +111,7 @@ void Camera::mousePressed(int x, int y)
 	m_viewLength = glm::value_ptr(tb_accuTransform)[14];
 	
 	//	Set to the identity
-	tb_transform = glm::mat4();
+	//tb_transform = glm::mat4();
 	
     tb_currPos[0] = (float)x / (float)tb_width;
     tb_currPos[1] = (float)y / (float)tb_height;
@@ -117,6 +122,7 @@ void Camera::mousePressed(int x, int y)
 
 void Camera::mouseRelease(int x, int y)
 {
+	tb_transform = glm::mat4();
 	tb_moving = GL_FALSE;
 }
 
@@ -135,13 +141,12 @@ void Camera::mouseMotion(int x, int y)
 
     switch (tb_mode)
     {
-        case 1: _rotate(dx, dy); break;
-        case 2: _zoom(dx, dy); break;
-        case 3: _twist(dx, dy); break;
-        case 4: _pan(dx, dy); break;
-		default: break;
+        case ROTATE_MODE:	_rotate(dx, dy);	break;
+        case ZOOM_MODE:		_zoom(dx, dy);		break;
+        case TWIST_MODE:	_twist(dx, dy);		break;
+        case PAN_MODE:		_pan(dx, dy);		break;
+		default:								break;
     }
-
 
     tb_prevPos[0] = tb_currPos[0];
     tb_prevPos[1] = tb_currPos[1];
@@ -220,6 +225,7 @@ void Camera::_twist(float dx, float dy)
 void Camera::_pan(float dx, float dy)
 {
     float distance = glm::value_ptr(tb_accuTransform)[14];
+	
 	float worldWidth = 2.0f * distance * tanf((60.0f/2.0f) * DegToRad);
 	
 	float aspect = (float)tb_width / (float)tb_height;

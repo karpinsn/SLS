@@ -20,7 +20,8 @@ void Holoencoder::init()
 
 		m_camera = new Camera();
 		m_camera->initRotatedCam(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-	
+		m_camera->setMode(4);
+		
 		//	Define the camera projection matrix
 		m_cameraProjectionMatrix = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
 											 0.0f, 1.0f, 0.0f, 0.0f,
@@ -136,6 +137,12 @@ void Holoencoder::resize(int width, int height)
 	m_height = height;
 	glOrtho(-1.0, 1.0, -1.0, 1.0, 0.001, 1000.0);
 	//glOrtho(0.0, 1.0, 0.0, 1.0, 0.0, 100.0);
+}
+
+
+void Holoencoder::cameraSelectMode(int mode)
+{
+	m_camera->setMode(mode);
 }
 
 void Holoencoder::mousePressEvent(int mouseX, int mouseY)

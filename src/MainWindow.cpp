@@ -101,6 +101,11 @@ void MainWindowController::playVideo(void)
 	}
 }
 
+void MainWindowController::panToolSelect(void)
+{
+	m_mainWindow->m_glWidget->cameraSelectMode(2);
+}
+
 MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
 {	
 	// Sets up the interface elements from Designer file
@@ -117,6 +122,9 @@ MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
 	m_glWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	horizontalLayout_3->insertWidget(0, m_glWidget);
 	m_holoDecoder = new Holodecoder(m_glWidget);
+	
+	m_glWidget->m_glDecoder = m_holoDecoder;
+	m_glWidget->m_glEncoder = m_holoEncoder;
 }
 
 MainWindow::~MainWindow()

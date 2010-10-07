@@ -101,9 +101,9 @@ void MainWindowController::playVideo(void)
 	}
 }
 
-void MainWindowController::panToolSelect(void)
+void MainWindowController::toolSelect(const int tool)
 {
-	m_mainWindow->m_glWidget->cameraSelectMode(2);
+	m_mainWindow->m_glWidget->cameraSelectMode(tool);
 }
 
 MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
@@ -125,10 +125,20 @@ MainWindow::MainWindow(QMainWindow* parent) : QMainWindow(parent)
 	
 	m_glWidget->m_glDecoder = m_holoDecoder;
 	m_glWidget->m_glEncoder = m_holoEncoder;
+	
+	_initTopMenu();
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::_initTopMenu()
+{
+	QActionGroup* group = new QActionGroup(this);
+	group->addAction(actionPan);
+	group->addAction(actionRotate);
+	group->addAction(actionZoom);
 }
 
 void MainWindow::connectSignalsWithController(QObject* controller)
@@ -138,4 +148,19 @@ void MainWindow::connectSignalsWithController(QObject* controller)
 	connect(fileList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), controller, SLOT(selectXYZM(QListWidgetItem*, QListWidgetItem*)));
 	connect(actionOpenXYZM, SIGNAL(triggered()), controller, SLOT(onOpenXYZM()));
 	connect(actionOpen_Holovideo, SIGNAL(triggered()), controller, SLOT(playVideo()));
+
+	//	Connect the tool bar signals
+	//	Need a mapper to map each signal to a tool type
+	QSignalMapper* mapper = new QSignalMapper(this);
+	mapper->setMapping(actionPan, Camera::PAN_MODE);
+	mapper->setMapping(actionRotate, Camera::ROTATE_MODE);
+	mapper->setMapping(actionZoom, Camera::ZOOM_MODE);
+	
+	//	Connect the tool signals to the mapper
+	connect(actionPan, SIGNAL(triggered()), mapper, SLOT(map()));
+	connect(actionRotate, SIGNAL(triggered()), mapper, SLOT(map()));
+	connect(actionZoom, SIGNAL(triggered()), mapper, SLOT(map()));
+	
+	//	Connect the mapper signal to the controller
+	connect(mapper, SIGNAL(mapped(int)), controller, SLOT(toolSelect(const int)));
 }

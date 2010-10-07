@@ -20,6 +20,7 @@
 //	Qt auto generated headers
 #include "ui_Holoencoder.h"
 
+#include "Camera.h"
 #include "OpenGLWidget.h"
 #include "Holoencoder.h"
 #include "Holodecoder.h"
@@ -44,8 +45,9 @@ public slots:
 	void onEncodeButton();
 	void onOpenXYZM();
 	void selectXYZM(QListWidgetItem* current, QListWidgetItem* previous);
-
 	void playVideo(void);
+	
+	void toolSelect(const int tool);
 	
 private:
 	MainWindow* m_mainWindow;
@@ -71,6 +73,9 @@ private:
 	
 	Holoencoder* m_holoEncoder;
 	Holodecoder* m_holoDecoder;
+	
+private:
+	void _initTopMenu(void);
 };
 
 #endif	// _MAIN_WINDOW_H_

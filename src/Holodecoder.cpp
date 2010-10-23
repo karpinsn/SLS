@@ -83,7 +83,6 @@ void Holodecoder::draw(void)
 		m_phaseCalculator.bind();
 		glActiveTexture(GL_TEXTURE0);
 		m_holoImages[m_frontBufferIndex]->bind();
-		//glBindTexture(GL_TEXTURE_2D, m_holoImageTex);
 		m_imageProcessor.process();
 		
 		//	Pass 2
@@ -143,13 +142,11 @@ void Holodecoder::cameraSelectMode(int mode)
 void Holodecoder::mousePressEvent(int mouseX, int mouseY)
 {
 	m_camera->mousePressed(mouseX, mouseY);
-	//m_controller->mousePressEvent(mouseX, mouseY);
 }
 
 void Holodecoder::mouseMoveEvent(int mouseX, int mouseY)
 {
 	m_camera->mouseMotion(mouseX, mouseY);
-	//m_controller->mouseMoveEvent(mouseX, mouseY);
 }
 
 void Holodecoder::setBackHoloBuffer(IplImage* image)

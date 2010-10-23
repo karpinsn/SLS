@@ -27,7 +27,8 @@ include(${QT_USE_FILE})
 set(SOURCES
 	
 	Application.cpp
-	MainWindow.cpp
+	MainWindowView.cpp
+	MainWindowController.cpp
 	OpenGLWidget.cpp
 	Holoencoder.cpp
 	Camera.cpp
@@ -44,7 +45,8 @@ set(SOURCES
 	FBOFacade.cpp
 	TextureFacade.cpp
 
-	MainWindow.h
+	MainWindowView.h
+	MainWindowController.h
 	OpenGLWidget.h
 	Holoencoder.h
 	Camera.h
@@ -70,7 +72,7 @@ set(SOURCES
 	
 set(UIS ui/Holoencoder.ui)	
 	
-set(MOCS MainWindow.h)	
+set(MOCS MainWindowView.h MainWindowController.h)	
 
 set(RESOURCES ui/Holoencoder.qrc)
 
@@ -105,6 +107,8 @@ add_executable(${PROJECT_NAME}
 	${UIS}
 	${MOCS}
 	${RESOURCES})
+
+message(STATUS "OpenCV Libs:" ${OpenCV_LIBS} " Done")
 
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${QT_LIBRARIES} ${OpenCV_LIBS})
 

@@ -4,18 +4,16 @@
   Author: Nik Karpinsky
 
   Adopted from:
-    Median Finding on a 3-by-3 Grid
-    by Alan Paeth
-    from "Graphics Gems", Academic Press, 1990
+    A Fast, Small-Radius GPU Median Filter
+    by Morgan McGuire
+    from Shader X6 Advanced Rendering Techniques
 */
 
-#define s2(a,b) {float t; if ((t=b-a)<0.0) {a+=t; b-=t;}}
-#define mn3(a,b,c) s2(a,b); s2(a,c);
-#define mx3(a,b,c) s2(b,c); s2(a,c);
-#define mnmx3(a,b,c) mx3(a,b,c); s2(a,b);
-#define mnmx4(a,b,c,d) s2(a,b); s2(c,d); s2(a,c); s2(b,d);
-#define mnmx5(a,b,c,d,e) s2(a,b); s2(c,d); mn3(a,c,e); mx3(b,d,e);
-#define mnmx6(a,b,c,d,e,f) s2(a,d); s2(b,e); s2(c,f); mn3(a,b,c); mx3(d,e,f);
+#define m2(a,b) 		t = a; a = min(t,b); b = max(t,b);
+#define m3(a,b,c) 	m2(b,c); m2(a,c); m2(a,b);
+#define m4(a,b,c,d) 	m2(a,b); m2(c,d); m2(a,c); m2(b,d);
+#define m5(a,b,c,d,e) 	m2(a,b); m2(c,d); m2(a,c); m2(a,e); m2(d,e); m2(b,e);
+#define m6(a,b,c,d,e,f)	m2(a,d); m2(b,e); m2(c,f); m2(a,b); m2(a,c); m2(e,f); m2(d,f);
 
 uniform sampler2D image;
 uniform float width;
@@ -26,25 +24,21 @@ float step_h = 1.0/height;
 
 void main(void)
 {
-  float step_w = 1.0/512.0;
-  float step_h = 1.0/512.0;
+  float v[9];
+  float t;
 
-  float block[6];
+  for(int dX = -1; dX <= 1; ++dX)
+  {
+    for(int dY = -1; dY <= 1; ++dY)
+    {
+      v[dX * 3 + dY + 4] = texture2D(image, gl_TexCoord[0].xy + vec2(float(dX)/width, float(dY)/height)).x;
+    }
+  }
 
-  block[0] = texture2D(image, gl_TexCoord[0].xy + vec2(-step_w, -step_w)).x;
-  block[1] = texture2D(image, gl_TexCoord[0].xy + vec2( 0.0, -step_w)).x;
-  block[2] = texture2D(image, gl_TexCoord[0].xy + vec2(+step_w, -step_w)).x;
-  block[3] = texture2D(image, gl_TexCoord[0].xy + vec2(-step_w,  0.0)).x;
-  block[4] = texture2D(image, gl_TexCoord[0].xy + vec2( 0.0,  0.0)).x;
-  block[5] = texture2D(image, gl_TexCoord[0].xy + vec2(+step_w,  0.0)).x;
-
-  mnmx6(block[0], block[1], block[2], block[3], block[4], block[5]);
-  block[0] = texture2D(image, gl_TexCoord[0].xy + vec2(-step_w, +step_w)).x;
-  mnmx5(block[0], block[1], block[2], block[3], block[4]);
-  block[0] = texture2D(image, gl_TexCoord[0].xy + vec2( 0.0, +step_w)).x;
-  mnmx4(block[0], block[1], block[2], block[3]);
-  block[0] = texture2D(image, gl_TexCoord[0].xy + vec2(+step_w, +step_w)).x;
-  mnmx3(block[0], block[1], block[2]);
+  m6(v[0], v[1], v[2], v[3], v[4], v[5]);
+  m5(v[1], v[2], v[3], v[4], v[6]);
+  m4(v[2], v[3], v[4], v[7]);
+  m3(v[3], v[4], v[8]);
    
-  gl_FragData[0] = vec4(block[1], 0.0, 0.0, 0.0);
+  gl_FragData[0] = vec4(v[4], 0.0, 0.0, 0.0);
 }

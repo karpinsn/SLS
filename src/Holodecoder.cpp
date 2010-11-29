@@ -17,7 +17,7 @@ void Holodecoder::init()
 		
 		m_mesh = new TriMesh(512, 512);
 		m_camera = new Camera();
-		m_camera->init(0.0f, 0.75f, 2.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
+		m_camera->init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
 		m_camera->setMode(1);
 		
 		m_mesh->initMesh();

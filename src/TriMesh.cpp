@@ -81,7 +81,7 @@ void TriMesh::_generateTexturedVertices(void)
 	{
 		for(int column = 0; column < meshWidth; column++)
 		{
-			meshVertices[row * meshHeight + column].x = (float)row * 0.001953125 -.5 + .001;
+			meshVertices[row * meshHeight + column].x = (float)row * 0.001953125 -.5;
 			meshVertices[row * meshHeight + column].y = (float)column * 0.001953125 + .5;
 			meshVertices[row * meshHeight + column].z = 0.0f;
 			

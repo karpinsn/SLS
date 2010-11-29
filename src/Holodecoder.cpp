@@ -17,7 +17,7 @@ void Holodecoder::init()
 		
 		m_mesh = new TriMesh(512, 512);
 		m_camera = new Camera();
-		m_camera->init(0.0f, 0.5f, 1.0f, 0.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f);
+		m_camera->init(0.0f, 0.75f, 2.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
 		m_camera->setMode(1);
 		
 		m_mesh->initMesh();
@@ -46,6 +46,7 @@ void Holodecoder::initShaders(void)
 	m_finalRender.init("Shaders/FinalRender.vert", "Shaders/FinalRender.frag");
 	m_finalRender.uniform("normals", 0);
 	m_finalRender.uniform("phaseMap", 1);
+	m_finalRender.uniform("holoImage", 2);
 	
 	OGLStatus::logOGLErrors("Holodecoder - initShaders()");
 }
@@ -116,6 +117,8 @@ void Holodecoder::draw(void)
 		m_normalMap.bind();
 		glActiveTexture(GL_TEXTURE1);
 		m_phaseMap1.bind();
+		glActiveTexture(GL_TEXTURE2);
+		m_holoImages[m_frontBufferIndex]->bind();
 		
 		//	Draw a plane of pixels
 		m_controller->applyTransform();
@@ -131,7 +134,9 @@ void Holodecoder::draw(void)
 void Holodecoder::resize(int width, int height)
 {
 	m_camera->reshape(width, height);
-	glOrtho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+	gluPerspective(45.0, 1.0, .00001, 10.0);
+	//glFrustum(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+	//glOrtho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
 }
 
 void Holodecoder::cameraSelectMode(int mode)
@@ -197,7 +202,6 @@ void Holodecoder::_initLighting(void)
 	glClearColor(1.0, 1.0, 1.0, 0.0);
 	
 	glShadeModel(GL_SMOOTH);
-	
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	

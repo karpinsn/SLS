@@ -101,6 +101,17 @@ void MainWindowController::playVideo(void)
 	}
 }
 
+void MainWindowController::openHoloImage(void)
+{
+	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holoimage to Open", "/", "Images (*.png)");
+	
+	if(!file.isEmpty())
+	{
+		m_mainWindow->m_glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
+		m_mainWindow->m_glWidget->playMovie(file.toStdString(), m_mainWindow->m_holoDecoder);
+	}
+}
+
 void MainWindowController::toolSelect(const int tool)
 {
 	m_mainWindow->m_glWidget->cameraSelectMode(tool);

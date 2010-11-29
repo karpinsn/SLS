@@ -14,7 +14,7 @@
 #ifdef __APPLE__
 	#include <glew.h>
 	#include <QtOpenGL/QGLWidget>
-#elseif _WIN32
+#elif _WIN32
 	#include <windows.h>
 	#include <GL/glew.h>
 	#include <QtOpenGL/QGLWidget>

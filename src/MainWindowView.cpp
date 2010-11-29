@@ -42,6 +42,7 @@ void MainWindowView::connectSignalsWithController(QObject* controller)
 	connect(fileList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), controller, SLOT(selectXYZM(QListWidgetItem*, QListWidgetItem*)));
 	connect(actionOpenXYZM, SIGNAL(triggered()), controller, SLOT(onOpenXYZM()));
 	connect(actionOpen_Holovideo, SIGNAL(triggered()), controller, SLOT(playVideo()));
+	connect(actionOpen_Holoimage, SIGNAL(triggered()), controller, SLOT(openHoloImage()));
 
 	//	Connect the tool bar signals
 	//	Need a mapper to map each signal to a tool type

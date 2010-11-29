@@ -47,6 +47,7 @@ public slots:
 	void onOpenXYZM();
 	void selectXYZM(QListWidgetItem* current, QListWidgetItem* previous);
 	void playVideo(void);
+	void openHoloImage(void);
 	
 	void toolSelect(const int tool);
 	

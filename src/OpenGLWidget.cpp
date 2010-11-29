@@ -43,6 +43,7 @@ void OpenGLWidget::initializeGL()
 void OpenGLWidget::setNewGLContext(AbstractGLContext* glContext)
 {
 	m_glContext = glContext;
+	resizeGL(512, 512);
 }
 
 void OpenGLWidget::updateScene()
@@ -104,6 +105,11 @@ void OpenGLWidget::mouseReleaseEvent(QMouseEvent* event)
 {
 	std::cout << "Mouse Released: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
 	updateGL();
+}
+
+void OpenGLWidget::openHoloImage(void)
+{
+	
 }
 
 void OpenGLWidget::timerEvent(QTimerEvent* event)

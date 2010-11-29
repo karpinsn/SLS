@@ -14,8 +14,11 @@
 #ifdef __APPLE__
 	#include <glew.h>
 	#include <QtOpenGL/QGLWidget>
-#else _WIN32
+#elif _WIN32
 	#include <windows.h>
+	#include <GL/glew.h>
+	#include <QtOpenGL/QGLWidget>
+#else
 	#include <GL/glew.h>
 	#include <QtOpenGL/QGLWidget>
 #endif
@@ -53,6 +56,7 @@ public:
 	QSize minimumSizeHint() const;
 	QSize sizeHint() const;
 	
+	void openHoloImage(void);
 	void playMovie(string movieFile, Holodecoder* decoder);
 	void cameraSelectMode(int mode);
 	

@@ -75,6 +75,7 @@
     </property>
     <addaction name="actionOpenXYZM"/>
     <addaction name="actionOpen_Holovideo"/>
+    <addaction name="actionOpen_Holoimage"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -154,6 +155,11 @@
    </property>
    <property name="toolTip">
     <string>pan</string>
+   </property>
+  </action>
+  <action name="actionOpen_Holoimage">
+   <property name="text">
+    <string>Open Holoimage</string>
    </property>
   </action>
  </widget>

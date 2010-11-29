@@ -65,6 +65,9 @@ set(SOURCES
 	ShaderFacade.h
 	FBOFacade.h
 	TextureFacade.h
+	
+	MockHolodecoder.cpp
+	MockHolodecoder.h
 
 	glm/glm.hpp
 	glm/gtc/matrix_transform.hpp

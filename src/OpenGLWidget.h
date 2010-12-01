@@ -29,10 +29,12 @@
 
 #include "Holoencoder.h"
 #include "Holodecoder.h"
+#include "MockHolodecoder.h"
 #include "Camera.h"
 #include "AbstractGLContext.h"
 
 class Holodecoder;
+class MockHolodecoder;
 
 class OpenGLWidget : public QGLWidget
 {
@@ -43,7 +45,7 @@ private:
 	
 	QTime movieTimer;
 	ImageIO m_aviIO;
-	Holodecoder* m_holoDecoder;
+	MockHolodecoder* m_holoDecoder;
 	
 	string					m_movieFilename;
 	
@@ -57,7 +59,7 @@ public:
 	QSize sizeHint() const;
 	
 	void openHoloImage(void);
-	void playMovie(string movieFile, Holodecoder* decoder);
+	void playMovie(string movieFile, MockHolodecoder* decoder);
 	void cameraSelectMode(int mode);
 	
 	AbstractGLContext		*m_glDecoder;

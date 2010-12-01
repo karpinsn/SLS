@@ -41,6 +41,39 @@ bool ImageIO::saveRGBImage(const string &filename, GLuint textureID, const unsig
 	return cvSaveImage(filename.c_str(), m_imageHandle);
 }
 
+bool ImageIO::saveBoundBuffer(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight)
+{
+	ensureImageSize(imageWidth, imageHeight);
+	
+	IplImage *temp = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 4);
+	IplImage *temp2 = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 3);
+	glReadPixels(0, 0, imageWidth, imageHeight, GL_RGBA, GL_FLOAT, temp->imageData);
+	
+	cvSetImageCOI(temp, 1);
+	cvSetImageCOI(temp2, 1);
+	cvCopy(temp, temp2);
+	
+	cvSetImageCOI(temp, 2);
+	cvSetImageCOI(temp2, 2);
+	cvCopy(temp, temp2);
+	
+	cvSetImageCOI(temp, 3);
+	cvSetImageCOI(temp2, 3);
+	cvCopy(temp, temp2);
+	
+	cvSetImageCOI(temp, 0);
+	cvSetImageCOI(temp2, 0);
+	
+	cvCvtScale(temp2, m_imageHandle, 255);
+	
+	//	Flip the image and convert to BGR since that is how OpenCV is looking for it
+	//cvFlip(m_imageHandle, 0);
+	cvCvtColor(m_imageHandle, m_imageHandle, CV_RGB2BGR);
+	
+	return cvSaveImage(filename.c_str(), m_imageHandle);
+	
+}
+
 IplImage* ImageIO::readImage(const string &filename)
 {
 	IplImage* image = cvLoadImage(filename.c_str());

@@ -15,7 +15,7 @@ MainWindowView::MainWindowView(QMainWindow* parent) : QMainWindow(parent)
 	m_glWidget->setMinimumSize(512, 512);
 	m_glWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	horizontalLayout_3->insertWidget(0, m_glWidget);
-	m_holoDecoder = new Holodecoder(m_glWidget);
+	m_holoDecoder = new MockHolodecoder(m_glWidget);
 	
 	m_glWidget->m_glDecoder = m_holoDecoder;
 	m_glWidget->m_glEncoder = m_holoEncoder;

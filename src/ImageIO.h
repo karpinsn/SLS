@@ -51,7 +51,8 @@ public:
 	//	Save Image Methods
 	bool saveRGBImage(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight);
 	bool saveRGBImage(const string &filename, GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight);
-
+	bool saveBoundBuffer(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight);
+	
 	//	Read Image Methods
 	IplImage* readImage(const string &filename);
 	

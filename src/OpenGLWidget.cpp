@@ -137,7 +137,7 @@ void OpenGLWidget::timerEvent(QTimerEvent* event)
 	updateGL();
 }
 
-void OpenGLWidget::playMovie(string movieFile, Holodecoder* decoder)
+void OpenGLWidget::playMovie(string movieFile, MockHolodecoder* decoder)
 {
 	m_movieFilename = movieFile;
 	m_holoDecoder = decoder;

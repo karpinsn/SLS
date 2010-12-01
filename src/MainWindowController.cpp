@@ -103,7 +103,7 @@ void MainWindowController::playVideo(void)
 
 void MainWindowController::openHoloImage(void)
 {
-	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holoimage to Open", "/", "Images (*.png)");
+	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holoimage to Open", "/", "Images (*.jpg)");
 	
 	if(!file.isEmpty())
 	{

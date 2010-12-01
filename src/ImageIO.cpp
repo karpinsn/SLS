@@ -65,6 +65,8 @@ bool ImageIO::saveBoundBuffer(const string &filename, const unsigned int imageWi
 	cvSetImageCOI(temp2, 0);
 	
 	cvCvtScale(temp2, m_imageHandle, 255);
+	cvReleaseImage(&temp);
+	cvReleaseImage(&temp2);
 	
 	//	Flip the image and convert to BGR since that is how OpenCV is looking for it
 	//cvFlip(m_imageHandle, 0);

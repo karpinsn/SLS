@@ -15,9 +15,23 @@ void MainWindowController::showWidget()
 	m_mainWindow->show();
 }
 
-void MainWindowController::onEncodeButton()
+void MainWindowController::exportSingleFrame()
 {
-	std::cout << "Encode Button Pushed" << std::endl;
+	Logger::logDebug("MainWindowController - exportSingleFrame: Enter");
+	
+	QString fileName = QFileDialog::getSaveFileName(m_mainWindow, "Save File", "/", "Images (*.png)");
+	
+	if(!fileName.isEmpty())
+	{
+		ImageIO io;
+		GLuint texID = m_mainWindow->m_holoEncoder->encode();
+		io.saveRGBImage(fileName.toAscii().constData(), texID, 512, 512);
+	}
+}
+
+void MainWindowController::exportEntireVideo()
+{
+	Logger::logDebug("MainWindowController - exportEntireVideo: Enter");
 	
 	QString fileName = QFileDialog::getSaveFileName(m_mainWindow, "Save File", "/", "Video (*.avi)");
 	
@@ -33,6 +47,7 @@ void MainWindowController::onEncodeButton()
 			//	Inform the user of the progress
 			QProgressDialog progress("Encoding frames...", 0, 0, m_mainWindow->fileList->count(), m_mainWindow);
 			
+			Logger::logDebug("MainWindowController - exportEntireVideo: Encoding frames");
 			for(int itemNumber = 0; itemNumber < m_mainWindow->fileList->count(); itemNumber++)
 			{
 				//	Increase the progress
@@ -50,7 +65,7 @@ void MainWindowController::onEncodeButton()
 			//	Last one done!
 			progress.setValue(m_mainWindow->fileList->count());
 			
-			clog << "Encoding complete" << endl;
+			Logger::logDebug("MainWindowController - exportEntireVideo: Encoding complete!");
 			io.saveAviFileFinish();
 		}
 	}
@@ -81,9 +96,9 @@ void MainWindowController::onOpenXYZM()
 
 void MainWindowController::selectXYZM(QListWidgetItem* current, QListWidgetItem* previous)
 {
-	//	Display the new XYZM file
-	cout << "New file selected" << endl;
-	
+	Logger::logDebug("MainWindowController - selectXYZM: Enter");
+
+	//	Display the new XYZM file	
 	XYZFileIO fileIO;
 	AbstractMesh* currentMesh = fileIO.newMeshFromFile(current->text().toAscii().constData());
 	m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
@@ -103,7 +118,7 @@ void MainWindowController::playVideo(void)
 
 void MainWindowController::openHoloImage(void)
 {
-	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holoimage to Open", "/", "Images (*.jpg)");
+	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holoimage to Open", "/", "Images (*.png *.jpg)");
 	
 	if(!file.isEmpty())
 	{

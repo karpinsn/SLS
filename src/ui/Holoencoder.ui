@@ -73,9 +73,18 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuExport">
+     <property name="title">
+      <string>Export</string>
+     </property>
+     <addaction name="actionExportSingleFrame"/>
+     <addaction name="actionExportEntireVideo"/>
+    </widget>
     <addaction name="actionOpenXYZM"/>
     <addaction name="actionOpen_Holovideo"/>
     <addaction name="actionOpen_Holoimage"/>
+    <addaction name="separator"/>
+    <addaction name="menuExport"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -160,6 +169,16 @@
   <action name="actionOpen_Holoimage">
    <property name="text">
     <string>Open Holoimage</string>
+   </property>
+  </action>
+  <action name="actionExportSingleFrame">
+   <property name="text">
+    <string>Single Frame</string>
+   </property>
+  </action>
+  <action name="actionExportEntireVideo">
+   <property name="text">
+    <string>Entire Video</string>
    </property>
   </action>
  </widget>

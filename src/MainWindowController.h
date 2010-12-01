@@ -29,6 +29,7 @@
 #include "ImageIO.h"
 #include "AbstractMesh.h"
 #include "XYZFileIO.h"
+#include "Logger.h"
 
 class MainWindowView;
 
@@ -43,7 +44,8 @@ public:
 	void showWidget();
 	
 public slots:
-	void onEncodeButton();
+	void exportSingleFrame();
+	void exportEntireVideo();
 	void onOpenXYZM();
 	void selectXYZM(QListWidgetItem* current, QListWidgetItem* previous);
 	void playVideo(void);

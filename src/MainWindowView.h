@@ -51,7 +51,7 @@ private:
 	OpenGLWidget* m_viewerWidget;
 	
 	Holoencoder* m_holoEncoder;
-	MockHolodecoder* m_holoDecoder;
+	Holodecoder* m_holoDecoder;
 	
 private:
 	void _initTopMenu(void);

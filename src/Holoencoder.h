@@ -29,6 +29,7 @@
 #include "AbstractMesh.h"
 #include "AbstractGLContext.h"
 #include "Arcball.h"
+#include "TextureFacade.h"
 
 using namespace std;
 
@@ -45,10 +46,11 @@ private:
 	
 	AbstractMesh* m_currentMesh;
 	
+	TextureFacade m_holoimage;
+	
 	//	Render to texture items
 	GLuint m_holoimageFBO;
 	GLuint m_holoimageRBO;
-	GLuint m_holoimageTextureID;
 	
 	bool m_hasBeenInit;
 	

@@ -171,9 +171,6 @@ IplImage* ImageIO::readAviFileFrame()
 	if(m_videoReaderInUse)
 	{
 		frame = cvQueryFrame(m_videoReaderHandle);
-		//cvFlip(frame, 0);
-		
-		//cvSaveImage("/Users/Karpinsn/Documents/Grad School/Data/Holovideo/Frame.png", frame);
 	}
 	else 
 	{

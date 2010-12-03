@@ -34,16 +34,7 @@ void Holoencoder::init()
 
 void Holoencoder::initFBO()
 {
-	//	Create the texture object that we will be rendering to
-	glGenTextures(1, &m_holoimageTextureID);
-	glBindTexture(GL_TEXTURE_2D, m_holoimageTextureID);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // automatic mipmap
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	m_holoimage.init(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 	
 	//	Need to create a render buffer object for the depth buffer
 	glGenRenderbuffersEXT(1, &m_holoimageRBO);
@@ -56,7 +47,7 @@ void Holoencoder::initFBO()
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
 	
 	//	Attach the texture to the FBO color attachment point
-	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_holoimageTextureID, 0);
+	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_holoimage.getTextureId(), 0);
 	
 	//	Attach the renderbuffer to the depth attachment point
 	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, m_holoimageRBO);
@@ -103,8 +94,6 @@ void Holoencoder::draw(void)
 	
 	cameraModelViewMatrix = cameraModelViewMatrix * m_controller->getTransform() * translateMatrix * scaleMatrix;
 	
-	
-	
 	m_encoderShader.bind();
 	GLint projectorModelViewLoc = glGetUniformLocation(m_encoderShader.shaderID(), "projectorModelView");
 	glUniformMatrix4fv(projectorModelViewLoc, 1, false, glm::value_ptr(cameraModelViewMatrix));
@@ -128,7 +117,7 @@ GLuint Holoencoder::encode()
 	
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 	
-	return m_holoimageTextureID;
+	return m_holoimage.getTextureId();
 }
 
 void Holoencoder::resize(int width, int height)

@@ -70,26 +70,20 @@ const GLenum TextureFacade::getTextureTarget(void) const
 	return GL_TEXTURE_2D;
 }
 
-void TextureFacade::transferToTexture(const void* data) 
+const int TextureFacade::getChannelCount(void) const
 {
-	size_t dataSize = m_width * m_height * sizeof(uchar) * 4;
-    
-	bind();
-	glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, m_PBOId);
-	glBufferData(GL_PIXEL_UNPACK_BUFFER_ARB, dataSize, NULL, GL_STREAM_DRAW);
+	int channelCount = 1;
 	
-	
-	GLubyte* ptr = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
-	
-	if(ptr)
+	if(m_format == GL_RGB || m_format == GL_BGR)
 	{
-		memcpy(ptr, data, dataSize);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 512, 512, GL_BGRA, GL_UNSIGNED_BYTE, 0);
-		glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
-		glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+		channelCount = 3;
+	}
+	else if(m_format == GL_RGBA || m_format == GL_BGRA)
+	{
+		channelCount = 4;
 	}
 	
-	OGLStatus::logOGLErrors("TextureFacade - transferToTexture()");
+	return channelCount;
 }
 
 void TextureFacade::transferFromTexture(void* data)
@@ -108,4 +102,84 @@ void TextureFacade::transferFromTexture(void* data)
 	glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, 0); 
 	
 	OGLStatus::logOGLErrors("TextureFacade - transferToTexture()");
+}
+ 
+bool TextureFacade::transferToTexture(const IplImage* image)
+{
+	bool compatible = _checkImageCompatibility(image);
+	
+	if(compatible)
+	{
+		const int channelCount = getChannelCount();
+		size_t dataSize = m_width * m_height * sizeof(uchar) * channelCount;
+		
+		bind();
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, m_PBOId);
+		glBufferData(GL_PIXEL_UNPACK_BUFFER_ARB, dataSize, NULL, GL_STREAM_DRAW);
+		GLubyte* gpuMem = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
+		
+		if(m_dataType == GL_FLOAT)
+		{
+			_transferFloatDataToTexture(image, gpuMem, channelCount);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 512, 512, m_format, m_dataType, 0);
+			glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
+			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+		}
+		else if(m_dataType == GL_UNSIGNED_BYTE)
+		{		
+			_transferByteDataToTexture(image, gpuMem, channelCount);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 512, 512, m_format, m_dataType, 0);
+			glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
+			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+		}	
+	}
+	return compatible;
+}
+ 
+void TextureFacade::_transferFloatDataToTexture(const IplImage* image, void* gpuMem, int channelCount)
+{ 
+	for(unsigned int y = 0; y < m_height; ++y)
+	{
+		for(unsigned int x = 0; x < m_width; ++x)
+		{
+			float* imagePointer = (float*)(image->imageData + image->widthStep*y);
+			float* gpuPointer = (float*)(((float*)gpuMem) + image->width*channelCount*y);
+ 
+			for(int channel = 0; channel < channelCount && channel < image->nChannels; channel++)
+			{
+				gpuPointer[x*channelCount+channel] = imagePointer[x*image->nChannels+channel];
+			}
+		}
+	}
+}
+ 
+void TextureFacade::_transferByteDataToTexture(const IplImage* image, void* gpuMem, int channelCount)
+ { 
+	for(unsigned int y = 0; y < m_height; ++y)
+	{
+		for(unsigned int x = 0; x < m_width; ++x)
+		{
+			uchar* imagePointer = (uchar*)(image->imageData + image->widthStep*y);
+			uchar* gpuPointer = (uchar*)(((uchar*)gpuMem) + image->width*channelCount*y);
+ 
+			for(int channel = 0; channel < channelCount && channel < image->nChannels; channel++)
+			{
+				gpuPointer[x*channelCount+channel] = imagePointer[x*image->nChannels+channel];
+			}
+		}
+	}
+ }
+
+bool TextureFacade::_checkImageCompatibility(const IplImage* image)
+{
+	bool compatible = false;
+	
+	if(image->width		== m_width && 
+	   image->height	== m_height && 
+	   image->nChannels <= getChannelCount())
+	{
+		compatible = true;
+	}
+	
+	return compatible;
 }

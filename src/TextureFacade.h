@@ -14,6 +14,7 @@
 #include <QtOpenGL/QGLWidget>
 
 #include "OGLStatus.h"
+#include <cv.h>
 
 class TextureFacade
 {
@@ -38,10 +39,16 @@ public:
 	
 	const GLuint getTextureId(void) const;
 	const GLenum getTextureTarget(void) const;
+	const int getChannelCount(void) const;
 	
-	void transferToTexture(const void* data);
 	void transferFromTexture(void* data);
 	//void* getDataPointer();						//	Caution should be used when using this method
+	bool transferToTexture(const IplImage* image);
+	
+private:	
+	void _transferFloatDataToTexture(const IplImage* image, void* gpuMem, int channelCount);
+	void _transferByteDataToTexture(const IplImage* image, void* gpuMem, int channelCount);
+	bool _checkImageCompatibility(const IplImage* image);
 };
 
 #endif	// _TEXTURE_FACADE_H_

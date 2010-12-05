@@ -107,9 +107,20 @@ void OpenGLWidget::mouseReleaseEvent(QMouseEvent* event)
 	updateGL();
 }
 
-void OpenGLWidget::openHoloImage(void)
+void OpenGLWidget::openHoloImage(string filename, Holodecoder* decoder)
 {
+	m_holoDecoder = decoder;
+	ImageIO io;
+	IplImage* image = io.readImage(filename.c_str());
 	
+	if(NULL != image)
+	{
+			
+		m_holoDecoder->setBackHoloBuffer(image);
+		m_holoDecoder->swapBuffers();
+	}
+	
+	updateGL();
 }
 
 void OpenGLWidget::timerEvent(QTimerEvent* event)

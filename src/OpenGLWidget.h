@@ -56,7 +56,7 @@ public:
 	QSize minimumSizeHint() const;
 	QSize sizeHint() const;
 	
-	void openHoloImage(void);
+	void openHoloImage(string filename, Holodecoder* decoder);
 	void playMovie(string movieFile, Holodecoder* decoder);
 	void cameraSelectMode(int mode);
 	

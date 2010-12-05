@@ -123,7 +123,7 @@ void MainWindowController::openHoloImage(void)
 	if(!file.isEmpty())
 	{
 		m_mainWindow->m_glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
-		m_mainWindow->m_glWidget->playMovie(file.toStdString(), m_mainWindow->m_holoDecoder);
+		m_mainWindow->m_glWidget->openHoloImage(file.toStdString(), m_mainWindow->m_holoDecoder);
 	}
 }
 

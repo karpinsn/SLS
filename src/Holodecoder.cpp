@@ -62,8 +62,8 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
 	m_phaseMap1AttachPoint = GL_COLOR_ATTACHMENT1_EXT;
 	m_normalMapAttachPoint = GL_COLOR_ATTACHMENT2_EXT;
 
-	m_holoImage0.init(width, height, GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE);
-	m_holoImage1.init(width, height, GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE);
+	m_holoImage0.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+	m_holoImage1.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
 	m_phaseMap0.init(width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
 	m_phaseMap1.init(width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
 	m_normalMap.init(width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
@@ -156,29 +156,9 @@ void Holodecoder::mouseMoveEvent(int mouseX, int mouseY)
 
 void Holodecoder::setBackHoloBuffer(IplImage* image)
 {
-	int backBufferIndex = (m_frontBufferIndex + 1) % 2;
+	int backBufferIndex = (m_frontBufferIndex + 1) % 2;	
+	m_holoImages[backBufferIndex]->transferToTexture(image);
 	
-	// update data directly on the mapped buffer
-	IplImage *imageRGBA = cvCreateImage(cvSize(512, 512), IPL_DEPTH_8U, 4);
-		
-	cvSetImageCOI(image, 1);
-	cvSetImageCOI(imageRGBA, 1);
-	cvCopy(image, imageRGBA);
-		
-	cvSetImageCOI(image, 2);
-	cvSetImageCOI(imageRGBA, 2);
-	cvCopy(image, imageRGBA);
-		
-	cvSetImageCOI(image, 3);
-	cvSetImageCOI(imageRGBA, 3);
-	cvCopy(image, imageRGBA);
-		
-	cvSetImageCOI(imageRGBA, 0);
-	cvSetImageCOI(image, 0);
-	m_holoImages[backBufferIndex]->transferToTexture(imageRGBA->imageData);
-	
-	cvReleaseImage(&imageRGBA);
-
 	//	Make sure we dont have any errors
 	OGLStatus::logOGLErrors("Holodecoder - setBackHoloBuffer()");
 }

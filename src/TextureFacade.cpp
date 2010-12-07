@@ -29,6 +29,15 @@ bool TextureFacade::init(const GLuint width, const GLuint height, const GLint in
 	m_format = format;
 	m_dataType = dataType;
 	
+	if(m_dataType == GL_FLOAT)
+	{
+		m_dataSize = sizeof(float);
+	}
+	else if(m_dataType == GL_UNSIGNED_BYTE)
+	{
+		m_dataSize = sizeof(uchar);
+	}
+	
 	//	Initialize the PBO
 	glGenBuffers(1, &m_PBOId);
 	
@@ -86,22 +95,56 @@ const int TextureFacade::getChannelCount(void) const
 	return channelCount;
 }
 
-void TextureFacade::transferFromTexture(void* data)
+const GLuint TextureFacade::getWidth(void) const
 {
-	size_t dataSize = m_width * m_height * sizeof(float) * 4;
+	return m_width;
+}
+
+const GLuint TextureFacade::getHeight(void) const
+{
+	return m_height;
+}
+
+const GLuint TextureFacade::getFormat(void) const
+{
+	return m_format;
+}
+
+const GLuint TextureFacade::getDataType(void) const
+{
+	return m_dataType;
+}
+
+bool TextureFacade::transferFromTexture(IplImage* image)
+{
+	bool compatible = _checkImageCompatibility(image);
 	
-	bind();
-	glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, m_PBOId);
-	glBufferData(GL_PIXEL_PACK_BUFFER_ARB, dataSize, NULL, GL_STREAM_READ);
-	glReadPixels (0, 0, m_width, m_height, GL_RGBA, GL_FLOAT, 0);
-	
-	void* mem = glMapBuffer(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY);   
-	memcpy(data, mem, dataSize);
-	
-	glUnmapBuffer(GL_PIXEL_PACK_BUFFER_ARB);
-	glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, 0); 
-	
-	OGLStatus::logOGLErrors("TextureFacade - transferToTexture()");
+	if(compatible)
+	{
+		const int channelCount = getChannelCount();
+		int widthStep = m_width * channelCount * m_dataSize;
+		size_t dataSize = m_width * m_height * channelCount * m_dataSize;
+		
+		bind();
+		glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, m_PBOId);
+		glBufferData(GL_PIXEL_PACK_BUFFER_ARB, dataSize, NULL, GL_STREAM_READ);
+		glReadPixels(0, 0, m_width, m_height, m_format, m_dataType, 0);
+		char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
+		
+		if(m_dataType == GL_FLOAT)
+		{
+			_transferFloatData(gpuMem, image->imageData, channelCount, image->nChannels, widthStep, image->widthStep);
+			glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB); // release pointer to mapping buffer
+			glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
+		}
+		else if(m_dataType == GL_UNSIGNED_BYTE)
+		{	
+			_transferByteData(gpuMem, image->imageData, channelCount, image->nChannels, widthStep, image->widthStep);
+			glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB); // release pointer to mapping buffer
+			glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
+		}	
+	}
+	return compatible;
 }
  
 bool TextureFacade::transferToTexture(const IplImage* image)
@@ -111,24 +154,25 @@ bool TextureFacade::transferToTexture(const IplImage* image)
 	if(compatible)
 	{
 		const int channelCount = getChannelCount();
-		size_t dataSize = m_width * m_height * sizeof(uchar) * channelCount;
+		int widthStep = m_width * channelCount * m_dataSize;
+		size_t dataSize = m_width * m_height * channelCount * m_dataSize;
 		
 		bind();
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, m_PBOId);
 		glBufferData(GL_PIXEL_UNPACK_BUFFER_ARB, dataSize, NULL, GL_STREAM_DRAW);
-		GLubyte* gpuMem = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
+		char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
 		
 		if(m_dataType == GL_FLOAT)
 		{
-			_transferFloatDataToTexture(image, gpuMem, channelCount);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 512, 512, m_format, m_dataType, 0);
+			_transferFloatData(image->imageData, gpuMem, image->nChannels, channelCount, image->widthStep, widthStep);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
 			glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
 			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 		}
 		else if(m_dataType == GL_UNSIGNED_BYTE)
 		{		
-			_transferByteDataToTexture(image, gpuMem, channelCount);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 512, 512, m_format, m_dataType, 0);
+			_transferByteData(image->imageData, gpuMem, image->nChannels, channelCount, image->widthStep, widthStep);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
 			glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
 			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 		}	
@@ -136,47 +180,46 @@ bool TextureFacade::transferToTexture(const IplImage* image)
 	return compatible;
 }
  
-void TextureFacade::_transferFloatDataToTexture(const IplImage* image, void* gpuMem, int channelCount)
-{ 
+void TextureFacade::_transferFloatData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep)
+{
 	for(unsigned int y = 0; y < m_height; ++y)
 	{
 		for(unsigned int x = 0; x < m_width; ++x)
 		{
-			float* imagePointer = (float*)(image->imageData + image->widthStep*y);
-			float* gpuPointer = (float*)(((float*)gpuMem) + image->width*channelCount*y);
- 
-			for(int channel = 0; channel < channelCount && channel < image->nChannels; channel++)
+			float* sourcePointer = (float*)(source + sourceWidthStep*y);
+			float* destPointer = (float*)(dest + destWidthStep*y);
+			
+			for(int channel = 0; channel < sourceNChannels && channel < destNChannels; channel++)
 			{
-				gpuPointer[x*channelCount+channel] = imagePointer[x*image->nChannels+channel];
+				destPointer[x*destNChannels+channel] = sourcePointer[x*sourceNChannels+channel];
 			}
 		}
 	}
 }
- 
-void TextureFacade::_transferByteDataToTexture(const IplImage* image, void* gpuMem, int channelCount)
- { 
+
+void TextureFacade::_transferByteData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep)
+{
 	for(unsigned int y = 0; y < m_height; ++y)
 	{
 		for(unsigned int x = 0; x < m_width; ++x)
 		{
-			uchar* imagePointer = (uchar*)(image->imageData + image->widthStep*y);
-			uchar* gpuPointer = (uchar*)(((uchar*)gpuMem) + image->width*channelCount*y);
- 
-			for(int channel = 0; channel < channelCount && channel < image->nChannels; channel++)
+			uchar* sourcePointer = (uchar*)(source + sourceWidthStep*y);
+			uchar* destPointer = (uchar*)(dest + destWidthStep*y);
+			
+			for(int channel = 0; channel < sourceNChannels && channel < destNChannels; channel++)
 			{
-				gpuPointer[x*channelCount+channel] = imagePointer[x*image->nChannels+channel];
+				destPointer[x*destNChannels+channel] = sourcePointer[x*sourceNChannels+channel];
 			}
 		}
 	}
- }
+}
 
-bool TextureFacade::_checkImageCompatibility(const IplImage* image)
+bool TextureFacade::_checkImageCompatibility(const IplImage* image) const
 {
 	bool compatible = false;
 	
-	if(image->width		== m_width && 
-	   image->height	== m_height && 
-	   image->nChannels <= getChannelCount())
+	if(image->width		== (GLint)m_width && 
+	   image->height	== (GLint)m_height)
 	{
 		compatible = true;
 	}

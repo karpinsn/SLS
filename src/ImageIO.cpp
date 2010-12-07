@@ -22,7 +22,7 @@ ImageIO::~ImageIO()
 
 bool ImageIO::saveRGBImage(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight)
 {
-	ensureImageSize(imageWidth, imageHeight);
+	ensureImageSize(imageWidth, imageHeight, 3);
 	
 	glReadBuffer(GL_FRONT);
 	glReadPixels(0, 0, imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, m_imageHandle->imageData);
@@ -34,46 +34,49 @@ bool ImageIO::saveRGBImage(const string &filename, const unsigned int imageWidth
 	return cvSaveImage(filename.c_str(), m_imageHandle);
 }
 
-bool ImageIO::saveRGBImage(const string &filename, GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight)
-{	
-	textureToImageHandle(textureID, imageWidth, imageHeight);
+bool ImageIO::saveImage(const string &filename, const IplImage* image, bool needChannelReorder)
+{
+	ensureImageSize(image->width, image->height, image->nChannels);
 	
-	return cvSaveImage(filename.c_str(), m_imageHandle);
+	bool saved = false;
+	if(IPL_DEPTH_8U == image->depth && (3 == image->nChannels || 1 == image->nChannels || 4 == image->nChannels))
+	{
+		if(needChannelReorder)
+		{
+			if(3 == image->nChannels)
+			{
+				cvCvtColor(image, m_imageHandle, CV_RGB2BGR);
+				saved = cvSaveImage(filename.c_str(), m_imageHandle);
+			}
+			else if(4 == image->nChannels)
+			{
+				cvCvtColor(image, m_imageHandle, CV_RGBA2BGRA);
+				saved = cvSaveImage(filename.c_str(), m_imageHandle);
+			}
+		}
+		else
+		{
+			saved = cvSaveImage(filename.c_str(), image);
+		}
+	}
+	
+	return saved;
 }
 
-bool ImageIO::saveBoundBuffer(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight)
+bool ImageIO::saveTexture(const string &filename, TextureFacade &texture)
 {
-	ensureImageSize(imageWidth, imageHeight);
+	ensureImageSize(texture.getWidth(), texture.getHeight(), texture.getChannelCount());
 	
-	IplImage *temp = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 4);
-	IplImage *temp2 = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 3);
-	glReadPixels(0, 0, imageWidth, imageHeight, GL_RGBA, GL_FLOAT, temp->imageData);
+	bool saved = false;
+	if(GL_UNSIGNED_BYTE == texture.getDataType())
+	{
+		texture.transferFromTexture(m_imageHandle);
+		
+		bool reorderChannels = texture.getFormat() == GL_RGBA || texture.getFormat() == GL_RGB;
+		saved = saveImage(filename, m_imageHandle, reorderChannels);
+	}
 	
-	cvSetImageCOI(temp, 1);
-	cvSetImageCOI(temp2, 1);
-	cvCopy(temp, temp2);
-	
-	cvSetImageCOI(temp, 2);
-	cvSetImageCOI(temp2, 2);
-	cvCopy(temp, temp2);
-	
-	cvSetImageCOI(temp, 3);
-	cvSetImageCOI(temp2, 3);
-	cvCopy(temp, temp2);
-	
-	cvSetImageCOI(temp, 0);
-	cvSetImageCOI(temp2, 0);
-	
-	cvCvtScale(temp2, m_imageHandle, 255);
-	cvReleaseImage(&temp);
-	cvReleaseImage(&temp2);
-	
-	//	Flip the image and convert to BGR since that is how OpenCV is looking for it
-	//cvFlip(m_imageHandle, 0);
-	cvCvtColor(m_imageHandle, m_imageHandle, CV_RGB2BGR);
-	
-	return cvSaveImage(filename.c_str(), m_imageHandle);
-	
+	return saved;
 }
 
 IplImage* ImageIO::readImage(const string &filename)
@@ -112,18 +115,32 @@ bool ImageIO::saveAviFile(const string &filename, const unsigned int videoWidth,
 	return openedVideoWriter;
 }
 
-bool ImageIO::saveAviFileWriteFrame(GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight)
-{	
+bool ImageIO::saveAviFileWriteFrame(TextureFacade& texture)
+{
 	if (m_videoWriterInUse) 
 	{
-		textureToImageHandle(textureID, imageWidth, imageHeight);
+		ensureImageSize(texture.getWidth(), texture.getHeight(), texture.getChannelCount());
+		texture.transferFromTexture(m_imageHandle);
+		
+		if(texture.getFormat() == GL_RGBA || texture.getFormat() == GL_RGB)
+		{
+			if(3 == m_imageHandle->nChannels)
+			{
+				cvCvtColor(m_imageHandle, m_imageHandle, CV_RGB2BGR);
+			}
+			else if(4 == m_imageHandle->nChannels)
+			{
+				cvCvtColor(m_imageHandle, m_imageHandle, CV_RGBA2BGRA);
+			}
+		}
+	
 		cvWriteFrame(m_videoWriterHandle, m_imageHandle);
 	}
 	else 
 	{
 		clog << "Unable to write frame out to file as no current video writer handle exists" << endl;
 	}
-
+	
 	return m_videoWriterInUse;
 }
 
@@ -180,7 +197,6 @@ IplImage* ImageIO::readAviFileFrame()
 	return frame;
 }
 
-
 bool ImageIO::readAviFileFinish(void)
 {
 	bool successfullyClosed = false;
@@ -204,26 +220,13 @@ bool ImageIO::aviFileOpen(void)
 	return m_videoReaderInUse;
 }
 
-void ImageIO::textureToImageHandle(GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight)
-{
-	ensureImageSize(imageWidth, imageHeight);
-	
-	//	Bind the texture and stream into the image handle
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, m_imageHandle->imageData);
-	
-	//	Flip the image and convert to BGR since that is how OpenCV is looking for it
-	cvFlip(m_imageHandle, 0);
-	cvCvtColor(m_imageHandle, m_imageHandle, CV_RGB2BGR);
-}
-
-void ImageIO::ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight)
+void ImageIO::ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight, const unsigned int channelCount)
 {
 	//	Check and see if the image is the correct size. If it is do nothing
-	if (m_imageWidth != imageWidth && m_imageHeight != imageHeight)
+	if (m_imageWidth != imageWidth || m_imageHeight != imageHeight || (unsigned int)m_imageHandle->nChannels != channelCount)
 	{
 		cvReleaseImage(&m_imageHandle);
-		m_imageHandle = cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_8U, 3);
+		m_imageHandle = cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_8U, channelCount);
 		m_imageWidth = imageWidth;
 		m_imageHeight = imageHeight;
 	}

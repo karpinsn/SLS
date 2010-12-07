@@ -29,6 +29,8 @@
 #include <cv.h>
 #include <highgui.h>
 
+#include "TextureFacade.h"
+
 using namespace std;
 
 class ImageIO
@@ -49,16 +51,16 @@ public:
 	~ImageIO();
 	
 	//	Save Image Methods
+	bool saveImage(const string &filename, const IplImage* image, bool needChannelReorder = false);
+	bool saveTexture(const string &filename, TextureFacade& texture);
 	bool saveRGBImage(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight);
-	bool saveRGBImage(const string &filename, GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight);
-	bool saveBoundBuffer(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight);
 	
 	//	Read Image Methods
 	IplImage* readImage(const string &filename);
 	
 	//	Save Avi File Methods
 	bool saveAviFile(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps);
-	bool saveAviFileWriteFrame(GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight);
+	bool saveAviFileWriteFrame(TextureFacade& texture);
 	bool saveAviFileFinish(void);
 	
 	//	Read Avi File Methods
@@ -68,8 +70,7 @@ public:
 	bool aviFileOpen(void);
 	
 private:
-	void textureToImageHandle(GLuint textureID, const unsigned int imageWidth, const unsigned int imageHeight);
-	void ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight);
+	void ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight, const unsigned int channelCount);
 };
 
 #endif // _IMAGE_IO_H_

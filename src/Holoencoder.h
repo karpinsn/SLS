@@ -61,14 +61,14 @@ private:
 public:
 	Holoencoder(void);
 	
-	virtual void init();
-    virtual void draw(void);
-	GLuint encode();
-	virtual void resize(int width, int height);
-	virtual void cameraSelectMode(int mode);
-	virtual void mousePressEvent(int mouseX, int mouseY);
-	virtual void mouseMoveEvent(int mouseX, int mouseY);
-	void setCurrentMesh(AbstractMesh* current);
+	virtual void			init();
+    virtual void			draw(void);
+			TextureFacade&	encode();
+	virtual void			resize(int width, int height);
+	virtual void			cameraSelectMode(int mode);
+	virtual void			mousePressEvent(int mouseX, int mouseY);
+	virtual void			mouseMoveEvent(int mouseX, int mouseY);
+	void					setCurrentMesh(AbstractMesh* current);
 	
 private:
 	void initFBO(void);

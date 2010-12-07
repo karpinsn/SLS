@@ -108,7 +108,7 @@ void Holoencoder::draw(void)
 	glPopMatrix();
 }
 
-GLuint Holoencoder::encode()
+TextureFacade& Holoencoder::encode()
 {	
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
 	
@@ -117,7 +117,7 @@ GLuint Holoencoder::encode()
 	
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 	
-	return m_holoimage.getTextureId();
+	return m_holoimage;
 }
 
 void Holoencoder::resize(int width, int height)

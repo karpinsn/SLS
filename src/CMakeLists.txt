@@ -11,14 +11,42 @@ project(Holoencoder)
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/../CMakeModules")
 SET(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/${PROJECT_NAME}")
 
-#	-----------------------------------------
-# 	Perform build configuration of dependencies
-find_package(Qt4 COMPONENTS QtCore QtGui QtOpenGL REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(OpenCV REQUIRED)
-find_package(GLEW REQUIRED)
+### ---------------------------------------------------------------------------------------
+# Configure Dependencies
+### ---------------------------------------------------------------------------------------
 
+#	-----------------------------------------
+#	QT
+#	-----------------------------------------
+find_package(Qt4 COMPONENTS QtCore QtGui QtOpenGL REQUIRED)
 include(${QT_USE_FILE})
+set (LIBS ${LIBS} ${QT_LIBRARIES})
+
+#	-----------------------------------------
+#	OpenGL
+#	-----------------------------------------
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIR})
+set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
+
+#	-----------------------------------------
+#	OpenCV
+#	-----------------------------------------
+find_package(OpenCV REQUIRED)
+include_directories(${OPENCV_INCLUDE_DIRS})
+set(LIBS ${LIBS} ${OPENCV_LIBRARIES})
+
+#	-----------------------------------------
+#	GLEW
+#	-----------------------------------------
+find_package(GLEW REQUIRED)
+include_directories(${GLEW_INCLUDE_DIR})
+set(LIBS ${LIBS} ${GLEW_LIBRARY})
+
+#	-----------------------------------------
+#	GLM
+#	-----------------------------------------
+add_subdirectory(glm)
 
 #	---------------------------------------------------------------------------------------
 #	List all of the sources to be compiled
@@ -65,15 +93,14 @@ set(SOURCES
 	ShaderFacade.h
 	FBOFacade.h
 	TextureFacade.h
-
-	glm/glm.hpp
-	glm/gtc/matrix_transform.hpp
 	)
 	
-set(UIS ui/Holoencoder.ui)	
+#	glm/glm.hpp
+#	glm/gtc/matrix_transform.hpp	
 	
+# QT Files
+set(UIS ui/Holoencoder.ui)	
 set(MOCS MainWindowView.h MainWindowController.h)	
-
 set(RESOURCES ui/Holoencoder.qrc)
 
 #	---------------------------------------------------------------------------------------
@@ -108,45 +135,15 @@ add_executable(${PROJECT_NAME}
 	${MOCS}
 	${RESOURCES})
 
-message(STATUS "OpenCV Libs:" ${OpenCV_LIBS} " Done")
+message(STATUS "Libraries to link:" ${LIBS} " Done")
 
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${QT_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 #	---------------------------------------------------------------------------------------
 #							Copy Shaders to build
 #	---------------------------------------------------------------------------------------
 
-message(STATUS "Setting up shader copy commands")
-
-set(SHADER_OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/Shaders")
-message("Shaders will be copied to: ${SHADER_OUTPUT}")
-
-add_custom_command(TARGET ${PROJECT_NAME}
-				   POST_BUILD
-				   COMMAND ${CMAKE_COMMAND}
-				   ARGS -E make_directory ${SHADER_OUTPUT}
-				   COMMENT "Creating directory: ${SHADER_OUTPUT}")
-
-message(STATUS "Looking for shaders in the following directory: " ${CMAKE_CURRENT_SOURCE_DIR})
-file(GLOB SHADERS_TO_COPY
-        RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/Shaders/" 
-		"Shaders/*.frag" "Shaders/*.vert")
-
-message(STATUS "Copying the following shaders: " ${SHADERS_TO_COPY})
-foreach(FILENAME ${SHADERS_TO_COPY})
-   	set(SRC "${CMAKE_CURRENT_SOURCE_DIR}/Shaders/${FILENAME}")
-   	set(DST "${SHADER_OUTPUT}/${FILENAME}")
-
-	message("SRC " ${SRC})
-	message("DST " ${DST})
-
-	# Copy the shader to the directory
-   	add_custom_command(TARGET ${PROJECT_NAME}
-   					   POST_BUILD
-					   COMMAND ${CMAKE_COMMAND} 
-    				   ARGS -E copy "${SRC}" "${DST}"
-					   COMMENT "Copying ${SRC} to ${DST}")
-endforeach(FILENAME)
+add_subdirectory(Shaders)
 
 #	---------------------------------------------------------------------------------------
 #							Install

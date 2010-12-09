@@ -1,36 +1,43 @@
-#	-----------------------------------------------------------------------------
-#							copy_shaders macro
-#
-#	This macro copies all the .vert and .frag shaders in the current directory to
-#	${APP_PATH}/../Shaders/
-#	-----------------------------------------------------------------------------
-#macro(copy_shaders)
-#endmacro(copy_shaders)
+#	---------------------------------------------------------------------------------------
+#	List all of the shader sources to be copied over
+#	---------------------------------------------------------------------------------------
 
-#	-----------------------------------------------------------------------------
-#							Copy Shaders to build
-#	-----------------------------------------------------------------------------
+set(SHADER_SOURCES
 
-message(STATUS "Copying shaders to the build directory")
+	Holoencoder.vert
+	Holodecoder.vert
+	MedianFilter3x3.vert
+	NormalCalculator.vert
+	PhaseCalculator.vert
+	FinalRender.vert
 
-get_target_property(APP_LOCATION ${PROJECT_NAME} LOCATION)
-get_filename_component(APP_PATH ${APP_LOCATION} PATH)
-message(${APP_PATH}/../Shaders/)
+	Holoencoder.frag
+	Holodecoder.frag
+	MedianFilter3x3.frag
+	NormalCalculator.frag
+	PhaseCalculator.frag
+	FinalRender.frag
+)
+
+#	---------------------------------------------------------------------------------------
+#	Copy Shaders to build
+#	---------------------------------------------------------------------------------------
+
+message(STATUS "Copying Shaders")
+
+set(SHADER_OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/Shaders")
+message("Shaders will be copied to: ${SHADER_OUTPUT}")
 
 add_custom_command(TARGET ${PROJECT_NAME}
 				   POST_BUILD
 				   COMMAND ${CMAKE_COMMAND}
-				   ARGS -E make_directory ${APP_PATH}/../Shaders/
-				   COMMENT "Creating directory: ${APP_PATH}/../Shaders/")
+				   ARGS -E make_directory ${SHADER_OUTPUT}
+				   COMMENT "Creating directory: ${SHADER_OUTPUT}")
 
-message(STATUS "Looking for shaders in the following directory: " ${CMAKE_CURRENT_SOURCE_DIR})
-file(GLOB SHADERS_TO_COPY
-        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.frag" "*.vert")
-
-message(STATUS "Copying the following shaders: " ${SHADERS_TO_COPY})
-foreach(FILENAME ${SHADERS_TO_COPY})
+message(STATUS "Copying the following shaders: " ${SHADER_SOURCES})
+foreach(FILENAME ${SHADER_SOURCES})
    	set(SRC "${CMAKE_CURRENT_SOURCE_DIR}/${FILENAME}")
-   	set(DST "${APP_PATH}/../Shaders/${FILENAME}")
+   	set(DST "${SHADER_OUTPUT}/${FILENAME}")
 
 	message("SRC " ${SRC})
 	message("DST " ${DST})
@@ -39,5 +46,6 @@ foreach(FILENAME ${SHADERS_TO_COPY})
    	add_custom_command(TARGET ${PROJECT_NAME}
    					   POST_BUILD
 					   COMMAND ${CMAKE_COMMAND} 
-    				   ARGS -E copy ${SRC} ${DST})
+    				   ARGS -E copy "${SRC}" "${DST}"
+					   COMMENT "Copying ${SRC} to ${DST}")
 endforeach(FILENAME)

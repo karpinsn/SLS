@@ -12,10 +12,15 @@
 #define _ARCBALL_H_
 
 #ifdef __APPLE__
-	#include <QtOpenGL/QGLWidget>
-#else _WIN32
+	#include <glew.h>
+	#include <OpenGL/gl.h>
+#elif _WIN32
 	#include <windows.h>
-	#include <QtOpenGL/QGLWidget>
+	#include <GL/glew.h>
+	#include <GL/gl.h>
+#else
+	#include <GL/glew.h>
+	#include <GL/gl.h>
 #endif
 
 #include <glm/glm.hpp>

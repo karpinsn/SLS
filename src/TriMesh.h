@@ -13,18 +13,27 @@
 
 #ifdef __APPLE__
 	#include <glew.h>
-	#include <QtOpenGL/QGLWidget>
-#else _WIN32
+	#include <OpenGL/gl.h>
+#elif _WIN32
 	#include <windows.h>
 	#include <GL/glew.h>
-	#include <QtOpenGL/QGLWidget>
+	#include <GL/gl.h>
+#else
+	#include <GL/glew.h>
+	#include <GL/gl.h>
 #endif
 
+#include "AbstractMesh.h"
 #include <stdio.h>
 #include <string.h>
 
-class TriMesh
+#ifdef USE_VRJ
+	#include <vrj/Draw/OGL/GlContextData.h>
+#endif
+
+class TriMesh : public AbstractMesh
 {
+private:
 	struct Vertex 
 	{
 		float x;
@@ -34,23 +43,31 @@ class TriMesh
 		float v;
 	};
 	
-private:
-	void _generateIndices(void);
-	void _generateTexturedVertices(void);
-	void _cacheTriMesh(void);
+	#ifdef USE_VRJ
+		vrj::GlContextData<GLuint> vrjVBOHandle;
+		vrj::GlContextData<GLuint> vrjIBOHandle;
+	#define m_triMeshVBOID   (*vrjVBOHandle)
+	#define m_triMeshIBOID (*vrjIBOHandle)
+	#else
+		GLuint m_triMeshVBOID;
+		GLuint m_triMeshIBOID;
+	#endif
 	
-	unsigned int *meshIndices;
-	Vertex *meshVertices;
-	unsigned int elementCount;
-	
-	unsigned int m_triMeshVBOID;
-	unsigned int m_triMeshIBOID;
+	unsigned int	*meshIndices;
+	Vertex			*meshVertices;
+	unsigned int	elementCount;
+		
 public:
 	TriMesh(int width, int height);
 	~TriMesh();
 	virtual void initMesh(void);
 	
-	void Draw();
+	void draw();
+	
+private:
+	void _generateIndices(void);
+	void _generateTexturedVertices(void);
+	void _cacheTriMesh(void);
 };
 
 #endif // _TRI_MESH_H_

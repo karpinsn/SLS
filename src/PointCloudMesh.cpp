@@ -22,7 +22,7 @@ void PointCloudMesh::initMesh(void)
 	_cacheMesh();
 }
 
-void PointCloudMesh::Draw()
+void PointCloudMesh::draw()
 {
 	/*
 	glPolygonMode(GL_FRONT, GL_POINT);

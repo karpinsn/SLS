@@ -13,15 +13,14 @@
 
 #ifdef __APPLE__
 	#include <glew.h>
-	#include <QtOpenGL/QGLWidget>
+	#include <OpenGL/gl.h>
 #elif _WIN32
 	#include <windows.h>
 	#include <GL/glew.h>
-	#include <QtOpenGL/QGLWidget>
+	#include <GL/gl.h>
 #else
 	#include <GL/glew.h>
-	#include <QtOpenGL/QGLWidget>
-
+	#include <GL/gl.h>
 #endif
 
 #include <glm/glm.hpp>

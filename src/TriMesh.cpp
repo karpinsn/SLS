@@ -20,7 +20,7 @@ void TriMesh::initMesh(void)
 	_cacheTriMesh();
 }
 
-void TriMesh::Draw()
+void TriMesh::draw()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, m_triMeshVBOID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_triMeshIBOID);

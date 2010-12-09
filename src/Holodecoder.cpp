@@ -122,7 +122,7 @@ void Holodecoder::draw(void)
 		
 		//	Draw a plane of pixels
 		m_controller->applyTransform();
-		m_mesh->Draw();
+		m_mesh->draw();
 	}
 	m_finalRender.unbind();
 

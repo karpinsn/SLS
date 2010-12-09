@@ -15,7 +15,7 @@ FBOFacade::FBOFacade(void)
 
 FBOFacade::~FBOFacade()
 {
-	glDeleteFramebuffersEXT(1, &m_frameBuffer);
+	glDeleteFramebuffersEXT(1, &m_framebuffer);
 }
 
 bool FBOFacade::init()
@@ -30,7 +30,7 @@ bool FBOFacade::init()
 
 void FBOFacade::bind()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER_EXT, m_frameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER_EXT, m_framebuffer);
 	OGLStatus::logOGLErrors("FBOFacade - bind()");
 }
 
@@ -108,8 +108,8 @@ void FBOFacade::_cacheQuad(void)
 
 void FBOFacade::_initFBO(void)
 {
-	glGenFramebuffers(1, &m_frameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER_EXT, m_frameBuffer);
+	glGenFramebuffers(1, &m_framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER_EXT, m_framebuffer);
 
 	OGLStatus::logOGLErrors("FBOFacade - _initFBO()");
 }

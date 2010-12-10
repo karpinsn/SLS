@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 2.6)
 project(Holoencoder)
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/../CMakeModules")
-SET(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/${PROJECT_NAME}")
+set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/${PROJECT_NAME}")
 
 ### ---------------------------------------------------------------------------------------
 # Configure Dependencies
@@ -48,6 +48,12 @@ set(LIBS ${LIBS} ${GLEW_LIBRARY})
 #	-----------------------------------------
 add_subdirectory(glm)
 
+#	-----------------------------------------
+#	Wrench
+#	-----------------------------------------
+add_subdirectory(wrench)
+set(LIBS ${LIBS} wrench)
+
 #	---------------------------------------------------------------------------------------
 #	List all of the sources to be compiled
 #	---------------------------------------------------------------------------------------
@@ -59,25 +65,17 @@ set(SOURCES
 	MainWindowController.cpp
 	OpenGLWidget.cpp
 	Holoencoder.cpp
-	Camera.cpp
 	ImageIO.cpp
 	XYZFileIO.cpp
 	XYZMesh.cpp
 	Holodecoder.cpp
 	PointCloudMesh.cpp
 	TriMesh.cpp
-	Arcball.cpp
-	OGLStatus.cpp
-	Logger.cpp	
-	ShaderFacade.cpp
-	FBOFacade.cpp
-	TextureFacade.cpp
 
 	MainWindowView.h
 	MainWindowController.h
 	OpenGLWidget.h
 	Holoencoder.h
-	Camera.h
 	ImageIO.h
 	XYZFileIO.h
 	XYZMesh.h
@@ -87,12 +85,6 @@ set(SOURCES
 	PointCloudMesh.h
 	TriMesh.h
 	AbstractGLContext.h	
-	Arcball.h
-	OGLStatus.h
-	Logger.h
-	ShaderFacade.h
-	FBOFacade.h
-	TextureFacade.h
 	)
 	
 #	glm/glm.hpp
@@ -120,10 +112,18 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}") 
 
 #	---------------------------------------------------------------------------------------
+#							Copy Shaders to build
+#	---------------------------------------------------------------------------------------
+
+add_subdirectory(Shaders)
+
+#	---------------------------------------------------------------------------------------
 #							Build the app
 #	---------------------------------------------------------------------------------------
 
 # Build and link the app!
+
+message(STATUS "Libraries to link:" ${SHADER_SOURCES} " Done")
 
 add_executable(${PROJECT_NAME}
 	MACOSX_BUNDLE
@@ -135,15 +135,9 @@ add_executable(${PROJECT_NAME}
 	${MOCS}
 	${RESOURCES})
 
-message(STATUS "Libraries to link:" ${LIBS} " Done")
+
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
-
-#	---------------------------------------------------------------------------------------
-#							Copy Shaders to build
-#	---------------------------------------------------------------------------------------
-
-add_subdirectory(Shaders)
 
 #	---------------------------------------------------------------------------------------
 #							Install

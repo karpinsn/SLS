@@ -22,14 +22,14 @@
 #include "ui_Holoencoder.h"
 
 #include "MainWindowView.h"
-#include "Camera.h"
+#include <wrench/gl/Camera.h>
 #include "OpenGLWidget.h"
 #include "Holoencoder.h"
 #include "Holodecoder.h"
 #include "ImageIO.h"
 #include "AbstractMesh.h"
 #include "XYZFileIO.h"
-#include "Logger.h"
+#include <wrench/Logger.h>
 
 class MainWindowView;
 

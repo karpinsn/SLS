@@ -1,13 +1,13 @@
-#include "ShaderFacade.h"
+#include "Shader.h"
 
-ShaderFacade::ShaderFacade()
+wrench::gl::Shader::Shader()
 {
     shader_id = 0;
 	shader_vp = 0;
 	shader_fp = 0;
 }
 
-ShaderFacade::ShaderFacade(const char *vsFile, const char *fsFile)
+wrench::gl::Shader::Shader(const char *vsFile, const char *fsFile)
 {
     shader_id = 0;
 	shader_vp = 0;
@@ -16,7 +16,7 @@ ShaderFacade::ShaderFacade(const char *vsFile, const char *fsFile)
     init(vsFile, fsFile);
 }
 
-ShaderFacade::~ShaderFacade()
+wrench::gl::Shader::~Shader()
 {
 	glDetachShader(shader_id, shader_fp);
 	glDetachShader(shader_id, shader_vp);
@@ -26,7 +26,7 @@ ShaderFacade::~ShaderFacade()
 	glDeleteProgram(shader_id);
 }
 
-bool ShaderFacade::init(const char *vsFile, const char *fsFile)
+bool wrench::gl::Shader::init(const char *vsFile, const char *fsFile)
 {
 	bool shaderCreated = false;
 	
@@ -69,21 +69,21 @@ bool ShaderFacade::init(const char *vsFile, const char *fsFile)
 	return shaderCreated;
 }
 
-unsigned int ShaderFacade::shaderID() 
+unsigned int wrench::gl::Shader::shaderID() 
 {
 	return shader_id;
 }
 
-void ShaderFacade::bind() {
+void wrench::gl::Shader::bind() {
 	glUseProgram(shader_id);
 }
 
-void ShaderFacade::unbind() 
+void wrench::gl::Shader::unbind() 
 {
 	glUseProgram(0);
 }
 
-void ShaderFacade::uniform(const string name, const int data)
+void wrench::gl::Shader::uniform(const string name, const int data)
 {
 	bind();
 	GLuint location = glGetUniformLocation(shader_id, name.c_str());
@@ -91,7 +91,7 @@ void ShaderFacade::uniform(const string name, const int data)
 	unbind();
 }
 
-void ShaderFacade::uniform(const string name, const float data)
+void wrench::gl::Shader::uniform(const string name, const float data)
 {
 	bind();
 	GLuint location = glGetUniformLocation(shader_id, name.c_str());
@@ -99,7 +99,7 @@ void ShaderFacade::uniform(const string name, const float data)
 	unbind();
 }
 
-char* ShaderFacade::_loadShaderSource(const string &filename)
+char* wrench::gl::Shader::_loadShaderSource(const string &filename)
 {
 	char* shaderSource;
 	
@@ -129,7 +129,7 @@ char* ShaderFacade::_loadShaderSource(const string &filename)
 	return shaderSource;
 }
 
-bool ShaderFacade::_validateShader(GLuint shader, const string &filename = "")
+bool wrench::gl::Shader::_validateShader(GLuint shader, const string &filename = "")
 {
 	bool validShader = false;
 	
@@ -149,7 +149,7 @@ bool ShaderFacade::_validateShader(GLuint shader, const string &filename = "")
     return validShader;
 }
 
-bool ShaderFacade::_validateProgram(GLuint program)
+bool wrench::gl::Shader::_validateProgram(GLuint program)
 {
 	bool validProgram = false;
 	

@@ -9,7 +9,7 @@
 
 #include "OGLStatus.h"
 
-void OGLStatus::logOGLErrors(const string &label) 
+void wrench::gl::OGLStatus::logOGLErrors(const string &label) 
 {
     GLenum errorCode;
     
@@ -21,7 +21,7 @@ void OGLStatus::logOGLErrors(const string &label)
     }
 }
 
-bool OGLStatus::logFBOStatus()
+bool wrench::gl::OGLStatus::logFBOStatus()
 {
 	bool fboComplete = false;
 

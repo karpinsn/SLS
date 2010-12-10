@@ -2,7 +2,7 @@
 #	List all of the shader sources to be copied over
 #	---------------------------------------------------------------------------------------
 
-set(SHADER_SOURCES
+set(SHADER_VERT_SOURCES
 
 	Holoencoder.vert
 	Holodecoder.vert
@@ -10,6 +10,9 @@ set(SHADER_SOURCES
 	NormalCalculator.vert
 	PhaseCalculator.vert
 	FinalRender.vert
+)
+
+set(SHADER_FRAG_SOURCES
 
 	Holoencoder.frag
 	Holodecoder.frag
@@ -18,6 +21,11 @@ set(SHADER_SOURCES
 	PhaseCalculator.frag
 	FinalRender.frag
 )
+
+SET(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})
+
+source_group("ShadersVert" FILES ${SHADER_VERT_SOURCES})
+source_group("ShadersFrag" FILES ${SHADER_FRAG_SOURCES})
 
 #	---------------------------------------------------------------------------------------
 #	Copy Shaders to build

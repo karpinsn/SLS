@@ -7,21 +7,21 @@
  *
  */
 
-#include "TextureFacade.h"
+#include "Texture.h"
 
-TextureFacade::TextureFacade()
+wrench::gl::Texture::Texture()
 {
 	m_width = 0;
 	m_height = 0;
 }
 
-TextureFacade::~TextureFacade()
+wrench::gl::Texture::~Texture()
 {
 	glDeleteTextures(1, &m_textureId);
 	glDeleteBuffers(1, &m_PBOId);
 }
 
-bool TextureFacade::init(const GLuint width, const GLuint height, const GLint internalFormat, const GLenum format, const GLenum dataType)
+bool wrench::gl::Texture::init(const GLuint width, const GLuint height, const GLint internalFormat, const GLenum format, const GLenum dataType)
 {
 	m_width = width;
 	m_height = height;
@@ -59,27 +59,27 @@ bool TextureFacade::init(const GLuint width, const GLuint height, const GLint in
 	return true;
 }
 
-void TextureFacade::bind()
+void wrench::gl::Texture::bind()
 {
 	glBindTexture(GL_TEXTURE_2D, m_textureId);
 }
 
-void TextureFacade::unbind()
+void wrench::gl::Texture::unbind()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-const GLuint TextureFacade::getTextureId(void) const
+const GLuint wrench::gl::Texture::getTextureId(void) const
 {
 	return m_textureId;
 }
 
-const GLenum TextureFacade::getTextureTarget(void) const
+const GLenum wrench::gl::Texture::getTextureTarget(void) const
 {
 	return GL_TEXTURE_2D;
 }
 
-const int TextureFacade::getChannelCount(void) const
+const int wrench::gl::Texture::getChannelCount(void) const
 {
 	int channelCount = 1;
 	
@@ -95,27 +95,27 @@ const int TextureFacade::getChannelCount(void) const
 	return channelCount;
 }
 
-const GLuint TextureFacade::getWidth(void) const
+const GLuint wrench::gl::Texture::getWidth(void) const
 {
 	return m_width;
 }
 
-const GLuint TextureFacade::getHeight(void) const
+const GLuint wrench::gl::Texture::getHeight(void) const
 {
 	return m_height;
 }
 
-const GLuint TextureFacade::getFormat(void) const
+const GLuint wrench::gl::Texture::getFormat(void) const
 {
 	return m_format;
 }
 
-const GLuint TextureFacade::getDataType(void) const
+const GLuint wrench::gl::Texture::getDataType(void) const
 {
 	return m_dataType;
 }
 
-bool TextureFacade::transferFromTexture(IplImage* image)
+bool wrench::gl::Texture::transferFromTexture(IplImage* image)
 {
 	bool compatible = _checkImageCompatibility(image);
 	
@@ -147,7 +147,7 @@ bool TextureFacade::transferFromTexture(IplImage* image)
 	return compatible;
 }
  
-bool TextureFacade::transferToTexture(const IplImage* image)
+bool wrench::gl::Texture::transferToTexture(const IplImage* image)
 {
 	bool compatible = _checkImageCompatibility(image);
 	
@@ -180,7 +180,7 @@ bool TextureFacade::transferToTexture(const IplImage* image)
 	return compatible;
 }
  
-void TextureFacade::_transferFloatData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep)
+void wrench::gl::Texture::_transferFloatData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep)
 {
 	for(unsigned int y = 0; y < m_height; ++y)
 	{
@@ -197,7 +197,7 @@ void TextureFacade::_transferFloatData(const char* source, char* dest, int sourc
 	}
 }
 
-void TextureFacade::_transferByteData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep)
+void wrench::gl::Texture::_transferByteData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep)
 {
 	for(unsigned int y = 0; y < m_height; ++y)
 	{
@@ -214,7 +214,7 @@ void TextureFacade::_transferByteData(const char* source, char* dest, int source
 	}
 }
 
-bool TextureFacade::_checkImageCompatibility(const IplImage* image) const
+bool wrench::gl::Texture::_checkImageCompatibility(const IplImage* image) const
 {
 	bool compatible = false;
 	

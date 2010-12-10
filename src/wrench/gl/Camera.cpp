@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera()
+wrench::gl::Camera::Camera()
 {	
     tb_mode = 1; // default is the rotation mode
     tb_currPos[0] = 0.0f;
@@ -14,11 +14,11 @@ Camera::Camera()
 	tb_mode = 2;
 }
 
-Camera::~Camera(void)
+wrench::gl::Camera::~Camera(void)
 {
 }
 
-void Camera::init()
+void wrench::gl::Camera::init()
 {
     /* put the identity in the trackball transform */
     glPushMatrix();
@@ -30,7 +30,7 @@ void Camera::init()
 	m_viewLength = 1.0;
 }
 
-void Camera::init(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
+void wrench::gl::Camera::init(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
 {
     /* put the identity in the trackball transform */
     glPushMatrix();
@@ -46,7 +46,7 @@ void Camera::init(float eyeX, float eyeY, float eyeZ, float centerX, float cente
 		m_viewLength = .3;
 }
 
-void Camera::initRotatedCam(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
+void wrench::gl::Camera::initRotatedCam(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
 {
 	/* put the identity in the trackball transform */
     glPushMatrix();
@@ -63,14 +63,14 @@ void Camera::initRotatedCam(float eyeX, float eyeY, float eyeZ, float centerX, f
 		m_viewLength = 2.0;
 }
 
-void Camera::setMode(int mode)
+void wrench::gl::Camera::setMode(int mode)
 {
 	//	Set to the identity
 	tb_transform = glm::mat4();
     tb_mode = mode;
 }
 
-void Camera::applyMatrix()
+void wrench::gl::Camera::applyMatrix()
 {
   // multiple the current one with the previous transformation
   glPushMatrix();
@@ -100,13 +100,13 @@ void Camera::applyMatrix()
   glMultMatrixf(glm::value_ptr(tb_accuTransform));
 }
 
-void Camera::reshape(int width, int height)
+void wrench::gl::Camera::reshape(int width, int height)
 {
   tb_width  = width;
   tb_height = height;
 }
 
-void Camera::mousePressed(int x, int y)
+void wrench::gl::Camera::mousePressed(int x, int y)
 {
 	m_viewLength = glm::value_ptr(tb_accuTransform)[14];
 	
@@ -120,13 +120,13 @@ void Camera::mousePressed(int x, int y)
     tb_moving = GL_TRUE;
 }
 
-void Camera::mouseRelease(int x, int y)
+void wrench::gl::Camera::mouseRelease(int x, int y)
 {
 	tb_transform = glm::mat4();
 	tb_moving = GL_FALSE;
 }
 
-void Camera::mouseMotion(int x, int y)
+void wrench::gl::Camera::mouseMotion(int x, int y)
 {
     if (!tb_moving) return;
 
@@ -152,7 +152,7 @@ void Camera::mouseMotion(int x, int y)
     tb_prevPos[1] = tb_currPos[1];
 }
 
-void Camera::_rotate(float dx, float dy)
+void wrench::gl::Camera::_rotate(float dx, float dy)
 {
 	float sx[3], sy[3], sz[3], axis[3];
 	float mag = sqrtf( dx * dx  + dy * dy );
@@ -170,7 +170,7 @@ void Camera::_rotate(float dx, float dy)
 	tb_transform = glm::rotate(tb_transform, angle, glm::vec3(axis[0], axis[1], axis[2]));
 }
 
-void Camera::_getScreenXYZ(float sx[3], float sy[3], float sz[3])
+void wrench::gl::Camera::_getScreenXYZ(float sx[3], float sy[3], float sz[3])
 {
     float mat[16];
     glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat *)mat);
@@ -185,7 +185,7 @@ void Camera::_getScreenXYZ(float sx[3], float sy[3], float sz[3])
     sz[2] = mat[10];
 }
 
-void Camera::_zoom(float dx, float dy)
+void wrench::gl::Camera::_zoom(float dx, float dy)
 {	
     // Implement zoom function
 	float zoomfactor = m_viewLength * ((1.0f/(1.0f + dy * 2.0f))-1.0f);
@@ -196,7 +196,7 @@ void Camera::_zoom(float dx, float dy)
 	glm::value_ptr(tb_transform)[14] = zoomfactor;
 }
 
-void Camera::_twist(float dx, float dy)
+void wrench::gl::Camera::_twist(float dx, float dy)
 {
     // Implement twist function	
 	glm::vec3 previousClickVec = glm::vec3(tb_prevPos[0], tb_prevPos[1], 0.0f) - glm::vec3(.5f, .5f, 0.0f);
@@ -222,7 +222,7 @@ void Camera::_twist(float dx, float dy)
 	tb_transform = glm::rotate(tb_transform, theta3, glm::vec3(sz[0], sz[1], sz[2]));
 }
 
-void Camera::_pan(float dx, float dy)
+void wrench::gl::Camera::_pan(float dx, float dy)
 {
     float distance = glm::value_ptr(tb_accuTransform)[14];
 	

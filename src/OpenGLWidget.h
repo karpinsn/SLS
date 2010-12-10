@@ -29,7 +29,7 @@
 
 #include "Holoencoder.h"
 #include "Holodecoder.h"
-#include "Camera.h"
+#include <wrench/gl/Camera.h>
 #include "AbstractGLContext.h"
 
 class Holodecoder;

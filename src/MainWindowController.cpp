@@ -24,7 +24,7 @@ void MainWindowController::exportSingleFrame()
 	if(!fileName.isEmpty())
 	{
 		ImageIO io;
-		TextureFacade holoimage = m_mainWindow->m_holoEncoder->encode();
+		Texture holoimage = m_mainWindow->m_holoEncoder->encode();
 		io.saveTexture(fileName.toAscii().constData(), holoimage);
 	}
 }
@@ -58,7 +58,7 @@ void MainWindowController::exportEntireVideo()
 				AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toAscii().constData());
 				m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
 				
-				TextureFacade holoimage = m_mainWindow->m_holoEncoder->encode();
+				Texture holoimage = m_mainWindow->m_holoEncoder->encode();
 				io.saveAviFileWriteFrame(holoimage);
 			}
 			

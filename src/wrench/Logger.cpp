@@ -9,12 +9,12 @@
 
 #include "Logger.h"
 
-void Logger::logError(const string &message)
+void wrench::Logger::logError(const string &message)
 {
 	clog << "Error: " << message << endl;
 }
 
-void Logger::logDebug(const string &message)
+void wrench::Logger::logDebug(const string &message)
 {
 	clog << "Debug: " << message << endl;
 }

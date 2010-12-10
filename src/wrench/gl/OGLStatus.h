@@ -16,15 +16,21 @@
 
 #include <QtOpenGL/QGLWidget>
 
-#include "Logger.h"
+#include "../Logger.h"
 
 using namespace std;
 
-class OGLStatus
+namespace wrench
 {
-public:
-	static void logOGLErrors (const string &label);
-	static bool logFBOStatus(void);
-};
+	namespace gl 
+	{
+		class OGLStatus
+		{
+		public:
+			static void logOGLErrors (const string &label);
+			static bool logFBOStatus(void);
+		};
+	}
+}
 
 #endif	// _OGL_STATUS_H_

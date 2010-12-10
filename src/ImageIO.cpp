@@ -63,7 +63,7 @@ bool ImageIO::saveImage(const string &filename, const IplImage* image, bool need
 	return saved;
 }
 
-bool ImageIO::saveTexture(const string &filename, TextureFacade &texture)
+bool ImageIO::saveTexture(const string &filename, Texture &texture)
 {
 	ensureImageSize(texture.getWidth(), texture.getHeight(), texture.getChannelCount());
 	
@@ -115,7 +115,7 @@ bool ImageIO::saveAviFile(const string &filename, const unsigned int videoWidth,
 	return openedVideoWriter;
 }
 
-bool ImageIO::saveAviFileWriteFrame(TextureFacade& texture)
+bool ImageIO::saveAviFileWriteFrame(Texture& texture)
 {
 	if (m_videoWriterInUse) 
 	{

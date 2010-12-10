@@ -21,7 +21,7 @@
 //	Qt auto generated headers
 #include "ui_Holoencoder.h"
 
-#include "Camera.h"
+#include <wrench/gl/Camera.h>
 #include "OpenGLWidget.h"
 #include "Holoencoder.h"
 #include "Holodecoder.h"
@@ -30,7 +30,10 @@
 #include "XYZFileIO.h"
 
 #include "MainWindowController.h"
+
 class MainWindowController;
+
+using namespace wrench;
 
 class MainWindowView : public QMainWindow, private Ui::MainWindow
 {

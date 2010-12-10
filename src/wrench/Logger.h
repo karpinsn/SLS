@@ -16,11 +16,14 @@
 
 using namespace std;
 
-class Logger
+namespace wrench
 {
-public:
-	static void logError(const string &message);
-	static void logDebug(const string &message);
-};
+	class Logger
+	{
+	public:
+		static void logError(const string &message);
+		static void logDebug(const string &message);
+	};
+}
 
 #endif	// _LOGGER_H_

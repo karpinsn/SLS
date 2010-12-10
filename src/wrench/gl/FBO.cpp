@@ -7,18 +7,18 @@
  *
  */
 
-#include "FBOFacade.h"
+#include "FBO.h"
 
-FBOFacade::FBOFacade(void)
+wrench::gl::FBO::FBO(void)
 {
 }
 
-FBOFacade::~FBOFacade()
+wrench::gl::FBO::~FBO()
 {
 	glDeleteFramebuffersEXT(1, &m_framebuffer);
 }
 
-bool FBOFacade::init()
+bool wrench::gl::FBO::init()
 {
 	_cacheQuad();
 	_initFBO();
@@ -28,13 +28,13 @@ bool FBOFacade::init()
 	return true;
 }
 
-void FBOFacade::bind()
+void wrench::gl::FBO::bind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER_EXT, m_framebuffer);
 	OGLStatus::logOGLErrors("FBOFacade - bind()");
 }
 
-void FBOFacade::process(void)
+void wrench::gl::FBO::process(void)
 {
 	glPushAttrib(GL_VIEWPORT_BIT);
 	{
@@ -63,7 +63,7 @@ void FBOFacade::process(void)
 	OGLStatus::logOGLErrors("FBOFacade - process()");
 }
 
-void FBOFacade::unbind()
+void wrench::gl::FBO::unbind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
 	glDrawBuffer(GL_BACK);
@@ -71,18 +71,18 @@ void FBOFacade::unbind()
 	OGLStatus::logOGLErrors("FBOFacade - unbind()");
 }
 
-void FBOFacade::bindDrawBuffer(GLenum attachmentPoint)
+void wrench::gl::FBO::bindDrawBuffer(GLenum attachmentPoint)
 {
 	glDrawBuffer(attachmentPoint);
 }
 
-void FBOFacade::setTextureAttachPoint(const TextureFacade &texture, const GLenum attachmentPoint)
+void wrench::gl::FBO::setTextureAttachPoint(const Texture &texture, const GLenum attachmentPoint)
 {
 	bind();
 	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, attachmentPoint, texture.getTextureTarget(), texture.getTextureId(), 0);
 }
 
-void FBOFacade::_cacheQuad(void)
+void wrench::gl::FBO::_cacheQuad(void)
 {
 	//	Quad used to render image operations
 	m_renderingQuad = glGenLists(1);
@@ -106,7 +106,7 @@ void FBOFacade::_cacheQuad(void)
 	glEndList();
 }
 
-void FBOFacade::_initFBO(void)
+void wrench::gl::FBO::_initFBO(void)
 {
 	glGenFramebuffers(1, &m_framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER_EXT, m_framebuffer);

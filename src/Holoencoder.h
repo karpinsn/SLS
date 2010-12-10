@@ -27,19 +27,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/type_ptr.hpp>
 
-#include "ShaderFacade.h"
-#include "Camera.h"
+#include <wrench/gl/Shader.h>
+#include <wrench/gl/Camera.h>
+#include <wrench/gl/Arcball.h>
+#include <wrench/gl/Texture.h>
+
 #include "AbstractMesh.h"
 #include "AbstractGLContext.h"
-#include "Arcball.h"
-#include "TextureFacade.h"
 
 using namespace std;
+using namespace wrench::gl;
 
 class Holoencoder : public AbstractGLContext
 {
 private:
-	ShaderFacade m_encoderShader;
+	Shader m_encoderShader;
 	int m_width;
 	int m_height;
 	
@@ -49,7 +51,7 @@ private:
 	
 	AbstractMesh* m_currentMesh;
 	
-	TextureFacade m_holoimage;
+	Texture m_holoimage;
 	
 	//	Render to texture items
 	GLuint m_holoimageFBO;
@@ -64,14 +66,14 @@ private:
 public:
 	Holoencoder(void);
 	
-	virtual void			init();
-    virtual void			draw(void);
-			TextureFacade&	encode();
-	virtual void			resize(int width, int height);
-	virtual void			cameraSelectMode(int mode);
-	virtual void			mousePressEvent(int mouseX, int mouseY);
-	virtual void			mouseMoveEvent(int mouseX, int mouseY);
-	void					setCurrentMesh(AbstractMesh* current);
+	virtual void				init();
+    virtual void				draw(void);
+	wrench::gl::Texture&		encode();
+	virtual void				resize(int width, int height);
+	virtual void				cameraSelectMode(int mode);
+	virtual void				mousePressEvent(int mouseX, int mouseY);
+	virtual void				mouseMoveEvent(int mouseX, int mouseY);
+	void						setCurrentMesh(AbstractMesh* current);
 	
 private:
 	void initFBO(void);

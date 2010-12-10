@@ -1,6 +1,6 @@
 #include "Arcball.h"                                   
 
-Arcball::Arcball(GLfloat width, GLfloat height)
+wrench::gl::Arcball::Arcball(GLfloat width, GLfloat height)
 {
     //	Clear initial values
 	m_startVector = glm::vec3(0.0f);
@@ -10,7 +10,7 @@ Arcball::Arcball(GLfloat width, GLfloat height)
     this->setBounds(width, height);
 }
 
-void Arcball::mousePressEvent(const GLint mouseX, const GLint mouseY)
+void wrench::gl::Arcball::mousePressEvent(const GLint mouseX, const GLint mouseY)
 {
 	m_lastRotation = m_thisRotation;
     
@@ -18,7 +18,7 @@ void Arcball::mousePressEvent(const GLint mouseX, const GLint mouseY)
     m_startVector = this->mapPointToSphere(glm::vec2(mouseX, mouseY));
 }
 
-void Arcball::mouseMoveEvent(const GLint mouseX, const GLint mouseY)
+void wrench::gl::Arcball::mouseMoveEvent(const GLint mouseX, const GLint mouseY)
 {
 	glm::quat drawQuat;
 	
@@ -51,17 +51,17 @@ void Arcball::mouseMoveEvent(const GLint mouseX, const GLint mouseY)
 	m_transform = m_thisRotation;
 }
 
-glm::mat4 Arcball::getTransform(void)
+glm::mat4 wrench::gl::Arcball::getTransform(void)
 {
 	return m_transform;
 }
 
-void Arcball::applyTransform(void)
+void wrench::gl::Arcball::applyTransform(void)
 {
 	glMultMatrixf(glm::value_ptr(m_transform));
 }
 
-glm::vec3 Arcball::mapPointToSphere(const glm::vec2& point) const
+glm::vec3 wrench::gl::Arcball::mapPointToSphere(const glm::vec2& point) const
 {
 	glm::vec3 mappedVector(0.0f);
 	
@@ -86,7 +86,7 @@ glm::vec3 Arcball::mapPointToSphere(const glm::vec2& point) const
 	return mappedVector;
 }
 
-void Arcball::setBounds(GLfloat width, GLfloat height)
+void wrench::gl::Arcball::setBounds(GLfloat width, GLfloat height)
 {		
 	//	Set adjustment factor for width & height
 	this->m_adjustWidth  = 1.0f / ((width  - 1.0f) * 0.5f);

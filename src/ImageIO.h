@@ -29,9 +29,10 @@
 #include <cv.h>
 #include <highgui.h>
 
-#include "TextureFacade.h"
+#include <wrench/gl/Texture.h>
 
 using namespace std;
+using namespace wrench::gl;
 
 class ImageIO
 {
@@ -52,7 +53,7 @@ public:
 	
 	//	Save Image Methods
 	bool saveImage(const string &filename, const IplImage* image, bool needChannelReorder = false);
-	bool saveTexture(const string &filename, TextureFacade& texture);
+	bool saveTexture(const string &filename, Texture& texture);
 	bool saveRGBImage(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight);
 	
 	//	Read Image Methods
@@ -60,7 +61,7 @@ public:
 	
 	//	Save Avi File Methods
 	bool saveAviFile(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps);
-	bool saveAviFileWriteFrame(TextureFacade& texture);
+	bool saveAviFileWriteFrame(Texture& texture);
 	bool saveAviFileFinish(void);
 	
 	//	Read Avi File Methods

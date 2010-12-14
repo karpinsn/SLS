@@ -14,7 +14,17 @@
 #include <iostream>
 #include <sstream>
 
-#include <QtOpenGL/QGLWidget>
+#ifdef __APPLE__
+	#include <glew.h>
+	#include <OpenGL/gl.h>
+#elif _WIN32
+	#include <windows.h>
+	#include <GL/glew.h>
+	#include <GL/gl.h>
+#else
+	#include <GL/glew.h>
+	#include <GL/gl.h>
+#endif
 
 #include "../Logger.h"
 

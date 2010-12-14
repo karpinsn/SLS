@@ -24,7 +24,7 @@
 #endif
 
 #include <glm/glm.hpp>
-#include <glm/gtc/Quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/type_ptr.hpp>
 
 # define Epsilon 1.0e-5

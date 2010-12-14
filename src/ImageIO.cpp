@@ -102,7 +102,7 @@ bool ImageIO::saveAviFile(const string &filename, const unsigned int videoWidth,
 	
 	if(!m_videoWriterInUse)
 	{
-		m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), -1, fps, cvSize(videoWidth, videoHeight), 1);
+		m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), 0, fps, cvSize(videoWidth, videoHeight), 1);
 		m_videoWriterInUse = true;
 		
 		openedVideoWriter = m_videoWriterInUse;

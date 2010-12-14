@@ -24,7 +24,7 @@
 	#include <GL/gl.h>
 #endif
 
-#include <string>
+#include <string.h>
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>

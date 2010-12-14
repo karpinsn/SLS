@@ -81,7 +81,7 @@ void PointCloudMesh::_cacheMesh(void)
 {
 	glGenBuffers(1, &m_meshVBOID);
 	glBindBuffer(GL_ARRAY_BUFFER, m_meshVBOID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * elementCount, meshVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 512 * 512, meshVertices, GL_STATIC_DRAW);
 	
 	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), 0);
 	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));

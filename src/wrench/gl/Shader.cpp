@@ -35,8 +35,8 @@ bool wrench::gl::Shader::init(const char *vsFile, const char *fsFile)
 	    shader_vp = glCreateShader(GL_VERTEX_SHADER);
 	    shader_fp = glCreateShader(GL_FRAGMENT_SHADER);
         
-	    const char* vsText = _loadShaderSource(vsFile);
-	    const char* fsText = _loadShaderSource(fsFile);	
+		const GLchar* vsText = _loadShaderSource(vsFile);
+		const GLchar* fsText = _loadShaderSource(fsFile);	
         
         if (vsText == NULL || fsText == NULL) 
 		{
@@ -63,6 +63,15 @@ bool wrench::gl::Shader::init(const char *vsFile, const char *fsFile)
 			glLinkProgram(shader_id);
 			
 			shaderCreated = _validateProgram(shader_id);
+		}
+		
+		if(NULL != vsText)
+		{
+			delete[] vsText;
+		}
+		if(NULL != fsText)
+		{
+			delete[] fsText;
 		}
     }
 	

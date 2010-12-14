@@ -3,7 +3,6 @@
 Holoencoder::Holoencoder(void)
 {
 	m_hasBeenInit = false;
-	m_controller = new Arcball(512, 512);
 }
 
 void Holoencoder::init()
@@ -16,6 +15,7 @@ void Holoencoder::init()
 		m_currentMesh = NULL;
 		initFBO();
 	
+		m_controller.init(m_width, m_height);
 		m_encoderShader.init("Shaders/Holoencoder.vert", "Shaders/Holoencoder.frag");
 
 		m_camera = new Camera();
@@ -83,7 +83,7 @@ void Holoencoder::draw(void)
 										  0.0f, 0.0f, 2.0f, 0.0f,
 										  0.0f, 0.0f, 0.0f, 1.0f);
 	
-	m_controller->applyTransform();
+	m_controller.applyTransform();
 	
 	
 	//glTranslatef(0.0f, 0.0f, 0.8f);
@@ -92,7 +92,7 @@ void Holoencoder::draw(void)
 	//glTranslatef(0.0f, -0.1f, 0.7f);
 	//glScalef(2.4f, 2.4f, 2.4f);
 	
-	cameraModelViewMatrix = cameraModelViewMatrix * m_controller->getTransform() * translateMatrix * scaleMatrix;
+	cameraModelViewMatrix = cameraModelViewMatrix * m_controller.getTransform() * translateMatrix * scaleMatrix;
 	
 	m_encoderShader.bind();
 	GLint projectorModelViewLoc = glGetUniformLocation(m_encoderShader.shaderID(), "projectorModelView");
@@ -136,12 +136,12 @@ void Holoencoder::cameraSelectMode(int mode)
 
 void Holoencoder::mousePressEvent(int mouseX, int mouseY)
 {	
-	m_controller->mousePressEvent(mouseX, mouseY);
+	m_controller.mousePressEvent(mouseX, mouseY);
 }
 
 void Holoencoder::mouseMoveEvent(int mouseX, int mouseY)
 {	
-	m_controller->mouseMoveEvent(mouseX, mouseY);
+	m_controller.mouseMoveEvent(mouseX, mouseY);
 }
 
 void Holoencoder::setCurrentMesh(AbstractMesh* current)

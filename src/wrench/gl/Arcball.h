@@ -36,9 +36,10 @@ namespace wrench
 		class Arcball
 		{	
 		public:
-			Arcball(GLfloat width, GLfloat height);
+			Arcball();
 			virtual ~Arcball() {};
-				
+			void init(GLfloat width, GLfloat height);
+			
 			//Mouse down
 			void mousePressEvent(const GLint mouseX, const GLint mouseY);
 			

@@ -122,8 +122,12 @@ add_subdirectory(Shaders)
 #	---------------------------------------------------------------------------------------
 
 # Build and link the app!
+set(SHADERS_QUALIFIED)
+foreach(shader ${SHADER_SOURCES})
+	list(APPEND SHADERS_QUALIFIED "Shaders/${shader}")
+endforeach()
 
-message(STATUS "Libraries to link:" ${SHADER_SOURCES} " Done")
+source_group("Shaders" FILES ${SHADERS_QUALIFIED})
 
 add_executable(${PROJECT_NAME}
 	MACOSX_BUNDLE
@@ -133,7 +137,8 @@ add_executable(${PROJECT_NAME}
 	${HEADERS}
 	${UIS}
 	${MOCS}
-	${RESOURCES})
+	${RESOURCES}
+	${SHADERS_QUALIFIED})
 
 
 

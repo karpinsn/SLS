@@ -23,9 +23,7 @@ set(SHADER_FRAG_SOURCES
 )
 
 SET(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})
-
-source_group("ShadersVert" FILES ${SHADER_VERT_SOURCES})
-source_group("ShadersFrag" FILES ${SHADER_FRAG_SOURCES})
+set(SHADER_SOURCES "${SHADER_SOURCES}" PARENT_SCOPE)
 
 #	---------------------------------------------------------------------------------------
 #	Copy Shaders to build

@@ -3,7 +3,6 @@
 Holodecoder::Holodecoder(OpenGLWidget* glContext)
 {
 	m_glContext = glContext;
-	m_controller = new Arcball(512, 512);
 	m_hasBeenInit = false;
 }
 
@@ -15,10 +14,11 @@ void Holodecoder::init()
 		_initTextures(512, 512);
 		_initLighting();
 		
+		m_controller.init(512, 512);
+		m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
+		m_camera.setMode(1);
+		
 		m_mesh = new TriMesh(512, 512);
-		m_camera = new Camera();
-		m_camera->init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
-		m_camera->setMode(1);
 		
 		m_mesh->initMesh();
 		haveHoloImage = false;
@@ -107,7 +107,7 @@ void Holodecoder::draw(void)
 	glPushMatrix();
 	glLoadIdentity();
 	
-	m_camera->applyMatrix();
+	m_camera.applyMatrix();
 	
 	glColor3f(0.0f, 1.0f, 0.0f);
 		
@@ -121,7 +121,7 @@ void Holodecoder::draw(void)
 		m_holoImages[m_frontBufferIndex]->bind();
 		
 		//	Draw a plane of pixels
-		m_controller->applyTransform();
+		m_controller.applyTransform();
 		m_mesh->draw();
 	}
 	m_finalRender.unbind();
@@ -133,7 +133,7 @@ void Holodecoder::draw(void)
 
 void Holodecoder::resize(int width, int height)
 {
-	m_camera->reshape(width, height);
+	m_camera.reshape(width, height);
 	gluPerspective(45.0, 1.0, .00001, 10.0);
 	//glFrustum(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
 	//glOrtho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
@@ -141,17 +141,17 @@ void Holodecoder::resize(int width, int height)
 
 void Holodecoder::cameraSelectMode(int mode)
 {
-	m_camera->setMode(mode);
+	m_camera.setMode(mode);
 }
 
 void Holodecoder::mousePressEvent(int mouseX, int mouseY)
 {
-	m_camera->mousePressed(mouseX, mouseY);
+	m_camera.mousePressed(mouseX, mouseY);
 }
 
 void Holodecoder::mouseMoveEvent(int mouseX, int mouseY)
 {
-	m_camera->mouseMotion(mouseX, mouseY);
+	m_camera.mouseMotion(mouseX, mouseY);
 }
 
 void Holodecoder::setBackHoloBuffer(IplImage* image)

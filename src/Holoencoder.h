@@ -46,7 +46,7 @@ private:
 	int m_height;
 	
 	Camera* m_camera;
-	Arcball* m_controller;
+	Arcball m_controller;
 	glm::mat4 m_cameraProjectionMatrix;
 	
 	AbstractMesh* m_currentMesh;

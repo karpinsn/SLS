@@ -1,5 +1,4 @@
 uniform sampler2D phaseA;
-varying vec4 vertex;
 
 float step_w = 1.0/512.0;
 float step_h = 1.0/512.0;

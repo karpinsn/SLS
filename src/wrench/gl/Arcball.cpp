@@ -1,12 +1,16 @@
 #include "Arcball.h"                                   
 
-wrench::gl::Arcball::Arcball(GLfloat width, GLfloat height)
+wrench::gl::Arcball::Arcball()
+{	
+}
+
+void wrench::gl::Arcball::init(GLfloat width, GLfloat height)
 {
-    //	Clear initial values
+	//	Clear initial values
 	m_startVector = glm::vec3(0.0f);
 	m_endVector = glm::vec3(0.0f);
 	
-    //	Set initial bounds
+	//	Set initial bounds
     this->setBounds(width, height);
 }
 

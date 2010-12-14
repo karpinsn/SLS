@@ -68,8 +68,8 @@ private:
 	
 	FBO m_imageProcessor;
 	
-	Camera* m_camera;
-	Arcball* m_controller;
+	Camera m_camera;
+	Arcball m_controller;
 	
 	TriMesh* m_mesh;
 	

@@ -188,6 +188,7 @@ IplImage* ImageIO::readAviFileFrame()
 	if(m_videoReaderInUse)
 	{
 		frame = cvQueryFrame(m_videoReaderHandle);
+		cvCvtColor(frame, frame, CV_BGR2RGB);
 	}
 	else 
 	{

@@ -169,15 +169,15 @@ bool wrench::gl::Texture::transferToTexture(const IplImage* image)
 		if(m_dataType == GL_FLOAT)
 		{
 			_transferFloatData(image->imageData, gpuMem, image->nChannels, channelCount, image->widthStep, widthStep);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
 			glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
 			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 		}
 		else if(m_dataType == GL_UNSIGNED_BYTE)
 		{		
 			_transferByteData(image->imageData, gpuMem, image->nChannels, channelCount, image->widthStep, widthStep);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
 			glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
 			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 		}	
 	}

@@ -123,8 +123,15 @@ void OpenGLWidget::openHoloImage(string filename, Holodecoder* decoder)
 	updateGL();
 }
 
+int frame = 1;
 void OpenGLWidget::timerEvent(QTimerEvent* event)
 {
+	ImageIO io;
+	stringstream filename;
+	filename << "Phase/";
+	filename << frame++;
+	filename << ".jpg";
+	
 	int elapsed = movieTimer.elapsed();
 	
 	if(elapsed >= 33)
@@ -132,12 +139,17 @@ void OpenGLWidget::timerEvent(QTimerEvent* event)
 		movieTimer.restart();
 		//	Need to fetch the next frame
 		
-		IplImage* frame = m_aviIO.readAviFileFrame();
+		//IplImage* frame = m_aviIO.readAviFileFrame();
 
+		//cvCvtColor(frame, frame, CV_RGB2BGR);
+		//cvSaveImage(filename.str().c_str(), frame, p);
+		IplImage* frame = m_aviIO.unpackAndReadPhaseMap();
+		
 		if(frame)
 		{
-			m_holoDecoder->setBackHoloBuffer(frame);
-			m_holoDecoder->swapBuffers();		
+			//m_holoDecoder->setBackHoloBuffer(frame);
+			//m_holoDecoder->swapBuffers();		
+			m_holoDecoder->m_phaseMap1.transferToTexture(frame);
 		}
 		else 
 		{

@@ -55,6 +55,9 @@ public:
 	bool saveImage(const string &filename, const IplImage* image, bool needChannelReorder = false);
 	bool saveTexture(const string &filename, Texture& texture);
 	bool saveRGBImage(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight);
+
+	bool packAndSavePhaseMap(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight);
+	IplImage* unpackAndReadPhaseMap();
 	
 	//	Read Image Methods
 	IplImage* readImage(const string &filename);

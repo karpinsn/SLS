@@ -48,7 +48,7 @@ using namespace wrench::gl;
 
 class Holodecoder : public AbstractGLContext
 {
-public:
+private:
 	Shader m_phaseCalculator;
 	Shader m_phaseFilter;
 	Shader m_normalCalculator;

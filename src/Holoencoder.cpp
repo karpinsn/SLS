@@ -76,11 +76,11 @@ void Holoencoder::draw(void)
 	glm::mat4 translateMatrix = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
 										  0.0f, 1.0f, 0.0f, 0.0f,
 										  0.0f, 0.0f, 1.0f, 0.0f,
-										  -0.5f, -.1f, 0.7f, 1.0f);
+										  0.0f, -.1f, 0.7f, 1.0f);
 	
-	glm::mat4 scaleMatrix	  = glm::mat4(3.5f, 0.0f, 0.0f, 0.0f,
-										  0.0f, 3.5f, 0.0f, 0.0f,
-										  0.0f, 0.0f, 3.5f, 0.0f,
+	glm::mat4 scaleMatrix	  = glm::mat4(2.0f, 0.0f, 0.0f, 0.0f,
+										  0.0f, 2.0f, 0.0f, 0.0f,
+										  0.0f, 0.0f, 2.0f, 0.0f,
 										  0.0f, 0.0f, 0.0f, 1.0f);
 	
 	m_controller.applyTransform();

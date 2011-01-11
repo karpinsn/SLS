@@ -148,62 +148,6 @@ target_link_libraries(${PROJECT_NAME} ${LIBS})
 #							Install
 #	---------------------------------------------------------------------------------------
 
-SET(plugin_dest_dir bin)
-SET(qtconf_dest_dir bin)
-SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/Holoencoder")
-IF(APPLE)
-  SET(plugin_dest_dir Holoencoder.app/Contents/MacOS)
-  SET(qtconf_dest_dir Holoencoder.app/Contents/Resources)
-  SET(APPS "\${CMAKE_INSTALL_PREFIX}/Holoencoder.app")
-ENDIF(APPLE)
-IF(WIN32)
-  SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/Holoencoder.exe")
-ENDIF(WIN32)
-
-
 install (TARGETS ${PROJECT_NAME}
 		RUNTIME DESTINATION bin/
 		BUNDLE DESTINATION ./ )
-
-#	---------------------------------------------------------------------------------------
-#							Deploy
-#	---------------------------------------------------------------------------------------
-		
-#--------------------------------------------------------------------------------
-# Install needed Qt plugins by copying directories from the qt installation
-# One can cull what gets copied by using 'REGEX "..." EXCLUDE'
-#INSTALL(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${plugin_dest_dir}/plugins COMPONENT Runtime)
-
-#--------------------------------------------------------------------------------
-# install a qt.conf file
-# this inserts some cmake code into the install script to write the file
-INSTALL(CODE "
-    file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${qtconf_dest_dir}/qt.conf\" \"\")
-    " COMPONENT Runtime)
-
-
-#--------------------------------------------------------------------------------
-# Use BundleUtilities to get all other dependencies for the application to work.
-# It takes a bundle or executable along with possible plugins and inspects it
-# for dependencies.  If they are not system dependencies, they are copied.
-
-# directories to look for dependencies
-SET(DIRS ${QT_LIBRARY_DIRS} /usr/local/lib/)
-
-# Now the work of copying dependencies into the bundle/package
-# The quotes are escaped and variables to use at install time have their $ escaped
-# An alternative is the do a configure_file() on a script and use install(SCRIPT  ...).
-# Note that the image plugins depend on QtSvg and QtXml, and it got those copied
-# over.
-INSTALL(CODE "
-    file(GLOB_RECURSE QTPLUGINS
-      \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
-    include(BundleUtilities)
-    fixup_bundle(\"${APPS}\" \"\${QTPLUGINS}\" \"${DIRS}\")
-    " COMPONENT Runtime)
-    
-# To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
-# where CPackConfig.cmake is created by including CPack
-# And then there's ways to customize this as well
-set(CPACK_BINARY_DRAGNDROP ON)
-include(CPack)

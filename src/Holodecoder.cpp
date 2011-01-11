@@ -75,17 +75,8 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
 	OGLStatus::logOGLErrors("Holodecoder - initTextures()");
 }
 
-#include <sstream>
-int frameN = 1;
-
 void Holodecoder::draw(void)
 {
-	ImageIO io;
-	stringstream filename;
-	filename << "PhaseRender/";
-	filename << frameN++;
-	filename << ".png";
-	
 	m_imageProcessor.bind();
 	{
 		//	Pass 1
@@ -93,17 +84,14 @@ void Holodecoder::draw(void)
 		m_phaseCalculator.bind();
 		glActiveTexture(GL_TEXTURE0);
 		m_holoImages[m_frontBufferIndex]->bind();
-		//m_imageProcessor.process();
-
+		m_imageProcessor.process();
 		
 		//	Pass 2
 		m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
 		m_phaseFilter.bind();
 		glActiveTexture(GL_TEXTURE0);
 		m_phaseMap0.bind();
-		//m_imageProcessor.process();
-		
-		//io.packAndSavePhaseMap(filename.str(), 512, 512);
+		m_imageProcessor.process();
 		
 		//	Pass 3
 		m_imageProcessor.bindDrawBuffer(m_normalMapAttachPoint);
@@ -121,10 +109,8 @@ void Holodecoder::draw(void)
 	
 	m_camera.applyMatrix();
 	
-	glTranslatef(0.0f, -.2f, -1.0f);
-	//glColor3f(0.0f, 1.0f, 0.0f);
-	glColor3f(1.165f, .775f, .645f);
-
+	glColor3f(0.0f, 1.0f, 0.0f);
+		
 	m_finalRender.bind();
 	{
 		glActiveTexture(GL_TEXTURE0);
@@ -140,14 +126,7 @@ void Holodecoder::draw(void)
 	}
 	m_finalRender.unbind();
 
-	io.saveRGBImage(filename.str(), 512, 512);
-	
 	glPopMatrix();
-	
-	if(frameN > 1350)
-	{
-		exit(0);
-	}
 	
 	OGLStatus::logOGLErrors("Holodecoder - draw()");
 }

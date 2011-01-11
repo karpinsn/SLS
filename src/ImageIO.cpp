@@ -79,82 +79,6 @@ bool ImageIO::saveTexture(const string &filename, Texture &texture)
 	return saved;
 }
 
-bool ImageIO::packAndSavePhaseMap(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight)
-{
-	ensureImageSize(imageWidth, imageHeight, 3);
-	
-	IplImage *temp = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 4);
-	IplImage *phase = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 1);
-	glReadPixels(0, 0, imageWidth, imageHeight, GL_RGBA, GL_FLOAT, temp->imageData);
-	
-	cvSetImageCOI(temp, 1);
-	cvSetImageCOI(phase, 1);
-	cvCopy(temp, phase);
-	
-	cvSetImageCOI(temp, 0);
-	cvSetImageCOI(phase, 0);
-	
-	for(unsigned int y = 0; y < imageHeight; ++y)
-	{
-		for(unsigned int x = 0; x < imageWidth; ++x)
-		{
-			float phaseValue = ((float*)(phase->imageData + phase->widthStep*y))[x];
-			unsigned int packedPhaseValue;
-			std::memcpy(&packedPhaseValue,&phaseValue,sizeof packedPhaseValue);
-			packedPhaseValue = packedPhaseValue >> 8;
-			
-			//	Not Cross platform!!! Depends on endieness of bits
-			uchar* packedPointer = (uchar*)(&packedPhaseValue);
-			
-			((uchar*)(m_imageHandle->imageData + m_imageHandle->widthStep*y))[x*3] = packedPointer[0];
-			((uchar*)(m_imageHandle->imageData + m_imageHandle->widthStep*y))[x*3+1] = packedPointer[1];
-			((uchar*)(m_imageHandle->imageData + m_imageHandle->widthStep*y))[x*3+2] = packedPointer[2];
-		}
-	}
-	
-	cvReleaseImage(&temp);
-	cvReleaseImage(&phase);
-	
-	cvFlip(m_imageHandle, 0);
-	return cvSaveImage(filename.c_str(), m_imageHandle);
-}
-
-IplImage* ImageIO::unpackAndReadPhaseMap()
-{
-	ensureImageSize(512, 512, 3);
-	m_imageHandle = cvQueryFrame(m_videoReaderHandle);
-	
-	static IplImage *temp = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 4);
-	IplImage *phase = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 1);
-	
-	for(unsigned int y = 0; y < m_imageHeight; ++y)
-	{
-		for(unsigned int x = 0; x < m_imageWidth; ++x)
-		{
-			//	Not Cross platform!!! Depends on endieness of bits
-			unsigned int packedPhaseValue;
-			uchar* packedPointer = (uchar*)(&packedPhaseValue);
-			
-			packedPointer[0] = ((uchar*)(m_imageHandle->imageData + m_imageHandle->widthStep*y))[x*3];
-			packedPointer[1] = ((uchar*)(m_imageHandle->imageData + m_imageHandle->widthStep*y))[x*3+1];
-			packedPointer[2] = ((uchar*)(m_imageHandle->imageData + m_imageHandle->widthStep*y))[x*3+2];
-			
-			packedPhaseValue <<= 8;
-			float phaseValue;
-			std::memcpy(&phaseValue,&packedPhaseValue,sizeof phaseValue);
-			
-			((float*)(phase->imageData + phase->widthStep*y))[x] = phaseValue;
-		}
-	}
-	
-	cvMerge(phase, phase, phase, phase, temp);
-	
-	cvReleaseImage(&phase);
-	
-	return temp;
-}
-
-
 IplImage* ImageIO::readImage(const string &filename)
 {
 	IplImage* image = cvLoadImage(filename.c_str());
@@ -265,7 +189,6 @@ IplImage* ImageIO::readAviFileFrame()
 	{
 		frame = cvQueryFrame(m_videoReaderHandle);
 		cvCvtColor(frame, frame, CV_BGR2RGB);
-		cvFlip(frame, 0);
 	}
 	else 
 	{

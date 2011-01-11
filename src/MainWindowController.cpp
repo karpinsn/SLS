@@ -107,7 +107,7 @@ void MainWindowController::selectXYZM(QListWidgetItem* current, QListWidgetItem*
 
 void MainWindowController::playVideo(void)
 {
-	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holovideo to Open", "/", "Images (*.avi *.mp4 *.mov *.mkv *.flv)");
+	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holovideo to Open", "/", "Images (*.avi *.mp4 *.mov *.mkv)");
 		
 	if(!file.isEmpty())
 	{

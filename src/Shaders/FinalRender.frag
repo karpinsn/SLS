@@ -29,7 +29,4 @@ void main()
 	{
 		gl_FragColor = gl_FrontLightModelProduct.sceneColor + Iamb + Idiff + Ispec;
 	}
-	//gl_FragColor = vec4(1.0,0.0,0.0,1.0);
-	//gl_FragData[0] = vec4(Normal, 1.0);
-	//gl_FragData[0] = vec4(gl_TexCoord[0].s, gl_TexCoord[0].t, 0.0, 0.0);
 }

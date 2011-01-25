@@ -9,7 +9,7 @@
     from Shader X6 Advanced Rendering Techniques
 */
 
-#define m2(a,b) 		t = a; a = min(t,b); b = max(t,b);
+#define m2(a,b) 	t = a; a = min(t,b); b = max(t,b);
 #define m3(a,b,c) 	m2(b,c); m2(a,c); m2(a,b);
 #define m4(a,b,c,d) 	m2(a,b); m2(c,d); m2(a,c); m2(b,d);
 #define m5(a,b,c,d,e) 	m2(a,b); m2(c,d); m2(a,c); m2(a,e); m2(d,e); m2(b,e);
@@ -31,7 +31,9 @@ void main(void)
   {
     for(int dY = -1; dY <= 1; ++dY)
     {
-      v[dX * 3 + dY + 4] = texture2D(image, gl_TexCoord[0].xy + vec2(float(dX)/width, float(dY)/height)).x;
+      vec2 offset = vec2(float(dX), float(dY));
+
+      v[dX * 3 + dY + 4] = texture2D(image, gl_TexCoord[0].xy + vec2(float(dX) * step_w, float(dY) * step_h)).x;
     }
   }
 

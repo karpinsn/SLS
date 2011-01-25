@@ -85,10 +85,7 @@ set(SOURCES
 	PointCloudMesh.h
 	TriMesh.h
 	AbstractGLContext.h	
-	)
-	
-#	glm/glm.hpp
-#	glm/gtc/matrix_transform.hpp	
+	)	
 	
 # QT Files
 set(UIS ui/Holoencoder.ui)	
@@ -140,8 +137,7 @@ add_executable(${PROJECT_NAME}
 	${RESOURCES}
 	${SHADERS_QUALIFIED})
 
-
-
+add_dependencies(${PROJECT_NAME} ${SHADER_TARGET})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 #	---------------------------------------------------------------------------------------

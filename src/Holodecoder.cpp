@@ -42,11 +42,14 @@ void Holodecoder::initShaders(void)
 
 	m_normalCalculator.init("Shaders/NormalCalculator.vert", "Shaders/NormalCalculator.frag");
 	m_normalCalculator.uniform("phaseA", 0);
+        m_normalCalculator.uniform("width", 512.0f);
+        m_normalCalculator.uniform("height", 512.0f);
 
 	m_finalRender.init("Shaders/FinalRender.vert", "Shaders/FinalRender.frag");
 	m_finalRender.uniform("normals", 0);
 	m_finalRender.uniform("phaseMap", 1);
 	m_finalRender.uniform("holoImage", 2);
+        m_finalRender.uniform("width", 512.0f);
 	
 	OGLStatus::logOGLErrors("Holodecoder - initShaders()");
 }

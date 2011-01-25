@@ -1,3 +1,6 @@
+include(FileCopyTargets)
+set(SHADER_TARGET CopyShaders)
+
 #	---------------------------------------------------------------------------------------
 #	List all of the shader sources to be copied over
 #	---------------------------------------------------------------------------------------
@@ -9,6 +12,7 @@ set(SHADER_VERT_SOURCES
 	NormalCalculator.vert
 	PhaseCalculator.vert
 	FinalRender.vert
+	Phong.vert
 )
 
 set(SHADER_FRAG_SOURCES
@@ -18,6 +22,7 @@ set(SHADER_FRAG_SOURCES
 	NormalCalculator.frag
 	PhaseCalculator.frag
 	FinalRender.frag
+	Phong.vert
 )
 
 SET(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})
@@ -26,30 +31,8 @@ set(SHADER_SOURCES "${SHADER_SOURCES}" PARENT_SCOPE)
 #	---------------------------------------------------------------------------------------
 #	Copy Shaders to build
 #	---------------------------------------------------------------------------------------
+set(SHADER_OUTPUT "${EXECUTABLE_OUTPUT_PATH}/Shaders")
+message(STATUS "Copying shaders to: " ${SHADER_OUTPUT})
 
-message(STATUS "Copying Shaders")
-
-set(SHADER_OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/Shaders")
-message("Shaders will be copied to: ${SHADER_OUTPUT}")
-
-add_custom_command(TARGET ${PROJECT_NAME}
-				   POST_BUILD
-				   COMMAND ${CMAKE_COMMAND}
-				   ARGS -E make_directory ${SHADER_OUTPUT}
-				   COMMENT "Creating directory: ${SHADER_OUTPUT}")
-
-message(STATUS "Copying the following shaders: " ${SHADER_SOURCES})
-foreach(FILENAME ${SHADER_SOURCES})
-   	set(SRC "${CMAKE_CURRENT_SOURCE_DIR}/${FILENAME}")
-   	set(DST "${SHADER_OUTPUT}/${FILENAME}")
-
-	message("SRC " ${SRC})
-	message("DST " ${DST})
-
-	# Copy the shader to the directory
-   	add_custom_command(TARGET ${PROJECT_NAME}
-   					   POST_BUILD
-					   COMMAND ${CMAKE_COMMAND} 
-    				   ARGS -E copy "${SRC}" "${DST}"
-					   COMMENT "Copying ${SRC} to ${DST}")
-endforeach(FILENAME)
+add_file_copy_target(${SHADER_TARGET} ${SHADER_OUTPUT} ${SHADER_SOURCES})
+set(SHADER_TARGET "${SHADER_TARGET}" PARENT_SCOPE)

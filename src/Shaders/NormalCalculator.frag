@@ -1,7 +1,9 @@
 uniform sampler2D phaseA;
+uniform float width;
+uniform float height;
 
-float step_w = 1.0/512.0;
-float step_h = 1.0/512.0;
+float step_w = 1.0/width;
+float step_h = 1.0/height;
 
 void main(void)
 {
@@ -12,7 +14,7 @@ void main(void)
 
   float pi = 3.14159265; 		// Mmmmmm PI
   float theta = pi / 6.0;		// Angle between camera and projector. 30 degrees
-  float W = 512.0;			// Width of the image
+  float W = width;			// Width of the image
   float fringeFrequency = 4.0;
   float P = W / (2.0 * fringeFrequency);			// Pixels per period of the projector
   

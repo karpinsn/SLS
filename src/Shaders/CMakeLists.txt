@@ -5,7 +5,6 @@
 set(SHADER_VERT_SOURCES
 
 	Holoencoder.vert
-	Holodecoder.vert
 	MedianFilter3x3.vert
 	NormalCalculator.vert
 	PhaseCalculator.vert
@@ -15,7 +14,6 @@ set(SHADER_VERT_SOURCES
 set(SHADER_FRAG_SOURCES
 
 	Holoencoder.frag
-	Holodecoder.frag
 	MedianFilter3x3.frag
 	NormalCalculator.frag
 	PhaseCalculator.frag

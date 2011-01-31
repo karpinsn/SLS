@@ -1,5 +1,11 @@
 #include "OpenGLWidget.h"
 
+OpenGLWidget::OpenGLWidget(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+{
+    m_clearColor = QColor::fromRgb(0, 0, 0, 0);
+    m_glContext = NULL;
+}
+
 OpenGLWidget::OpenGLWidget(QWidget *parent, AbstractGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
 	m_glContext = glContext;
@@ -8,16 +14,6 @@ OpenGLWidget::OpenGLWidget(QWidget *parent, AbstractGLContext* glContext, QColor
 
 OpenGLWidget::~OpenGLWidget()
 {
-}
-
-QSize OpenGLWidget::minimumSizeHint() const
-{
-	return QSize(50, 50);
-}
-
-QSize OpenGLWidget::sizeHint() const
-{
-	return QSize(400, 400);
 }
 
 void OpenGLWidget::initializeGL()

@@ -50,9 +50,6 @@ public:
 	void connectSignalsWithController(QObject* controller);
 	
 private:
-	OpenGLWidget* m_glWidget;
-	OpenGLWidget* m_viewerWidget;
-	
 	Holoencoder* m_holoEncoder;
 	Holodecoder* m_holoDecoder;
 	

@@ -89,7 +89,7 @@ set(SOURCES
 	
 # QT Files
 set(UIS ui/Holoencoder.ui)	
-set(MOCS MainWindowView.h MainWindowController.h)	
+set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h)
 set(RESOURCES ui/Holoencoder.qrc)
 
 #	---------------------------------------------------------------------------------------

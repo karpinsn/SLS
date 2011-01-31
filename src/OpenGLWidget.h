@@ -36,6 +36,8 @@ class Holodecoder;
 
 class OpenGLWidget : public QGLWidget
 {
+    Q_OBJECT
+
 private:
 	AbstractGLContext		*m_glContext;
 	
@@ -48,14 +50,13 @@ private:
 	string					m_movieFilename;
 	
 public:
+        OpenGLWidget(QWidget *parent);
 	OpenGLWidget(QWidget* parent, AbstractGLContext* glContext, QColor clearColor);
-	~OpenGLWidget();
+        virtual ~OpenGLWidget();
 
 	void updateScene();
 	void setNewGLContext(AbstractGLContext* glContext);
-	QSize minimumSizeHint() const;
-	QSize sizeHint() const;
-	
+
 	void openHoloImage(string filename, Holodecoder* decoder);
 	void playMovie(string movieFile, Holodecoder* decoder);
 	void cameraSelectMode(int mode);

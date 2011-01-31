@@ -17,6 +17,7 @@
 #include <qfiledialog.h>
 #include <QListWidgetItem>
 #include <QProgressDialog>
+#include <QPropertyAnimation>
 
 //	Qt auto generated headers
 #include "ui_Holoencoder.h"
@@ -43,6 +44,10 @@ public:
 	
 	void showWidget();
 	
+        QAnimationGroup *animationGroup;
+        QPropertyAnimation *fileListAnimation;
+        QPropertyAnimation *mainWindowAnimation;
+
 public slots:
 	void exportSingleFrame();
 	void exportEntireVideo();
@@ -52,6 +57,9 @@ public slots:
 	void openHoloImage(void);
 	
 	void toolSelect(const int tool);
+
+        void viewMode();
+        void encodeMode();
 	
 private:
 	MainWindowView* m_mainWindow;

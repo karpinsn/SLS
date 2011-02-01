@@ -4,6 +4,11 @@ MainWindowController::MainWindowController()
 {
 	m_mainWindow = new MainWindowView(0);
 	m_mainWindow->connectSignalsWithController(this);
+
+        //  Since we start in view give it the Holodecoder
+        Holodecoder *decoder = new Holodecoder();
+        m_mainWindow->glWidget->m_glDecoder = decoder;
+        m_mainWindow->glWidget->m_glContext = decoder;
 }
 
 MainWindowController::~MainWindowController()
@@ -111,7 +116,7 @@ void MainWindowController::playVideo(void)
 		
 	if(!file.isEmpty())
 	{
-                m_mainWindow->glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
+                //m_mainWindow->glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
                 m_mainWindow->glWidget->playMovie(file.toStdString(), m_mainWindow->m_holoDecoder);
 	}
 }
@@ -122,62 +127,35 @@ void MainWindowController::openHoloImage(void)
 	
 	if(!file.isEmpty())
 	{
-                m_mainWindow->glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
+                //m_mainWindow->glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
                 m_mainWindow->glWidget->openHoloImage(file.toStdString(), m_mainWindow->m_holoDecoder);
 	}
 }
 
-void MainWindowController::toolSelect(const int tool)
+void MainWindowController::toolSelect(int tool)
 {
-        m_mainWindow->glWidget->cameraSelectMode(tool);
+    m_mainWindow->glWidget->cameraSelectMode(tool);
 }
 
-void MainWindowController::viewMode()
+void MainWindowController::viewMode(void)
 {
-    //  Need to change the mode
-    fileListAnimation = new QPropertyAnimation(m_mainWindow->fileList, "maximumSize");
-    fileListAnimation->setDuration(1000);
-    fileListAnimation->setStartValue(QSize(200, 512));
-    fileListAnimation->setEndValue(QSize(0, 512));
-    fileListAnimation->setEasingCurve(QEasingCurve::InOutCubic);
-
-    QRect windowStart = m_mainWindow->geometry();
-    QRect windowEnd = windowStart;
-    windowEnd.setWidth(windowStart.width() - 200);
-
-    mainWindowAnimation = new QPropertyAnimation(m_mainWindow, "geometry");
-    mainWindowAnimation->setDuration(1000);
-    mainWindowAnimation->setStartValue(windowStart);
-    mainWindowAnimation->setEndValue(windowEnd);
-    mainWindowAnimation->setEasingCurve(QEasingCurve::InOutCubic);
-
-    animationGroup = new QSequentialAnimationGroup();
-    animationGroup->addAnimation(fileListAnimation);
-    animationGroup->addAnimation(mainWindowAnimation);
-    animationGroup->start();
+    //  Ensure that the file list is hidden
+    m_mainWindow->hideFileList();
+    Holodecoder *decoder = new Holodecoder();
+    m_mainWindow->glWidget->m_glDecoder = decoder;
+    m_mainWindow->glWidget->setNewGLContext(decoder);
 }
 
-void MainWindowController::encodeMode()
+void MainWindowController::encodeMode(void)
 {
-    //  Need to change the mode
-    fileListAnimation = new QPropertyAnimation(m_mainWindow->fileList, "maximumSize");
-    fileListAnimation->setDuration(1000);
-    fileListAnimation->setStartValue(QSize(0, 512));
-    fileListAnimation->setEndValue(QSize(200, 512));
-    fileListAnimation->setEasingCurve(QEasingCurve::InOutCubic);
+    //  Show the file list
+    m_mainWindow->showFileList();
+    m_mainWindow->glWidget->setNewGLContext(new Holoencoder());
+}
 
-    QRect windowStart = m_mainWindow->geometry();
-    QRect windowEnd = windowStart;
-    windowEnd.setWidth(windowStart.width() + 200);
-
-    mainWindowAnimation = new QPropertyAnimation(m_mainWindow, "geometry");
-    mainWindowAnimation->setDuration(1000);
-    mainWindowAnimation->setStartValue(windowStart);
-    mainWindowAnimation->setEndValue(windowEnd);
-    mainWindowAnimation->setEasingCurve(QEasingCurve::InOutCubic);
-
-    animationGroup = new QSequentialAnimationGroup();
-    animationGroup->addAnimation(mainWindowAnimation);
-    animationGroup->addAnimation(fileListAnimation);
-    animationGroup->start();
+void MainWindowController::captureMode(void)
+{
+    //  Ensure that the file list is hidden
+    m_mainWindow->hideFileList();
+    m_mainWindow->glWidget->setNewGLContext(new MultiWavelengthCapture());
 }

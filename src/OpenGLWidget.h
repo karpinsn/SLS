@@ -39,9 +39,7 @@ class OpenGLWidget : public QGLWidget
     Q_OBJECT
 
 private:
-	AbstractGLContext		*m_glContext;
-	
-	QColor					m_clearColor;
+        QColor					m_clearColor;
 	
 	QTime movieTimer;
 	ImageIO m_aviIO;
@@ -61,6 +59,7 @@ public:
 	void playMovie(string movieFile, Holodecoder* decoder);
 	void cameraSelectMode(int mode);
 	
+        AbstractGLContext		*m_glContext;
 	AbstractGLContext		*m_glDecoder;
 	AbstractGLContext		*m_glEncoder;
 	

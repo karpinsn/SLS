@@ -56,8 +56,6 @@
         <height>512</height>
        </size>
       </property>
-      <zorder>fileList</zorder>
-      <zorder>fileList</zorder>
      </widget>
     </item>
     <item>
@@ -181,6 +179,7 @@
    </attribute>
    <addaction name="modeView"/>
    <addaction name="modeEncode"/>
+   <addaction name="modeCapture"/>
   </widget>
   <action name="actionOpenXYZM">
    <property name="text">
@@ -278,6 +277,17 @@
    </property>
    <property name="toolTip">
     <string>Encode Geometry</string>
+   </property>
+  </action>
+  <action name="modeCapture">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Capture</string>
+   </property>
+   <property name="toolTip">
+    <string>Capture Geometry</string>
    </property>
   </action>
  </widget>

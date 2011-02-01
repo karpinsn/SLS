@@ -1,12 +1,11 @@
-#include "Holodecoder.h"
+#include "MultiWavelengthCapture.h"
 
-Holodecoder::Holodecoder(void)
+MultiWavelengthCapture::MultiWavelengthCapture(void)
 {
-        haveHoloImage = false;
 	m_hasBeenInit = false;
 }
 
-void Holodecoder::init()
+void MultiWavelengthCapture::init()
 {
 	if(!m_hasBeenInit)
 	{
@@ -21,19 +20,21 @@ void Holodecoder::init()
 		m_mesh = new TriMesh(512, 512);
 		
 		m_mesh->initMesh();
-		haveHoloImage = false;
 		m_hasBeenInit = true;
 		
-		m_holoImages[0] = &m_holoImage0;
-		m_holoImages[1] = &m_holoImage1;
+                m_fringeImages[0] = &m_fringeImage1;
+                m_fringeImages[1] = &m_fringeImage2;
+                m_fringeImages[2] = &m_fringeImage3;
 	}
 }
 
-void Holodecoder::initShaders(void)
+void MultiWavelengthCapture::initShaders(void)
 {
 	//	Create the shaders
-	m_phaseCalculator.init("Shaders/PhaseCalculator.vert", "Shaders/PhaseCalculator.frag");
-	m_phaseCalculator.uniform("holoImage", 0);
+        m_phaseCalculator.init("Shaders/MultiWavelength/PhaseCalculator.vert", "Shaders/MultiWavelength/PhaseCalculator.frag");
+        m_phaseCalculator.uniform("fringe1", 0);
+        m_phaseCalculator.uniform("fringe2", 1);
+        m_phaseCalculator.uniform("fringe3", 2);
 
 	m_phaseFilter.init("Shaders/MedianFilter3x3.vert", "Shaders/MedianFilter3x3.frag");
 	m_phaseFilter.uniform("image", 0);
@@ -51,12 +52,12 @@ void Holodecoder::initShaders(void)
 	m_finalRender.uniform("holoImage", 2);
         m_finalRender.uniform("width", 512.0f);
 	
-	OGLStatus::logOGLErrors("Holodecoder - initShaders()");
+        OGLStatus::logOGLErrors("MultiWavelengthCapture - initShaders()");
 }
 
-void Holodecoder::_initTextures(GLuint width, GLuint height)
+void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
 {
-	Logger::logDebug("Holodecoder - initTextures(): Creating textures for phase map and normal map");
+        Logger::logDebug("MultiWavelengthCapture - initTextures(): Creating textures for phase map and normal map");
 	
 	m_imageProcessor.init();
 	m_imageProcessor.unbind();
@@ -65,8 +66,9 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
 	m_phaseMap1AttachPoint = GL_COLOR_ATTACHMENT1_EXT;
 	m_normalMapAttachPoint = GL_COLOR_ATTACHMENT2_EXT;
 
-	m_holoImage0.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
-	m_holoImage1.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+        m_fringeImage1.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+        m_fringeImage2.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+        m_fringeImage3.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
 	m_phaseMap0.init(width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
 	m_phaseMap1.init(width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
 	m_normalMap.init(width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
@@ -75,21 +77,23 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
 	m_imageProcessor.setTextureAttachPoint(m_phaseMap1, m_phaseMap1AttachPoint);
 	m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
 
-	OGLStatus::logOGLErrors("Holodecoder - initTextures()");
+        OGLStatus::logOGLErrors("MultiWavelengthCapture - initTextures()");
 }
 
-void Holodecoder::draw(void)
+void MultiWavelengthCapture::draw(void)
 {
-    if(haveHoloImage)
-    {
 	m_imageProcessor.bind();
 	{
 		//	Pass 1
 		m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
 		m_phaseCalculator.bind();
 		glActiveTexture(GL_TEXTURE0);
-		m_holoImages[m_frontBufferIndex]->bind();
-		m_imageProcessor.process();
+                m_fringeImage1.bind();
+                glActiveTexture(GL_TEXTURE1);
+                m_fringeImage2.bind();
+                glActiveTexture(GL_TEXTURE2);
+                m_fringeImage3.bind();
+                m_imageProcessor.process();
 		
 		//	Pass 2
 		m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
@@ -122,21 +126,20 @@ void Holodecoder::draw(void)
 		m_normalMap.bind();
 		glActiveTexture(GL_TEXTURE1);
 		m_phaseMap1.bind();
-		glActiveTexture(GL_TEXTURE2);
-		m_holoImages[m_frontBufferIndex]->bind();
-		
+                glActiveTexture(GL_TEXTURE2);
+                m_phaseMap1.bind();
+
 		//	Draw a plane of pixels
 		m_controller.applyTransform();
 		m_mesh->draw();
 	}
 	m_finalRender.unbind();
-
 	glPopMatrix();
-    }
-	OGLStatus::logOGLErrors("Holodecoder - draw()");
+	
+        OGLStatus::logOGLErrors("MultiWavelengthCapture - draw()");
 }
 
-void Holodecoder::resize(int width, int height)
+void MultiWavelengthCapture::resize(int width, int height)
 {
 	m_camera.reshape(width, height);
 	gluPerspective(45.0, 1.0, .00001, 10.0);
@@ -144,42 +147,40 @@ void Holodecoder::resize(int width, int height)
 	//glOrtho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
 }
 
-void Holodecoder::cameraSelectMode(int mode)
+void MultiWavelengthCapture::cameraSelectMode(int mode)
 {
 	m_camera.setMode(mode);
 }
 
-void Holodecoder::mousePressEvent(int mouseX, int mouseY)
+void MultiWavelengthCapture::mousePressEvent(int mouseX, int mouseY)
 {
 	m_camera.mousePressed(mouseX, mouseY);
 }
 
-void Holodecoder::mouseMoveEvent(int mouseX, int mouseY)
+void MultiWavelengthCapture::mouseMoveEvent(int mouseX, int mouseY)
 {
 	m_camera.mouseMotion(mouseX, mouseY);
 }
 
-void Holodecoder::setBackHoloBuffer(IplImage* image)
+void MultiWavelengthCapture::setBackBuffer(IplImage* image)
 {
-	int backBufferIndex = (m_frontBufferIndex + 1) % 2;	
-	m_holoImages[backBufferIndex]->transferToTexture(image);
+        //int backBufferIndex = (m_frontBufferIndex + 1) % 2;
+        //m_holoImages[backBufferIndex]->transferToTexture(image);
 	
 	//	Make sure we dont have any errors
 	OGLStatus::logOGLErrors("Holodecoder - setBackHoloBuffer()");
 }
 
-void Holodecoder::swapBuffers(void)
+void MultiWavelengthCapture::swapBuffers(void)
 {
 	//	Switch the front and back buffer
 	m_frontBufferIndex = (m_frontBufferIndex + 1) % 2;
 	
-        haveHoloImage = true;
-
 	//	Make sure we dont have any errors
 	OGLStatus::logOGLErrors("Holodecoder - swapBuffers()");
 }
 
-void Holodecoder::_initLighting(void)
+void MultiWavelengthCapture::_initLighting(void)
 {
 	GLfloat mat_specular[] = {.1f, .1f, .1f, .1f};
 	GLfloat mat_shininess[] = {1.0f};

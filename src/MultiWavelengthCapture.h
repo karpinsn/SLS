@@ -1,15 +1,15 @@
 /*
- Filename:		Holodecoder.h
- Author:		Nikolaus Karpinsky
- Date Created:	09/01/09
- Last Edited:	09/01/09
+ Filename:	MultiWavelengthCapture.h
+ Author:	Nikolaus Karpinsky
+ Date Created:	01/30/11
+ Last Edited:	01/30/11
  
  Revision Log:
- 09/01/09 - Nik Karpinsky - Original creation.
+ 01/30/11 - Nik Karpinsky - Original creation.
  */
 
-#ifndef _HOLODECODER_H_
-#define _HOLODECODER_H_
+#ifndef _MULTI_WAVELENGTH_CAPTURE_H_
+#define _MULTI_WAVELENGTH_CAPTURE_H_
 
 #ifdef __APPLE__
 	#include <glew.h>
@@ -46,7 +46,7 @@ class OpenGLWidget;
 using namespace wrench;
 using namespace wrench::gl;
 
-class Holodecoder : public AbstractGLContext
+class MultiWavelengthCapture : public AbstractGLContext
 {
 private:
 	Shader m_phaseCalculator;
@@ -58,9 +58,10 @@ private:
 	GLenum m_phaseMap1AttachPoint;
 	GLenum m_normalMapAttachPoint;
 	
-	Texture* m_holoImages[2];
-	Texture m_holoImage0;
-	Texture m_holoImage1;
+        Texture* m_fringeImages[3];
+        Texture m_fringeImage1;
+        Texture m_fringeImage2;
+        Texture m_fringeImage3;
 	
 	Texture m_phaseMap0;
 	Texture m_phaseMap1;
@@ -73,14 +74,16 @@ private:
 	
 	TriMesh* m_mesh;
 	
-	bool haveHoloImage;
+        bool haveFringeImages;
 	
 	bool m_hasBeenInit;
 	
 	int m_frontBufferIndex;		//	Index of the front buffer in m_bufferIds
 	
+	OpenGLWidget* m_glContext;
+	
 public:
-        Holodecoder();
+        MultiWavelengthCapture(void);
 	
 	virtual void init(void);
 	virtual void draw(void);
@@ -89,7 +92,7 @@ public:
 	virtual void mousePressEvent(int mouseX, int mouseY);
 	virtual void mouseMoveEvent(int mouseX, int mouseY);
 	
-	void setBackHoloBuffer(IplImage* image);
+        void setBackBuffer(IplImage* image);
 	void swapBuffers(void);
 	
 private:
@@ -101,4 +104,4 @@ private:
 	GLubyte* imageData;
 };
 
-#endif	// _HOLODECODER_H_
+#endif	// _MULTI_WAVELENGTH_CAPTURE_H_

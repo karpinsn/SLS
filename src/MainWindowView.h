@@ -48,11 +48,18 @@ public:
 	
 	// Connect up the signals with the controller
 	void connectSignalsWithController(QObject* controller);
+
+        void showFileList(void);
+        void hideFileList(void);
 	
 private:
 	Holoencoder* m_holoEncoder;
 	Holodecoder* m_holoDecoder;
 	
+        // Used to animate the GUI
+        QAnimationGroup *animationGroup;
+        QPropertyAnimation *fileListAnimation;
+        QPropertyAnimation *mainWindowAnimation;
 private:
 	void _initTopMenu(void);
 };

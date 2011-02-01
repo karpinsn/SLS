@@ -1,25 +1,26 @@
-uniform sampler2D fringe1;
-uniform sampler2D fringe2;
-uniform sampler2D fringe3;
+uniform sampler2D fringeImage1;
+uniform sampler2D fringeImage2;
+uniform sampler2D fringeImage3;
 
 void main(void)
 {
-	vec3 phi1 = texture2D(fringe1, gl_TexCoord[0].st).rgb;
-	vec3 phi2 = texture2D(fringe2, gl_TexCoord[0].st).rgb;
-	vec3 phi3 = texture2D(fringe3, gl_TexCoord[0].st).rgb;
+	float pi = 3.14159;
 
-	vec4 holoPhase = texture2D(holoImage, gl_TexCoord[0].st);
+	vec3 fringe1 = texture2D(fringeImage1, gl_TexCoord[0].st).rgb;
+	vec3 fringe2 = texture2D(fringeImage2, gl_TexCoord[0].st).rgb;
+	vec3 fringe3 = texture2D(fringeImage3, gl_TexCoord[0].st).rgb;
 
-	float fringeFrequency = 4.0;							// Frequency of the fringe in Hz
-	float pi = 3.14159265; 									// Mmmmmm PI
-	float stepHeight = 1.0 / (2.0 * fringeFrequency) -.001;	// .001 is just a buffer so we dont get rounding errors
+	float phi1 = atan(sqrt(3.0) * (fringe1.r - fringe1.b), 2.0 * fringe1.g - fringe1.r - fringe1.b);
+	float phi2 = atan(sqrt(3.0) * (fringe2.r - fringe2.b), 2.0 * fringe2.g - fringe2.r - fringe2.b);
+	float phi3 = atan(sqrt(3.0) * (fringe3.r - fringe3.b), 2.0 * fringe3.g - fringe3.r - fringe3.b);
 
-	float I1 = holoPhase.x * 255.0;
-	float I2 = holoPhase.y * 255.0;
-	float I3 = floor(holoPhase.z * 1.0 / stepHeight);
+	float phi12 = fmod(phi1 - phi2, 2.0 * pi);
+	float phi23 = fmod(phi2 - phi3, 2.0 * pi);
+	float phi123 = fmod(phi12 - phi23, 2.0 * pi);
+	float k = fround((8 * phi123 - phi1) / 2.0 * pi);
 
-	float phaseA = atan((I1 - 127.5), (I2 - 127.5)) + (2.0 * pi * I3);
+	float phase = k * 2 * pi + phi1;
 
-	gl_FragData[0].x = phaseA;
+	gl_FragData[0].x = phase;
 }
 

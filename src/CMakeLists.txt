@@ -71,6 +71,7 @@ set(SOURCES
 	Holodecoder.cpp
 	PointCloudMesh.cpp
 	TriMesh.cpp
+	MultiWavelengthCapture.cpp
 
 	MainWindowView.h
 	MainWindowController.h
@@ -84,7 +85,8 @@ set(SOURCES
 	Holodecoder.h
 	PointCloudMesh.h
 	TriMesh.h
-	AbstractGLContext.h	
+	AbstractGLContext.h
+	MultiWavelengthCapture.h
 	)	
 	
 # QT Files
@@ -109,23 +111,10 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}") 
 
 #	---------------------------------------------------------------------------------------
-#							Copy Shaders to build
-#	---------------------------------------------------------------------------------------
-
-add_subdirectory(Shaders)
-
-#	---------------------------------------------------------------------------------------
 #							Build the app
 #	---------------------------------------------------------------------------------------
 
 # Build and link the app!
-set(SHADERS_QUALIFIED)
-foreach(shader ${SHADER_SOURCES})
-	list(APPEND SHADERS_QUALIFIED "Shaders/${shader}")
-endforeach()
-
-source_group("Shaders" FILES ${SHADERS_QUALIFIED})
-
 add_executable(${PROJECT_NAME}
 	MACOSX_BUNDLE
 	WIN32
@@ -137,7 +126,7 @@ add_executable(${PROJECT_NAME}
 	${RESOURCES}
 	${SHADERS_QUALIFIED})
 
-add_dependencies(${PROJECT_NAME} ${SHADER_TARGET})
+#add_dependencies(${PROJECT_NAME} ${SHADER_TARGET})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 #	---------------------------------------------------------------------------------------
@@ -147,3 +136,16 @@ target_link_libraries(${PROJECT_NAME} ${LIBS})
 install (TARGETS ${PROJECT_NAME}
 		RUNTIME DESTINATION bin/
 		BUNDLE DESTINATION ./ )
+
+#	---------------------------------------------------------------------------------------
+#							Copy Shaders to build
+#	---------------------------------------------------------------------------------------
+
+add_subdirectory(Shaders)
+
+set(SHADERS_QUALIFIED)
+foreach(shader ${SHADER_SOURCES})
+	list(APPEND SHADERS_QUALIFIED "Shaders/${shader}")
+endforeach()
+
+source_group("Shaders" FILES ${SHADERS_QUALIFIED})

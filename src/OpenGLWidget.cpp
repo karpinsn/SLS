@@ -25,8 +25,7 @@ void OpenGLWidget::initializeGL()
 	}
 	std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << endl;
 
-	m_glDecoder->init();
-	m_glEncoder->init();
+        m_glContext->init();
 	
 	// Set the clear color
 	qglClearColor(m_clearColor);
@@ -38,8 +37,15 @@ void OpenGLWidget::initializeGL()
 
 void OpenGLWidget::setNewGLContext(AbstractGLContext* glContext)
 {
-	m_glContext = glContext;
-	resizeGL(512, 512);
+    //  If we have an old one delete it
+    if(NULL != m_glContext)
+    {
+        delete m_glContext;
+    }
+
+    m_glContext = glContext;
+    m_glContext->init();
+    resizeGL(512, 512);
 }
 
 void OpenGLWidget::updateScene()

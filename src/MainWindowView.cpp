@@ -5,12 +5,12 @@ MainWindowView::MainWindowView(QMainWindow* parent) : QMainWindow(parent)
 	// Sets up the interface elements from Designer file
 	setupUi(this);
 	
-        m_holoEncoder = new Holoencoder();
-        m_holoDecoder = new Holodecoder(glWidget);
-        glWidget->setNewGLContext(m_holoEncoder);
+        //m_holoEncoder = new Holoencoder();
+        //m_holoDecoder = new Holodecoder();
+        //glWidget->setNewGLContext(m_holoEncoder);
 	
-        glWidget->m_glDecoder = m_holoDecoder;
-        glWidget->m_glEncoder = m_holoEncoder;
+        //glWidget->m_glDecoder = m_holoDecoder;
+        //glWidget->m_glEncoder = m_holoEncoder;
 	
         QRect fileListInitial = fileList->geometry();
         QRect windowInitial = geometry();
@@ -36,6 +36,7 @@ void MainWindowView::_initTopMenu()
         QActionGroup* modeGroup = new QActionGroup(this);
         modeGroup->addAction(modeView);
         modeGroup->addAction(modeEncode);
+        modeGroup->addAction(modeCapture);
 }
 
 void MainWindowView::connectSignalsWithController(QObject* controller)
@@ -47,8 +48,10 @@ void MainWindowView::connectSignalsWithController(QObject* controller)
 	connect(actionExportEntireVideo, SIGNAL(triggered()), controller, SLOT(exportEntireVideo()));
 	connect(actionOpen_Holovideo, SIGNAL(triggered()), controller, SLOT(playVideo()));
 	connect(actionOpen_Holoimage, SIGNAL(triggered()), controller, SLOT(openHoloImage()));
+
         connect(modeView, SIGNAL(triggered()), controller, SLOT(viewMode()));
         connect(modeEncode, SIGNAL(triggered()), controller, SLOT(encodeMode()));
+        connect(modeCapture, SIGNAL(triggered()), controller, SLOT(captureMode()));
 
 	//	Connect the tool bar signals
 	//	Need a mapper to map each signal to a tool type
@@ -63,18 +66,60 @@ void MainWindowView::connectSignalsWithController(QObject* controller)
         connect(actionZoom, SIGNAL(triggered()), toolMapper, SLOT(map()));
 	
 	//	Connect the mapper signal to the controller
-        connect(toolMapper, SIGNAL(mapper(int)), controller, SLOT(toolSelect(const int)));
+        connect(toolMapper, SIGNAL(mapped(int)), controller, SLOT(toolSelect(int)));
+}
 
-        //	Connect the mode bar signals
-        //	Need a mapper to map each signal to a tool type
-        QSignalMapper* modeMapper = new QSignalMapper(this);
-        modeMapper->setMapping(modeView, 0);
-        modeMapper->setMapping(modeEncode, 1);
+void MainWindowView::showFileList(void)
+{
+    QSize fileListSize = fileList->maximumSize();
 
-        //	Connect the tool signals to the mapper
-        connect(modeView, SIGNAL(triggered()), modeMapper, SLOT(map()));
-        connect(modeEncode, SIGNAL(triggered()), modeMapper, SLOT(map()));
+    //  Need to change the mode
+    fileListAnimation = new QPropertyAnimation(fileList, "maximumSize");
+    fileListAnimation->setDuration(500);
+    fileListAnimation->setStartValue(QSize(fileListSize.width(), fileListSize.height()));
+    fileListAnimation->setEndValue(QSize(200, fileListSize.height()));
+    fileListAnimation->setEasingCurve(QEasingCurve::InOutCubic);
 
-        //	Connect the mapper signal to the controller
-        connect(modeMapper, SIGNAL(mapped(int)), controller, SLOT(modeSelect(const int)));
+    QRect windowStart = geometry();
+    QRect windowEnd = windowStart;
+    //  There shouldnt be any width but just incase
+    windowEnd.setWidth(windowStart.width() + (200 - fileListSize.width()));
+
+    mainWindowAnimation = new QPropertyAnimation(this, "geometry");
+    mainWindowAnimation->setDuration(500);
+    mainWindowAnimation->setStartValue(windowStart);
+    mainWindowAnimation->setEndValue(windowEnd);
+    mainWindowAnimation->setEasingCurve(QEasingCurve::InOutCubic);
+
+    animationGroup = new QSequentialAnimationGroup();
+    animationGroup->addAnimation(mainWindowAnimation);
+    animationGroup->addAnimation(fileListAnimation);
+    animationGroup->start();
+}
+
+void MainWindowView::hideFileList(void)
+{
+    QSize fileListSize = fileList->maximumSize();
+
+    //  Need to change the mode
+    fileListAnimation = new QPropertyAnimation(fileList, "maximumSize");
+    fileListAnimation->setDuration(500);
+    fileListAnimation->setStartValue(QSize(fileListSize.width(), fileListSize.height()));
+    fileListAnimation->setEndValue(QSize(0, fileListSize.height()));
+    fileListAnimation->setEasingCurve(QEasingCurve::InOutCubic);
+
+    QRect windowStart = geometry();
+    QRect windowEnd = windowStart;
+    windowEnd.setWidth(windowStart.width() - fileListSize.width());
+
+    mainWindowAnimation = new QPropertyAnimation(this, "geometry");
+    mainWindowAnimation->setDuration(500);
+    mainWindowAnimation->setStartValue(windowStart);
+    mainWindowAnimation->setEndValue(windowEnd);
+    mainWindowAnimation->setEasingCurve(QEasingCurve::InOutCubic);
+
+    animationGroup = new QSequentialAnimationGroup();
+    animationGroup->addAnimation(fileListAnimation);
+    animationGroup->addAnimation(mainWindowAnimation);
+    animationGroup->start();
 }

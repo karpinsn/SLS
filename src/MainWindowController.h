@@ -25,12 +25,14 @@
 #include "MainWindowView.h"
 #include <wrench/gl/Camera.h>
 #include "OpenGLWidget.h"
-#include "Holoencoder.h"
-#include "Holodecoder.h"
 #include "ImageIO.h"
 #include "AbstractMesh.h"
 #include "XYZFileIO.h"
 #include <wrench/Logger.h>
+
+#include "Holoencoder.h"
+#include "Holodecoder.h"
+#include "MultiWavelengthCapture.h"
 
 class MainWindowView;
 
@@ -43,10 +45,6 @@ public:
 	~MainWindowController();
 	
 	void showWidget();
-	
-        QAnimationGroup *animationGroup;
-        QPropertyAnimation *fileListAnimation;
-        QPropertyAnimation *mainWindowAnimation;
 
 public slots:
 	void exportSingleFrame();
@@ -56,10 +54,11 @@ public slots:
 	void playVideo(void);
 	void openHoloImage(void);
 	
-	void toolSelect(const int tool);
+        void toolSelect(int tool);
 
         void viewMode();
         void encodeMode();
+        void captureMode();
 	
 private:
 	MainWindowView* m_mainWindow;

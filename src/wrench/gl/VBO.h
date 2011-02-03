@@ -10,8 +10,8 @@
  12/09/10 - Nik Karpinsky - Moved file into the Wrench library
  */
 
-#ifndef _WRENCH_GL_FBO_H_
-#define _WRENCH_GL_FBO_H_
+#ifndef _WRENCH_GL_VBO_H_
+#define _WRENCH_GL_VBO_H_
 
 #ifdef __APPLE__
 	#include <glew.h>
@@ -37,39 +37,31 @@ namespace wrench
 {
 	namespace gl
 	{
-		class FBO
+                class VBO
 		{
 		private:
 			#ifdef USE_VRJ
-				vrj::GlContextData<GLuint> vrjFBOHandle;
-                                vrj::GlContextData<GLuint> vrjVAOHandle;
-                                vrj::GlContextData<GLuint[3]> vrjVBOHandle;
-				#define m_framebuffer   (*vrjFBOHandle)
-                                #define m_vaoID         (*vrjVAOHandle)
-                                #define m_vboID[3]      (*vrjVBOHandle)
+                                vrj::GlContextData<GLuint>  vrjVBOId;
+                                #define m_vboId             (*vrjVBOId)
 			#else
-				GLuint m_framebuffer;
-                                GLuint m_vaoID;
-                                GLuint m_vboID[3];
+                                GLuint m_vboId;
 			#endif
 			
 		public:
-			FBO(void);
-			~FBO();
+                        VBO(void);
+                        ~VBO();
 			
 			bool init();
 			
-			void bind(void);
-			void unbind(void);
-			void bindDrawBuffer(GLenum attachmentPoint);
-			void setTextureAttachPoint(const Texture &texture, GLenum attachmentPoint);	
-			void process(void);
+                        void draw();
 			
 		private:
+                        void _bind(void);
+                        void _unbind(void);
 			void _initFBO(void);
 			void _cacheQuad(void);
 		};
 	}
 }
 
-#endif	// _WRENCH_GL_FBO_H_
+#endif	// _WRENCH_GL_VBO_H_

@@ -42,9 +42,7 @@ private:
         QColor					m_clearColor;
 	
 	QTime movieTimer;
-	ImageIO m_aviIO;
-	Holodecoder* m_holoDecoder;
-	
+	ImageIO m_aviIO;	
 	string					m_movieFilename;
 	
 public:
@@ -55,13 +53,12 @@ public:
 	void updateScene();
 	void setNewGLContext(AbstractGLContext* glContext);
 
-	void openHoloImage(string filename, Holodecoder* decoder);
-	void playMovie(string movieFile, Holodecoder* decoder);
+        void openHoloImage(string filename);
+        void playMovie(string movieFile);
 	void cameraSelectMode(int mode);
 	
         AbstractGLContext		*m_glContext;
-	AbstractGLContext		*m_glDecoder;
-	AbstractGLContext		*m_glEncoder;
+        Holodecoder* m_holoDecoder;
 	
 protected:
 	void initializeGL();

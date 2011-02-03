@@ -10,7 +10,7 @@ void MultiWavelengthCapture::init()
 	if(!m_hasBeenInit)
 	{
 		initShaders();
-		_initTextures(512, 512);
+                _initTextures(576, 576);
 		_initLighting();
 		
 		m_controller.init(512, 512);
@@ -36,21 +36,25 @@ void MultiWavelengthCapture::initShaders(void)
         m_phaseCalculator.uniform("fringe2", 1);
         m_phaseCalculator.uniform("fringe3", 2);
 
+        m_phaseCalculator.bindAttributeLocation("vertex", 0);
+        m_phaseCalculator.bindAttributeLocation("color", 1);
+        m_phaseCalculator.bindAttributeLocation("textureCoordinate", 2);
+
 	m_phaseFilter.init("Shaders/MedianFilter3x3.vert", "Shaders/MedianFilter3x3.frag");
 	m_phaseFilter.uniform("image", 0);
-	m_phaseFilter.uniform("width", 512.0f);
-	m_phaseFilter.uniform("height", 512.0f);
+        m_phaseFilter.uniform("width", 576.0f);
+        m_phaseFilter.uniform("height", 576.0f);
 
 	m_normalCalculator.init("Shaders/NormalCalculator.vert", "Shaders/NormalCalculator.frag");
 	m_normalCalculator.uniform("phaseA", 0);
-        m_normalCalculator.uniform("width", 512.0f);
-        m_normalCalculator.uniform("height", 512.0f);
+        m_normalCalculator.uniform("width", 576.0f);
+        m_normalCalculator.uniform("height", 576.0f);
 
 	m_finalRender.init("Shaders/FinalRender.vert", "Shaders/FinalRender.frag");
 	m_finalRender.uniform("normals", 0);
 	m_finalRender.uniform("phaseMap", 1);
 	m_finalRender.uniform("holoImage", 2);
-        m_finalRender.uniform("width", 512.0f);
+        m_finalRender.uniform("width", 576.0f);
 	
         OGLStatus::logOGLErrors("MultiWavelengthCapture - initShaders()");
 }
@@ -143,8 +147,6 @@ void MultiWavelengthCapture::resize(int width, int height)
 {
 	m_camera.reshape(width, height);
 	gluPerspective(45.0, 1.0, .00001, 10.0);
-	//glFrustum(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
-	//glOrtho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
 }
 
 void MultiWavelengthCapture::cameraSelectMode(int mode)
@@ -178,6 +180,18 @@ void MultiWavelengthCapture::swapBuffers(void)
 	
 	//	Make sure we dont have any errors
 	OGLStatus::logOGLErrors("Holodecoder - swapBuffers()");
+}
+
+void MultiWavelengthCapture::loadTestData(void)
+{
+    //  Load the test data
+    const string path("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/");
+
+    ImageIO io;
+
+    m_fringeImage1.transferToTexture(io.readImage(path + "fringe1.png"));
+    m_fringeImage2.transferToTexture(io.readImage(path + "fringe2.png"));
+    m_fringeImage3.transferToTexture(io.readImage(path + "fringe3.png"));
 }
 
 void MultiWavelengthCapture::_initLighting(void)

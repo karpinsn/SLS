@@ -7,7 +7,7 @@ MainWindowController::MainWindowController()
 
         //  Since we start in view give it the Holodecoder
         Holodecoder *decoder = new Holodecoder();
-        m_mainWindow->glWidget->m_glDecoder = decoder;
+        m_mainWindow->glWidget->m_holoDecoder = decoder;
         m_mainWindow->glWidget->m_glContext = decoder;
 }
 
@@ -117,7 +117,7 @@ void MainWindowController::playVideo(void)
 	if(!file.isEmpty())
 	{
                 //m_mainWindow->glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
-                m_mainWindow->glWidget->playMovie(file.toStdString(), m_mainWindow->m_holoDecoder);
+                m_mainWindow->glWidget->playMovie(file.toStdString());
 	}
 }
 
@@ -128,7 +128,7 @@ void MainWindowController::openHoloImage(void)
 	if(!file.isEmpty())
 	{
                 //m_mainWindow->glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
-                m_mainWindow->glWidget->openHoloImage(file.toStdString(), m_mainWindow->m_holoDecoder);
+                m_mainWindow->glWidget->openHoloImage(file.toStdString());
 	}
 }
 
@@ -142,7 +142,7 @@ void MainWindowController::viewMode(void)
     //  Ensure that the file list is hidden
     m_mainWindow->hideFileList();
     Holodecoder *decoder = new Holodecoder();
-    m_mainWindow->glWidget->m_glDecoder = decoder;
+    m_mainWindow->glWidget->m_holoDecoder = decoder;
     m_mainWindow->glWidget->setNewGLContext(decoder);
 }
 
@@ -157,5 +157,7 @@ void MainWindowController::captureMode(void)
 {
     //  Ensure that the file list is hidden
     m_mainWindow->hideFileList();
-    m_mainWindow->glWidget->setNewGLContext(new MultiWavelengthCapture());
+    MultiWavelengthCapture *capture = new MultiWavelengthCapture();
+    m_mainWindow->glWidget->setNewGLContext(capture);
+    capture->loadTestData();
 }

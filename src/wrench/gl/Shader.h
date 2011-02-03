@@ -70,6 +70,7 @@ namespace wrench
 			
 			void uniform(const string name, const int data);
 			void uniform(const string name, const float data);
+                        void bindAttributeLocation(const string name, const GLuint index);
 			
 		private:
 			char* _loadShaderSource(const string &filename);

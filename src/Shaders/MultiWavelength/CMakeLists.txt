@@ -7,11 +7,13 @@ include(FileCopyTargets)
 set(SHADER_VERT_SOURCES
 
 	PhaseCalculator.vert
+	PhaseCalculator.frag
 )
 
 set(SHADER_FRAG_SOURCES
 	
 	PhaseCalculator.vert
+	PhaseCalculator.frag
 )
 
 set(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})

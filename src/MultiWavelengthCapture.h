@@ -94,7 +94,7 @@ public:
 	
         void setBackBuffer(IplImage* image);
 	void swapBuffers(void);
-	
+        void loadTestData(void);
 private:
 	void initShaders(void);
 	void _initTextures(GLuint width, GLuint height);

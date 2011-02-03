@@ -109,9 +109,8 @@ void OpenGLWidget::mouseReleaseEvent(QMouseEvent* event)
 	updateGL();
 }
 
-void OpenGLWidget::openHoloImage(string filename, Holodecoder* decoder)
+void OpenGLWidget::openHoloImage(string filename)
 {
-	m_holoDecoder = decoder;
 	ImageIO io;
 	IplImage* image = io.readImage(filename.c_str());
 	
@@ -150,10 +149,9 @@ void OpenGLWidget::timerEvent(QTimerEvent* event)
 	updateGL();
 }
 
-void OpenGLWidget::playMovie(string movieFile, Holodecoder* decoder)
+void OpenGLWidget::playMovie(string movieFile)
 {
 	m_movieFilename = movieFile;
-	m_holoDecoder = decoder;
 	
 	if(!m_aviIO.aviFileOpen())
 	{

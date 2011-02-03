@@ -108,6 +108,11 @@ void wrench::gl::Shader::uniform(const string name, const float data)
 	unbind();
 }
 
+void wrench::gl::Shader::bindAttributeLocation(const string name, GLuint index)
+{
+    glBindAttribLocation(shader_id, index, name.c_str());
+}
+
 char* wrench::gl::Shader::_loadShaderSource(const string &filename)
 {
 	char* shaderSource;

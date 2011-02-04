@@ -3,16 +3,15 @@
 // uniform mat4 projectionMatrix;
 // uniform mat4 modelViewMatrix;
 
-in vec3 vertex;
-in vec3 color;
-in vec2 textureCoordinate;
+in vec3 vert;
+in vec2 vertTexCoord;
 
-out vec2 fragmentTextureCoordinate;
+out vec2 fragTexCoord;
 
 void main() 
 {
-	fragmentTextureCoordinate = textureCoordinate;
+	fragTexCoord = vertTexCoord;
 
-	gl_Position = vec4(vertex, 1.0);
+	gl_Position = vec4(vert, 1.0);
 }
 

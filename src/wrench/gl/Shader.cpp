@@ -60,7 +60,7 @@ bool wrench::gl::Shader::init(const char *vsFile, const char *fsFile)
 			shader_id = glCreateProgram();
 			glAttachShader(shader_id, shader_fp);
 			glAttachShader(shader_id, shader_vp);
-			glLinkProgram(shader_id);
+                        glLinkProgram(shader_id);
 			
 			shaderCreated = _validateProgram(shader_id);
 		}

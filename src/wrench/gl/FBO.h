@@ -43,14 +43,14 @@ namespace wrench
 			#ifdef USE_VRJ
 				vrj::GlContextData<GLuint> vrjFBOHandle;
                                 vrj::GlContextData<GLuint> vrjVAOHandle;
-                                vrj::GlContextData<GLuint[3]> vrjVBOHandle;
+                                vrj::GlContextData<GLuint[2]> vrjVBOHandle;
 				#define m_framebuffer   (*vrjFBOHandle)
                                 #define m_vaoID         (*vrjVAOHandle)
-                                #define m_vboID[3]      (*vrjVBOHandle)
+                                #define m_vboID[2]      (*vrjVBOHandle)
 			#else
 				GLuint m_framebuffer;
                                 GLuint m_vaoID;
-                                GLuint m_vboID[3];
+                                GLuint m_vboID[2];
 			#endif
 			
 		public:

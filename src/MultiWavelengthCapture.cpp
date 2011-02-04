@@ -36,9 +36,11 @@ void MultiWavelengthCapture::initShaders(void)
         m_phaseCalculator.uniform("fringe2", 1);
         m_phaseCalculator.uniform("fringe3", 2);
 
-        m_phaseCalculator.bindAttributeLocation("vertex", 0);
-        m_phaseCalculator.bindAttributeLocation("color", 1);
-        m_phaseCalculator.bindAttributeLocation("textureCoordinate", 2);
+        m_phaseCalculator.bindAttributeLocation("vert", 0);
+        m_phaseCalculator.bindAttributeLocation("vertTexCoord", 1);
+
+        GLuint loc = glGetAttribLocation(m_phaseCalculator.shaderID(), "vert");
+        GLuint loc1 = glGetAttribLocation(m_phaseCalculator.shaderID(), "vertTexCoord");
 
 	m_phaseFilter.init("Shaders/MedianFilter3x3.vert", "Shaders/MedianFilter3x3.frag");
 	m_phaseFilter.uniform("image", 0);

@@ -32,21 +32,25 @@ void Holodecoder::init()
 void Holodecoder::initShaders(void)
 {
 	//	Create the shaders
-	m_phaseCalculator.init("Shaders/PhaseCalculator.vert", "Shaders/PhaseCalculator.frag");
+        m_phaseCalculator.init("Shaders/PhaseCalculator.vert", "Shaders/PhaseCalculator.frag");
+        m_phaseCalculator.link();
 	m_phaseCalculator.uniform("holoImage", 0);
 
 	m_phaseFilter.init("Shaders/MedianFilter3x3.vert", "Shaders/MedianFilter3x3.frag");
-	m_phaseFilter.uniform("image", 0);
+        m_phaseFilter.link();
+        m_phaseFilter.uniform("image", 0);
 	m_phaseFilter.uniform("width", 512.0f);
 	m_phaseFilter.uniform("height", 512.0f);
 
 	m_normalCalculator.init("Shaders/NormalCalculator.vert", "Shaders/NormalCalculator.frag");
-	m_normalCalculator.uniform("phaseA", 0);
+        m_normalCalculator.link();
+        m_normalCalculator.uniform("phaseA", 0);
         m_normalCalculator.uniform("width", 512.0f);
         m_normalCalculator.uniform("height", 512.0f);
 
 	m_finalRender.init("Shaders/FinalRender.vert", "Shaders/FinalRender.frag");
-	m_finalRender.uniform("normals", 0);
+        m_finalRender.link();
+        m_finalRender.uniform("normals", 0);
 	m_finalRender.uniform("phaseMap", 1);
 	m_finalRender.uniform("holoImage", 2);
         m_finalRender.uniform("width", 512.0f);

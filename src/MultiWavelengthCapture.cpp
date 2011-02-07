@@ -21,39 +21,38 @@ void MultiWavelengthCapture::init()
 		
 		m_mesh->initMesh();
 		m_hasBeenInit = true;
-		
-                m_fringeImages[0] = &m_fringeImage1;
-                m_fringeImages[1] = &m_fringeImage2;
-                m_fringeImages[2] = &m_fringeImage3;
 	}
 }
 
 void MultiWavelengthCapture::initShaders(void)
 {
-	//	Create the shaders
+        // Create the shaders
         m_phaseCalculator.init("Shaders/MultiWavelength/PhaseCalculator.vert", "Shaders/MultiWavelength/PhaseCalculator.frag");
-        m_phaseCalculator.uniform("fringe1", 0);
-        m_phaseCalculator.uniform("fringe2", 1);
-        m_phaseCalculator.uniform("fringe3", 2);
 
         m_phaseCalculator.bindAttributeLocation("vert", 0);
         m_phaseCalculator.bindAttributeLocation("vertTexCoord", 1);
 
-        GLuint loc = glGetAttribLocation(m_phaseCalculator.shaderID(), "vert");
-        GLuint loc1 = glGetAttribLocation(m_phaseCalculator.shaderID(), "vertTexCoord");
+        m_phaseCalculator.link();
+
+        m_phaseCalculator.uniform("fringeImage1", 0);
+        m_phaseCalculator.uniform("fringeImage2", 1);
+        m_phaseCalculator.uniform("fringeImage3", 2);
 
 	m_phaseFilter.init("Shaders/MedianFilter3x3.vert", "Shaders/MedianFilter3x3.frag");
-	m_phaseFilter.uniform("image", 0);
+        m_phaseFilter.link();
+        m_phaseFilter.uniform("image", 0);
         m_phaseFilter.uniform("width", 576.0f);
         m_phaseFilter.uniform("height", 576.0f);
 
 	m_normalCalculator.init("Shaders/NormalCalculator.vert", "Shaders/NormalCalculator.frag");
-	m_normalCalculator.uniform("phaseA", 0);
+        m_normalCalculator.link();
+        m_normalCalculator.uniform("phaseA", 0);
         m_normalCalculator.uniform("width", 576.0f);
         m_normalCalculator.uniform("height", 576.0f);
 
 	m_finalRender.init("Shaders/FinalRender.vert", "Shaders/FinalRender.frag");
-	m_finalRender.uniform("normals", 0);
+        m_finalRender.link();
+        m_finalRender.uniform("normals", 0);
 	m_finalRender.uniform("phaseMap", 1);
 	m_finalRender.uniform("holoImage", 2);
         m_finalRender.uniform("width", 576.0f);

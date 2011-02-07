@@ -58,7 +58,6 @@ private:
 	GLenum m_phaseMap1AttachPoint;
 	GLenum m_normalMapAttachPoint;
 	
-        Texture* m_fringeImages[3];
         Texture m_fringeImage1;
         Texture m_fringeImage2;
         Texture m_fringeImage3;

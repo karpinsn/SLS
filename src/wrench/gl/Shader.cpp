@@ -60,9 +60,9 @@ bool wrench::gl::Shader::init(const char *vsFile, const char *fsFile)
 			shader_id = glCreateProgram();
 			glAttachShader(shader_id, shader_fp);
 			glAttachShader(shader_id, shader_vp);
-                        glLinkProgram(shader_id);
+
 			
-			shaderCreated = _validateProgram(shader_id);
+                        //shaderCreated = _validateProgram(shader_id);
 		}
 		
 		if(NULL != vsText)
@@ -90,6 +90,13 @@ void wrench::gl::Shader::bind() {
 void wrench::gl::Shader::unbind() 
 {
 	glUseProgram(0);
+}
+
+bool wrench::gl::Shader::link()
+{
+    glLinkProgram(shader_id);
+
+    return _validateProgram(shader_id);
 }
 
 void wrench::gl::Shader::uniform(const string name, const int data)

@@ -67,6 +67,7 @@ namespace wrench
 			void unbind();
 			
 			unsigned int shaderID();
+                        bool link();
 			
 			void uniform(const string name, const int data);
 			void uniform(const string name, const float data);

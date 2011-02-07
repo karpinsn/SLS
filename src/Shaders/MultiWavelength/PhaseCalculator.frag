@@ -1,5 +1,7 @@
 #version 330	// This is needed for the round operator
 
+//precision highp float;
+
 uniform sampler2D fringeImage1;
 uniform sampler2D fringeImage2;
 uniform sampler2D fringeImage3;
@@ -24,7 +26,9 @@ void main(void)
 	float phi123 = mod(phi12 - phi23, 2.0 * pi);
 	float k = round((8.0 * phi123 - phi1) / 2.0 * pi);
 
+	//phase = fringe3;
+	phase = vec4(phi23);
 	//	phase = vec4(fragTexCoord.x, fragTexCoord.y, .6, 1.0);
-	phase = vec4(k * 2.0 * pi + phi1);
+	//phase = vec4(k * 2.0 * pi + phi1);
 }
 

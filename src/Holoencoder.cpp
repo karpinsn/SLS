@@ -16,7 +16,10 @@ void Holoencoder::init()
 		initFBO();
 	
 		m_controller.init(m_width, m_height);
-		m_encoderShader.init("Shaders/Holoencoder.vert", "Shaders/Holoencoder.frag");
+                m_encoderShader.init();
+                m_encoderShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holoencoder.vert"));
+                m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holoencoder.frag"));
+                m_encoderShader.link();
 
 		m_camera = new Camera();
 		m_camera->initRotatedCam(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
@@ -95,8 +98,7 @@ void Holoencoder::draw(void)
 	cameraModelViewMatrix = cameraModelViewMatrix * m_controller.getTransform() * translateMatrix * scaleMatrix;
 	
 	m_encoderShader.bind();
-	GLint projectorModelViewLoc = glGetUniformLocation(m_encoderShader.shaderID(), "projectorModelView");
-	glUniformMatrix4fv(projectorModelViewLoc, 1, false, glm::value_ptr(cameraModelViewMatrix));
+        m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(cameraModelViewMatrix));
 	
 	if(NULL != m_currentMesh)
 	{

@@ -30,6 +30,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "OGLStatus.h"
+
 #ifdef USE_VRJ
 	#include <vrj/Draw/OGL/GlContextData.h>
 #endif
@@ -45,38 +47,22 @@ namespace wrench
 		private:
 			#ifdef USE_VRJ
 				vrj::GlContextData<GLuint> vrjShaderID;
-				vrj::GlContextData<GLuint> vrjShaderVP;
-				vrj::GlContextData<GLuint> vrjShaderFP;
-				#define shader_id (*vrjShaderID)
-				#define shader_vp (*vrjShaderVP)
-				#define shader_fp (*vrjShaderFP)
+                                #define m_shaderID (*vrjShaderID)
 			#else
-				GLuint shader_id;
-				GLuint shader_vp;
-				GLuint shader_fp;
+                                GLuint m_shaderID;
 			#endif
 			
 		public:
 			Shader();
-			Shader(const char *vsFile, const char *fsFile);
+                        Shader(GLenum shaderType, const string &filename);
 			~Shader();
 			
-			bool init(const char *vsFile, const char *fsFile);
-			
-			void bind();
-			void unbind();
-			
-			unsigned int shaderID();
-                        bool link();
-			
-			void uniform(const string name, const int data);
-			void uniform(const string name, const float data);
-                        void bindAttributeLocation(const string name, const GLuint index);
-			
+                        bool init(GLenum shaderType, const string &filename);
+
+                        GLuint shaderID(void);
 		private:
 			char* _loadShaderSource(const string &filename);
 			bool _validateShader(GLuint shader, const string &filename);
-			bool _validateProgram(GLuint program);
 		};
 	}
 }

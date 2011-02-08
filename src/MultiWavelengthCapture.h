@@ -32,6 +32,7 @@
 #include "AbstractGLContext.h"
 
 #include <wrench/gl/Camera.h>
+#include <wrench/gl/ShaderProgram.h>
 #include <wrench/gl/Shader.h>
 #include <wrench/gl/Texture.h>
 #include <wrench/gl/FBO.h>
@@ -49,10 +50,10 @@ using namespace wrench::gl;
 class MultiWavelengthCapture : public AbstractGLContext
 {
 private:
-	Shader m_phaseCalculator;
-	Shader m_phaseFilter;
-	Shader m_normalCalculator;
-	Shader m_finalRender;
+        ShaderProgram m_phaseCalculator;
+        ShaderProgram m_phaseFilter;
+        ShaderProgram m_normalCalculator;
+        ShaderProgram m_finalRender;
 	
 	GLenum m_phaseMap0AttachPoint;
 	GLenum m_phaseMap1AttachPoint;

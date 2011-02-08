@@ -32,23 +32,32 @@ void Holodecoder::init()
 void Holodecoder::initShaders(void)
 {
 	//	Create the shaders
-        m_phaseCalculator.init("Shaders/PhaseCalculator.vert", "Shaders/PhaseCalculator.frag");
+        m_phaseCalculator.init();
+        m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/PhaseCalculator.vert"));
+        m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/PhaseCalculator.frag"));
+
         m_phaseCalculator.link();
 	m_phaseCalculator.uniform("holoImage", 0);
 
-	m_phaseFilter.init("Shaders/MedianFilter3x3.vert", "Shaders/MedianFilter3x3.frag");
+        m_phaseFilter.init();
+        m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MedianFilter3x3.vert"));
+        m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MedianFilter3x3.frag"));
         m_phaseFilter.link();
         m_phaseFilter.uniform("image", 0);
 	m_phaseFilter.uniform("width", 512.0f);
 	m_phaseFilter.uniform("height", 512.0f);
 
-	m_normalCalculator.init("Shaders/NormalCalculator.vert", "Shaders/NormalCalculator.frag");
+        m_normalCalculator.init();
+        m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NormalCalculator.vert"));
+        m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NormalCalculator.frag"));
         m_normalCalculator.link();
         m_normalCalculator.uniform("phaseA", 0);
         m_normalCalculator.uniform("width", 512.0f);
         m_normalCalculator.uniform("height", 512.0f);
 
-	m_finalRender.init("Shaders/FinalRender.vert", "Shaders/FinalRender.frag");
+        m_finalRender.init();
+        m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/FinalRender.vert"));
+        m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/FinalRender.frag"));
         m_finalRender.link();
         m_finalRender.uniform("normals", 0);
 	m_finalRender.uniform("phaseMap", 1);

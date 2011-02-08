@@ -28,6 +28,7 @@
 #include <glm/gtx/type_ptr.hpp>
 
 #include <wrench/gl/Shader.h>
+#include <wrench/gl/ShaderProgram.h>
 #include <wrench/gl/Camera.h>
 #include <wrench/gl/Arcball.h>
 #include <wrench/gl/Texture.h>
@@ -41,7 +42,7 @@ using namespace wrench::gl;
 class Holoencoder : public AbstractGLContext
 {
 private:
-	Shader m_encoderShader;
+        ShaderProgram m_encoderShader;
 	int m_width;
 	int m_height;
 	

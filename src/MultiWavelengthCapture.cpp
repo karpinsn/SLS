@@ -27,7 +27,9 @@ void MultiWavelengthCapture::init()
 void MultiWavelengthCapture::initShaders(void)
 {
         // Create the shaders
-        m_phaseCalculator.init("Shaders/MultiWavelength/PhaseCalculator.vert", "Shaders/MultiWavelength/PhaseCalculator.frag");
+        m_phaseCalculator.init();
+        m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/PhaseCalculator.vert"));
+        m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/PhaseCalculator.frag"));
 
         m_phaseCalculator.bindAttributeLocation("vert", 0);
         m_phaseCalculator.bindAttributeLocation("vertTexCoord", 1);
@@ -38,19 +40,25 @@ void MultiWavelengthCapture::initShaders(void)
         m_phaseCalculator.uniform("fringeImage2", 1);
         m_phaseCalculator.uniform("fringeImage3", 2);
 
-	m_phaseFilter.init("Shaders/MedianFilter3x3.vert", "Shaders/MedianFilter3x3.frag");
+        m_phaseFilter.init();
+        m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MedianFilter3x3.vert"));
+        m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MedianFilter3x3.frag"));
         m_phaseFilter.link();
         m_phaseFilter.uniform("image", 0);
         m_phaseFilter.uniform("width", 576.0f);
         m_phaseFilter.uniform("height", 576.0f);
 
-	m_normalCalculator.init("Shaders/NormalCalculator.vert", "Shaders/NormalCalculator.frag");
+        m_normalCalculator.init();
+        m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NormalCalculator.vert"));
+        m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NormalCalculator.frag"));
         m_normalCalculator.link();
         m_normalCalculator.uniform("phaseA", 0);
         m_normalCalculator.uniform("width", 576.0f);
         m_normalCalculator.uniform("height", 576.0f);
 
-	m_finalRender.init("Shaders/FinalRender.vert", "Shaders/FinalRender.frag");
+        m_finalRender.init();
+        m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/FinalRender.vert"));
+        m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/FinalRender.frag"));
         m_finalRender.link();
         m_finalRender.uniform("normals", 0);
 	m_finalRender.uniform("phaseMap", 1);

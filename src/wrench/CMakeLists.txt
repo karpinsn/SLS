@@ -16,7 +16,7 @@ set(GL_SOURCES
 	gl/Arcball.cpp
 	gl/Camera.cpp
 	gl/FBO.cpp
-        #gl/VBO.cpp
+        gl/ShaderProgram.cpp 
 	gl/Shader.cpp
 	gl/Texture.cpp
 	gl/OGLStatus.cpp
@@ -24,7 +24,7 @@ set(GL_SOURCES
 	gl/Arcball.h
 	gl/Camera.h
 	gl/FBO.h
-        #gl/VBO.h
+        gl/ShaderProgram.h
 	gl/Shader.h
 	gl/Texture.h
 	gl/OGLStatus.h

@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <string>
+#include <stdarg.h>
 
 using namespace std;
 
@@ -22,6 +23,7 @@ namespace wrench
 	{
 	public:
 		static void logError(const string &message);
+                static void logError(const char* Format, ... );
 		static void logDebug(const string &message);
 	};
 }

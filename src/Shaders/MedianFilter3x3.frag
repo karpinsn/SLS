@@ -1,3 +1,5 @@
+#version 330
+
 /*
   3x3 Median Filter
 
@@ -19,6 +21,9 @@ uniform sampler2D image;
 uniform float width;
 uniform float height;
 
+in vec2 fragTexCoord;
+out vec4 filteredImage;
+
 float step_w = 1.0/width;
 float step_h = 1.0/height;
 
@@ -33,7 +38,7 @@ void main(void)
     {
       vec2 offset = vec2(float(dX), float(dY));
 
-      v[dX * 3 + dY + 4] = texture2D(image, gl_TexCoord[0].xy + vec2(float(dX) * step_w, float(dY) * step_h)).x;
+      v[dX * 3 + dY + 4] = texture2D(image, fragTexCoord + vec2(float(dX) * step_w, float(dY) * step_h)).x;
     }
   }
 
@@ -42,5 +47,5 @@ void main(void)
   m4(v[2], v[3], v[4], v[7]);
   m3(v[3], v[4], v[8]);
    
-  gl_FragData[0] = vec4(v[4], 0.0, 0.0, 0.0);
+  filteredImage = vec4(v[4], 0.0, 0.0, 0.0);
 }

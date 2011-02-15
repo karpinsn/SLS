@@ -1,5 +1,13 @@
-void main() 
+#version 330
+
+in vec3 vert;
+in vec2 vertTexCoord;
+
+out vec2 fragTexCoord;
+
+void main()
 {
-  gl_TexCoord[0] = gl_MultiTexCoord0;
-  gl_Position = ftransform();
+        fragTexCoord = vertTexCoord;
+
+        gl_Position = vec4(vert, 1.0);
 }

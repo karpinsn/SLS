@@ -1,8 +1,13 @@
+#version 330
+
 uniform sampler2D holoImage;
+
+in vec2 fragTexCoord;
+out vec4 phase;
 
 void main(void)
 {
-	vec4 holoPhase = texture2D(holoImage, gl_TexCoord[0].st);
+	vec4 holoPhase = texture2D(holoImage, fragTexCoord);
 
 	float fringeFrequency = 4.0;							// Frequency of the fringe in Hz
 	float pi = 3.14159265; 									// Mmmmmm PI
@@ -14,5 +19,5 @@ void main(void)
 
 	float phaseA = atan((I1 - 127.5), (I2 - 127.5)) + (2.0 * pi * I3);
 
-	gl_FragData[0].x = phaseA;
+	phase = vec4(phaseA);
 }

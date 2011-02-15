@@ -27,7 +27,7 @@ void main(void)
 	float k = round((8.0 * phi123 - phi1) / 2.0 * pi);
 
 	//phase = fringe3;
-	phase = vec4(phi23);
+	phase = vec4(phi123);
 	//	phase = vec4(fragTexCoord.x, fragTexCoord.y, .6, 1.0);
 	//phase = vec4(k * 2.0 * pi + phi1);
 }

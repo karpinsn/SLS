@@ -53,11 +53,14 @@ namespace wrench
                                 GLuint m_vboID[2];
 			#endif
 			
+                        int m_width;
+                        int m_height;
+
 		public:
 			FBO(void);
 			~FBO();
 			
-			bool init();
+                        bool init(int width, int height);
 			
 			void bind(void);
 			void unbind(void);

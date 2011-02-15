@@ -89,7 +89,7 @@ IplImage* ImageIO::readImage(const string &filename)
 	}
 	else
 	{
-		cvCvtColor(image, image, CV_BGR2RGB);
+            cvCvtColor(image, image, CV_BGR2RGB);
 	}
 
 	

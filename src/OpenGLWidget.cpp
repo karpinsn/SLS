@@ -113,7 +113,8 @@ void OpenGLWidget::openHoloImage(string filename)
 {
 	ImageIO io;
 	IplImage* image = io.readImage(filename.c_str());
-	
+        m_glContext = m_holoDecoder;
+
 	if(NULL != image)
 	{
 			

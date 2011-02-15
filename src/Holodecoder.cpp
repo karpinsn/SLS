@@ -35,6 +35,8 @@ void Holodecoder::initShaders(void)
         m_phaseCalculator.init();
         m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/PhaseCalculator.vert"));
         m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/PhaseCalculator.frag"));
+        m_phaseCalculator.bindAttributeLocation("vert", 0);
+        m_phaseCalculator.bindAttributeLocation("vertTexCoord", 1);
 
         m_phaseCalculator.link();
 	m_phaseCalculator.uniform("holoImage", 0);
@@ -42,6 +44,9 @@ void Holodecoder::initShaders(void)
         m_phaseFilter.init();
         m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MedianFilter3x3.vert"));
         m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MedianFilter3x3.frag"));
+        m_phaseFilter.bindAttributeLocation("vert", 0);
+        m_phaseFilter.bindAttributeLocation("vertTexCoord", 1);
+
         m_phaseFilter.link();
         m_phaseFilter.uniform("image", 0);
 	m_phaseFilter.uniform("width", 512.0f);
@@ -50,6 +55,9 @@ void Holodecoder::initShaders(void)
         m_normalCalculator.init();
         m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NormalCalculator.vert"));
         m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NormalCalculator.frag"));
+        m_normalCalculator.bindAttributeLocation("vert", 0);
+        m_normalCalculator.bindAttributeLocation("vertTexCoord", 1);
+
         m_normalCalculator.link();
         m_normalCalculator.uniform("phaseA", 0);
         m_normalCalculator.uniform("width", 512.0f);
@@ -58,6 +66,7 @@ void Holodecoder::initShaders(void)
         m_finalRender.init();
         m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/FinalRender.vert"));
         m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/FinalRender.frag"));
+
         m_finalRender.link();
         m_finalRender.uniform("normals", 0);
 	m_finalRender.uniform("phaseMap", 1);
@@ -71,7 +80,7 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
 {
 	Logger::logDebug("Holodecoder - initTextures(): Creating textures for phase map and normal map");
 	
-	m_imageProcessor.init();
+        m_imageProcessor.init(width, height);
 	m_imageProcessor.unbind();
 	
 	m_phaseMap0AttachPoint = GL_COLOR_ATTACHMENT0_EXT;
@@ -100,22 +109,19 @@ void Holodecoder::draw(void)
 		//	Pass 1
 		m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
 		m_phaseCalculator.bind();
-		glActiveTexture(GL_TEXTURE0);
-		m_holoImages[m_frontBufferIndex]->bind();
+                m_holoImages[m_frontBufferIndex]->bind(GL_TEXTURE0);
 		m_imageProcessor.process();
 		
 		//	Pass 2
 		m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
 		m_phaseFilter.bind();
-		glActiveTexture(GL_TEXTURE0);
-		m_phaseMap0.bind();
+                m_phaseMap0.bind(GL_TEXTURE0);
 		m_imageProcessor.process();
 		
 		//	Pass 3
 		m_imageProcessor.bindDrawBuffer(m_normalMapAttachPoint);
 		m_normalCalculator.bind();
-		glActiveTexture(GL_TEXTURE0);
-		m_phaseMap1.bind();
+                m_phaseMap1.bind(GL_TEXTURE0);
 		m_imageProcessor.process();
 	}
 	m_imageProcessor.unbind();
@@ -129,14 +135,11 @@ void Holodecoder::draw(void)
 	
 	glColor3f(0.0f, 1.0f, 0.0f);
 		
-	m_finalRender.bind();
+        m_finalRender.bind();
 	{
-		glActiveTexture(GL_TEXTURE0);
-		m_normalMap.bind();
-		glActiveTexture(GL_TEXTURE1);
-		m_phaseMap1.bind();
-		glActiveTexture(GL_TEXTURE2);
-		m_holoImages[m_frontBufferIndex]->bind();
+                m_normalMap.bind(GL_TEXTURE0);
+                m_phaseMap1.bind(GL_TEXTURE1);
+                m_holoImages[m_frontBufferIndex]->bind(GL_TEXTURE2);
 		
 		//	Draw a plane of pixels
 		m_controller.applyTransform();
@@ -146,7 +149,7 @@ void Holodecoder::draw(void)
 
 	glPopMatrix();
     }
-	OGLStatus::logOGLErrors("Holodecoder - draw()");
+    OGLStatus::logOGLErrors("Holodecoder - draw()");
 }
 
 void Holodecoder::resize(int width, int height)

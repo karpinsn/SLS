@@ -96,12 +96,8 @@ public:
 	void swapBuffers(void);
         void loadTestData(void);
 private:
-	void initShaders(void);
+        void _initShaders(void);
 	void _initTextures(GLuint width, GLuint height);
-	void _initLighting(void);
-	
-	int DATA_SIZE;
-	GLubyte* imageData;
 };
 
 #endif	// _MULTI_WAVELENGTH_CAPTURE_H_

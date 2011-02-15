@@ -18,14 +18,17 @@ wrench::gl::FBO::~FBO()
 	glDeleteFramebuffersEXT(1, &m_framebuffer);
 }
 
-bool wrench::gl::FBO::init()
+bool wrench::gl::FBO::init(int width, int height)
 {
-	_cacheQuad();
-	_initFBO();
+    m_width = width;
+    m_height = height;
+
+    _cacheQuad();
+    _initFBO();
 	
-	OGLStatus::logOGLErrors("FBOFacade - init()");
+    OGLStatus::logOGLErrors("FBOFacade - init()");
 	
-	return true;
+    return true;
 }
 
 void wrench::gl::FBO::bind()
@@ -45,17 +48,14 @@ void wrench::gl::FBO::process(void)
 	
 		glMatrixMode (GL_MODELVIEW);
 		glLoadIdentity();
-                glViewport (0, 0, 576, 576);
+                glViewport (0, 0, m_width, m_height);
 
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		glPolygonMode(GL_FRONT,GL_FILL);
-	
-                //glColor3f(1.0f, 1.0f, 1.0f);
-                //glCallList(m_renderingQuad);
-
 
                 glBindVertexArray(m_vaoID);
                 glDrawArrays(GL_QUADS, 0, 4);
+                glBindVertexArray(0);
 
 		//	Pop back matricies as if nothing happened
 		glMatrixMode(GL_PROJECTION);
@@ -120,29 +120,6 @@ void wrench::gl::FBO::_cacheQuad(void)
 
         delete [] vertex;
         delete [] tex;
-
-        /*
-        //	Quad used to render image operations
-        m_renderingQuad = glGenLists(1);
-
-	glNewList(m_renderingQuad,GL_COMPILE);
-	{
-		glColor3f(1.0f, 1.0f, 1.0f);
-		glBegin (GL_QUADS);
-		{
-                        glTexCoord2f (0.0f,0.0f); // lower left corner of image
-			glVertex3f (-1.0f, -1.0f, 0.0f);
-                        glTexCoord2f (1.0f, 0.0f); // lower right corner of image
-			glVertex3f (1.0f, -1.0f, 0.0f);
-                        glTexCoord2f (1.0f, 1.0f); // upper right corner of image
-			glVertex3f (1.0f, 1.0f, 0.0f);
-                        glTexCoord2f (0.0f, 1.0f); // upper left corner of image
-			glVertex3f (-1.0f, 1.0f, 0.0f);
-		}
-		glEnd ();
-	}
-        glEndList();
-        */
 }
 
 void wrench::gl::FBO::_initFBO(void)

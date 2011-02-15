@@ -63,17 +63,18 @@ namespace wrench
 			Texture(void);
 			~Texture();
 			
-			bool			init(GLuint width, GLuint height, GLint internalFormat = GL_RGBA32F_ARB, GLenum format = GL_RGBA, GLenum dataType = GL_FLOAT);
-			void			bind();
-			void			unbind();
+                        bool		init(GLuint width, GLuint height, GLint internalFormat = GL_RGBA32F_ARB, GLenum format = GL_RGBA, GLenum dataType = GL_FLOAT);
+                        void            bind();
+                        void            bind(GLenum texture);
+                        void		unbind();
 			
-			const	GLuint	getTextureId(void)							const;
-			const	GLenum	getTextureTarget(void)						const;
-			const	int		getChannelCount(void)						const;
-			const	GLuint	getWidth(void)								const;
-			const	GLuint	getHeight(void)								const;
-			const	GLuint	getFormat(void)								const;
-			const	GLuint	getDataType(void)							const;
+                        const	GLuint	getTextureId(void)	const;
+                        const	GLenum	getTextureTarget(void)	const;
+                        const	int	getChannelCount(void)	const;
+                        const	GLuint	getWidth(void)		const;
+                        const	GLuint	getHeight(void)		const;
+                        const	GLuint	getFormat(void)		const;
+                        const	GLuint	getDataType(void)	const;
 			
 			bool	transferFromTexture(IplImage* image);
 			bool	transferToTexture(const IplImage* image);

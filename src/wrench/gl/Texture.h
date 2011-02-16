@@ -25,6 +25,7 @@
 	#include <GL/gl.h>
 #endif
 
+#include "Converter.h"
 #include "OGLStatus.h"
 #include <cv.h>
 

@@ -26,8 +26,8 @@
 #endif
 
 #include "../Logger.h"
-#include "Texture.h"
 #include "OGLStatus.h"
+#include "Converter.h"
 
 #ifdef USE_VRJ
 	#include <vrj/Draw/OGL/GlContextData.h>
@@ -41,25 +41,27 @@ namespace wrench
 		{
 		private:
 			#ifdef USE_VRJ
-                                vrj::GlContextData<GLuint>  vrjVBOId;
-                                #define m_vboId             (*vrjVBOId)
+                                vrj::GlContextData<GLuint>  vrjVBOID;
+                                #define m_vboID             (*vrjVBOID)
 			#else
-                                GLuint m_vboId;
+                                GLuint m_vboID;
 			#endif
 			
+                        GLint   m_componentSize;    // Defined in glVertexAttribPointer as size
+                        GLenum  m_componentType;    // Defined in glVertexAttribPointer as type
+                        GLenum  m_target;           // Defined in glBufferData as target
 		public:
                         VBO(void);
                         ~VBO();
 			
-			bool init();
-			
-                        void draw();
-			
-		private:
-                        void _bind(void);
-                        void _unbind(void);
-			void _initFBO(void);
-			void _cacheQuad(void);
+                        bool init(GLint compSize, GLenum type, GLenum target);  // Here compSize is the number of components per vertex
+                        void bufferData(GLsizei size, const GLvoid* data, GLenum usage);
+
+                        GLint getComponentSize(void);
+                        GLenum getComponentType(void);
+                        GLenum getTarget(void);
+                        void bind(void);
+                        void unbind(void);
 		};
 	}
 }

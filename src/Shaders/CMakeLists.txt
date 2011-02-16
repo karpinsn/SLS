@@ -12,6 +12,7 @@ set(SHADER_VERT_SOURCES
 	PhaseCalculator.vert
 	FinalRender.vert
 	Phong.vert
+	AxisDisplay.vert
 )
 
 set(SHADER_FRAG_SOURCES
@@ -21,7 +22,8 @@ set(SHADER_FRAG_SOURCES
 	NormalCalculator.frag
 	PhaseCalculator.frag
 	FinalRender.frag
-	Phong.vert
+	Phong.frag
+	AxisDisplay.frag
 )
 
 set(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})

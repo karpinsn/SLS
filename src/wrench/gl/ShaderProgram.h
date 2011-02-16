@@ -24,6 +24,9 @@
 	#include <GL/gl.h>
 #endif
 
+#include <glm/glm.hpp>
+#include <glm/gtx/type_ptr.hpp>
+
 #include <string.h>
 #include <iostream>
 #include <fstream>
@@ -68,6 +71,7 @@ namespace wrench
 			
                         void uniform(const string name, const int data);
 			void uniform(const string name, const float data);
+                        void uniform(const string name, const glm::mat3 data);
                         void uniformMat4(const string name, GLboolean transpose, const GLfloat *value);
                         void bindAttributeLocation(const string name, const GLuint index);
 			

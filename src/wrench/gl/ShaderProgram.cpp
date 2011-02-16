@@ -64,6 +64,14 @@ void wrench::gl::ShaderProgram::uniform(const string name, const float data)
     glUniform1f(location, data);
 }
 
+void wrench::gl::ShaderProgram::uniform(const string name, const glm::mat3 data)
+{
+    bind();
+    GLuint location = glGetUniformLocation(m_shaderID, name.c_str());
+    glUniformMatrix3fv(location, 1, false, glm::value_ptr(data));
+}
+
+
 void wrench::gl::ShaderProgram::uniformMat4(const string name, GLboolean transpose, const GLfloat *value)
 {
     bind();

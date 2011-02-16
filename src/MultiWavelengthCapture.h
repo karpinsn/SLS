@@ -36,6 +36,7 @@
 #include <wrench/gl/Shader.h>
 #include <wrench/gl/Texture.h>
 #include <wrench/gl/FBO.h>
+#include <wrench/gl/AxisDisplay.h>
 
 #include "OpenGLWidget.h"
 #include <wrench/gl/OGLStatus.h>
@@ -50,6 +51,8 @@ using namespace wrench::gl;
 class MultiWavelengthCapture : public AbstractGLContext
 {
 private:
+        AxisDisplay m_axis;
+
         ShaderProgram m_phaseCalculator;
         ShaderProgram m_phaseFilter;
         ShaderProgram m_normalCalculator;

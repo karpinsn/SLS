@@ -28,6 +28,8 @@
 #include "../Logger.h"
 #include "Texture.h"
 #include "OGLStatus.h"
+#include "VAO.h"
+#include "VBO.h"
 
 #ifdef USE_VRJ
 	#include <vrj/Draw/OGL/GlContextData.h>
@@ -52,7 +54,11 @@ namespace wrench
                                 GLuint m_vaoID;
                                 GLuint m_vboID[2];
 			#endif
-			
+
+                        VAO m_screen;
+                        VBO m_vertex;
+                        VBO m_texCoords;
+
                         int m_width;
                         int m_height;
 

@@ -10,115 +10,60 @@
 
 wrench::gl::VBO::VBO(void)
 {
-    m_vboId = 0;
+    m_vboID = 0;
 }
 
 wrench::gl::VBO::~VBO()
 {
-    glDeleteFramebuffersEXT(1, &m_vboId);
+    if(0 != m_vboID)
+    {
+        glDeleteFramebuffersEXT(1, &m_vboID);
+    }
 }
 
-bool wrench::gl::VBO::init()
+bool wrench::gl::VBO::init(GLint componentSize, GLenum componentType, GLenum target)
 {
-	_cacheQuad();
-	_initFBO();
-	
-        OGLStatus::logOGLErrors("wrench::gl::VBO - init()");
-	
-	return true;
+    m_componentSize = componentSize;
+    m_componentType = componentType;
+    m_target = target;
+
+    glGenBuffers(1, &m_vboID);
+
+    OGLStatus::logOGLErrors("wrench::gl::VBO - init()");
+    return (0 != m_vboID);
 }
 
-void wrench::gl::VBO::draw()
+void wrench::gl::VBO::bufferData(GLsizei size, const GLvoid* data, GLenum usage)
 {
-    //  Bind the VBO
-    _bind();
+   bind();
+   glBufferData(m_target, size * m_componentSize * Converter::typeToSize(m_componentType), data, usage);
 
-    glEnableClientState(GL_VERTEX_ARRAY);
+   OGLStatus::logOGLErrors("wrench::gl::VBO - bufferData()");
+}
 
+GLint wrench::gl::VBO::getComponentSize(void)
+{
+    return m_componentSize;
+}
+
+GLenum wrench::gl::VBO::getComponentType(void)
+{
+    return m_componentType;
+}
+
+GLenum wrench::gl::VBO::getTarget(void)
+{
+    return m_target;
 }
 
 void wrench::gl::VBO::bind()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER_EXT, m_framebuffer);
-        OGLStatus::logOGLErrors("wrench::gl::VBO - bind()");
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
+    OGLStatus::logOGLErrors("wrench::gl::VBO - _bind()");
 }
 
-void wrench::gl::VBO::process(void)
+void wrench::gl::VBO::unbind()
 {
-	glPushAttrib(GL_VIEWPORT_BIT);
-	{
-		glMatrixMode (GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity ();
-		gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
-	
-		glMatrixMode (GL_MODELVIEW);
-		glLoadIdentity();
-		glViewport (0, 0, 512, 512);
-
-		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		glPolygonMode(GL_FRONT,GL_FILL);
-	
-		glColor3f(1.0f, 1.0f, 1.0f);
-		glCallList(m_renderingQuad);
-	
-		//	Pop back matricies as if nothing happened
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-	}
-	glPopAttrib();
-		
-        OGLStatus::logOGLErrors("wrench::gl::VBO - process()");
-}
-
-void wrench::gl::FBO::unbind()
-{
-	glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
-	glDrawBuffer(GL_BACK);
-	
-        OGLStatus::logOGLErrors("wrench::gl::VBO - unbind()");
-}
-
-void wrench::gl::FBO::bindDrawBuffer(GLenum attachmentPoint)
-{
-	glDrawBuffer(attachmentPoint);
-}
-
-void wrench::gl::FBO::setTextureAttachPoint(const Texture &texture, const GLenum attachmentPoint)
-{
-	bind();
-	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, attachmentPoint, texture.getTextureTarget(), texture.getTextureId(), 0);
-}
-
-void wrench::gl::FBO::_cacheQuad(void)
-{
-	//	Quad used to render image operations
-	m_renderingQuad = glGenLists(1);
-	
-	glNewList(m_renderingQuad,GL_COMPILE);
-	{
-		glColor3f(1.0f, 1.0f, 1.0f);
-		glBegin (GL_QUADS);
-		{
-			glTexCoord2f (0.0f,0.0f); /* lower left corner of image */
-			glVertex3f (-1.0f, -1.0f, 0.0f);
-			glTexCoord2f (1.0f, 0.0f); /* lower right corner of image */
-			glVertex3f (1.0f, -1.0f, 0.0f);
-			glTexCoord2f (1.0f, 1.0f); /* upper right corner of image */
-			glVertex3f (1.0f, 1.0f, 0.0f);
-			glTexCoord2f (0.0f, 1.0f); /* upper left corner of image */
-			glVertex3f (-1.0f, 1.0f, 0.0f);
-		}
-		glEnd ();
-	}
-	glEndList();
-}
-
-void wrench::gl::FBO::_initFBO(void)
-{
-	glGenFramebuffers(1, &m_framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER_EXT, m_framebuffer);
-
-        OGLStatus::logOGLErrors("wrench::gl::VBO - _initFBO()");
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    OGLStatus::logOGLErrors("wrench::gl::VBO - _unbind()");
 }

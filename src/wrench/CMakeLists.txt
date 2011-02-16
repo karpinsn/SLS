@@ -20,6 +20,10 @@ set(GL_SOURCES
 	gl/Shader.cpp
 	gl/Texture.cpp
 	gl/OGLStatus.cpp
+	gl/AxisDisplay.cpp
+	gl/VBO.cpp
+	gl/VAO.cpp
+	gl/Converter.cpp
 
 	gl/Arcball.h
 	gl/Camera.h
@@ -28,6 +32,10 @@ set(GL_SOURCES
 	gl/Shader.h
 	gl/Texture.h
 	gl/OGLStatus.h
+	gl/AxisDisplay.h
+	gl/VBO.h
+	gl/VAO.h
+	gl/Converter.h
 )
 
 set(SOURCES

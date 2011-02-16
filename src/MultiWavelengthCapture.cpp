@@ -12,6 +12,8 @@ void MultiWavelengthCapture::init()
                 _initShaders();
                 _initTextures(576, 576);
 		
+                m_axis.init();
+
 		m_controller.init(512, 512);
 		m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
 		m_camera.setMode(1);
@@ -129,20 +131,25 @@ void MultiWavelengthCapture::draw(void)
 	glLoadIdentity();
 	
 	m_camera.applyMatrix();
-	
+        m_controller.applyTransform();
+
 	glColor3f(0.0f, 1.0f, 0.0f);
-		
+
+        glm::mat4 mvMatrix;
+        glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(mvMatrix));
+        m_axis.draw(mvMatrix);
+
 	m_finalRender.bind();
 	{
                 m_normalMap.bind(GL_TEXTURE0);
                 m_phaseMap1.bind(GL_TEXTURE1);
                 m_phaseMap1.bind(GL_TEXTURE2);
 
-		//	Draw a plane of pixels
-		m_controller.applyTransform();
+                // Draw a plane of pixels
 		m_mesh->draw();
 	}
 	m_finalRender.unbind();
+
 	glPopMatrix();
 	
         OGLStatus::logOGLErrors("MultiWavelengthCapture - draw()");

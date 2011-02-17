@@ -160,4 +160,8 @@ void MainWindowController::captureMode(void)
     MultiWavelengthCapture *capture = new MultiWavelengthCapture();
     m_mainWindow->glWidget->setNewGLContext(capture);
     capture->loadTestData();
+    m_mainWindow->glWidget->updateGL();
+    capture->loadTestData();
+    m_mainWindow->glWidget->updateGL();
+
 }

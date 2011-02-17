@@ -3,6 +3,7 @@
 MultiWavelengthCapture::MultiWavelengthCapture(void)
 {
 	m_hasBeenInit = false;
+        m_haveReferencePhase = false;
 }
 
 void MultiWavelengthCapture::init()
@@ -62,13 +63,12 @@ void MultiWavelengthCapture::_initShaders(void)
         m_normalCalculator.uniform("height", 576.0f);
 
         m_finalRender.init();
-        m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/FinalRender.vert"));
-        m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/FinalRender.frag"));
+        m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/FinalRender.vert"));
+        m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/FinalRender.frag"));
         m_finalRender.link();
         m_finalRender.uniform("normals", 0);
 	m_finalRender.uniform("phaseMap", 1);
-	m_finalRender.uniform("holoImage", 2);
-        m_finalRender.uniform("width", 576.0f);
+        m_finalRender.uniform("referencePhaseMap", 2);
 	
         OGLStatus::logOGLErrors("MultiWavelengthCapture - initShaders()");
 }
@@ -80,27 +80,48 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
         m_imageProcessor.init(width, height);
 	m_imageProcessor.unbind();
 	
-	m_phaseMap0AttachPoint = GL_COLOR_ATTACHMENT0_EXT;
-	m_phaseMap1AttachPoint = GL_COLOR_ATTACHMENT1_EXT;
-	m_normalMapAttachPoint = GL_COLOR_ATTACHMENT2_EXT;
+        m_phaseMap0AttachPoint      = GL_COLOR_ATTACHMENT0_EXT;
+        m_phaseMap1AttachPoint      = GL_COLOR_ATTACHMENT1_EXT;
+        m_normalMapAttachPoint      = GL_COLOR_ATTACHMENT2_EXT;
+        m_referencePhaseAttachPoint = GL_COLOR_ATTACHMENT3_EXT;
 
         m_fringeImage1.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
         m_fringeImage2.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
         m_fringeImage3.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
 
-        m_phaseMap0.init(width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-	m_phaseMap1.init(width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-	m_normalMap.init(width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-	
+        m_phaseMap0.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+        m_phaseMap1.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+        m_normalMap.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+        m_referencePhase.init   (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+
 	m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);
 	m_imageProcessor.setTextureAttachPoint(m_phaseMap1, m_phaseMap1AttachPoint);
 	m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
+        m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
 
         OGLStatus::logOGLErrors("MultiWavelengthCapture - initTextures()");
 }
 
 void MultiWavelengthCapture::draw(void)
 {
+    if(!m_haveReferencePhase)
+    {
+        //  If we dont have the reference phase then we are calculating it and we redraw
+        m_imageProcessor.bind();
+        {
+            m_imageProcessor.bindDrawBuffer(m_referencePhaseAttachPoint);
+            m_phaseCalculator.bind();
+            m_fringeImage1.bind(GL_TEXTURE0);
+            m_fringeImage2.bind(GL_TEXTURE1);
+            m_fringeImage3.bind(GL_TEXTURE2);
+            m_imageProcessor.process();
+        }
+        m_imageProcessor.unbind();
+
+        m_haveReferencePhase = true;
+    }
+    else
+    {
 	m_imageProcessor.bind();
 	{
 		//	Pass 1
@@ -143,7 +164,7 @@ void MultiWavelengthCapture::draw(void)
 	{
                 m_normalMap.bind(GL_TEXTURE0);
                 m_phaseMap1.bind(GL_TEXTURE1);
-                m_phaseMap1.bind(GL_TEXTURE2);
+                m_referencePhase.bind(GL_TEXTURE2);
 
                 // Draw a plane of pixels
 		m_mesh->draw();
@@ -151,7 +172,7 @@ void MultiWavelengthCapture::draw(void)
 	m_finalRender.unbind();
 
 	glPopMatrix();
-	
+    }
         OGLStatus::logOGLErrors("MultiWavelengthCapture - draw()");
 }
 
@@ -196,12 +217,26 @@ void MultiWavelengthCapture::swapBuffers(void)
 
 void MultiWavelengthCapture::loadTestData(void)
 {
-    //  Load the test data
-    const string path("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/");
+    if(m_haveReferencePhase)
+    {
+        //  Load the test data
+        const string path("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/");
 
-    ImageIO io;
+        ImageIO io;
 
-    m_fringeImage1.transferToTexture(io.readImage(path + "fringe1.png"));
-    m_fringeImage2.transferToTexture(io.readImage(path + "fringe2.png"));
-    m_fringeImage3.transferToTexture(io.readImage(path + "fringe3.png"));
+        m_fringeImage1.transferToTexture(io.readImage(path + "fringe1.png"));
+        m_fringeImage2.transferToTexture(io.readImage(path + "fringe2.png"));
+        m_fringeImage3.transferToTexture(io.readImage(path + "fringe3.png"));
+    }
+    else
+    {
+        //  Load the test data
+        const string path("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/");
+
+        ImageIO io;
+
+        m_fringeImage1.transferToTexture(io.readImage(path + "Reference1.png"));
+        m_fringeImage2.transferToTexture(io.readImage(path + "Reference2.png"));
+        m_fringeImage3.transferToTexture(io.readImage(path + "Reference3.png"));
+    }
 }

@@ -61,11 +61,13 @@ private:
 	GLenum m_phaseMap0AttachPoint;
 	GLenum m_phaseMap1AttachPoint;
 	GLenum m_normalMapAttachPoint;
-	
+        GLenum m_referencePhaseAttachPoint;
+
         Texture m_fringeImage1;
         Texture m_fringeImage2;
         Texture m_fringeImage3;
-	
+
+        Texture m_referencePhase;
 	Texture m_phaseMap0;
 	Texture m_phaseMap1;
 	Texture m_normalMap;
@@ -78,7 +80,8 @@ private:
 	TriMesh* m_mesh;
 	
         bool haveFringeImages;
-	
+        bool m_haveReferencePhase;
+
 	bool m_hasBeenInit;
 	
 	int m_frontBufferIndex;		//	Index of the front buffer in m_bufferIds

@@ -13,9 +13,9 @@ void main(void)
 {
 	float pi = 3.14159;
 
-	vec4 fringe1 = texture2D(fringeImage1, fragTexCoord);
-	vec4 fringe2 = texture2D(fringeImage2, fragTexCoord);
-	vec4 fringe3 = texture2D(fringeImage3, fragTexCoord);
+	vec3 fringe1 = texture2D(fringeImage1, fragTexCoord).rgb;
+	vec3 fringe2 = texture2D(fringeImage2, fragTexCoord).rgb;
+	vec3 fringe3 = texture2D(fringeImage3, fragTexCoord).rgb;
 
 	float phi1 = atan(sqrt(3.0) * (fringe1.r - fringe1.b), 2.0 * fringe1.g - fringe1.r - fringe1.b);
 	float phi2 = atan(sqrt(3.0) * (fringe2.r - fringe2.b), 2.0 * fringe2.g - fringe2.r - fringe2.b);
@@ -33,6 +33,15 @@ void main(void)
 	float P123=(P13*P12)/(P13-P12);
 	float k=round((phi123*(P123/P1)-phi1)/(2.0*pi));
 
-	phase = vec4(k * 2.0 * pi + phi1);
+	float fringeMagnitude = length(fringe1) + length(fringe2) + length(fringe3);
+
+	if(fringeMagnitude >= .015)
+	{	
+		phase = vec4(k * 2.0 * pi + phi1);
+	}
+	else
+	{
+		phase = vec4(0.0);
+	}	
 }
 

@@ -13,7 +13,7 @@ void main()
 	float phaseA = texture2D(phaseMap, gl_MultiTexCoord0.st).x;
 	vec4 newVertexPosition = gl_Vertex;
 		
-	newVertexPosition.z = (phaseA - phaseR);
+	newVertexPosition.z = (phaseA - phaseR) * .04;
 
 	v = vec3(gl_ModelViewMatrix * newVertexPosition);
 	gl_Position = gl_ModelViewProjectionMatrix * newVertexPosition;

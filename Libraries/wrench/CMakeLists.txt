@@ -54,5 +54,5 @@ include_directories(..)
 #	Build the library
 #	---------------------------------------------------------------------------------------
 
-
 add_library(${NAME} ${SOURCES} ${GL_SOURCES})
+

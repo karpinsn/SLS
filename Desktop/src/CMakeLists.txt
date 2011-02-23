@@ -6,9 +6,9 @@
 cmake_minimum_required(VERSION 2.6)
 
 # Set package properties
-project(Holoencoder)
+project(SLS-Desktop)
 
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/../CMakeModules")
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/../../CMakeModules")
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/${PROJECT_NAME}")
 
 ### ---------------------------------------------------------------------------------------
@@ -43,15 +43,22 @@ find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIR})
 set(LIBS ${LIBS} ${GLEW_LIBRARY})
 
+#	----------------------------------------------------------------
+#	Libraries
+#	----------------------------------------------------------------
+include_directories(../../Libraries)
+include_directories(../../Libraries/3rdParty)
+
 #	-----------------------------------------
 #	GLM
 #	-----------------------------------------
-add_subdirectory(glm)
+add_subdirectory(../../Libraries/3rdParty/glm ${PROJECT_BINARY_DIR}/Libraries/3rdParty/glm)
+set(LIBS ${LIBS} glm)
 
 #	-----------------------------------------
 #	Wrench
 #	-----------------------------------------
-add_subdirectory(wrench)
+add_subdirectory(../../Libraries/wrench ${PROJECT_BINARY_DIR}/Libraries/wrench)
 set(LIBS ${LIBS} wrench)
 
 #	---------------------------------------------------------------------------------------
@@ -126,7 +133,8 @@ add_executable(${PROJECT_NAME}
 	${RESOURCES}
 	${SHADERS_QUALIFIED})
 
-#add_dependencies(${PROJECT_NAME} ${SHADER_TARGET})
+add_dependencies(${PROJECT_NAME} wrench)
+
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 #	---------------------------------------------------------------------------------------

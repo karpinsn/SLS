@@ -37,8 +37,9 @@ void Holoencoder::init()
 
 void Holoencoder::initFBO()
 {
-	m_holoimage.init(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-	
+        //m_holoimage.init(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+        m_holoimage.init(m_width, m_height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+
 	//	Need to create a render buffer object for the depth buffer
 	glGenRenderbuffersEXT(1, &m_holoimageRBO);
 	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, m_holoimageRBO);
@@ -50,7 +51,7 @@ void Holoencoder::initFBO()
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
 	
 	//	Attach the texture to the FBO color attachment point
-	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_holoimage.getTextureId(), 0);
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_holoimage.getTextureId(), 0);
 	
 	//	Attach the renderbuffer to the depth attachment point
 	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, m_holoimageRBO);
@@ -67,6 +68,10 @@ void Holoencoder::initFBO()
 
 void Holoencoder::draw(void)
 {	
+    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glPushMatrix();
 	
 	m_camera->applyMatrix();
@@ -108,6 +113,8 @@ void Holoencoder::draw(void)
 	m_encoderShader.unbind();
 	
 	glPopMatrix();
+
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 }
 
 Texture& Holoencoder::encode()

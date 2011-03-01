@@ -150,7 +150,9 @@ void MainWindowController::encodeMode(void)
 {
     //  Show the file list
     m_mainWindow->showFileList();
-    m_mainWindow->glWidget->setNewGLContext(new Holoencoder());
+    Holoencoder *encoder = new Holoencoder();
+    m_mainWindow->m_holoEncoder = encoder;
+    m_mainWindow->glWidget->setNewGLContext(encoder);
 }
 
 void MainWindowController::captureMode(void)

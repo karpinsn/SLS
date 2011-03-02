@@ -13,13 +13,10 @@ void Holoencoder::init()
 		m_height = 512;
 	
 		m_currentMesh = NULL;
-		initFBO();
+                _initFBO();
 	
 		m_controller.init(m_width, m_height);
-                m_encoderShader.init();
-                m_encoderShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holoencoder.vert"));
-                m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holoencoder.frag"));
-                m_encoderShader.link();
+                _initShaders();
 
 		m_camera = new Camera();
 		m_camera->initRotatedCam(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
@@ -35,7 +32,7 @@ void Holoencoder::init()
 	}
 }
 
-void Holoencoder::initFBO()
+void Holoencoder::_initFBO()
 {
         //m_holoimage.init(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
         m_holoimage.init(m_width, m_height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
@@ -64,6 +61,16 @@ void Holoencoder::initFBO()
 	}
 	
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+}
+
+void Holoencoder::_initShaders(void)
+{
+    m_encoderShader.init();
+    m_encoderShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holoencoder.vert"));
+    m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holoencoder.frag"));
+    m_encoderShader.link();
+
+    m_encoderShader.uniform("fringeFrequency", 16.0f);
 }
 
 void Holoencoder::draw(void)
@@ -95,16 +102,19 @@ void Holoencoder::draw(void)
 	
 	
 	//glTranslatef(0.0f, 0.0f, 0.8f);
-	glMultMatrixf(glm::value_ptr(translateMatrix));
-	glMultMatrixf(glm::value_ptr(scaleMatrix));
+        //glMultMatrixf(glm::value_ptr(translateMatrix));
+        //glMultMatrixf(glm::value_ptr(scaleMatrix));
 	//glTranslatef(0.0f, -0.1f, 0.7f);
 	//glScalef(2.4f, 2.4f, 2.4f);
 	
-	cameraModelViewMatrix = cameraModelViewMatrix * m_controller.getTransform() * translateMatrix * scaleMatrix;
+        cameraModelViewMatrix = cameraModelViewMatrix * m_controller.getTransform();// * translateMatrix * scaleMatrix;
 	
 	m_encoderShader.bind();
         m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(cameraModelViewMatrix));
 	
+        GLUquadricObj *quadratic = gluNewQuadric();
+        gluSphere(quadratic, .5, 1024, 1024);
+
 	if(NULL != m_currentMesh)
 	{
 		m_currentMesh->draw();

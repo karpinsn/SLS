@@ -70,7 +70,7 @@ void Holoencoder::_initShaders(void)
     m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holoencoder.frag"));
     m_encoderShader.link();
 
-    m_encoderShader.uniform("fringeFrequency", 16.0f);
+    m_encoderShader.uniform("fringeFrequency", 12.0f);
 }
 
 void Holoencoder::draw(void)
@@ -98,7 +98,7 @@ void Holoencoder::draw(void)
 										  0.0f, 0.0f, 2.0f, 0.0f,
 										  0.0f, 0.0f, 0.0f, 1.0f);
 	
-	m_controller.applyTransform();
+        //m_controller.applyTransform();
 	
 	
 	//glTranslatef(0.0f, 0.0f, 0.8f);
@@ -107,13 +107,13 @@ void Holoencoder::draw(void)
 	//glTranslatef(0.0f, -0.1f, 0.7f);
 	//glScalef(2.4f, 2.4f, 2.4f);
 	
-        cameraModelViewMatrix = cameraModelViewMatrix * m_controller.getTransform();// * translateMatrix * scaleMatrix;
+        cameraModelViewMatrix = cameraModelViewMatrix;// * m_controller.getTransform();// * translateMatrix * scaleMatrix;
 	
 	m_encoderShader.bind();
         m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(cameraModelViewMatrix));
 	
         GLUquadricObj *quadratic = gluNewQuadric();
-        gluSphere(quadratic, .5, 1024, 1024);
+        gluSphere(quadratic, 1.0, 4096, 4096);
 
 	if(NULL != m_currentMesh)
 	{
@@ -143,7 +143,7 @@ void Holoencoder::resize(int width, int height)
 {
 	m_width = width;
 	m_height = height;
-	glOrtho(-1.0, 1.0, -1.0, 1.0, 0.001, 1000.0);
+        glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 	//glOrtho(0.0, 1.0, 0.0, 1.0, 0.0, 100.0);
 }
 

@@ -106,7 +106,7 @@ void MainWindowController::selectXYZM(QListWidgetItem* current, QListWidgetItem*
 	//	Display the new XYZM file	
 	XYZFileIO fileIO;
 	AbstractMesh* currentMesh = fileIO.newMeshFromFile(current->text().toAscii().constData());
-	m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
+        m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
         m_mainWindow->glWidget->updateScene();
 }
 

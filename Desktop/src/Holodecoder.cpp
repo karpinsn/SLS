@@ -133,7 +133,7 @@ void Holodecoder::draw(void)
 	
 	m_camera.applyMatrix();
 	
-	glColor3f(0.0f, 1.0f, 0.0f);
+        glColor3f(0.8f, 0.8f, 0.8f);
 		
         m_finalRender.bind();
 	{
@@ -199,7 +199,7 @@ void Holodecoder::_initLighting(void)
 {
 	GLfloat mat_specular[] = {.1f, .1f, .1f, .1f};
 	GLfloat mat_shininess[] = {1.0f};
-	GLfloat light_position[] = {2.0f, 2.0f, 4.0f, 1.0f};
+        GLfloat light_position[] = {-2.0f, 2.0f, 4.0f, 1.0f};
 	GLfloat white_light[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	
 	glClearColor(1.0, 1.0, 1.0, 0.0);

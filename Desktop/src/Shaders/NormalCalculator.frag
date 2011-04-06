@@ -20,7 +20,7 @@ void main(void)
   float pi = 3.14159265; 		// Mmmmmm PI
   float theta = pi / 6.0;		// Angle between camera and projector. 30 degrees
   float W = width;			// Width of the image
-  float fringeFrequency = 4.0;
+  float fringeFrequency = 6.0;
   float P = W / (2.0 * fringeFrequency);			// Pixels per period of the projector
   
   vec3 newVertex = vec3(fragTexCoord.s-.5, fragTexCoord.t-.5, 0.0);

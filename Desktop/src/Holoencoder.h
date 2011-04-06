@@ -26,6 +26,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
 
 #include <wrench/gl/Shader.h>
 #include <wrench/gl/ShaderProgram.h>
@@ -48,7 +49,7 @@ private:
 	
 	Camera* m_camera;
 	Arcball m_controller;
-	glm::mat4 m_cameraProjectionMatrix;
+        glm::mat4 m_cameraModelView;
 	
 	AbstractMesh* m_currentMesh;
 	

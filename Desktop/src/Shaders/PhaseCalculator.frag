@@ -9,7 +9,7 @@ void main(void)
 {
 	vec4 holoPhase = texture2D(holoImage, fragTexCoord);
 
-	float fringeFrequency = 4.0;							// Frequency of the fringe in Hz
+	float fringeFrequency = 6.0;							// Frequency of the fringe in Hz
 	float pi = 3.14159265; 									// Mmmmmm PI
 	float stepHeight = 1.0 / (2.0 * fringeFrequency) -.001;	// .001 is just a buffer so we dont get rounding errors
 

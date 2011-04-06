@@ -3,6 +3,7 @@
 Holoencoder::Holoencoder(void)
 {
 	m_hasBeenInit = false;
+        m_currentMesh = NULL;
 }
 
 void Holoencoder::init()
@@ -19,15 +20,14 @@ void Holoencoder::init()
                 _initShaders();
 
 		m_camera = new Camera();
-		m_camera->initRotatedCam(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+                m_camera->init(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 		m_camera->setMode(4);
 		
 		//	Define the camera projection matrix
-		m_cameraProjectionMatrix = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
-											 0.0f, 1.0f, 0.0f, 0.0f,
-											 0.0f, 0.0f, 1.0f, 0.0f,
-											 0.0f, 0.0f, -1.0f, 1.0f);
-		
+                m_cameraModelView = glm::mat4();
+                m_cameraModelView = m_cameraModelView * glm::gtx::transform::rotate(30.0f, 0.0f, 1.0f, 0.0f);
+
+
 		m_hasBeenInit = true;
 	}
 }
@@ -70,7 +70,7 @@ void Holoencoder::_initShaders(void)
     m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holoencoder.frag"));
     m_encoderShader.link();
 
-    m_encoderShader.uniform("fringeFrequency", 12.0f);
+    m_encoderShader.uniform("fringeFrequency", 6.0f);
 }
 
 void Holoencoder::draw(void)
@@ -84,43 +84,133 @@ void Holoencoder::draw(void)
 	m_camera->applyMatrix();
 	
 	//	Draw the currentMesh
-	glm::mat4 cameraModelViewMatrix = m_cameraProjectionMatrix;
+        glm::mat4 cameraModelViewMatrix = m_cameraModelView;
 	
 	
 	
-	glm::mat4 translateMatrix = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
-										  0.0f, 1.0f, 0.0f, 0.0f,
-										  0.0f, 0.0f, 1.0f, 0.0f,
-										  0.0f, -.1f, 0.7f, 1.0f);
-	
-	glm::mat4 scaleMatrix	  = glm::mat4(2.0f, 0.0f, 0.0f, 0.0f,
-										  0.0f, 2.0f, 0.0f, 0.0f,
-										  0.0f, 0.0f, 2.0f, 0.0f,
+
+
+        glm::mat4 scaleMatrix	  = glm::mat4(2.0f, 0.0f, 0.0f, 0.0f,
+                                                                                  0.0f, 2.0f, 0.0f, 0.0f,
+                                                                                  0.0f, 0.0f, 2.0f, 0.0f,
 										  0.0f, 0.0f, 0.0f, 1.0f);
-	
-        //m_controller.applyTransform();
+
+        glm::mat4 translateMatrix = glm::mat4(  1.0f, 0.0f, 0.0f, -0.5f,
+                                                               0.0f, 1.0f, 0.0f,  -0.5f,
+                                                               0.0f, 0.0f, 1.0f,  .0f,
+                                                               0.0f, 0.0f, 0.0f,  1.0f);
+                       translateMatrix = glm::transpose(translateMatrix);
+
 	
 	
 	//glTranslatef(0.0f, 0.0f, 0.8f);
-        //glMultMatrixf(glm::value_ptr(translateMatrix));
-        //glMultMatrixf(glm::value_ptr(scaleMatrix));
+        //
+        glMultMatrixf(glm::value_ptr(scaleMatrix));
+        glMultMatrixf(glm::value_ptr(translateMatrix));
 	//glTranslatef(0.0f, -0.1f, 0.7f);
 	//glScalef(2.4f, 2.4f, 2.4f);
 	
-        cameraModelViewMatrix = cameraModelViewMatrix;// * m_controller.getTransform();// * translateMatrix * scaleMatrix;
+        cameraModelViewMatrix = cameraModelViewMatrix * m_controller.getTransform() * scaleMatrix * translateMatrix;
 	
-	m_encoderShader.bind();
+        m_encoderShader.bind();
         m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(cameraModelViewMatrix));
 	
         GLUquadricObj *quadratic = gluNewQuadric();
-        gluSphere(quadratic, 1.0, 4096, 4096);
 
+        //  Experiment 1
+        //gluSphere(quadratic, 1.0, 4096, 4096);
+
+
+        //  Experiment 2
+//        glBegin(GL_QUADS);
+//        glVertex4f(-.75, -.75, 0.0, 1);    // Lower left
+//        glVertex4f(.75, -.75, 0.0, 1); //  Lower right
+//        glVertex4f(.75, .75, 0.0, 1);  //  Upper right
+//        glVertex4f(-.75, .75, 0.0, 1); //  Upper left
+
+//        glEnd();
+
+        //  Experiment 2.5
+
+//        glm::mat4 translateMatrix = glm::mat4(  1.0f, 0.0f, 0.0f, -0.5f,
+//                                                       0.0f, 1.0f, 0.0f,  -0.5f,
+//                                                       0.0f, 0.0f, 1.0f,  0.0f,
+//                                                       0.0f, 0.0f, 0.0f,  1.0f);
+//               translateMatrix = glm::transpose(translateMatrix);
+//               glm::mat4 mat = cameraModelViewMatrix;
+//               mat = mat * translateMatrix;
+//               m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(mat));
+//               glMultMatrixf(glm::value_ptr(translateMatrix));
+
+        //  Experiment 3
+        //{
+        //  Upper left
+
+//        glPushMatrix();
+//        glm::mat4 translateMatrix = glm::mat4(  1.0f, 0.0f, 0.0f, -0.5f,
+//                                                0.0f, 1.0f, 0.0f,  0.5f,
+//                                                0.0f, 0.0f, 1.0f,  0.0f,
+//                                                0.0f, 0.0f, 0.0f,  1.0f);
+//        translateMatrix = glm::transpose(translateMatrix);
+//        glm::mat4 mat = cameraModelViewMatrix;
+//        mat = mat * translateMatrix;
+//        m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(mat));
+//        glMultMatrixf(glm::value_ptr(translateMatrix));
+//        gluSphere(quadratic, .4, 4096, 4096);
+//        glPopMatrix();
+
+//        //  lower left
+//        glPushMatrix();
+//                  translateMatrix = glm::mat4(  1.0f, 0.0f, 0.0f, -0.5f,
+//                                                0.0f, 1.0f, 0.0f, -0.5f,
+//                                                0.0f, 0.0f, 1.0f,  0.0f,
+//                                                0.0f, 0.0f, 0.0f,  1.0f);
+//        translateMatrix = glm::transpose(translateMatrix);
+//        mat = cameraModelViewMatrix;
+//        mat = mat * translateMatrix;
+//        m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(mat));
+//        glMultMatrixf(glm::value_ptr(translateMatrix));
+//        gluSphere(quadratic, .4, 4096, 4096);
+//        glPopMatrix();
+
+//        //  Upper right
+//        glPushMatrix();
+//                  translateMatrix = glm::mat4(  1.0f, 0.0f, 0.0f,  0.5f,
+//                                                0.0f, 1.0f, 0.0f,  0.5f,
+//                                                0.0f, 0.0f, 1.0f,  0.0f,
+//                                                0.0f, 0.0f, 0.0f,  1.0f);
+//        translateMatrix = glm::transpose(translateMatrix);
+//        mat = cameraModelViewMatrix;
+//        mat = mat * translateMatrix;
+//        m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(mat));
+//        glMultMatrixf(glm::value_ptr(translateMatrix));
+//        gluSphere(quadratic, .4, 4096, 4096);
+//        glPopMatrix();
+
+//        //  lower right
+//        glPushMatrix();
+//                  translateMatrix = glm::mat4(  1.0f, 0.0f, 0.0f,  0.5f,
+//                                                0.0f, 1.0f, 0.0f, -0.5f,
+//                                                0.0f, 0.0f, 1.0f,  0.0f,
+//                                                0.0f, 0.0f, 0.0f,  1.0f);
+//        translateMatrix = glm::transpose(translateMatrix);
+//        mat = cameraModelViewMatrix;
+//        mat = mat * translateMatrix;
+//        m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(mat));
+//        glMultMatrixf(glm::value_ptr(translateMatrix));
+//        gluSphere(quadratic, .4, 4096, 4096);
+//        glPopMatrix();
+
+        //}
+
+        glColor3f(.8, .8, .8);
+        m_controller.applyTransform();
 	if(NULL != m_currentMesh)
 	{
 		m_currentMesh->draw();
 	}
 	
-	m_encoderShader.unbind();
+        m_encoderShader.unbind();
 	
 	glPopMatrix();
 

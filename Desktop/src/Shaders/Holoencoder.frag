@@ -18,6 +18,7 @@ void main()
 	gl_FragColor = vec4((1.0 - sin(angularFrequency * projectorPos.x)) * .5, 
 						(1.0 - cos(angularFrequency * projectorPos.x)) * .5, 
 						cos(stairAngularFrequency * (projectorPos.x - (b * (1.0 / stepHeight) * stepWidth)) + pi) * (stepHeight / 3.0) + (stepHeight / 2.0) + b, 
+						//b,
 						1.0);
 }
 

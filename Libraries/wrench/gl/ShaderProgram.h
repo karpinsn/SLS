@@ -38,7 +38,7 @@
 #include "OGLStatus.h"
 
 #ifdef USE_VRJ
-	#include <vrj/Draw/OGL/GlContextData.h>
+    #include <vrj/Draw/OpenGL/ContextData.h>
 #endif
 
 using namespace std;
@@ -51,10 +51,10 @@ namespace wrench
 		{
 		private:
 			#ifdef USE_VRJ
-				vrj::GlContextData<GLuint> vrjShaderID;
-                                #define m_shaderID (*vrjShaderID)
+                vrj::opengl::ContextData<GLuint> vrjShaderID;
+                #define m_shaderID (*vrjShaderID)
 			#else
-                                GLuint m_shaderID;
+                GLuint m_shaderID;
 			#endif
 			
                         vector<Shader*> m_shaders;

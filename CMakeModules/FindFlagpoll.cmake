@@ -25,13 +25,18 @@
 #
 # Example usage:
 # 	flagpoll_get_include_dirs(vpr NO_DEPS)
-# 	find_path(VPR22_INCLUDE_DIRS vpr/vpr.h
+# 	find_path(VPR20_INCLUDE_DIRS vpr/vpr.h
 #   	  HINTS  ${vpr_FLAGPOLL_INCLUDE_DIRS})
 #
 # Original Author:
 # 2009-2010 Ryan Pavlik <rpavlik@iastate.edu> <abiryan@ryand.net>
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
+#
+# Copyright Iowa State University 2009-2010.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 
 ###
@@ -44,7 +49,7 @@ find_program(FLAGPOLL
 	flagpoll.exe
 	PATHS
 	"${FLAGPOLL_ROOT_DIR}"
-	"${VRJUGGLER30_ROOT_DIR}"
+	"${VRJUGGLER22_ROOT_DIR}"
 	PATH_SUFFIXES
 	bin)
 

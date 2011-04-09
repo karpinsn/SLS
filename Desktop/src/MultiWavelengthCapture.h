@@ -12,15 +12,15 @@
 #define _MULTI_WAVELENGTH_CAPTURE_H_
 
 #ifdef __APPLE__
-	#include <glew.h>
-	#include <OpenGL/gl.h>
+#include <glew.h>
+#include <OpenGL/gl.h>
 #elif _WIN32
-	#include <windows.h>
-	#include <GL/glew.h>
-	#include <GL/gl.h>
+#include <windows.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
 #else
-	#include <GL/glew.h>
-	#include <GL/gl.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
 #endif
 
 #include <QMutex>
@@ -51,59 +51,59 @@ using namespace wrench::gl;
 class MultiWavelengthCapture : public AbstractGLContext
 {
 private:
-        AxisDisplay m_axis;
+  AxisDisplay m_axis;
 
-        ShaderProgram m_phaseCalculator;
-        ShaderProgram m_phaseFilter;
-        ShaderProgram m_normalCalculator;
-        ShaderProgram m_finalRender;
-	
-	GLenum m_phaseMap0AttachPoint;
-	GLenum m_phaseMap1AttachPoint;
-	GLenum m_normalMapAttachPoint;
-        GLenum m_referencePhaseAttachPoint;
+  ShaderProgram m_phaseCalculator;
+  ShaderProgram m_phaseFilter;
+  ShaderProgram m_normalCalculator;
+  ShaderProgram m_finalRender;
 
-        Texture m_fringeImage1;
-        Texture m_fringeImage2;
-        Texture m_fringeImage3;
+  GLenum m_phaseMap0AttachPoint;
+  GLenum m_phaseMap1AttachPoint;
+  GLenum m_normalMapAttachPoint;
+  GLenum m_referencePhaseAttachPoint;
 
-        Texture m_referencePhase;
-	Texture m_phaseMap0;
-	Texture m_phaseMap1;
-	Texture m_normalMap;
-	
-	FBO m_imageProcessor;
-	
-	Camera m_camera;
-	Arcball m_controller;
-	
-	TriMesh* m_mesh;
-	
-        bool haveFringeImages;
-        bool m_haveReferencePhase;
+  Texture m_fringeImage1;
+  Texture m_fringeImage2;
+  Texture m_fringeImage3;
 
-	bool m_hasBeenInit;
-	
-	int m_frontBufferIndex;		//	Index of the front buffer in m_bufferIds
-	
-	OpenGLWidget* m_glContext;
-	
+  Texture m_referencePhase;
+  Texture m_phaseMap0;
+  Texture m_phaseMap1;
+  Texture m_normalMap;
+
+  FBO m_imageProcessor;
+
+  Camera m_camera;
+  Arcball m_controller;
+
+  TriMesh* m_mesh;
+
+  bool haveFringeImages;
+  bool m_haveReferencePhase;
+
+  bool m_hasBeenInit;
+
+  int m_frontBufferIndex;		//	Index of the front buffer in m_bufferIds
+
+  OpenGLWidget* m_glContext;
+
 public:
-        MultiWavelengthCapture(void);
-	
-	virtual void init(void);
-	virtual void draw(void);
-	virtual void resize(int width, int height);
-	virtual void cameraSelectMode(int mode);
-	virtual void mousePressEvent(int mouseX, int mouseY);
-	virtual void mouseMoveEvent(int mouseX, int mouseY);
-	
-        void setBackBuffer(IplImage* image);
-	void swapBuffers(void);
-        void loadTestData(void);
+  MultiWavelengthCapture(void);
+
+  virtual void init(void);
+  virtual void draw(void);
+  virtual void resize(int width, int height);
+  virtual void cameraSelectMode(int mode);
+  virtual void mousePressEvent(int mouseX, int mouseY);
+  virtual void mouseMoveEvent(int mouseX, int mouseY);
+
+  void setBackBuffer(IplImage* image);
+  void swapBuffers(void);
+  void loadTestData(void);
 private:
-        void _initShaders(void);
-	void _initTextures(GLuint width, GLuint height);
+  void _initShaders(void);
+  void _initTextures(GLuint width, GLuint height);
 };
 
 #endif	// _MULTI_WAVELENGTH_CAPTURE_H_

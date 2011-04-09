@@ -49,7 +49,7 @@ private:
 	
 	Camera* m_camera;
 	Arcball m_controller;
-        glm::mat4 m_cameraModelView;
+    glm::mat4 m_projectorModelView;
 	
 	AbstractMesh* m_currentMesh;
 	
@@ -68,14 +68,14 @@ private:
 public:
 	Holoencoder(void);
 	
-        virtual void                        init();
-        virtual void                        draw(void);
-        wrench::gl::Texture&                encode();
-        virtual void                        resize(int width, int height);
-        virtual void                        cameraSelectMode(int mode);
-        virtual void                        mousePressEvent(int mouseX, int mouseY);
-        virtual void                        mouseMoveEvent(int mouseX, int mouseY);
-        void                                setCurrentMesh(AbstractMesh* current);
+        virtual void          init();
+        virtual void          draw(void);
+        wrench::gl::Texture&  encode();
+        virtual void          resize(int width, int height);
+        virtual void          cameraSelectMode(int mode);
+        virtual void          mousePressEvent(int mouseX, int mouseY);
+        virtual void          mouseMoveEvent(int mouseX, int mouseY);
+        void                  setCurrentMesh(AbstractMesh* current);
 	
 private:
         void _initFBO(void);

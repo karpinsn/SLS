@@ -40,8 +40,8 @@
 # Brandon Newendorp <brandon@newendorp.com>
 
 set(_HUMAN "VPR 2.2")
-set(_RELEASE_NAMES vpr-2_2 libvpr-2_2)
-set(_DEBUG_NAMES vpr_d-2_2 libvpr_d-2_2)
+set(_RELEASE_NAMES vpr-2_2 libvpr-2_2 vpr-2_2_0)
+set(_DEBUG_NAMES vpr_d-2_2 libvpr_d-2_2 vpr_d-2_2_0)
 set(_DIR vpr-2.2)
 set(_HEADER vpr/vpr.h)
 set(_FP_PKG_NAME vpr)
@@ -124,10 +124,13 @@ if(COMMAND cmake_policy)
 	cmake_policy(SET CMP0011 NEW)
 	cmake_policy(SET CMP0012 NEW)
 endif()
-if((NOT "${Boost_FOUND}")
-	OR (NOT "${Boost_FILESYSTEM_FOUND}")
-	OR (NOT "${Boost_SIGNALS_FOUND}")
-	OR (Boost_VERSION GREATER 103401 AND NOT Boost_SYSTEM_FOUND))
+if((NOT Boost_FOUND)
+	OR (NOT Boost_FILESYSTEM_FOUND)
+	OR (NOT Boost_SIGNALS_FOUND)
+	OR (NOT Boost_SYSTEM_FOUND)
+	OR (NOT Boost_PROGRAM_OPTIONS_FOUND)
+	OR (NOT Boost_DATE_TIME_FOUND)
+	OR (NOT Boost_REGEX_FOUND))
 	if(VPR22_LIBRARY_RELEASE)
 		# Find Boost in the same place as VPR
 		get_filename_component(VPR22_LIBRARY_DIR
@@ -135,38 +138,19 @@ if((NOT "${Boost_FOUND}")
 			PATH)
 		set(BOOST_ROOT ${VPR22_LIBRARY_DIR}/../)
 
-		if(APPLE)
-			# VR Juggler 3.0 binaries for Mac are built against single-threaded boost.
-			set(Boost_USE_STATIC_LIBS ON)
-			#set(Boost_USE_MULTITHREADED OFF)
-		endif()
-
 		find_package(Boost
-			1.43.0
+			1.40.0
 			${_FIND_FLAGS}
 			COMPONENTS
 			filesystem
-			signals)
+			system
+			signals
+			program_options
+			date_time
+			regex)
 
 		mark_as_advanced(Boost_LIB_DIAGNOSTIC_DEFINITIONS)
 
-		if(WIN32 AND NOT Boost_FOUND)
-			if(NOT VPR22_FIND_QUIETLY)
-				message(STATUS
-					"Searching for Boost using forced '-vc80' override...")
-			endif()
-			set(Boost_COMPILER "-vc80")
-			find_package(Boost
-				1.43.0
-				${_FIND_FLAGS}
-				COMPONENTS
-				filesystem
-				signals)
-		endif()
-
-		if(Boost_VERSION GREATER 103401)
-			find_package(Boost ${_FIND_FLAGS} COMPONENTS filesystem system signals)
-		endif()
 	endif()
 
 endif()
@@ -175,12 +159,19 @@ list(APPEND
 	_deps_libs
 	${Boost_FILESYSTEM_LIBRARY}
 	${Boost_SYSTEM_LIBRARY}
-	${Boost_SIGNALS_LIBRARY})
+	${Boost_SIGNALS_LIBRARY}
+	${Boost_PROGRAM_OPTIONS_LIBRARY}
+	${Boost_DATE_TIME_LIBRARY}
+	${Boost_REGEX_LIBRARY})
 list(APPEND _deps_includes ${Boost_INCLUDE_DIRS})
 list(APPEND
 	_deps_check
 	Boost_FILESYSTEM_LIBRARY
+	Boost_SYSTEM_LIBRARY
 	Boost_SIGNALS_LIBRARY
+	Boost_PROGRAM_OPTIONS_LIBRARY
+	Boost_DATE_TIME_LIBRARY
+	Boost_REGEX_LIBRARY
 	Boost_INCLUDE_DIRS)
 
 if(NOT CPPDOM_FOUND)
@@ -205,38 +196,6 @@ if(UNIX AND NOT WIN32)
 		list(APPEND _deps_check VPR22_libuuid_LIBRARY)
 		list(APPEND _deps_libs ${VPR22_libuuid_LIBRARY})
 	endif()
-endif()
-
-if(WIN32)
-	find_library(VPR22_libnspr4_LIBRARY
-		NAMES
-		nspr4
-		libnspr4
-		HINTS
-		${${_FP_PKG_NAME}_FLAGPOLL_LIBRARY_DIRS}
-		"${_ROOT_DIR}"
-		PATH_SUFFIXES
-		${_VRJ_LIBSUFFIXES}
-		DOC
-		"${_HUMAN} NSPR4 library full path")
-
-	find_library(VPR22_libplc4_LIBRARY
-		NAMES
-		plc4
-		libplc4
-		HINTS
-		${${_FP_PKG_NAME}_FLAGPOLL_LIBRARY_DIRS}
-		"${_ROOT_DIR}"
-		PATH_SUFFIXES
-		${_VRJ_LIBDSUFFIXES}
-		DOC
-		"${_HUMAN} PLC4 library full path")
-	mark_as_advanced(VPR22_libnspr4_LIBRARY VPR22_libplc4_LIBRARY)
-	list(APPEND _deps_check VPR22_libnspr4_LIBRARY VPR22_libplc4_LIBRARY)
-	list(APPEND
-		_deps_libs
-		${VPR22_libnspr4_LIBRARY}
-		${VPR22_libplc4_LIBRARY})
 endif()
 
 # handle the QUIETLY and REQUIRED arguments and set xxx_FOUND to TRUE if

@@ -5,7 +5,9 @@
 
 cmake_minimum_required(VERSION 2.6)
 
-# Set package properties
+#	-----------------------------------------
+# 	Set package properties
+#	-----------------------------------------
 project(SLS-Desktop)
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/../../CMakeModules")
@@ -61,6 +63,11 @@ set(LIBS ${LIBS} glm)
 add_subdirectory(../../Libraries/wrench ${PROJECT_BINARY_DIR}/Libraries/wrench)
 set(LIBS ${LIBS} wrench)
 
+#	-----------------------------------------
+#	Common
+#	-----------------------------------------
+include_directories(../../Common/src)
+
 #	---------------------------------------------------------------------------------------
 #	List all of the sources to be compiled
 #	---------------------------------------------------------------------------------------
@@ -72,28 +79,30 @@ set(SOURCES
 	MainWindowController.cpp
 	OpenGLWidget.cpp
 	Holoencoder.cpp
-	ImageIO.cpp
-	XYZFileIO.cpp
+    XYZFileIO.cpp
 	XYZMesh.cpp
-	Holodecoder.cpp
-	PointCloudMesh.cpp
-	TriMesh.cpp
 	MultiWavelengthCapture.cpp
+
+    ../../Common/src/ImageIO.cpp
+	../../Common/src/PointCloudMesh.cpp		
+	../../Common/src/TriMesh.cpp
+    ../../Common/src/Holodecoder.cpp
 
 	MainWindowView.h
 	MainWindowController.h
 	OpenGLWidget.h
 	Holoencoder.h
-	ImageIO.h
 	XYZFileIO.h
 	XYZMesh.h
-	XYZPoint.h
-	AbstractMesh.h
-	Holodecoder.h
-	PointCloudMesh.h
-	TriMesh.h
-	AbstractGLContext.h
 	MultiWavelengthCapture.h
+
+    ../../Common/src/ImageIO.h
+	../../Common/src/XYZPoint.h
+	../../Common/src/AbstractMesh.h
+	../../Common/src/PointCloudMesh.h
+	../../Common/src/TriMesh.h
+	../../Common/src/AbstractGLContext.h
+    	../../Common/src/Holodecoder.h
 	)	
 	
 # QT Files

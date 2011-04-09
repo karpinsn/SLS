@@ -14,15 +14,15 @@
 #define _WRENCH_GL_VBA_H_
 
 #ifdef __APPLE__
-	#include <glew.h>
-	#include <OpenGL/gl.h>
+#include <glew.h>
+#include <OpenGL/gl.h>
 #elif _WIN32
-	#include <windows.h>
-	#include <GL/glew.h>
-	#include <GL/gl.h>
+#include <windows.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
 #else
-	#include <GL/glew.h>
-	#include <GL/gl.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
 #endif
 
 #include "map"
@@ -32,42 +32,42 @@
 #include "VBO.h"
 
 #ifdef USE_VRJ
-	#include <vrj/Draw/OGL/GlContextData.h>
+#include <vrj/Draw/OpenGL/ContextData.h>
 #endif
 
 namespace wrench 
 {
-	namespace gl
-	{
-                class VAO
-		{
-		private:
-			#ifdef USE_VRJ
-                                vrj::GlContextData<GLuint>  vrjVAOID;
-                                #define m_vaoID             (*vrjVAOID)
-			#else
-                                GLuint m_vaoID;
-			#endif
-			
-                        GLenum  m_mode;     // Defined by glDrawArrays: GL_TRIANGLE_STRIP, GL_QUAD, etc...
-                        GLsizei m_count;    // Defined by glDrawArrays: Number of things to draw
+  namespace gl
+  {
+    class VAO
+    {
+    private:
+#ifdef USE_VRJ
+      vrj::opengl::ContextData<GLuint>  vrjVAOID;
+#define m_vaoID             (*vrjVAOID)
+#else
+      GLuint m_vaoID;
+#endif
 
-                        std::map<std::string, int> m_vertexAttributes;
-		public:
-                        VAO(void);
-                        ~VAO();
-			
-                        bool init(GLenum mode, GLsizei count);
-                        void addVBO(VBO& vbo, std::string attributeName);
-                        GLuint getVertexAttributeAddress(std::string attributeName);
+      GLenum  m_mode;     // Defined by glDrawArrays: GL_TRIANGLE_STRIP, GL_QUAD, etc...
+      GLsizei m_count;    // Defined by glDrawArrays: Number of things to draw
 
-                        void draw();
-			
-		private:
-                        void _bind(void);
-                        void _unbind(void);
-		};
-	}
+      std::map<std::string, int> m_vertexAttributes;
+    public:
+      VAO(void);
+      ~VAO();
+
+      bool init(GLenum mode, GLsizei count);
+      void addVBO(VBO& vbo, std::string attributeName);
+      GLuint getVertexAttributeAddress(std::string attributeName);
+
+      void draw();
+
+    private:
+      void _bind(void);
+      void _unbind(void);
+    };
+  }
 }
 
 #endif	// _WRENCH_GL_VAO_H_

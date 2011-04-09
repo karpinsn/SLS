@@ -14,15 +14,15 @@
 #define _WRENCH_GL_VBO_H_
 
 #ifdef __APPLE__
-	#include <glew.h>
-	#include <OpenGL/gl.h>
+#include <glew.h>
+#include <OpenGL/gl.h>
 #elif _WIN32
-	#include <windows.h>
-	#include <GL/glew.h>
-	#include <GL/gl.h>
+#include <windows.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
 #else
-	#include <GL/glew.h>
-	#include <GL/gl.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
 #endif
 
 #include "../Logger.h"
@@ -30,40 +30,40 @@
 #include "Converter.h"
 
 #ifdef USE_VRJ
-	#include <vrj/Draw/OGL/GlContextData.h>
+#include <vrj/Draw/OpenGL/ContextData.h>
 #endif
 
 namespace wrench 
 {
-	namespace gl
-	{
-                class VBO
-		{
-		private:
-			#ifdef USE_VRJ
-                                vrj::GlContextData<GLuint>  vrjVBOID;
-                                #define m_vboID             (*vrjVBOID)
-			#else
-                                GLuint m_vboID;
-			#endif
-			
-                        GLint   m_componentSize;    // Defined in glVertexAttribPointer as size
-                        GLenum  m_componentType;    // Defined in glVertexAttribPointer as type
-                        GLenum  m_target;           // Defined in glBufferData as target
-		public:
-                        VBO(void);
-                        ~VBO();
-			
-                        bool init(GLint compSize, GLenum type, GLenum target);  // Here compSize is the number of components per vertex
-                        void bufferData(GLsizei size, const GLvoid* data, GLenum usage);
+  namespace gl
+  {
+    class VBO
+    {
+    private:
+#ifdef USE_VRJ
+      vrj::opengl::ContextData<GLuint>  vrjVBOID;
+#define m_vboID             (*vrjVBOID)
+#else
+      GLuint m_vboID;
+#endif
 
-                        GLint getComponentSize(void);
-                        GLenum getComponentType(void);
-                        GLenum getTarget(void);
-                        void bind(void);
-                        void unbind(void);
-		};
-	}
+      GLint   m_componentSize;    // Defined in glVertexAttribPointer as size
+      GLenum  m_componentType;    // Defined in glVertexAttribPointer as type
+      GLenum  m_target;           // Defined in glBufferData as target
+    public:
+      VBO(void);
+      ~VBO();
+
+      bool init(GLint compSize, GLenum type, GLenum target);  // Here compSize is the number of components per vertex
+      void bufferData(GLsizei size, const GLvoid* data, GLenum usage);
+
+      GLint getComponentSize(void);
+      GLenum getComponentType(void);
+      GLenum getTarget(void);
+      void bind(void);
+      void unbind(void);
+    };
+  }
 }
 
 #endif	// _WRENCH_GL_VBO_H_

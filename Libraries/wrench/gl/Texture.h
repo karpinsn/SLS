@@ -30,7 +30,7 @@
 #include <cv.h>
 
 #ifdef USE_VRJ
-	#include <vrj/Draw/OGL/GlContextData.h>
+    #include <vrj/Draw/OpenGL/ContextData.h>
 #endif
 
 namespace wrench
@@ -51,8 +51,8 @@ namespace wrench
 			GLenum	m_dataType;			//	Data type of the texture
 			
 			#ifdef USE_VRJ
-				vrj::GlContextData<GLuint> vrjTextureHandle;
-				vrj::GlContextData<GLuint> vrjPBOHandle;
+                vrj::opengl::ContextData<GLuint> vrjTextureHandle;
+                vrj::opengl::ContextData<GLuint> vrjPBOHandle;
 				#define m_textureId (*vrjTextureHandle)
 				#define m_PBOId     (*vrjPBOHandle)
 			#else

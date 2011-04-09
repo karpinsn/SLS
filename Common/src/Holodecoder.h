@@ -26,43 +26,47 @@
 #include <cv.h>
 
 #include "TriMesh.h"
-#include "Camera.h"
+#include "PointCloudMesh.h"
 #include "ImageIO.h"
+#include "AbstractGLContext.h"
 
-#include "ShaderFacade.h"
-#include "TextureFacade.h"
-#include "FBOFacade.h"
+#include <wrench/gl/Camera.h>
+#include <wrench/gl/ShaderProgram.h>
+#include <wrench/gl/Shader.h>
+#include <wrench/gl/Texture.h>
+#include <wrench/gl/FBO.h>
 
-#include "OGLStatus.h"
+#include <wrench/gl/OGLStatus.h>
 
-#include "Arcball.h"
+#include <wrench/gl/Arcball.h>
 
-class OpenGLWidget;
+using namespace wrench;
+using namespace wrench::gl;
 
-class Holodecoder
+class Holodecoder : public AbstractGLContext
 {
 private:
-	ShaderFacade m_phaseCalculator;
-	ShaderFacade m_phaseFilter;
-	ShaderFacade m_normalCalculator;
-	ShaderFacade m_finalRender;
-	
+    ShaderProgram m_phaseCalculator;
+    ShaderProgram m_phaseFilter;
+    ShaderProgram m_normalCalculator;
+    ShaderProgram m_finalRender;
+
 	GLenum m_phaseMap0AttachPoint;
 	GLenum m_phaseMap1AttachPoint;
 	GLenum m_normalMapAttachPoint;
 	
-	TextureFacade* m_holoImages[2];
-	TextureFacade m_holoImage0;
-	TextureFacade m_holoImage1;
+	Texture* m_holoImages[2];
+	Texture m_holoImage0;
+	Texture m_holoImage1;
 	
-	TextureFacade m_phaseMap0;
-	TextureFacade m_phaseMap1;
-	TextureFacade m_normalMap;
+	Texture m_phaseMap0;
+	Texture m_phaseMap1;
+	Texture m_normalMap;
 	
-	FBOFacade m_imageProcessor;
+	FBO m_imageProcessor;
 	
-	Camera* m_camera;
-	Arcball* m_controller;
+	Camera m_camera;
+	Arcball m_controller;
 	
 	TriMesh* m_mesh;
 	
@@ -73,7 +77,7 @@ private:
 	int m_frontBufferIndex;		//	Index of the front buffer in m_bufferIds
 	
 public:
-	Holodecoder();
+    Holodecoder();
 	
 	virtual void init(void);
 	virtual void draw(void);

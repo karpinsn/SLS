@@ -47,9 +47,9 @@ using namespace vrj;
 
 void MainWindowController::init()
 {
-    std::cout << "---------- App:init() ---------------" << std::endl;
-    // Initialize devices
-    mHead.init("VJHead");
+  std::cout << "---------- App:init() ---------------" << std::endl;
+  // Initialize devices
+  mHead.init("VJHead");
 }
 
 void MainWindowController::apiInit()
@@ -61,8 +61,8 @@ void MainWindowController::apiInit()
 // using two or more viewports per display window.
 void MainWindowController::bufferPreDraw()
 {
-   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-   glClear(GL_COLOR_BUFFER_BIT);
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+  glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void MainWindowController::preFrame()
@@ -80,12 +80,12 @@ void MainWindowController::preFrame()
 
 void MainWindowController::draw()
 {
-   glClear(GL_DEPTH_BUFFER_BIT);
+  glClear(GL_DEPTH_BUFFER_BIT);
 
-   // --- Setup for drawing --- //
-   glMatrixMode(GL_MODELVIEW);
-   m_decoder->draw();
-   OGLStatus::logOGLErrors("simpleApp - Draw()");
+  // --- Setup for drawing --- //
+  glMatrixMode(GL_MODELVIEW);
+  m_decoder->draw();
+  OGLStatus::logOGLErrors("simpleApp - Draw()");
 }
 
 void MainWindowController::intraFrame()
@@ -100,87 +100,85 @@ void MainWindowController::postFrame()
 
 void MainWindowController::contextInit()
 {
-   GLfloat light0_ambient[] = { 0.1f,  0.1f,  0.1f,  1.0f};
-   GLfloat light0_diffuse[] = { 0.8f,  0.8f,  0.8f,  1.0f};
-   GLfloat light0_specular[] = { 1.0f,  1.0f,  1.0f,  1.0f};
-   GLfloat light0_position[] = {0.0f, 0.75f, 0.75f, 0.0f};
+  GLfloat light0_ambient[] = { 0.1f,  0.1f,  0.1f,  1.0f};
+  GLfloat light0_diffuse[] = { 0.8f,  0.8f,  0.8f,  1.0f};
+  GLfloat light0_specular[] = { 1.0f,  1.0f,  1.0f,  1.0f};
+  GLfloat light0_position[] = {0.0f, 0.75f, 0.75f, 0.0f};
 
-   GLfloat mat_ambient[] = { 0.7f, 0.7f,  0.7f, 1.0f };
-   GLfloat mat_diffuse[] = { 1.0f,  0.5f,  0.8f, 1.0f };
-   GLfloat mat_specular[] = { 1.0,  1.0,  1.0,  1.0};
-   GLfloat mat_shininess[] = { 50.0};
-//   GLfloat mat_emission[] = { 1.0,  1.0,  1.0,  1.0};
-   GLfloat no_mat[] = { 0.0,  0.0,  0.0,  1.0};
+  GLfloat mat_ambient[] = { 0.7f, 0.7f,  0.7f, 1.0f };
+  GLfloat mat_diffuse[] = { 1.0f,  0.5f,  0.8f, 1.0f };
+  GLfloat mat_specular[] = { 1.0,  1.0,  1.0,  1.0};
+  GLfloat mat_shininess[] = { 50.0};
+  GLfloat no_mat[] = { 0.0,  0.0,  0.0,  1.0};
 
-   glLightfv(GL_LIGHT0, GL_AMBIENT,  light0_ambient);
-   glLightfv(GL_LIGHT0, GL_DIFFUSE,  light0_diffuse);
-   glLightfv(GL_LIGHT0, GL_SPECULAR,  light0_specular);
-   glLightfv(GL_LIGHT0, GL_POSITION,  light0_position);
+  glLightfv(GL_LIGHT0, GL_AMBIENT,  light0_ambient);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE,  light0_diffuse);
+  glLightfv(GL_LIGHT0, GL_SPECULAR,  light0_specular);
+  glLightfv(GL_LIGHT0, GL_POSITION,  light0_position);
 
-   glMaterialfv( GL_FRONT, GL_AMBIENT, mat_ambient );
-   glMaterialfv( GL_FRONT,  GL_DIFFUSE, mat_diffuse );
-   glMaterialfv( GL_FRONT, GL_SPECULAR, mat_specular );
-   glMaterialfv( GL_FRONT,  GL_SHININESS, mat_shininess );
-   glMaterialfv( GL_FRONT,  GL_EMISSION, no_mat);
+  glMaterialfv( GL_FRONT, GL_AMBIENT, mat_ambient );
+  glMaterialfv( GL_FRONT,  GL_DIFFUSE, mat_diffuse );
+  glMaterialfv( GL_FRONT, GL_SPECULAR, mat_specular );
+  glMaterialfv( GL_FRONT,  GL_SHININESS, mat_shininess );
+  glMaterialfv( GL_FRONT,  GL_EMISSION, no_mat);
 
-   glEnable(GL_DEPTH_TEST);
-   glEnable(GL_NORMALIZE);
-   glEnable(GL_LIGHTING);
-   glEnable(GL_LIGHT0);
-   glEnable(GL_COLOR_MATERIAL);
-   glShadeModel(GL_SMOOTH);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_NORMALIZE);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+  glEnable(GL_COLOR_MATERIAL);
+  glShadeModel(GL_SMOOTH);
 
-   // Init GLEW
-   GLenum err = glewInit();
-   if(GLEW_OK != err)
-   {
-      std::cout << "Failed to init GLEW: " << glewGetErrorString(err) << std::endl; 
-   }
-   std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << std::endl;
+  // Init GLEW
+  GLenum err = glewInit();
+  if(GLEW_OK != err)
+  {
+    std::cout << "Failed to init GLEW: " << glewGetErrorString(err) << std::endl;
+  }
+  std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << std::endl;
 
-   OGLStatus::logFBOStatus();
-   m_decoder = new Holodecoder();
-   m_decoder->init();
-   //playMovie("~/Data/VeryFirst-Uncompressed.avi", m_decoder);
-   OGLStatus::logOGLErrors("simpleApp - contextInit()");
+  m_decoder = new Holodecoder();
+  m_decoder->init();
+  playMovie("/home/karpinsn/Dropbox/Research/Data/Holovideo/Holovid-Lossless.avi", m_decoder);
+  OGLStatus::logOGLErrors("simpleApp - contextInit()");
 }
 
 void MainWindowController::timerEvent()
 {
- 	double elapsed = 1;//movieTimer.elapsed();
-	
-	if(elapsed >= 1.0/30.0)
-	{
-		//movieTimer.restart();
-		//	Need to fetch the next frame
-		
-		IplImage* frame = m_aviIO.readAviFileFrame();
+  double elapsed = 1;//movieTimer.elapsed();
 
-		if(frame)
-		{
-			m_decoder->setBackHoloBuffer(frame);
-			m_decoder->swapBuffers();		
-		}
-	}
+  if(elapsed >= 1.0/30.0)
+  {
+    //movieTimer.restart();
+    //	Need to fetch the next frame
+
+    IplImage* frame = m_aviIO.readAviFileFrame();
+
+    if(frame)
+    {
+      m_decoder->setBackHoloBuffer(frame);
+      m_decoder->swapBuffers();
+    }
+  }
 }
 
 void MainWindowController::playMovie(string movieFile, Holodecoder* decoder)
 {
-	m_movieFilename = movieFile;
+  m_movieFilename = movieFile;
 
-	if(!m_aviIO.aviFileOpen())
-	{
-		bool fileOpened = m_aviIO.readAviFile(m_movieFilename.c_str());
-		
-		if(fileOpened)
-		{
-			IplImage *frame = m_aviIO.readAviFileFrame();
-			if(frame)
-			{
-				m_decoder->setBackHoloBuffer(frame);
-				m_decoder->swapBuffers();
-				//movieTimer.restart();
-			}
-		}
-	}
+  if(!m_aviIO.aviFileOpen())
+  {
+    bool fileOpened = m_aviIO.readAviFile(m_movieFilename.c_str());
+
+    if(fileOpened)
+    {
+      IplImage *frame = m_aviIO.readAviFileFrame();
+      if(frame)
+      {
+        m_decoder->setBackHoloBuffer(frame);
+        m_decoder->swapBuffers();
+        //movieTimer.restart();
+      }
+    }
+  }
 }

@@ -48,18 +48,18 @@
         #include <GL/gl.h>
 #endif
 
-#include <vrj/Draw/OGL/GlApp.h>
+#include <vrj/Draw/OpenGL/App.h>
 
 #include <gadget/Type/PositionInterface.h>
 #include <gadget/Type/DigitalInterface.h>
 
 //#include <boost/timer.hpp>
 
-#include "OGLStatus.h"
+#include <wrench/gl/OGLStatus.h>
 
 using namespace vrj;
 
-class MainWindowController : public GlApp
+class MainWindowController : public opengl::App
 {
 public:
    MainWindowController()

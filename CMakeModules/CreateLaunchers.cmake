@@ -20,7 +20,7 @@
 #    [RUNTIME_LIBRARY_DIRS <dir...>]
 #    [WORKING_DIRECTORY <dir>]
 #    [ENVIRONMENT <VAR=value> [<VAR=value>...]])
-#    - sets GENERIC_LAUNCHER_COMMAND amd GENERIC_LAUNCHER_FAIL_REGULAR_EXPRESSION
+#    - sets GENERIC_LAUNCHER_COMMAND and GENERIC_LAUNCHER_FAIL_REGULAR_EXPRESSION
 #
 # Requires these CMake modules:
 #  ListFilter
@@ -33,6 +33,11 @@
 # 2009-2010 Ryan Pavlik <rpavlik@iastate.edu> <abiryan@ryand.net>
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
+#
+# Copyright Iowa State University 2009-2010.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 if(__create_launchers)
 	return()
@@ -59,26 +64,45 @@ macro(_launcher_system_settings)
 		# Find user and system name
 		set(SYSTEM_NAME $ENV{USERDOMAIN})
 		set(USER_NAME $ENV{USERNAME})
-
-		if(MSVC100)
+		set(VCPROJ_TYPE vcproj)
+		set(USERFILE_EXTENSION ${SYSTEM_NAME}.${USER_NAME}.user)
+		set(LAUNCHER_LINESEP "&#x0A;")
+		if(MSVC10)
+			set(LAUNCHER_LINESEP "\n")
 			set(USERFILE_VC_VERSION 10.00)
+			set(USERFILE_EXTENSION user)
+			set(VCPROJ_TYPE vcxproj)
 		elseif(MSVC90)
 			set(USERFILE_VC_VERSION 9.00)
 		elseif(MSVC80)
 			set(USERFILE_VC_VERSION 8.00)
 		elseif(MSVC71)
 			set(USERFILE_VC_VERSION 7.10)
+		elseif(MSVC)
+			message(STATUS "MSVC but unrecognized version!")
 		endif()
-
-		set(USERFILE_PLATFORM Win${BITS})
+		if(BITS EQUAL 64)
+			set(USERFILE_PLATFORM x64)
+		else()
+			set(USERFILE_PLATFORM Win${BITS})
+		endif()
 		set(_pathdelim ";")
 		set(_suffix "cmd")
 	else()
 		set(_pathdelim ":")
 		set(USERFILE_PLATFORM ${CMAKE_SYSTEM_NAME}${BITS})
 		set(_suffix "sh")
+		find_package(GDB QUIET)
+		if(GDB_FOUND)
+			set(LAUNCHERS_GOT_GDB YES)
+			if(GDB_HAS_RETURN_CHILD_RESULT)
+				set(LAUNCHERS_GDB_ARG --return-child-result)
+			endif()				
+		else()
+			set(LAUNCHERS_GOT_GDB)
+		endif()
 	endif()
-	
+
 	if(WIN32 AND NOT USERFILE_REMOTE_MACHINE)
 		site_name(USERFILE_REMOTE_MACHINE)
 		mark_as_advanced(USERFILE_REMOTE_MACHINE)
@@ -111,7 +135,8 @@ macro(_launcher_process_args)
 	endforeach()
 
 	if(_nowhere)
-		message(FATAL_ERROR "Syntax error in use of a function in CreateLaunchers!")
+		message(FATAL_ERROR
+			"Syntax error in use of a function in CreateLaunchers!")
 	endif()
 
 	# Turn into a list of native paths
@@ -120,11 +145,11 @@ macro(_launcher_process_args)
 		file(TO_NATIVE_PATH "${_dlldir}" _path)
 		set(_runtime_lib_dirs "${_runtime_lib_dirs}${_path}${_pathdelim}")
 	endforeach()
-	
+
 	if(NOT WORKING_DIRECTORY)
 		set(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 	endif()
-	
+
 	if(FORWARD_ARGS)
 		if(WIN32)
 			set(FWD_ARGS %*)
@@ -134,11 +159,11 @@ macro(_launcher_process_args)
 	else()
 		set(FWD_ARGS)
 	endif()
-	
+
 	set(USERFILE_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
 	set(USERFILE_COMMAND_ARGUMENTS "${ARGS}")
 	set(LAUNCHERSCRIPT_COMMAND_ARGUMENTS "${ARGS} ${FWD_ARGS}")
-	
+
 	if(WIN32)
 		set(RUNTIME_LIBRARIES_ENVIRONMENT "PATH=${_runtime_lib_dirs};%PATH%")
 		file(READ
@@ -146,9 +171,11 @@ macro(_launcher_process_args)
 			_cmdenv)
 	else()
 		if(APPLE)
-			set(RUNTIME_LIBRARIES_ENVIRONMENT "DYLD_LIBRARY_PATH=${_runtime_lib_dirs}:$DYLD_LIBRARY_PATH")
+			set(RUNTIME_LIBRARIES_ENVIRONMENT
+				"DYLD_LIBRARY_PATH=${_runtime_lib_dirs}:$DYLD_LIBRARY_PATH")
 		else()
-			set(RUNTIME_LIBRARIES_ENVIRONMENT "LD_LIBRARY_PATH=${_runtime_lib_dirs}:$LD_LIBRARY_PATH")
+			set(RUNTIME_LIBRARIES_ENVIRONMENT
+				"LD_LIBRARY_PATH=${_runtime_lib_dirs}:$LD_LIBRARY_PATH")
 		endif()
 		file(READ
 			"${_launchermoddir}/launcher.env.sh.in"
@@ -159,7 +186,7 @@ macro(_launcher_process_args)
 	set(USERFILE_ENV_COMMANDS)
 	foreach(_arg "${RUNTIME_LIBRARIES_ENVIRONMENT}" ${ENVIRONMENT})
 		string(CONFIGURE
-			"@USERFILE_ENVIRONMENT@&#x0A;@_arg@"
+			"@USERFILE_ENVIRONMENT@@LAUNCHER_LINESEP@@_arg@"
 			USERFILE_ENVIRONMENT
 			@ONLY)
 		string(CONFIGURE
@@ -172,7 +199,7 @@ endmacro()
 macro(_launcher_produce_vcproj_user)
 	if(MSVC)
 		file(READ
-			"${_launchermoddir}/perconfig.vcproj.user.in"
+			"${_launchermoddir}/perconfig.${VCPROJ_TYPE}.user.in"
 			_perconfig)
 		set(USERFILE_CONFIGSECTIONS)
 		foreach(USERFILE_CONFIGNAME ${CMAKE_CONFIGURATION_TYPES})
@@ -190,8 +217,8 @@ macro(_launcher_produce_vcproj_user)
 		endforeach()
 
 
-		configure_file("${_launchermoddir}/vcproj.user.in"
-			${VCPROJNAME}.vcproj.${SYSTEM_NAME}.${USER_NAME}.user
+		configure_file("${_launchermoddir}/${VCPROJ_TYPE}.user.in"
+			${VCPROJNAME}.${VCPROJ_TYPE}.${USERFILE_EXTENSION}
 			@ONLY)
 	endif()
 
@@ -201,7 +228,12 @@ macro(_launcher_create_target_launcher)
 	if(CMAKE_CONFIGURATION_TYPES)
 		# Multi-config generator - multiple launchers
 		foreach(_config ${CMAKE_CONFIGURATION_TYPES})
-			set(USERFILE_COMMAND "${USERFILE_${_config}_COMMAND}")
+			get_target_property(USERFILE_${_config}_COMMAND
+				${_targetname}
+				LOCATION_${_config})
+			file(TO_NATIVE_PATH
+				"${USERFILE_${_config}_COMMAND}"
+				USERFILE_COMMAND)
 			configure_file("${_launchermoddir}/targetlauncher.${_suffix}.in"
 				"${CMAKE_CURRENT_BINARY_DIR}/launch-${_targetname}-${_config}.${_suffix}"
 				@ONLY)
@@ -223,32 +255,30 @@ endmacro()
 function(create_default_target_launcher _targetname)
 	_launcher_system_settings()
 	_launcher_process_args(${ARGN})
-	
+
 	set(VCPROJNAME "${CMAKE_BINARY_DIR}/ALL_BUILD")
 	_launcher_produce_vcproj_user()
-	
-	set(VCPROJNAME "${CMAKE_CURRENT_BINARY_DIR}/${_targetname}")
-	_launcher_produce_vcproj_user()
-	
-	_launcher_create_target_launcher()	
+
+	_launcher_create_target_launcher()
 endfunction()
 
 function(create_target_launcher _targetname)
 	_launcher_system_settings()
 	_launcher_process_args(${ARGN})
-	
+
 	set(VCPROJNAME "${CMAKE_CURRENT_BINARY_DIR}/${_targetname}")
 	_launcher_produce_vcproj_user()
-	
-	_launcher_create_target_launcher()	
+
+	_launcher_create_target_launcher()
 endfunction()
 
 function(create_generic_launcher _launchername)
 	_launcher_system_settings()
 	_launcher_process_args(${ARGN})
-	
+
 	if(NOT IS_ABSOLUTE _launchername)
-		set(_launchername "${CMAKE_CURRENT_BINARY_DIR}/${_launchername}.${_suffix}")
+		set(_launchername
+			"${CMAKE_CURRENT_BINARY_DIR}/${_launchername}.${_suffix}")
 	else()
 		set(_launchername "${_launchername}.${_suffix}")
 	endif()
@@ -258,9 +288,9 @@ function(create_generic_launcher _launchername)
 	else()
 		set(GENERIC_LAUNCHER_COMMAND sh "${_launchername}" PARENT_SCOPE)
 		set(GENERIC_LAUNCHER_FAIL_REGULAR_EXPRESSION
-		    "Program terminated with signal")
+			"Program terminated with signal")
 	endif()
-	
+
 	configure_file("${_launchermoddir}/genericlauncher.${_suffix}.in"
 		"${_launchername}"
 		@ONLY)

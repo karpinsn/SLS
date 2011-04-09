@@ -1,14 +1,14 @@
 #version 120
 
+uniform sampler2D phaseMap;
 uniform sampler2D normals;
-uniform sampler2D holoImage;
 
 varying vec3 v;
 
 void main()
 {
+	float phase = texture2D(phaseMap, gl_TexCoord[0].st).r;
 	vec3 Normal = normalize(gl_NormalMatrix * vec3(texture2D(normals, gl_TexCoord[0].st)));
-	vec3 holoFrag = vec3(texture2D(holoImage, gl_TexCoord[0].st));
 	vec3 L = normalize(gl_LightSource[0].position.xyz - v);
 	vec3 E = normalize(-v);
 	vec3 R = normalize(-reflect(L,Normal));
@@ -21,11 +21,10 @@ void main()
 	
 	//	Specular light
 	vec4 Ispec = gl_FrontLightProduct[0].specular * pow(max(dot(R,E),0.0), gl_FrontMaterial.shininess);
-	
-	//	Total color
-	if(holoFrag.r <= 0.0 && holoFrag.g <= 0.0)
+
+	if(0.0 == phase)
 	{
-		gl_FragColor = vec4(0.0,0.0,0.0,0.0);
+		gl_FragColor = vec4(0.0);
 	}
 	else
 	{

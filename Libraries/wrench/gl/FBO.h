@@ -14,15 +14,15 @@
 #define _WRENCH_GL_FBO_H_
 
 #ifdef __APPLE__
-	#include <glew.h>
-	#include <OpenGL/gl.h>
+#include <glew.h>
+#include <OpenGL/gl.h>
 #elif _WIN32
-	#include <windows.h>
-	#include <GL/glew.h>
-	#include <GL/gl.h>
+#include <windows.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
 #else
-	#include <GL/glew.h>
-	#include <GL/gl.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
 #endif
 
 #include "../Logger.h"
@@ -32,53 +32,56 @@
 #include "VBO.h"
 
 #ifdef USE_VRJ
-	#include <vrj/Draw/OGL/GlContextData.h>
+#include <vrj/Draw/OpenGL/ContextData.h>
 #endif
 
 namespace wrench 
 {
-	namespace gl
-	{
-		class FBO
-		{
-		private:
-			#ifdef USE_VRJ
-				vrj::GlContextData<GLuint> vrjFBOHandle;
-                                vrj::GlContextData<GLuint> vrjVAOHandle;
-                                vrj::GlContextData<GLuint[2]> vrjVBOHandle;
-				#define m_framebuffer   (*vrjFBOHandle)
-                                #define m_vaoID         (*vrjVAOHandle)
-                                #define m_vboID[2]      (*vrjVBOHandle)
-			#else
-				GLuint m_framebuffer;
-                                GLuint m_vaoID;
-                                GLuint m_vboID[2];
-			#endif
+  namespace gl
+  {
+    class FBO
+    {
+    private:
+#ifdef USE_VRJ
+      vrj::opengl::ContextData<GLuint> vrjFBOHandle;
+      vrj::opengl::ContextData<GLuint> vrjRBOHandle;
+      vrj::opengl::ContextData<GLuint> vrjVAOHandle;
+      vrj::opengl::ContextData<GLuint[2]> vrjVBOHandle;
+#define m_framebuffer   (*vrjFBOHandle)
+#define m_rbo           (*vrjRBOHandle)
+#define m_vaoID         (*vrjVAOHandle)
+#define m_vboID[2]      (*vrjVBOHandle)
+#else
+      GLuint m_framebuffer;
+      GLuint m_rbo;
+      GLuint m_vaoID;
+      GLuint m_vboID[2];
+#endif
 
-                        VAO m_screen;
-                        VBO m_vertex;
-                        VBO m_texCoords;
+      VAO m_screen;
+      VBO m_vertex;
+      VBO m_texCoords;
 
-                        int m_width;
-                        int m_height;
+      int m_width;
+      int m_height;
 
 		public:
-			FBO(void);
-			~FBO();
-			
-                        bool init(int width, int height);
-			
-			void bind(void);
-			void unbind(void);
-			void bindDrawBuffer(GLenum attachmentPoint);
-			void setTextureAttachPoint(const Texture &texture, GLenum attachmentPoint);	
-			void process(void);
-			
+      FBO(void);
+      ~FBO();
+
+      bool init(int width, int height);
+
+      void bind(void);
+      void unbind(void);
+      void bindDrawBuffer(GLenum attachmentPoint);
+      void setTextureAttachPoint(const Texture &texture, GLenum attachmentPoint);
+      void process(void);
+
 		private:
-			void _initFBO(void);
-			void _cacheQuad(void);
-		};
-	}
+      void _initFBO(void);
+      void _cacheQuad(void);
+    };
+  }
 }
 
 #endif	// _WRENCH_GL_FBO_H_

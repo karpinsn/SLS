@@ -28,7 +28,7 @@
 #include <string.h>
 
 #ifdef USE_VRJ
-	#include <vrj/Draw/OGL/GlContextData.h>
+    #include <vrj/Draw/OpenGL/ContextData.h>
 #endif
 
 class TriMesh : public AbstractMesh
@@ -44,8 +44,8 @@ private:
 	};
 	
 	#ifdef USE_VRJ
-		vrj::GlContextData<GLuint> vrjVBOHandle;
-		vrj::GlContextData<GLuint> vrjIBOHandle;
+        vrj::opengl::ContextData<GLuint> vrjVBOHandle;
+        vrj::opengl::ContextData<GLuint> vrjIBOHandle;
 	#define m_triMeshVBOID   (*vrjVBOHandle)
 	#define m_triMeshIBOID (*vrjIBOHandle)
 	#else

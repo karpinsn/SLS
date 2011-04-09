@@ -44,37 +44,29 @@ using namespace vrj;
 
 int main(int argc, char* argv[])
 {
-   // Allocate the kernel object and the application object
-   Kernel* kernel = Kernel::instance();           // Get the kernel
-   MainWindowController* application = new MainWindowController();          // Instantiate an instance of the app
-
-#if ! defined(VRJ_USE_COCOA)
-   // IF not args passed to the program
-   //    Display usage information and exit
+   #if ! defined(VRJ_USE_COCOA)
    if (argc <= 1)
    {
-      std::cout << "\n\n";
-      std::cout << "Usage: " << argv[0] << " vjconfigfile[0] vjconfigfile[1] ... vjconfigfile[n]" << std::endl;
-      exit(1);
+      std::cerr << "Missing command line options\n";
+      return EXIT_FAILURE;
    }
-#endif
+   #endif
+
+   vrj::Kernel* kernel = vrj::Kernel::instance();
+   MainWindowController application;          // Instantiate an instance of the app
+
+   // Initialize the kernel.
+   kernel->init(argc, argv);
 
    // Load any config files specified on the command line
-   for( int i = 1; i < argc; ++i )
+   for (int i = 1; i < argc; ++i)
    {
       kernel->loadConfigFile(argv[i]);
    }
 
-   // Start the kernel running
    kernel->start();
-
-   // Give the kernel an application to execute
-   kernel->setApplication(application);
-
-   // Keep thread alive and waiting
+   kernel->setApplication(&application);
    kernel->waitForKernelStop();
 
-   delete application;
-
-   return 0;
+   return EXIT_SUCCESS;
 }

@@ -11,7 +11,7 @@ void MultiWavelengthCapture::init()
   if(!m_hasBeenInit)
   {
     _initShaders();
-    _initTextures(576, 576);
+    _initTextures(1280, 720);
 
     m_axis.init();
 
@@ -19,7 +19,7 @@ void MultiWavelengthCapture::init()
     m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
     m_camera.setMode(1);
 
-    m_mesh = new TriMesh(512, 512);
+    m_mesh = new TriMesh(1280, 720);
 
     m_mesh->initMesh();
     m_hasBeenInit = true;
@@ -48,8 +48,8 @@ void MultiWavelengthCapture::_initShaders(void)
 
   m_phaseFilter.link();
   m_phaseFilter.uniform("image", 0);
-  m_phaseFilter.uniform("width", 576.0f);
-  m_phaseFilter.uniform("height", 576.0f);
+  m_phaseFilter.uniform("width", 1280.0f);
+  m_phaseFilter.uniform("height", 720.0f);
 
   m_normalCalculator.init();
   m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NormalCalculator.vert"));
@@ -59,8 +59,8 @@ void MultiWavelengthCapture::_initShaders(void)
 
   m_normalCalculator.link();
   m_normalCalculator.uniform("phaseA", 0);
-  m_normalCalculator.uniform("width", 576.0f);
-  m_normalCalculator.uniform("height", 576.0f);
+  m_normalCalculator.uniform("width", 1280.0f);
+  m_normalCalculator.uniform("height", 720.0f);
 
   m_finalRender.init();
   m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/FinalRender.vert"));
@@ -77,9 +77,6 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
 {
   Logger::logDebug("MultiWavelengthCapture - initTextures(): Creating textures for phase map and normal map");
 
-  m_imageProcessor.init(width, height);
-  m_imageProcessor.unbind();
-
   m_phaseMap0AttachPoint      = GL_COLOR_ATTACHMENT0_EXT;
   m_phaseMap1AttachPoint      = GL_COLOR_ATTACHMENT1_EXT;
   m_normalMapAttachPoint      = GL_COLOR_ATTACHMENT2_EXT;
@@ -94,10 +91,12 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
   m_normalMap.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
   m_referencePhase.init   (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
 
+  m_imageProcessor.init(width, height);
   m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_phaseMap1, m_phaseMap1AttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
+  m_imageProcessor.unbind();
 
   OGLStatus::logOGLErrors("MultiWavelengthCapture - initTextures()");
 }
@@ -220,23 +219,23 @@ void MultiWavelengthCapture::loadTestData(void)
   if(m_haveReferencePhase)
   {
     //  Load the test data
-    const string path("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/");
+    const string path("/home/karpinsn/Desktop/DeereParticleTrack/4-21-2011/Cotton/");
 
     ImageIO io;
 
-    m_fringeImage1.transferToTexture(io.readImage(path + "fringe1.png"));
-    m_fringeImage2.transferToTexture(io.readImage(path + "fringe2.png"));
-    m_fringeImage3.transferToTexture(io.readImage(path + "fringe3.png"));
+    m_fringeImage1.transferToTexture(io.readImage(path + "1.png"));
+    m_fringeImage2.transferToTexture(io.readImage(path + "2.png"));
+    m_fringeImage3.transferToTexture(io.readImage(path + "3.png"));
   }
   else
   {
     //  Load the test data
-    const string path("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/");
+    const string path("/home/karpinsn/Desktop/DeereParticleTrack/4-21-2011/Cotton/Reference/");
 
     ImageIO io;
 
-    m_fringeImage1.transferToTexture(io.readImage(path + "Reference1.png"));
-    m_fringeImage2.transferToTexture(io.readImage(path + "Reference2.png"));
-    m_fringeImage3.transferToTexture(io.readImage(path + "Reference3.png"));
+    m_fringeImage1.transferToTexture(io.readImage(path + "1.png"));
+    m_fringeImage2.transferToTexture(io.readImage(path + "2.png"));
+    m_fringeImage3.transferToTexture(io.readImage(path + "3.png"));
   }
 }

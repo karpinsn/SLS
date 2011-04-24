@@ -49,13 +49,13 @@ namespace wrench
       vrj::opengl::ContextData<GLuint[2]> vrjVBOHandle;
 #define m_framebuffer   (*vrjFBOHandle)
 #define m_rbo           (*vrjRBOHandle)
-#define m_vaoID         (*vrjVAOHandle)
-#define m_vboID[2]      (*vrjVBOHandle)
+#define m_vaoId         (*vrjVAOHandle)
+#define m_vboId         (*vrjVBOHandle)
 #else
       GLuint m_framebuffer;
       GLuint m_rbo;
-      GLuint m_vaoID;
-      GLuint m_vboID[2];
+      GLuint m_vaoId;
+      GLuint m_vboId[2];
 #endif
 
       VAO m_screen;

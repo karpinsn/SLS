@@ -82,9 +82,15 @@ void Holoencoder::draw(void)
 
       //	Draw the currentMesh
       glm::mat4 projectorModelView = m_projectorModelView;
+      glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f),
+                                         glm::vec3(4.8f));
+      glm::mat4 translate = glm::translate(glm::mat4(1.0), glm::vec3(-.1, -.2, .1));
 
       m_controller.applyTransform();
-      projectorModelView = projectorModelView * m_controller.getTransform();
+      projectorModelView = projectorModelView * m_controller.getTransform() * scaleMatrix * translate;
+
+      glScalef(4.8, 4.8, 4.8);
+      glTranslatef(-.1, -.2, .1);
 
       m_encoderShader.bind();
       m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(projectorModelView));

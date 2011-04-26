@@ -1,14 +1,9 @@
-#include "MainWindowController.h"
+    #include "MainWindowController.h"
 
 MainWindowController::MainWindowController()
 {
 	m_mainWindow = new MainWindowView(0);
 	m_mainWindow->connectSignalsWithController(this);
-
-        //  Since we start in view give it the Holodecoder
-        Holodecoder *decoder = new Holodecoder();
-        m_mainWindow->glWidget->m_holoDecoder = decoder;
-        m_mainWindow->glWidget->m_glContext = decoder;
 }
 
 MainWindowController::~MainWindowController()
@@ -17,21 +12,14 @@ MainWindowController::~MainWindowController()
 
 void MainWindowController::showWidget()
 {
-	m_mainWindow->show();
+  m_mainWindow->mainView->setCurrentWidget(m_mainWindow->viewController);
+  m_mainWindow->show();
 }
 
 void MainWindowController::exportSingleFrame()
 {
 	Logger::logDebug("MainWindowController - exportSingleFrame: Enter");
-	
-	QString fileName = QFileDialog::getSaveFileName(m_mainWindow, "Save File", "/", "Images (*.png)");
-	
-	if(!fileName.isEmpty())
-	{
-		ImageIO io;
-		Texture holoimage = m_mainWindow->m_holoEncoder->encode();
-		io.saveTexture(fileName.toAscii().constData(), holoimage);
-	}
+    m_mainWindow->encodeController->exportCurrentFrame();
 }
 
 void MainWindowController::exportEntireVideo()
@@ -102,12 +90,7 @@ void MainWindowController::onOpenXYZM()
 void MainWindowController::selectXYZM(QListWidgetItem* current, QListWidgetItem* previous)
 {
 	Logger::logDebug("MainWindowController - selectXYZM: Enter");
-
-	//	Display the new XYZM file	
-	XYZFileIO fileIO;
-	AbstractMesh* currentMesh = fileIO.newMeshFromFile(current->text().toAscii().constData());
-        m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
-        m_mainWindow->glWidget->updateScene();
+    m_mainWindow->encodeController->selectXYZM(current->text().toAscii().constData());
 }
 
 void MainWindowController::playVideo(void)
@@ -116,54 +99,46 @@ void MainWindowController::playVideo(void)
 		
 	if(!file.isEmpty())
 	{
-                //m_mainWindow->glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
-                m_mainWindow->glWidget->playMovie(file.toStdString());
+      m_mainWindow->viewController->playMovie(file.toStdString());
 	}
 }
 
 void MainWindowController::openHoloImage(void)
 {
-	QString file = QFileDialog::getOpenFileName(m_mainWindow, "Select Holoimage to Open", "/", "Images (*.png *.jpg)");
-	
-	if(!file.isEmpty())
-	{
-                //m_mainWindow->glWidget->setNewGLContext(m_mainWindow->m_holoDecoder);
-                m_mainWindow->glWidget->openHoloImage(file.toStdString());
-	}
+  m_mainWindow->viewController->openHoloImage();
 }
 
 void MainWindowController::toolSelect(int tool)
 {
-    m_mainWindow->glWidget->cameraSelectMode(tool);
+    //m_mainWindow->glWidget->cameraSelectMode(tool);
 }
 
 void MainWindowController::viewMode(void)
 {
-    //  Ensure that the file list is hidden
-    m_mainWindow->hideFileList();
-    Holodecoder *decoder = new Holodecoder();
-    m_mainWindow->glWidget->m_holoDecoder = decoder;
-    m_mainWindow->glWidget->setNewGLContext(decoder);
+  //  Ensure that the file list is hidden
+  m_mainWindow->mainView->setCurrentWidget(m_mainWindow->viewController);
 }
 
 void MainWindowController::encodeMode(void)
 {
-    //  Show the file list
-    m_mainWindow->showFileList();
-    Holoencoder *encoder = new Holoencoder();
-    m_mainWindow->m_holoEncoder = encoder;
-    m_mainWindow->glWidget->setNewGLContext(encoder);
+  //  Show the file list
+  //m_mainWindow->showFileList();
+
+  m_mainWindow->mainView->setCurrentWidget(m_mainWindow->encodeController);
 }
 
 void MainWindowController::captureMode(void)
 {
-    //  Ensure that the file list is hidden
-    m_mainWindow->hideFileList();
-    MultiWavelengthCapture *capture = new MultiWavelengthCapture();
-    m_mainWindow->glWidget->setNewGLContext(capture);
-    capture->loadTestData();
-    m_mainWindow->glWidget->updateGL();
-    capture->loadTestData();
-    m_mainWindow->glWidget->updateGL();
+  m_mainWindow->mainView->setCurrentWidget(m_mainWindow->captureController);
 
+  /*
+    //  Ensure that the file list is hidden
+    //m_mainWindow->hideFileList();
+    MultiWavelengthCapture *capture = new MultiWavelengthCapture();
+    //m_mainWindow->glWidget->setNewGLContext(capture);
+    capture->loadTestData();
+    //m_mainWindow->glWidget->updateGL();
+    capture->loadTestData();
+    //m_mainWindow->glWidget->updateGL();
+    */
 }

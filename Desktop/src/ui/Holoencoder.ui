@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>601</width>
-    <height>595</height>
+    <width>535</width>
+    <height>636</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -37,39 +37,170 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <widget class="OpenGLWidget" name="glWidget" native="true">
+     <widget class="QStackedWidget" name="mainView">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="minimumSize">
-       <size>
-        <width>512</width>
-        <height>512</height>
-       </size>
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <property name="maximumSize">
-       <size>
-        <width>512</width>
-        <height>512</height>
-       </size>
-      </property>
+      <widget class="ViewController" name="viewController">
+       <widget class="OpenGLWidget" name="viewGLWidget" native="true">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>512</width>
+          <height>512</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>512</width>
+          <height>512</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>512</width>
+          <height>512</height>
+         </size>
+        </property>
+       </widget>
+      </widget>
+      <widget class="EncoderController" name="encodeController">
+       <widget class="OpenGLWidget" name="encoderGLWidget" native="true">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>512</width>
+          <height>512</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>512</width>
+          <height>512</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>512</width>
+          <height>512</height>
+         </size>
+        </property>
+       </widget>
+      </widget>
+      <widget class="CaptureController" name="captureController">
+       <widget class="QTabWidget" name="tabWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>521</width>
+          <height>551</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::NoContextMenu</enum>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="threeDTab">
+         <attribute name="title">
+          <string>3D</string>
+         </attribute>
+         <widget class="OpenGLWidget" name="captureGLWidget" native="true">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>512</width>
+            <height>512</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>512</width>
+            <height>512</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>512</width>
+            <height>512</height>
+           </size>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="cameraTab">
+         <attribute name="title">
+          <string>Camera</string>
+         </attribute>
+         <widget class="OpenGLWidget" name="cameraGLWidget" native="true">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>512</width>
+            <height>512</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>512</width>
+            <height>512</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>512</width>
+            <height>512</height>
+           </size>
+          </property>
+         </widget>
+        </widget>
+       </widget>
+      </widget>
      </widget>
-    </item>
-    <item>
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
     </item>
     <item>
      <widget class="QListWidget" name="fileList">
@@ -112,7 +243,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>601</width>
+     <width>535</width>
      <height>25</height>
     </rect>
    </property>
@@ -157,26 +288,7 @@
    <addaction name="actionRotate"/>
    <addaction name="actionZoom"/>
    <addaction name="actionPan"/>
-  </widget>
-  <widget class="QToolBar" name="toolBar_2">
-   <property name="windowTitle">
-    <string>modeBar</string>
-   </property>
-   <property name="movable">
-    <bool>false</bool>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::LeftToolBarArea</set>
-   </property>
-   <property name="floatable">
-    <bool>false</bool>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
+   <addaction name="separator"/>
    <addaction name="modeView"/>
    <addaction name="modeEncode"/>
    <addaction name="modeCapture"/>
@@ -296,6 +408,24 @@
    <class>OpenGLWidget</class>
    <extends>QWidget</extends>
    <header>OpenGLWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ViewController</class>
+   <extends>QWidget</extends>
+   <header>ViewController.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EncoderController</class>
+   <extends>QWidget</extends>
+   <header>EncoderController.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CaptureController</class>
+   <extends>QWidget</extends>
+   <header>CaptureController.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

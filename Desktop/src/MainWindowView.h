@@ -37,31 +37,30 @@ using namespace wrench;
 
 class MainWindowView : public QMainWindow, private Ui::MainWindow
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	friend class MainWindowController;
+  friend class MainWindowController;
 public:
-	MainWindowView(QMainWindow* parent);
-	~MainWindowView();
-	
-	void glInit(void);
-	
-	// Connect up the signals with the controller
-	void connectSignalsWithController(QObject* controller);
+  MainWindowView(QMainWindow* parent);
+  ~MainWindowView();
 
-        void showFileList(void);
-        void hideFileList(void);
-	
+  // Connect up the signals with the controller
+  void connectSignalsWithController(QObject* controller);
+
+  void showFileList(void);
+  void hideFileList(void);
+
 private:
-	Holoencoder* m_holoEncoder;
-	Holodecoder* m_holoDecoder;
-	
-        // Used to animate the GUI
-        QAnimationGroup *animationGroup;
-        QPropertyAnimation *fileListAnimation;
-        QPropertyAnimation *mainWindowAnimation;
+  Holoencoder* m_holoEncoder;
+  Holodecoder* m_holoDecoder;
+
+  // Used to animate the GUI
+  QAnimationGroup *animationGroup;
+  QPropertyAnimation *fileListAnimation;
+  QPropertyAnimation *mainWindowAnimation;
 private:
-	void _initTopMenu(void);
+  void _initTopMenu(void);
+  void _initControllers(void);
 };
 
 #endif	// _MAIN_WINDOW_VIEW_H_

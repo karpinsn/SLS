@@ -216,6 +216,7 @@ void MultiWavelengthCapture::swapBuffers(void)
 
 void MultiWavelengthCapture::loadTestData(void)
 {
+  /*
   if(m_haveReferencePhase)
   {
     //  Load the test data
@@ -238,4 +239,5 @@ void MultiWavelengthCapture::loadTestData(void)
     m_fringeImage2.transferToTexture(io.readImage(path + "2.png"));
     m_fringeImage3.transferToTexture(io.readImage(path + "3.png"));
   }
+  */
 }

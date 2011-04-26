@@ -12,15 +12,15 @@
 #define _OPEN_GL_WIDGET_H_
 
 #ifdef __APPLE__
-	#include <glew.h>
-	#include <QtOpenGL/QGLWidget>
+#include <glew.h>
+#include <QtOpenGL/QGLWidget>
 #elif _WIN32
-	#include <windows.h>
-	#include <GL/glew.h>
-	#include <QtOpenGL/QGLWidget>
+#include <windows.h>
+#include <GL/glew.h>
+#include <QtOpenGL/QGLWidget>
 #else
-	#include <GL/glew.h>
-	#include <QtOpenGL/QGLWidget>
+#include <GL/glew.h>
+#include <QtOpenGL/QGLWidget>
 #endif
 
 #include <QtCore/QTimer>
@@ -36,38 +36,30 @@ class Holodecoder;
 
 class OpenGLWidget : public QGLWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 private:
-        QColor					m_clearColor;
-	
-	QTime movieTimer;
-	ImageIO m_aviIO;	
-	string					m_movieFilename;
-	
+  QColor					m_clearColor;
+
 public:
-        OpenGLWidget(QWidget *parent);
-	OpenGLWidget(QWidget* parent, AbstractGLContext* glContext, QColor clearColor);
-        virtual ~OpenGLWidget();
+  OpenGLWidget(QWidget *parent);
+  OpenGLWidget(QWidget* parent, AbstractGLContext* glContext, QColor clearColor);
+  virtual ~OpenGLWidget();
 
-	void updateScene();
-	void setNewGLContext(AbstractGLContext* glContext);
+  void initializeGL();
+  void updateScene();
+  void setGLContext(AbstractGLContext* glContext);
+  void cameraSelectMode(int mode);
 
-        void openHoloImage(string filename);
-        void playMovie(string movieFile);
-	void cameraSelectMode(int mode);
-	
-        AbstractGLContext		*m_glContext;
-        Holodecoder* m_holoDecoder;
-	
+  AbstractGLContext*    m_glContext;
+  Holodecoder*          m_holoDecoder;
+
 protected:
-	void initializeGL();
-	void paintGL();
-	void resizeGL(int width, int height);
-	void mousePressEvent(QMouseEvent *event);
-	void mouseMoveEvent(QMouseEvent *event);
-	void mouseReleaseEvent(QMouseEvent* event);
-	void timerEvent(QTimerEvent* event);
+  void paintGL();
+  void resizeGL(int width, int height);
+  void mousePressEvent(QMouseEvent *event);
+  void mouseMoveEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent* event);
 };
 
 #endif	// _OPEN_GL_WIDGET_H_

@@ -82,6 +82,10 @@ set(SOURCES
     XYZFileIO.cpp
 	XYZMesh.cpp
 	MultiWavelengthCapture.cpp
+	CaptureController.cpp
+    Camera.cpp
+    ViewController.cpp
+    EncoderController.cpp
 
     ../../Common/src/ImageIO.cpp
 	../../Common/src/PointCloudMesh.cpp		
@@ -95,6 +99,10 @@ set(SOURCES
 	XYZFileIO.h
 	XYZMesh.h
 	MultiWavelengthCapture.h
+	CaptureController.h
+    Camera.h
+    ViewController.h
+    EncoderController.h
 
     ../../Common/src/ImageIO.h
 	../../Common/src/XYZPoint.h
@@ -107,7 +115,7 @@ set(SOURCES
 	
 # QT Files
 set(UIS ui/Holoencoder.ui)	
-set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h)
+set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h CaptureController.h ViewController.h EncoderController.h)
 set(RESOURCES ui/Holoencoder.qrc)
 
 #	---------------------------------------------------------------------------------------

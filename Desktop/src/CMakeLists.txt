@@ -83,9 +83,11 @@ set(SOURCES
 	XYZMesh.cpp
 	MultiWavelengthCapture.cpp
 	CaptureController.cpp
-    Camera.cpp
+    CameraCapture.cpp
     ViewController.cpp
     EncoderController.cpp
+    CameraGLContext.cpp
+    ImageBuffer.cpp
 
     ../../Common/src/ImageIO.cpp
 	../../Common/src/PointCloudMesh.cpp		
@@ -100,9 +102,11 @@ set(SOURCES
 	XYZMesh.h
 	MultiWavelengthCapture.h
 	CaptureController.h
-    Camera.h
+    CameraCapture.h
     ViewController.h
     EncoderController.h
+    CameraGLContext.h
+    ImageBuffer.h
 
     ../../Common/src/ImageIO.h
 	../../Common/src/XYZPoint.h

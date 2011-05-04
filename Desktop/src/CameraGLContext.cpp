@@ -44,6 +44,7 @@ void CameraGLContext::draw(void)
 
   glPushMatrix();
   {
+	  OGLStatus::logOGLErrors("CameraGLContext - draw()");
     m_textureDisplay.bind();
     {
       m_textureBuffer[m_frontBufferIndex]->bind(GL_TEXTURE0);

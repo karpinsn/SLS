@@ -4,6 +4,7 @@ MultiWavelengthCapture::MultiWavelengthCapture(void)
 {
   m_hasBeenInit = false;
   m_haveReferencePhase = false;
+  m_currentFringeLoad = 0;
 }
 
 void MultiWavelengthCapture::init()
@@ -196,11 +197,16 @@ void MultiWavelengthCapture::mouseMoveEvent(int mouseX, int mouseY)
   m_camera.mouseMotion(mouseX, mouseY);
 }
 
-void MultiWavelengthCapture::setBackBuffer(IplImage* image)
+void MultiWavelengthCapture::newImage(IplImage* image)
 {
   //int backBufferIndex = (m_frontBufferIndex + 1) % 2;
   //m_holoImages[backBufferIndex]->transferToTexture(image);
 
+	if(m_currentFringeLoad == 9)
+	{
+		m_currentFringeLoad = 0;
+		swapBuffers();
+	}
   //	Make sure we dont have any errors
   OGLStatus::logOGLErrors("Holodecoder - setBackHoloBuffer()");
 }

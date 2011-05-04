@@ -1,4 +1,4 @@
-#version 330    // This is needed for the round operator
+#version 130    // This is needed for the round operator
 
 // uniform mat4 projectionMatrix;
 // uniform mat4 modelViewMatrix;

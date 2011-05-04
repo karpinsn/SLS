@@ -15,6 +15,11 @@ void ViewController::init(void)
   glWidget->m_holoDecoder = &m_decoder;
 }
 
+void ViewController::cameraSelectMode(int mode)
+{
+  m_decoder.cameraSelectMode(mode);
+}
+
 void ViewController::openHoloImage(void)
 {
   QString file = QFileDialog::getOpenFileName(this, "Select Holoimage to Open", "/", "Images (*.png *.jpg)");
@@ -84,8 +89,6 @@ void ViewController::timerEvent(QTimerEvent* event)
 
 void ViewController::_updateGL(void)
 {
-  Logger::logDebug("ViewController - _updateGL: Enter");
-
   OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("viewGLWidget"));
 
   if(NULL != glContext)

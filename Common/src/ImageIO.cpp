@@ -102,7 +102,7 @@ bool ImageIO::saveAviFile(const string &filename, const unsigned int videoWidth,
 	
 	if(!m_videoWriterInUse)
 	{
-		m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), 0, fps, cvSize(videoWidth, videoHeight), 1);
+        m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), 0, fps, cvSize(videoWidth, videoHeight), 1);
 		m_videoWriterInUse = true;
 		
 		openedVideoWriter = m_videoWriterInUse;
@@ -188,14 +188,14 @@ IplImage* ImageIO::readAviFileFrame()
 	if(m_videoReaderInUse)
 	{
 		frame = cvQueryFrame(m_videoReaderHandle);
-		cvCvtColor(frame, frame, CV_BGR2RGB);
+        cvCvtColor(frame, frame, CV_BGR2RGB);
 	}
 	else 
 	{
 		clog << "Unable to read frame as no current video reader handle exists" << endl;
 	}
 
-	return frame;
+    return frame;
 }
 
 bool ImageIO::readAviFileFinish(void)

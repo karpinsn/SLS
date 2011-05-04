@@ -6,7 +6,7 @@ CameraCapture::CameraCapture() : QThread()
 
 void CameraCapture::init(ImageBuffer *buffer)
 {
-  m_capture = cvCaptureFromCAM(-1);
+  m_capture = cvCaptureFromCAM(CV_CAP_ANY);
   m_paused = false;
   m_buffer = buffer;
 }

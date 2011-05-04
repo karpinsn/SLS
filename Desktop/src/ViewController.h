@@ -31,6 +31,7 @@ public:
 
 
   void init(void);
+  void cameraSelectMode(int mode);
   void playMovie(string movieFile);
   void openHoloImage(void);
 

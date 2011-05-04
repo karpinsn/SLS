@@ -29,7 +29,7 @@ public:
   ~EncoderController();
 
   void exportCurrentFrame(void);
-  void exportEntireVideo(void);
+  void exportEntireVideo(QListWidget* fileList);
   void selectXYZM(const string &filename);
 
   void init(void);

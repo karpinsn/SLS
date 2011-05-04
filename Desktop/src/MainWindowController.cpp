@@ -24,44 +24,7 @@ void MainWindowController::exportSingleFrame()
 
 void MainWindowController::exportEntireVideo()
 {
-	Logger::logDebug("MainWindowController - exportEntireVideo: Enter");
-	
-	QString fileName = QFileDialog::getSaveFileName(m_mainWindow, "Save File", "/", "Video (*.avi)");
-	
-	if(!fileName.isEmpty())
-	{
-		ImageIO io;
-		bool canSaveFile = io.saveAviFile(fileName.toAscii().constData(), 512, 512, 30);
-		
-		if(canSaveFile)
-		{
-			XYZFileIO fileIO;
-			
-			//	Inform the user of the progress
-			QProgressDialog progress("Encoding frames...", 0, 0, m_mainWindow->fileList->count(), m_mainWindow);
-			
-			Logger::logDebug("MainWindowController - exportEntireVideo: Encoding frames");
-			for(int itemNumber = 0; itemNumber < m_mainWindow->fileList->count(); itemNumber++)
-			{
-				//	Increase the progress
-				progress.setValue(itemNumber);
-				
-				QListWidgetItem *item = m_mainWindow->fileList->item(itemNumber);
-				
-				AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toAscii().constData());
-				m_mainWindow->m_holoEncoder->setCurrentMesh(currentMesh);
-				
-				Texture holoimage = m_mainWindow->m_holoEncoder->encode();
-				io.saveAviFileWriteFrame(holoimage);
-			}
-			
-			//	Last one done!
-			progress.setValue(m_mainWindow->fileList->count());
-			
-			Logger::logDebug("MainWindowController - exportEntireVideo: Encoding complete!");
-			io.saveAviFileFinish();
-		}
-	}
+    m_mainWindow->encodeController->exportEntireVideo(m_mainWindow->fileList);
 }
 
 void MainWindowController::onOpenXYZM()
@@ -110,7 +73,7 @@ void MainWindowController::openHoloImage(void)
 
 void MainWindowController::toolSelect(int tool)
 {
-    //m_mainWindow->glWidget->cameraSelectMode(tool);
+    m_mainWindow->viewController->cameraSelectMode(tool);
 }
 
 void MainWindowController::viewMode(void)

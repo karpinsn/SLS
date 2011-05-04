@@ -50,12 +50,16 @@ int CameraCapture::pause()
   m_pauseMutex.lock();
   m_paused = true;
   m_pauseMutex.unlock();
+
+	return 0;
 }
 
 int CameraCapture::resume()
 {
   m_paused = false;
   m_pauseCondition.wakeAll();
+
+  return 0;
 }
 
 int CameraCapture::getWidth()

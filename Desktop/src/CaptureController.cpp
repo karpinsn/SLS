@@ -13,8 +13,8 @@ void CaptureController::showEvent(QShowEvent *event)
 {
   m_camera.start();
 
-  m_glCameraContext.setBackBuffer(m_buffer.popFrame());
-  m_glCameraContext.swapBuffers();
+  //m_glCameraContext.setBackBuffer(m_buffer.popFrame());
+  //m_glCameraContext.swapBuffers();
   m_cameraTimer.start();
   startTimer(0);
 
@@ -36,9 +36,15 @@ void CaptureController::init(void)
 void CaptureController::timerEvent(QTimerEvent* event)
 {
   m_cameraTimer.restart();
+ 
   IplImage* image = m_buffer.popFrame();
-  m_glCameraContext.setBackBuffer(image);
-  m_glCameraContext.swapBuffers();
+  
+  IplImage *im_gray = cvCreateImage(cvGetSize(image),IPL_DEPTH_8U,1);
+  cvCvtColor(image,im_gray,CV_RGB2GRAY);
+  
+  m_gl3DContext.newImage(im_gray);
+  
+  cvReleaseImage(&im_gray);
   cvReleaseImage(&image);
   _updateGL();
 }

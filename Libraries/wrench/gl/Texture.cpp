@@ -210,6 +210,8 @@ bool wrench::gl::Texture::transferChannelToTexture(const IplImage* image, int ch
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
     glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
   }
+
+  return false;
 }
 
 void wrench::gl::Texture::_transferFloatData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep)

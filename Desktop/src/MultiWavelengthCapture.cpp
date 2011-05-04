@@ -14,7 +14,7 @@ void MultiWavelengthCapture::init()
   if(!m_hasBeenInit)
   {
     _initShaders();
-    _initTextures(1280, 720);
+    _initTextures(640, 480);
 
     m_axis.init();
 
@@ -22,7 +22,7 @@ void MultiWavelengthCapture::init()
     m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
     m_camera.setMode(1);
 
-    m_mesh = new TriMesh(1280, 720);
+    m_mesh = new TriMesh(640, 480);
 
     m_mesh->initMesh();
     m_hasBeenInit = true;
@@ -51,8 +51,8 @@ void MultiWavelengthCapture::_initShaders(void)
 
   m_phaseFilter.link();
   m_phaseFilter.uniform("image", 0);
-  m_phaseFilter.uniform("width", 1280.0f);
-  m_phaseFilter.uniform("height", 720.0f);
+  m_phaseFilter.uniform("width", 640.0f);
+  m_phaseFilter.uniform("height", 480.0f);
 
   m_normalCalculator.init();
   m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NormalCalculator.vert"));
@@ -62,8 +62,8 @@ void MultiWavelengthCapture::_initShaders(void)
 
   m_normalCalculator.link();
   m_normalCalculator.uniform("phaseA", 0);
-  m_normalCalculator.uniform("width", 1280.0f);
-  m_normalCalculator.uniform("height", 720.0f);
+  m_normalCalculator.uniform("width", 640.0f);
+  m_normalCalculator.uniform("height", 480.0f);
 
   m_finalRender.init();
   m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/FinalRender.vert"));

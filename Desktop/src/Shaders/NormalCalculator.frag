@@ -1,4 +1,4 @@
-#version 330
+#version 130
 
 uniform sampler2D phaseA;
 uniform float width;

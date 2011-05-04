@@ -63,9 +63,14 @@ private:
   GLenum m_normalMapAttachPoint;
   GLenum m_referencePhaseAttachPoint;
 
-  Texture m_fringeImage1;
+  Texture* m_fringeImages[2][3];  // Buffer and Images
+  Texture m_fringeImage1; //  Fringe images for the front buffer
   Texture m_fringeImage2;
   Texture m_fringeImage3;
+
+  Texture m_fringeImage4; //  Fringe images for the back buffer
+  Texture m_fringeImage5;
+  Texture m_fringeImage6;
 
   Texture m_referencePhase;
   Texture m_phaseMap0;
@@ -82,6 +87,7 @@ private:
   bool haveFringeImages;
   bool m_haveReferencePhase;
   int m_currentFringeLoad;
+  int m_currentChannelLoad;
 
   bool m_hasBeenInit;
 

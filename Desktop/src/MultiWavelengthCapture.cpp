@@ -5,6 +5,8 @@ MultiWavelengthCapture::MultiWavelengthCapture(void)
   m_hasBeenInit = false;
   m_haveReferencePhase = false;
   m_currentFringeLoad = 0;
+  m_currentChannelLoad = 0;
+  m_frontBufferIndex = 0;
 }
 
 void MultiWavelengthCapture::init()
@@ -86,6 +88,16 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
   m_fringeImage1.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
   m_fringeImage2.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
   m_fringeImage3.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+  m_fringeImage4.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+  m_fringeImage5.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+  m_fringeImage6.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+
+  m_fringeImages[0][0] = &m_fringeImage1;
+  m_fringeImages[0][1] = &m_fringeImage2;
+  m_fringeImages[0][2] = &m_fringeImage3;
+  m_fringeImages[1][0] = &m_fringeImage4;
+  m_fringeImages[1][1] = &m_fringeImage5;
+  m_fringeImages[1][2] = &m_fringeImage6;
 
   m_phaseMap0.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
   m_phaseMap1.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
@@ -199,14 +211,18 @@ void MultiWavelengthCapture::mouseMoveEvent(int mouseX, int mouseY)
 
 void MultiWavelengthCapture::newImage(IplImage* image)
 {
-  //int backBufferIndex = (m_frontBufferIndex + 1) % 2;
-  //m_holoImages[backBufferIndex]->transferToTexture(image);
+  m_fringeImages[(m_frontBufferIndex + 1) % 2][m_currentFringeLoad]->transferChannelToTexture(image, m_currentChannelLoad);
 
-	if(m_currentFringeLoad == 9)
-	{
-		m_currentFringeLoad = 0;
-		swapBuffers();
-	}
+  m_currentChannelLoad++;
+  m_currentFringeLoad++;
+
+  if(m_currentFringeLoad == 3)
+  {
+    m_currentChannelLoad = 0;
+    m_currentFringeLoad = 0;
+    swapBuffers();
+  }
+
   //	Make sure we dont have any errors
   OGLStatus::logOGLErrors("Holodecoder - setBackHoloBuffer()");
 }

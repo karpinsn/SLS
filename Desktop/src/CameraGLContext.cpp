@@ -76,11 +76,11 @@ void CameraGLContext::mouseMoveEvent(int mouseX, int mouseY)
 
 }
 
-void CameraGLContext::setBackBuffer(IplImage* image)
+void CameraGLContext::newImage(IplImage* image)
 {
     int backBufferIndex = (m_frontBufferIndex + 1) % 2;
     m_textureBuffer[backBufferIndex]->transferToTexture(image);
-
+    swapBuffers();
     //	Make sure we dont have any errors
     OGLStatus::logOGLErrors("CameraGLContext - setBackBuffer()");
 }

@@ -63,7 +63,7 @@ public:
   virtual void mousePressEvent(int mouseX, int mouseY);
   virtual void mouseMoveEvent(int mouseX, int mouseY);
 
-  void setBackBuffer(IplImage* image);
+  void newImage(IplImage* image);
   void swapBuffers(void);
 private:
   void _initShaders(void);

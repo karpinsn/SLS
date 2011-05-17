@@ -51,7 +51,8 @@ void CaptureController::timerEvent(QTimerEvent* event)
 
 void CaptureController::_updateGL(void)
 {
-  OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("cameraGLWidget"));
+  //OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("cameraGLWidget"));
+  OpenGLWidget *glContext = findChild<OpenGLWidget*>(QString::fromUtf8("captureGLWidget"));
 
   if(NULL != glContext)
   {

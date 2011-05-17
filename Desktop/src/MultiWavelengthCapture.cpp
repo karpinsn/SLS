@@ -220,7 +220,8 @@ void MultiWavelengthCapture::newImage(IplImage* image)
 
   if(m_currentChannelLoad == 3)
   {
-    m_fringeImages[(m_frontBufferIndex + 1) % 2][m_currentFringeLoad]->transferToTexture(m_fringeLoadingImage);
+    int backBufferIndex = (m_frontBufferIndex + 1) % 2;
+    m_fringeImages[backBufferIndex][m_currentFringeLoad]->transferToTexture(m_fringeLoadingImage);
     m_currentChannelLoad = 0;
     m_currentFringeLoad++;
   }

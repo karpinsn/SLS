@@ -63,6 +63,7 @@ private:
   GLenum m_normalMapAttachPoint;
   GLenum m_referencePhaseAttachPoint;
 
+  IplImage *m_fringeLoadingImage;
   Texture* m_fringeImages[2][3];  // Buffer and Images
   Texture m_fringeImage1; //  Fringe images for the front buffer
   Texture m_fringeImage2;

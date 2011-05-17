@@ -7,6 +7,7 @@ MultiWavelengthCapture::MultiWavelengthCapture(void)
   m_currentFringeLoad = 0;
   m_currentChannelLoad = 0;
   m_frontBufferIndex = 0;
+  m_fringeLoadingImage = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 3);
 }
 
 void MultiWavelengthCapture::init()
@@ -85,12 +86,12 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
   m_normalMapAttachPoint      = GL_COLOR_ATTACHMENT2_EXT;
   m_referencePhaseAttachPoint = GL_COLOR_ATTACHMENT3_EXT;
 
-  m_fringeImage1.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
-  m_fringeImage2.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
-  m_fringeImage3.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
-  m_fringeImage4.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
-  m_fringeImage5.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
-  m_fringeImage6.init(width, height, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+  m_fringeImage1.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+  m_fringeImage2.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+  m_fringeImage3.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+  m_fringeImage4.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+  m_fringeImage5.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+  m_fringeImage6.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 
   m_fringeImages[0][0] = &m_fringeImage1;
   m_fringeImages[0][1] = &m_fringeImage2;
@@ -211,10 +212,18 @@ void MultiWavelengthCapture::mouseMoveEvent(int mouseX, int mouseY)
 
 void MultiWavelengthCapture::newImage(IplImage* image)
 {
-  m_fringeImages[(m_frontBufferIndex + 1) % 2][m_currentFringeLoad]->transferChannelToTexture(image, m_currentChannelLoad);
+  cvSetImageCOI(m_fringeLoadingImage, (m_currentChannelLoad + 1));
+  cvCopy(image, m_fringeLoadingImage);
+  cvSetImageCOI(m_fringeLoadingImage, 0);
 
   m_currentChannelLoad++;
-  m_currentFringeLoad++;
+
+  if(m_currentChannelLoad == 3)
+  {
+    m_fringeImages[(m_frontBufferIndex + 1) % 2][m_currentFringeLoad]->transferToTexture(m_fringeLoadingImage);
+    m_currentChannelLoad = 0;
+    m_currentFringeLoad++;
+  }
 
   if(m_currentFringeLoad == 3)
   {
@@ -224,7 +233,7 @@ void MultiWavelengthCapture::newImage(IplImage* image)
   }
 
   //	Make sure we dont have any errors
-  OGLStatus::logOGLErrors("Holodecoder - setBackHoloBuffer()");
+  OGLStatus::logOGLErrors("MultiWavelengthCapture - setBackHoloBuffer()");
 }
 
 void MultiWavelengthCapture::swapBuffers(void)
@@ -233,7 +242,7 @@ void MultiWavelengthCapture::swapBuffers(void)
   m_frontBufferIndex = (m_frontBufferIndex + 1) % 2;
 
   //	Make sure we dont have any errors
-  OGLStatus::logOGLErrors("Holodecoder - swapBuffers()");
+  OGLStatus::logOGLErrors("MultiWavelengthCapture - swapBuffers()");
 }
 
 void MultiWavelengthCapture::loadTestData(void)

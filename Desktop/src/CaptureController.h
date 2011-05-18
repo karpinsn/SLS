@@ -42,7 +42,8 @@ protected:
     void timerEvent(QTimerEvent* event);
 
 private:
-    void _updateGL(void);
+    void _update3DGL(void);
+    void _updateCameraGL(void);
 };
 
 #endif	// _CAPTURE_CONTROLLER_H_

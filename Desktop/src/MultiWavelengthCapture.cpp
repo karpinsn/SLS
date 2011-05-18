@@ -4,6 +4,7 @@ MultiWavelengthCapture::MultiWavelengthCapture(void)
 {
   m_hasBeenInit = false;
   m_haveReferencePhase = false;
+  m_captureReferencePhase = false;
   m_currentFringeLoad = 0;
   m_currentChannelLoad = 0;
   m_frontBufferIndex = 0;
@@ -14,7 +15,7 @@ void MultiWavelengthCapture::init()
 {
   if(!m_hasBeenInit)
   {
-    _initShaders();
+    _initShaders(640, 480);
     _initTextures(640, 480);
 
     m_axis.init();
@@ -30,7 +31,7 @@ void MultiWavelengthCapture::init()
   }
 }
 
-void MultiWavelengthCapture::_initShaders(void)
+void MultiWavelengthCapture::_initShaders(float width, float height)
 {
   // Create the shaders
   m_phaseCalculator.init();
@@ -52,8 +53,8 @@ void MultiWavelengthCapture::_initShaders(void)
 
   m_phaseFilter.link();
   m_phaseFilter.uniform("image", 0);
-  m_phaseFilter.uniform("width", 640.0f);
-  m_phaseFilter.uniform("height", 480.0f);
+  m_phaseFilter.uniform("width", width);
+  m_phaseFilter.uniform("height", height);
 
   m_normalCalculator.init();
   m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NormalCalculator.vert"));
@@ -63,8 +64,8 @@ void MultiWavelengthCapture::_initShaders(void)
 
   m_normalCalculator.link();
   m_normalCalculator.uniform("phaseA", 0);
-  m_normalCalculator.uniform("width", 640.0f);
-  m_normalCalculator.uniform("height", 480.0f);
+  m_normalCalculator.uniform("width", width);
+  m_normalCalculator.uniform("height", height);
 
   m_finalRender.init();
   m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/FinalRender.vert"));
@@ -117,32 +118,33 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
 
 void MultiWavelengthCapture::draw(void)
 {
-  if(!m_haveReferencePhase)
+  if(m_captureReferencePhase)
   {
     //  If we dont have the reference phase then we are calculating it and we redraw
     m_imageProcessor.bind();
     {
       m_imageProcessor.bindDrawBuffer(m_referencePhaseAttachPoint);
       m_phaseCalculator.bind();
-      m_fringeImage1.bind(GL_TEXTURE0);
-      m_fringeImage2.bind(GL_TEXTURE1);
-      m_fringeImage3.bind(GL_TEXTURE2);
+      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE0);
+      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE1);
+      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE2);
       m_imageProcessor.process();
     }
     m_imageProcessor.unbind();
 
     m_haveReferencePhase = true;
+    m_captureReferencePhase = false;
   }
-  else
+  else if(m_haveReferencePhase)
   {
 	m_imageProcessor.bind();
 	{
       //	Pass 1
       m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
       m_phaseCalculator.bind();
-      m_fringeImage1.bind(GL_TEXTURE0);
-      m_fringeImage2.bind(GL_TEXTURE1);
-      m_fringeImage3.bind(GL_TEXTURE2);
+      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE0);
+      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE1);
+      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE2);
       m_imageProcessor.process();
 
       //	Pass 2
@@ -244,6 +246,11 @@ void MultiWavelengthCapture::swapBuffers(void)
 
   //	Make sure we dont have any errors
   OGLStatus::logOGLErrors("MultiWavelengthCapture - swapBuffers()");
+}
+
+void MultiWavelengthCapture::captureReferencePlane(void)
+{
+  m_captureReferencePhase = true;
 }
 
 void MultiWavelengthCapture::loadTestData(void)

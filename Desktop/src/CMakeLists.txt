@@ -64,6 +64,12 @@ add_subdirectory(../../Libraries/wrench ${PROJECT_BINARY_DIR}/Libraries/wrench)
 set(LIBS ${LIBS} wrench)
 
 #	-----------------------------------------
+#	Lens
+#	-----------------------------------------
+add_subdirectory(../../Libraries/lens ${PROJECT_BINARY_DIR}/Libraries/lens)
+set(LIBS ${LIBS} lens)
+
+#	-----------------------------------------
 #	Common
 #	-----------------------------------------
 include_directories(../../Common/src)
@@ -155,6 +161,7 @@ add_executable(${PROJECT_NAME}
 	${SHADERS_QUALIFIED})
 
 add_dependencies(${PROJECT_NAME} wrench)
+add_dependencies(${PROJECT_NAME} lens)
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 

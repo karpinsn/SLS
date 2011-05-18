@@ -87,6 +87,7 @@ private:
 
   bool haveFringeImages;
   bool m_haveReferencePhase;
+  bool m_captureReferencePhase;
   int m_currentFringeLoad;
   int m_currentChannelLoad;
 
@@ -109,8 +110,9 @@ public:
   void newImage(IplImage* image);
   void swapBuffers(void);
   void loadTestData(void);
+  void captureReferencePlane(void);
 private:
-  void _initShaders(void);
+  void _initShaders(float width, float height);
   void _initTextures(GLuint width, GLuint height);
 };
 

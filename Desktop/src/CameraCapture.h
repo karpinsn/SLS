@@ -11,38 +11,28 @@
 #ifndef _CAMERA_CAPTURE_H_
 #define _CAMERA_CAPTURE_H_
 
-#include <QThread>
-#include <QMutex>
-#include <QWaitCondition>
-
 #include <cv.h>
 #include <highgui.h>
 
+#include <lens/Camera.h>
+#include <lens/CameraObserver.h>
+#include <lens/OpenCVCamera.h>
+
 #include "ImageBuffer.h"
 
-class CameraCapture : public QThread
+class CameraCapture : public lens::CameraObserver
 {
+private:
+  lens::Camera  *m_camera;
+  ImageBuffer   *m_buffer;
+
 public:
     CameraCapture();
     ~CameraCapture();
 
     void init(ImageBuffer *buffer);
-    bool isConnected();
-    int getWidth();
-    int getHeight();
-    int pause();
-    int resume();
-
-protected:
-    void run();
-
-private:
-    CvCapture *m_capture;
-    ImageBuffer *m_buffer;
-
-    QMutex m_pauseMutex;
-    QWaitCondition m_pauseCondition;
-    bool m_paused;
+    void start();
+    virtual void newFrame(IplImage* frame);
  };
 
 #endif	// _CAMERA_CAPTURE_H_

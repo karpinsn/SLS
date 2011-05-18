@@ -1,87 +1,31 @@
 #include "CameraCapture.h"
 
-CameraCapture::CameraCapture() : QThread()
+CameraCapture::CameraCapture()
 {	
-}
-
-void CameraCapture::init(ImageBuffer *buffer)
-{
-  m_capture = cvCaptureFromCAM(CV_CAP_ANY);
-  m_paused = false;
-  m_buffer = buffer;
+  m_camera = new lens::OpenCVCamera();
 }
 
 CameraCapture::~CameraCapture()
 {
-  if(NULL != m_capture)
+  if(NULL != m_camera)
   {
-    cvReleaseCapture(&m_capture);
+    delete m_camera;
   }
 }
 
-bool CameraCapture::isConnected()
+void CameraCapture::init(ImageBuffer *buffer)
 {
-  return m_capture != NULL;
+  m_camera->init();
+  m_camera->addObserver(this);
+  m_buffer = buffer;
 }
 
-void CameraCapture::run()
+void CameraCapture::start()
 {
-  while(true)
-  {
-    m_pauseMutex.lock();
-
-    if(m_paused)
-    {
-      m_pauseCondition.wait(&m_pauseMutex);
-    }
-
-    m_pauseMutex.unlock();
-
-    if(NULL != m_capture)
-    {
-      IplImage* image = cvQueryFrame(m_capture);
-      m_buffer->pushFrame(image);
-    }
-  }
+  m_camera->open();
 }
 
-int CameraCapture::pause()
+void CameraCapture::newFrame(IplImage* frame)
 {
-  m_pauseMutex.lock();
-  m_paused = true;
-  m_pauseMutex.unlock();
-
-	return 0;
-}
-
-int CameraCapture::resume()
-{
-  m_paused = false;
-  m_pauseCondition.wakeAll();
-
-  return 0;
-}
-
-int CameraCapture::getWidth()
-{
-  int width = 0;
-
-  if(NULL != m_capture)
-  {
-    width = cvGetCaptureProperty(m_capture, CV_CAP_PROP_FRAME_WIDTH);
-  }
-
-  return width;
-}
-
-int CameraCapture::getHeight()
-{
-  int height = 0;
-
-  if(NULL != m_capture)
-  {
-    height = cvGetCaptureProperty(m_capture, CV_CAP_PROP_FRAME_HEIGHT);
-  }
-
-  return height;
+  m_buffer->pushFrame(frame);
 }

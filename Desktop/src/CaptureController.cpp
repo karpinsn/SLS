@@ -11,14 +11,14 @@ CaptureController::~CaptureController()
 
 void CaptureController::showEvent(QShowEvent *event)
 {
-  m_camera.start();
+  //  Connect to camera
 
-  //m_glCameraContext.setBackBuffer(m_buffer.popFrame());
-  //m_glCameraContext.swapBuffers();
+  m_camera.start();
   m_cameraTimer.start();
   startTimer(0);
 
-  _updateGL();
+  _update3DGL();
+  _updateCameraGL();
 }
 
 void CaptureController::init(void)
@@ -39,6 +39,17 @@ void CaptureController::timerEvent(QTimerEvent* event)
  
   IplImage* image = m_buffer.popFrame();
   
+  //  Only do this if m_glCameraContex is visible
+  OpenGLWidget* cameraContext = findChild<OpenGLWidget*>(QString::fromUtf8("cameraGLWidget"));
+  if(cameraContext->isVisible())
+  {
+    cameraContext->makeCurrent();
+    m_glCameraContext.newImage(image);
+    _updateCameraGL();
+  }
+  OpenGLWidget *captureContext = findChild<OpenGLWidget*>(QString::fromUtf8("captureGLWidget"));
+  captureContext->makeCurrent();
+
   IplImage *im_gray = cvCreateImage(cvGetSize(image),IPL_DEPTH_8U,1);
   cvCvtColor(image,im_gray,CV_RGB2GRAY);
   
@@ -46,12 +57,11 @@ void CaptureController::timerEvent(QTimerEvent* event)
   
   cvReleaseImage(&im_gray);
   cvReleaseImage(&image);
-  _updateGL();
+  _update3DGL();
 }
 
-void CaptureController::_updateGL(void)
+void CaptureController::_update3DGL(void)
 {
-  //OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("cameraGLWidget"));
   OpenGLWidget *glContext = findChild<OpenGLWidget*>(QString::fromUtf8("captureGLWidget"));
 
   if(NULL != glContext)
@@ -60,6 +70,20 @@ void CaptureController::_updateGL(void)
   }
   else
   {
-    Logger::logError("ViewController - _updateGL: Unable to find OpenGL Widget");
+    Logger::logError("ViewController - _update3DGL: Unable to find 3D Decoding OpenGL Widget");
+  }
+}
+
+void CaptureController::_updateCameraGL(void)
+{
+  OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("cameraGLWidget"));
+
+  if(NULL != glContext)
+  {
+    glContext->updateScene();
+  }
+  else
+  {
+    Logger::logError("ViewController - _updateGL: Unable to find Camera view OpenGL Widget");
   }
 }

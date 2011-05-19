@@ -2,7 +2,6 @@
 
 CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
 {
-
 }
 
 CaptureController::~CaptureController()
@@ -12,8 +11,8 @@ CaptureController::~CaptureController()
 void CaptureController::showEvent(QShowEvent *event)
 {
   //  Connect to camera
-  m_camera.start();
   m_frameCapture.start();
+  connectToCamera();
 
   _update3DGL();
   _updateCameraGL();
@@ -37,6 +36,15 @@ void CaptureController::init(void)
 void CaptureController::captureReference(void)
 {
   m_gl3DContext.captureReferencePlane();
+}
+
+void CaptureController::connectToCamera(void)
+{
+  CameraConnectDialog dialog;
+  lens::Camera *camera = dialog.getCamera();
+  //  We got a valid camera. Start it up
+  m_camera.setCamera(camera);
+  m_camera.start();
 }
 
 void CaptureController::newFrame(IplImage *frame)

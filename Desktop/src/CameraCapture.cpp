@@ -2,7 +2,7 @@
 
 CameraCapture::CameraCapture()
 {	
-  m_camera = new lens::OpenCVCamera();
+  m_camera = NULL;
 }
 
 CameraCapture::~CameraCapture()
@@ -15,17 +15,34 @@ CameraCapture::~CameraCapture()
 
 void CameraCapture::init(ImageBuffer *buffer)
 {
-  m_camera->init();
-  m_camera->addObserver(this);
   m_buffer = buffer;
 }
 
 void CameraCapture::start()
 {
-  m_camera->open();
+  if(NULL != m_camera)
+  {
+    m_camera->open();
+  }
 }
 
 void CameraCapture::newFrame(IplImage* frame)
 {
   m_buffer->pushFrame(frame);
+}
+
+void CameraCapture::setCamera(lens::Camera* camera)
+{
+  if(NULL != camera)
+  {
+    //  Delete the old camera if we have one
+    if(NULL != m_camera)
+    {
+      delete m_camera;
+    }
+
+    m_camera = camera;
+    m_camera->init();
+    m_camera->addObserver(this);
+  }
 }

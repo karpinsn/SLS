@@ -14,6 +14,7 @@
 #include <QWidget>
 
 #include "OpenGLWidget.h"
+#include "CameraConnectDialog.h"
 
 #include "MultiWavelengthCapture.h"
 #include "CameraGLContext.h"
@@ -35,6 +36,7 @@ private:
 public slots:
   void newFrame(IplImage *frame);
   void captureReference(void);
+  void connectToCamera(void);
 
 public:
     CaptureController(QWidget* parent = 0);

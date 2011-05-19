@@ -94,6 +94,7 @@ set(SOURCES
     EncoderController.cpp
     CameraGLContext.cpp
     ImageBuffer.cpp
+    FrameCapture.cpp
 
     ../../Common/src/ImageIO.cpp
 	../../Common/src/PointCloudMesh.cpp		
@@ -113,6 +114,7 @@ set(SOURCES
     EncoderController.h
     CameraGLContext.h
     ImageBuffer.h
+    FrameCapture.h
 
     ../../Common/src/ImageIO.h
 	../../Common/src/XYZPoint.h
@@ -125,7 +127,7 @@ set(SOURCES
 	
 # QT Files
 set(UIS ui/Holoencoder.ui)	
-set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h CaptureController.h ViewController.h EncoderController.h)
+set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h)
 set(RESOURCES ui/Holoencoder.qrc)
 
 #	---------------------------------------------------------------------------------------

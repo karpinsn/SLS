@@ -15,7 +15,7 @@ void lens::Camera::addObserver(CameraObserver *observer)
 
 void lens::Camera::notifyObservers(IplImage *frame)
 {
-  vector<CameraObserver*>::iterator iterator;
+  std::vector<CameraObserver*>::iterator iterator;
 
   for(iterator = m_observers.begin(); iterator < m_observers.end(); iterator++)
   {

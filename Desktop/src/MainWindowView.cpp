@@ -58,6 +58,7 @@ void MainWindowView::connectSignalsWithController(QObject* controller)
   connect(actionExportEntireVideo, SIGNAL(triggered()), controller, SLOT(exportEntireVideo()));
   connect(actionOpen_Holovideo, SIGNAL(triggered()), controller, SLOT(playVideo()));
   connect(actionOpen_Holoimage, SIGNAL(triggered()), controller, SLOT(openHoloImage()));
+  connect(actionCalibrateRefrence, SIGNAL(triggered()), captureController, SLOT(captureReference()));
 
   connect(modeView, SIGNAL(triggered()), controller, SLOT(viewMode()));
   connect(modeEncode, SIGNAL(triggered()), controller, SLOT(encodeMode()));

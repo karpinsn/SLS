@@ -264,7 +264,14 @@
     <addaction name="separator"/>
     <addaction name="menuExport"/>
    </widget>
+   <widget class="QMenu" name="menuCapture">
+    <property name="title">
+     <string>Capture</string>
+    </property>
+    <addaction name="actionCalibrateRefrence"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuCapture"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -400,6 +407,11 @@
    </property>
    <property name="toolTip">
     <string>Capture Geometry</string>
+   </property>
+  </action>
+  <action name="actionCalibrateRefrence">
+   <property name="text">
+    <string>Calibrate Reference</string>
    </property>
   </action>
  </widget>

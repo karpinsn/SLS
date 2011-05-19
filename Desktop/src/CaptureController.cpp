@@ -12,10 +12,8 @@ CaptureController::~CaptureController()
 void CaptureController::showEvent(QShowEvent *event)
 {
   //  Connect to camera
-
   m_camera.start();
-  m_cameraTimer.start();
-  startTimer(0);
+  m_frameCapture.start();
 
   _update3DGL();
   _updateCameraGL();
@@ -31,32 +29,38 @@ void CaptureController::init(void)
 
   m_glCameraContext.setBuffer(&m_buffer);
   m_camera.init(&m_buffer);
+  m_frameCapture.init(&m_buffer);
+
+  _connectSignalsWithController();
 }
 
-void CaptureController::timerEvent(QTimerEvent* event)
+void CaptureController::captureReference(void)
 {
-  m_cameraTimer.restart();
- 
-  IplImage* image = m_buffer.popFrame();
-  
+  m_gl3DContext.captureReferencePlane();
+}
+
+void CaptureController::newFrame(IplImage *frame)
+{
+
   //  Only do this if m_glCameraContex is visible
   OpenGLWidget* cameraContext = findChild<OpenGLWidget*>(QString::fromUtf8("cameraGLWidget"));
   if(cameraContext->isVisible())
   {
     cameraContext->makeCurrent();
-    m_glCameraContext.newImage(image);
+    m_glCameraContext.newImage(frame);
     _updateCameraGL();
   }
+
   OpenGLWidget *captureContext = findChild<OpenGLWidget*>(QString::fromUtf8("captureGLWidget"));
   captureContext->makeCurrent();
 
-  IplImage *im_gray = cvCreateImage(cvGetSize(image),IPL_DEPTH_8U,1);
-  cvCvtColor(image,im_gray,CV_RGB2GRAY);
-  
+  IplImage *im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
+  cvCvtColor(frame, im_gray, CV_RGB2GRAY);
+
   m_gl3DContext.newImage(im_gray);
-  
+
   cvReleaseImage(&im_gray);
-  cvReleaseImage(&image);
+  cvReleaseImage(&frame);
   _update3DGL();
 }
 
@@ -86,4 +90,9 @@ void CaptureController::_updateCameraGL(void)
   {
     Logger::logError("ViewController - _updateGL: Unable to find Camera view OpenGL Widget");
   }
+}
+
+void CaptureController::_connectSignalsWithController(void)
+{
+  connect(&m_frameCapture, SIGNAL(newFrame(IplImage*)), this, SLOT(newFrame(IplImage*)));
 }

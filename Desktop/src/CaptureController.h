@@ -19,6 +19,7 @@
 #include "CameraGLContext.h"
 #include "CameraCapture.h"
 #include "ImageBuffer.h"
+#include "FrameCapture.h"
 
 class CaptureController : public QWidget
 {
@@ -28,22 +29,26 @@ private:
   MultiWavelengthCapture  m_gl3DContext;
   CameraGLContext         m_glCameraContext;
   CameraCapture           m_camera;
+  FrameCapture            m_frameCapture;
   ImageBuffer             m_buffer;
-  QTime                   m_cameraTimer;
+
+public slots:
+  void newFrame(IplImage *frame);
+  void captureReference(void);
 
 public:
     CaptureController(QWidget* parent = 0);
     ~CaptureController();
 
-    void init(void);
+  void init(void);
 
 protected:
     virtual void showEvent(QShowEvent *event);
-    void timerEvent(QTimerEvent* event);
 
 private:
     void _update3DGL(void);
     void _updateCameraGL(void);
+    void _connectSignalsWithController(void);
 };
 
 #endif	// _CAPTURE_CONTROLLER_H_

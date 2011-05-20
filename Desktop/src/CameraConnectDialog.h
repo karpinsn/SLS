@@ -15,6 +15,9 @@ public:
     CameraConnectDialog(QWidget *parent = 0);
 
     lens::Camera* getCamera(void);
+
+private:
+    void _initCameraDriverList(void);
 };
 
 #endif // CAMERA_CONNECT_DIALOG_H

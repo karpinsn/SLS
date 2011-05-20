@@ -2,10 +2,11 @@
 
 CameraConnectDialog::CameraConnectDialog(QWidget *parent) : QDialog(parent)
 {
-    // Setup dialog
-    setupUi(this);
+  // Setup dialog
+  setupUi(this);
+  _initCameraDriverList();
 
-    setWindowModality(Qt::ApplicationModal);
+  setWindowModality(Qt::ApplicationModal);
 }
 
 lens::Camera* CameraConnectDialog::getCamera(void)
@@ -19,4 +20,9 @@ lens::Camera* CameraConnectDialog::getCamera(void)
   }
 
   return m_camera;
+}
+
+void CameraConnectDialog::_initCameraDriverList(void)
+{
+  cameraDriverComboBox->addItem();
 }

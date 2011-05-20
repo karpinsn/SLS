@@ -37,6 +37,11 @@ void lens::OpenCVCamera::close(void)
   m_running = false;
 }
 
+std::string lens::OpenCVCamera::cameraName(void)
+{
+	return "OpenCV Camera Driver";
+}
+
 void lens::OpenCVCamera::run()
 {
   while(m_running)

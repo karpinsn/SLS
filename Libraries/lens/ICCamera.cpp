@@ -13,12 +13,17 @@ void lens::ICCamera::init(void)
 
 }
 
-void lens::Camera::open(void)
+void lens::ICCamera::open(void)
 {
 
 }
 
-void lens::Camera::close(void)
+void lens::ICCamera::close(void)
 {
 
+}
+
+std::string lens::ICCamera::cameraName(void)
+{
+	return "IC Camera Driver";
 }

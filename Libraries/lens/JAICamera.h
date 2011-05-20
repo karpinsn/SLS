@@ -1,5 +1,5 @@
 /*
- Filename:		ICCamera.h
+ Filename:		JAICamera.h
  Author:		Nikolaus Karpinsky
  Date Created:	09/20/10
  Last Edited:	09/20/10
@@ -8,8 +8,8 @@
  09/20/10 - Nik Karpinsky - Original creation.
  */
 
-#ifndef _IC_CAMERA_H_
-#define _IC_CAMERA_H_
+#ifndef _JAI_CAMERA_H_
+#define _JAI_CAMERA_H_
 
 #include "Camera.h"
 
@@ -17,18 +17,15 @@ using namespace std;
 
 namespace lens
 {
-    class ICCamera : public Camera
+    class JAICamera : public Camera
 	{
-    private:
-      //DShowLib::Grabber        m_grabber; // The instance of the Grabber class.
 
     public:
       virtual void init(void);
       virtual void open(void);
       virtual void close(void);
 	  virtual std::string cameraName(void);
-
 	};
 }
 
-#endif	// _IC_CAMERA_H_
+#endif	// _JAI_CAMERA_H_

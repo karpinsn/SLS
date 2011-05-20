@@ -24,5 +24,5 @@ lens::Camera* CameraConnectDialog::getCamera(void)
 
 void CameraConnectDialog::_initCameraDriverList(void)
 {
-  cameraDriverComboBox->addItem();
+  //cameraDriverComboBox->addItem();
 }

@@ -33,6 +33,7 @@ namespace lens
       virtual void init(void);
       virtual void open(void);
       virtual void close(void);
+	  virtual std::string cameraName(void);
 
     protected:
       void run();

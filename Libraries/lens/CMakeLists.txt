@@ -16,11 +16,13 @@ set(SOURCES
 	CameraObserver.cpp
 	ICCamera.cpp	
 	OpenCVCamera.cpp
+	JAICamera.cpp
 
 	Camera.h
 	CameraObserver.h
 	ICCamera.h
 	OpenCVCamera.h
+	JAICamera.h
 )
 
 source_group("lens" FILES ${SOURCES})

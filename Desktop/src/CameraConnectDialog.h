@@ -3,6 +3,7 @@
 
 #include "lens/Camera.h"
 #include "lens/OpenCVCamera.h"
+#include "lens/JAICamera.h"
 
 //	Qt auto generated headers
 #include "ui_CameraConnectDialog.h"

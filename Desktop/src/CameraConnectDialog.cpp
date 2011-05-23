@@ -16,7 +16,8 @@ lens::Camera* CameraConnectDialog::getCamera(void)
   if(this->exec() == QDialog::Accepted)
   {
     //  Check if the openCV camera is selected
-    m_camera = new lens::OpenCVCamera();
+    //m_camera = new lens::OpenCVCamera();
+	  m_camera = new lens::JAICamera();
   }
 
   return m_camera;

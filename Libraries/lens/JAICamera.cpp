@@ -8,19 +8,79 @@
 
 #include "JAICamera.h"
 
+lens::JAICamera::JAICamera(void)
+{
+	m_cameraImage = NULL;
+}
+
 void lens::JAICamera::init(void)
 {
 	_openFactory();
 }
 
+#define NODE_NAME_WIDTH         "Width"
+#define NODE_NAME_HEIGHT        "Height"
+#define NODE_NAME_PIXELFORMAT   "PixelFormat"
+#define NODE_NAME_ACQSTART      "AcquisitionStart"
+
 void lens::JAICamera::open(void)
 {
 	_openCamera();
+
+	J_STATUS_TYPE	retval = J_ST_SUCCESS;
+	int64_t int64Val;
+	SIZE	ViewSize;
+	int64_t pixelFormat;
+	
+	// Get Width from the camera
+    retval = J_Camera_GetValueInt64(m_camera, NODE_NAME_WIDTH, &int64Val);
+    ViewSize.cx = (LONG)int64Val;     // Set window size cx
+
+    // Get Height from the camera
+    retval = J_Camera_GetValueInt64(m_camera, NODE_NAME_HEIGHT, &int64Val);
+    ViewSize.cy = (LONG)int64Val;     // Set window size cy
+
+    // Get pixelformat from the camera
+    retval = J_Camera_GetValueInt64(m_camera, NODE_NAME_PIXELFORMAT, &int64Val);
+    pixelFormat = int64Val;
+
+    // Calculate number of bits (not bytes) per pixel using macro
+    int bpp = J_BitsPerPixel(pixelFormat);
+
+	// Open stream
+    retval = J_Image_OpenStream(m_camera, 0, reinterpret_cast<J_IMG_CALLBACK_OBJECT>(this), reinterpret_cast<J_IMG_CALLBACK_FUNCTION>(&lens::JAICamera::streamCallBack), &m_thread, (ViewSize.cx*ViewSize.cy*bpp)/8);
+    if (retval != J_ST_SUCCESS) 
+	{
+        //	Could not open the stream
+        return;
+    }
+
+    // Start Acquision
+    retval = J_Camera_ExecuteCommand(m_camera, NODE_NAME_ACQSTART);
 }
 
 void lens::JAICamera::close(void)
 {
 	_closeCamera();
+}
+
+//--------------------------------------------------------------------------------------------------
+// StreamCBFunc
+//--------------------------------------------------------------------------------------------------
+void lens::JAICamera::streamCallBack(J_tIMAGE_INFO * pAqImageInfo)
+{
+    // We only want to create the OpenCV Image object once and we want to get the correct size from the Acquisition Info structure
+    if (m_cameraImage == NULL)
+    {
+        // Create the Image:
+        // We assume this is a 8-bit monochrome image in this sample
+        m_cameraImage = cvCreateImage(cvSize(pAqImageInfo->iSizeX,pAqImageInfo->iSizeY), IPL_DEPTH_8U, 1);
+    }
+
+	// Copy the data from the Acquisition engine image buffer into the OpenCV Image obejct
+    memcpy(m_cameraImage->imageData, pAqImageInfo->pImageBuffer, m_cameraImage->imageSize);
+
+	notifyObservers(m_cameraImage);
 }
 
 std::string lens::JAICamera::cameraName(void)

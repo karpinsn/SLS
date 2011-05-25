@@ -24,13 +24,17 @@ namespace lens
 	private:
 		FACTORY_HANDLE	m_factory; // Factory Handle
 		CAM_HANDLE		m_camera; // Camera Handle
+		THRD_HANDLE     m_thread;      // Acquisition Thread Handle
 		int8_t          m_cameraID[J_CAMERA_ID_SIZE];    // Camera ID string
+		IplImage*		m_cameraImage;
 
     public:
+	  JAICamera(void);
       virtual void init(void);
       virtual void open(void);
       virtual void close(void);
 	  virtual std::string cameraName(void);
+	  void streamCallBack(J_tIMAGE_INFO * pAqImageInfo);
 
 	private:
 		void _openFactory(void);

@@ -6,6 +6,8 @@
  *
  */
 
+#ifdef USE_JAI_CAMERA
+
 #include "JAICamera.h"
 
 lens::JAICamera::JAICamera(void)
@@ -17,11 +19,6 @@ void lens::JAICamera::init(void)
 {
 	_openFactory();
 }
-
-#define NODE_NAME_WIDTH         "Width"
-#define NODE_NAME_HEIGHT        "Height"
-#define NODE_NAME_PIXELFORMAT   "PixelFormat"
-#define NODE_NAME_ACQSTART      "AcquisitionStart"
 
 void lens::JAICamera::open(void)
 {
@@ -164,3 +161,5 @@ void lens::JAICamera::_closeCamera(void)
 		}
 	}
 }
+
+#endif  // USE_JAI_CAMERA

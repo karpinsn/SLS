@@ -29,7 +29,6 @@ namespace lens
     virtual void        init(void) = 0;
     virtual void        open(void) = 0;
     virtual void        close(void) = 0;
-    virtual std::string cameraName(void) = 0;
 
     void addObserver(CameraObserver *observer);
 

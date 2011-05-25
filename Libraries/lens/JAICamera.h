@@ -8,12 +8,19 @@
  09/20/10 - Nik Karpinsky - Original creation.
  */
 
+#ifdef USE_JAI_CAMERA
+
 #ifndef _JAI_CAMERA_H_
 #define _JAI_CAMERA_H_
 
 #include "Camera.h"
 #include <Jai_Factory.h>
 //#include <stdint.h>
+
+#define NODE_NAME_WIDTH         "Width"
+#define NODE_NAME_HEIGHT        "Height"
+#define NODE_NAME_PIXELFORMAT   "PixelFormat"
+#define NODE_NAME_ACQSTART      "AcquisitionStart"
 
 using namespace std;
 
@@ -33,7 +40,7 @@ namespace lens
       virtual void init(void);
       virtual void open(void);
       virtual void close(void);
-	  virtual std::string cameraName(void);
+      static std::string cameraName(void);
 	  void streamCallBack(J_tIMAGE_INFO * pAqImageInfo);
 
 	private:
@@ -46,3 +53,4 @@ namespace lens
 }
 
 #endif	// _JAI_CAMERA_H_
+#endif  // USE_JAI_CAMERA

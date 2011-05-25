@@ -15,9 +15,24 @@ lens::Camera* CameraConnectDialog::getCamera(void)
 
   if(this->exec() == QDialog::Accepted)
   {
-    //  Check if the openCV camera is selected
-    //m_camera = new lens::OpenCVCamera();
-	  m_camera = new lens::JAICamera();
+    if(0 == QString::fromStdString(lens::OpenCVCamera::cameraName()).compare(cameraDriverComboBox->currentText()))
+    {
+      m_camera = new lens::OpenCVCamera();
+    }
+
+#ifdef USE_IC_CAMERA
+    if(0 == QString::fromStdString(lens::ICCamera::cameraName()).compare(cameraDriverComboBox->currentText()))
+    {
+      m_camera = new lens::ICCamera();
+    }
+#endif
+
+#ifdef USE_JAI_CAMERA
+    if(0 == QString::fromStdString(lens::JAICamera::cameraName()).compare(cameraDriverComboBox->currentText()))
+    {
+      m_camera = new lens::JAICamera();
+    }
+#endif
   }
 
   return m_camera;
@@ -25,5 +40,15 @@ lens::Camera* CameraConnectDialog::getCamera(void)
 
 void CameraConnectDialog::_initCameraDriverList(void)
 {
-  //cameraDriverComboBox->addItem();
+  cameraDriverComboBox->addItem(QString::fromStdString(lens::OpenCVCamera::cameraName()));
+
+  //  Only add the cameras if they are being used
+#ifdef USE_IC_CAMERA
+  cameraDriverComboBox->addItem(QString::fromStdString(lens::ICCamera::cameraName()));
+#endif
+
+#ifdef USE_JAI_CAMERA
+  cameraDriverComboBox->addItem(QString::fromStdString(lens::JAICamera::cameraName()));
+#endif
+
 }

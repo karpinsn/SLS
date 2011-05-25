@@ -8,6 +8,7 @@
  09/20/10 - Nik Karpinsky - Original creation.
  */
 
+#ifdef USE_IC_CAMERA
 #ifndef _IC_CAMERA_H_
 #define _IC_CAMERA_H_
 
@@ -26,9 +27,10 @@ namespace lens
       virtual void init(void);
       virtual void open(void);
       virtual void close(void);
-	  virtual std::string cameraName(void);
+      static std::string cameraName(void);
 
 	};
 }
 
 #endif	// _IC_CAMERA_H_
+#endif  // USE_IC_CAMERA

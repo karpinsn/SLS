@@ -3,8 +3,15 @@
 
 #include "lens/Camera.h"
 #include "lens/OpenCVCamera.h"
-#include "lens/ICCamera.h"
-#include "lens/JAICamera.h"
+
+#include "lens/config-lens.h"
+
+#ifdef USE_IC_CAMERA
+  #include "lens/ICCamera.h"
+#endif
+#ifdef USE_JAI_CAMERA
+  #include "lens/JAICamera.h"
+#endif
 
 //	Qt auto generated headers
 #include "ui_CameraConnectDialog.h"

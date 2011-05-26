@@ -14,19 +14,53 @@ set(NAME lens)
 set(SOURCES
 	Camera.cpp
 	CameraObserver.cpp
-	ICCamera.cpp	
 	OpenCVCamera.cpp
-	JAICamera.cpp
 
 	Camera.h
 	CameraObserver.h
-	ICCamera.h
 	OpenCVCamera.h
-	JAICamera.h
 )
 
-source_group("lens" FILES ${SOURCES})
+#	-----------------------------------------------
+#	Allow the option to compile with JAI Camera
+#	-----------------------------------------------
+option(LENS_JAI_CAMERA "Build with JAI SDK" OFF)
+if(LENS_JAI_CAMERA)
+	SET(USE_JAI_CAMERA ON)
+	message(STATUS "Building with JAI Camera Functionality")
+	LIST(APPEND SOURCES
+		JAICamera.cpp
+		JAICamera.h
+	)
+else()
+	SET(USE_JAI_CAMERA OFF)
+endif()
 
+#	-----------------------------------------------
+#	Allow the option to compile with IC Camera
+#	-----------------------------------------------
+option(LENS_IC_CAMERA "Build with IC_CAMERA" OFF)
+if(LENS_IC_CAMERA)
+	SET(USE_IC_CAMERA ON)
+	message(STATUS "Building with IC Camera Functionality")
+	LIST(APPEND SOURCES
+		ICCamera.cpp
+		ICCamera.h
+	)
+else()
+	SET(USE_IC_CAMERA OFF)
+endif()
+
+#	----------------------------------------------
+#	Generate the config file for the code
+#	----------------------------------------------
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config-lens.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config-lens.h)
+LIST(APPEND SOURCES config-lens.h)
+
+#	----------------------------------------------
+#	Group the source files
+#	----------------------------------------------
+source_group("lens" FILES ${SOURCES})
 include_directories(..)
 
 #	---------------------------------------------------------------------------------------

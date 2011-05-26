@@ -6,8 +6,6 @@
  *
  */
 
-#ifdef USE_IC_CAMERA
-
 #include "ICCamera.h"
 
 void lens::ICCamera::init(void)
@@ -29,5 +27,3 @@ std::string lens::ICCamera::cameraName(void)
 {
 	return "IC Camera Driver";
 }
-
-#endif

@@ -6,8 +6,6 @@
  *
  */
 
-#ifdef USE_JAI_CAMERA
-
 #include "JAICamera.h"
 
 lens::JAICamera::JAICamera(void)
@@ -161,5 +159,3 @@ void lens::JAICamera::_closeCamera(void)
 		}
 	}
 }
-
-#endif  // USE_JAI_CAMERA

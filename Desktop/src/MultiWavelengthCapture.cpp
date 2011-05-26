@@ -8,7 +8,6 @@ MultiWavelengthCapture::MultiWavelengthCapture(void)
   m_currentFringeLoad = 0;
   m_currentChannelLoad = 0;
   m_frontBufferIndex = 0;
-  m_fringeLoadingImage = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 3);
 }
 
 void MultiWavelengthCapture::init()
@@ -27,6 +26,9 @@ void MultiWavelengthCapture::init()
     m_mesh = new TriMesh(640, 480);
 
     m_mesh->initMesh();
+
+    m_fringeLoadingImage = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 3);
+
     m_hasBeenInit = true;
   }
 }

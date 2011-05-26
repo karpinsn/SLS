@@ -8,10 +8,9 @@
  09/20/10 - Nik Karpinsky - Original creation.
  */
 
-#ifdef USE_JAI_CAMERA
-
 #ifndef _JAI_CAMERA_H_
 #define _JAI_CAMERA_H_
+#define USE_JAI_CAMERA
 
 #include "Camera.h"
 #include <Jai_Factory.h>
@@ -53,4 +52,3 @@ namespace lens
 }
 
 #endif	// _JAI_CAMERA_H_
-#endif  // USE_JAI_CAMERA

@@ -8,10 +8,10 @@
  09/20/10 - Nik Karpinsky - Original creation.
  */
 
-#ifdef USE_IC_CAMERA
 #ifndef _IC_CAMERA_H_
 #define _IC_CAMERA_H_
 
+#define USE_IC_CAMERA
 #include "Camera.h"
 
 using namespace std;
@@ -33,4 +33,3 @@ namespace lens
 }
 
 #endif	// _IC_CAMERA_H_
-#endif  // USE_IC_CAMERA

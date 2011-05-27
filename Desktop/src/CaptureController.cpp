@@ -14,6 +14,8 @@ void CaptureController::showEvent(QShowEvent *event)
   m_frameCapture.start();
   connectToCamera();
 
+  //  Reinitalize OpenGL stuff
+
   _update3DGL();
   _updateCameraGL();
 }

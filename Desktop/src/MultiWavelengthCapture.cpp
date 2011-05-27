@@ -33,6 +33,21 @@ void MultiWavelengthCapture::init()
   }
 }
 
+void MultiWavelengthCapture::resizeInput(int width, int height)
+{
+  //  Make sure that it has been initalized first.
+  if(m_hasBeenInit)
+  {
+    //  Resize all of the textures
+
+    //  Send the new size to all of the shaders
+
+    //  Resize the display mesh
+
+    //  Resize the fringe loader
+  }
+}
+
 void MultiWavelengthCapture::_initShaders(float width, float height)
 {
   // Create the shaders

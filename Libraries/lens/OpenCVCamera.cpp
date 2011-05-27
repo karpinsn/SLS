@@ -37,6 +37,16 @@ void lens::OpenCVCamera::close(void)
   m_running = false;
 }
 
+float lens::OpenCVCamera::getWidth(void)
+{
+  return cvGetCaptureProperty(m_capture, CV_CAP_PROP_FRAME_WIDTH);
+}
+
+float lens::OpenCVCamera::getHeight(void)
+{
+  return cvGetCaptureProperty(m_capture, CV_CAP_PROP_FRAME_HEIGHT);
+}
+
 std::string lens::OpenCVCamera::cameraName(void)
 {
 	return "OpenCV Camera Driver";

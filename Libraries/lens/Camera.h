@@ -29,6 +29,8 @@ namespace lens
     virtual void        init(void) = 0;
     virtual void        open(void) = 0;
     virtual void        close(void) = 0;
+    virtual float       getWidth(void) = 0;
+    virtual float       getHeight(void) = 0;
 
     void addObserver(CameraObserver *observer);
 

@@ -64,7 +64,8 @@ public:
   Texture(void);
   ~Texture();
 
-  bool		init(GLuint width, GLuint height, GLint internalFormat = GL_RGBA32F_ARB, GLenum format = GL_RGBA, GLenum dataType = GL_FLOAT);
+  bool		init(const GLuint width, const GLuint height, GLint internalFormat = GL_RGBA32F_ARB, GLenum format = GL_RGBA, GLenum dataType = GL_FLOAT);
+  bool      reinit(const GLuint width, const GLuint height, GLint internalFormat = GL_RGBA32F_ARB, GLenum format = GL_RGBA, GLenum dataType = GL_FLOAT);
   void      bind();
   void      bind(GLenum texture);
   void		unbind();

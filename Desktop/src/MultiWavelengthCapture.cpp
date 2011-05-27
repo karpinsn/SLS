@@ -33,18 +33,37 @@ void MultiWavelengthCapture::init()
   }
 }
 
-void MultiWavelengthCapture::resizeInput(int width, int height)
+void MultiWavelengthCapture::resizeInput(float width, float height)
 {
   //  Make sure that it has been initalized first.
   if(m_hasBeenInit)
   {
     //  Resize all of the textures
+    m_fringeImage1.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+    m_fringeImage2.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+    m_fringeImage3.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+    m_fringeImage4.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+    m_fringeImage5.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+    m_fringeImage6.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+
+    m_phaseMap0.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+    m_phaseMap1.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+    m_normalMap.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+    m_referencePhase.reinit   (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
 
     //  Send the new size to all of the shaders
+    m_phaseFilter.uniform("width", width);
+    m_phaseFilter.uniform("height", height);
+    m_normalCalculator.uniform("width", width);
+    m_normalCalculator.uniform("height", height);
 
     //  Resize the display mesh
+    delete m_mesh;
+    m_mesh = new TriMesh((int)width, (int)height);
 
     //  Resize the fringe loader
+    cvReleaseImage(&m_fringeLoadingImage);
+    m_fringeLoadingImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3);
   }
 }
 
@@ -268,32 +287,4 @@ void MultiWavelengthCapture::swapBuffers(void)
 void MultiWavelengthCapture::captureReferencePlane(void)
 {
   m_captureReferencePhase = true;
-}
-
-void MultiWavelengthCapture::loadTestData(void)
-{
-  /*
-  if(m_haveReferencePhase)
-  {
-    //  Load the test data
-    const string path("/home/karpinsn/Desktop/DeereParticleTrack/4-21-2011/Cotton/");
-
-    ImageIO io;
-
-    m_fringeImage1.transferToTexture(io.readImage(path + "1.png"));
-    m_fringeImage2.transferToTexture(io.readImage(path + "2.png"));
-    m_fringeImage3.transferToTexture(io.readImage(path + "3.png"));
-  }
-  else
-  {
-    //  Load the test data
-    const string path("/home/karpinsn/Desktop/DeereParticleTrack/4-21-2011/Cotton/Reference/");
-
-    ImageIO io;
-
-    m_fringeImage1.transferToTexture(io.readImage(path + "1.png"));
-    m_fringeImage2.transferToTexture(io.readImage(path + "2.png"));
-    m_fringeImage3.transferToTexture(io.readImage(path + "3.png"));
-  }
-  */
 }

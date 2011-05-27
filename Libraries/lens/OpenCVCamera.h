@@ -30,9 +30,12 @@ namespace lens
       OpenCVCamera();
       ~OpenCVCamera();
 
-      virtual void init(void);
-      virtual void open(void);
-      virtual void close(void);
+      virtual void  init(void);
+      virtual void  open(void);
+      virtual void  close(void);
+      virtual float getWidth(void);
+      virtual float getHeight(void);
+
       static std::string cameraName(void);
 
     protected:

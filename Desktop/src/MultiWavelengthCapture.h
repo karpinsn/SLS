@@ -107,9 +107,9 @@ public:
   virtual void mousePressEvent(int mouseX, int mouseY);
   virtual void mouseMoveEvent(int mouseX, int mouseY);
 
+  void resizeInput(float width, float height);
   void newImage(IplImage* image);
   void swapBuffers(void);
-  void loadTestData(void);
   void captureReferencePlane(void);
 private:
   void _initShaders(float width, float height);

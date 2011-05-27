@@ -14,8 +14,6 @@ void CaptureController::showEvent(QShowEvent *event)
   m_frameCapture.start();
   connectToCamera();
 
-  //  Reinitalize OpenGL stuff
-
   _update3DGL();
   _updateCameraGL();
 }
@@ -44,8 +42,11 @@ void CaptureController::connectToCamera(void)
 {
   CameraConnectDialog dialog;
   lens::Camera *camera = dialog.getCamera();
-  //  We got a valid camera. Start it up
+
   m_camera.setCamera(camera);
+
+  //  Reinitalize OpenGL stuff
+  m_gl3DContext.resizeInput(camera->getWidth(), camera->getHeight());
   m_camera.start();
 }
 

@@ -56,6 +56,18 @@ bool wrench::gl::Texture::init(const GLuint width, const GLuint height, const GL
   return true;
 }
 
+bool wrench::gl::Texture::reinit(const GLuint width, const GLuint height, const GLint internalFormat, const GLenum format, const GLenum dataType)
+{
+  //	If we have a width and height we assume to have a texture
+  if(m_width != 0 && m_height != 0)
+  {
+    glDeleteTextures(1, &m_textureId);
+    glDeleteBuffers(1, &m_PBOId);
+  }
+
+  init(width, height, internalFormat, format, dataType);
+}
+
 void wrench::gl::Texture::bind()
 {
   glBindTexture(GL_TEXTURE_2D, m_textureId);

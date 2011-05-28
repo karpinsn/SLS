@@ -59,6 +59,16 @@ void lens::JAICamera::close(void)
 	_closeCamera();
 }
 
+float lens::JAICamera::getWidth(void)
+{
+	return 1392.0;
+}
+
+float lens::JAICamera::getHeight(void)
+{
+	return 1040.0;
+}
+
 //--------------------------------------------------------------------------------------------------
 // StreamCBFunc
 //--------------------------------------------------------------------------------------------------

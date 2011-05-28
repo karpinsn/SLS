@@ -14,7 +14,7 @@ void CameraGLContext::init()
   m_frontBufferIndex = 0;
   _cacheQuad();
   _initShaders();
-  _initTextures(640, 480);
+  _initTextures(1392, 1040);
 }
 
 void CameraGLContext::_initShaders(void)
@@ -32,8 +32,8 @@ void CameraGLContext::_initShaders(void)
 
 void CameraGLContext::_initTextures(GLuint width, GLuint height)
 {
-  m_frame0.init(width, height, GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE);
-  m_frame1.init(width, height, GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE);
+	m_frame0.init(width, height, GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE);
+  m_frame1.init(width, height, GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE);
   m_textureBuffer[0] = &m_frame0;
   m_textureBuffer[1] = &m_frame1;
 }

@@ -39,6 +39,9 @@ namespace lens
       virtual void init(void);
       virtual void open(void);
       virtual void close(void);
+	  virtual float getWidth(void);
+      virtual float getHeight(void);
+
       static std::string cameraName(void);
 	  void streamCallBack(J_tIMAGE_INFO * pAqImageInfo);
 

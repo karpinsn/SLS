@@ -65,7 +65,7 @@ bool wrench::gl::Texture::reinit(const GLuint width, const GLuint height, const 
     glDeleteBuffers(1, &m_PBOId);
   }
 
-  init(width, height, internalFormat, format, dataType);
+  return init(width, height, internalFormat, format, dataType);
 }
 
 void wrench::gl::Texture::bind()

@@ -65,12 +65,12 @@ void CaptureController::newFrame(IplImage *frame)
   OpenGLWidget *captureContext = findChild<OpenGLWidget*>(QString::fromUtf8("captureGLWidget"));
   captureContext->makeCurrent();
 
-  IplImage *im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
-  cvCvtColor(frame, im_gray, CV_RGB2GRAY);
+  //IplImage *im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
+  //cvCvtColor(frame, im_gray, CV_RGB2GRAY);
 
-  m_gl3DContext.newImage(im_gray);
+  m_gl3DContext.newImage(frame);
 
-  cvReleaseImage(&im_gray);
+  //cvReleaseImage(&im_gray);
   cvReleaseImage(&frame);
   _update3DGL();
 }

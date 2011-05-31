@@ -32,6 +32,7 @@ public:
 
     void init(ImageBuffer *buffer);
     void start();
+    void stop();
     virtual void newFrame(IplImage* frame);
     void setCamera(lens::Camera* camera);
  };

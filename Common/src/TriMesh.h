@@ -53,9 +53,11 @@ private:
 		GLuint m_triMeshIBOID;
 	#endif
 	
-	unsigned int	*meshIndices;
-	Vertex			*meshVertices;
-	unsigned int	elementCount;
+    unsigned int	*m_meshIndices;
+    Vertex			*m_meshVertices;
+    unsigned int	m_elementCount;
+    unsigned int    m_width;
+    unsigned int    m_height;
 		
 public:
 	TriMesh(int width, int height);

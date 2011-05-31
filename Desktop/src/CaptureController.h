@@ -11,6 +11,9 @@
 #ifndef _CAPTURE_CONTROLLER_H_
 #define _CAPTURE_CONTROLLER_H_
 
+//	Qt auto generated headers
+#include "ui_Capture.h"
+
 #include <QWidget>
 
 #include "OpenGLWidget.h"
@@ -22,7 +25,7 @@
 #include "ImageBuffer.h"
 #include "FrameCapture.h"
 
-class CaptureController : public QWidget
+class CaptureController : public QWidget, private Ui::Capture
 {
   Q_OBJECT
 
@@ -36,7 +39,8 @@ private:
 public slots:
   void newFrame(IplImage *frame);
   void captureReference(void);
-  void connectToCamera(void);
+  void connectCamera(void);
+  void disconnectCamera(void);
 
 public:
     CaptureController(QWidget* parent = 0);
@@ -48,8 +52,6 @@ protected:
     virtual void showEvent(QShowEvent *event);
 
 private:
-    void _update3DGL(void);
-    void _updateCameraGL(void);
     void _connectSignalsWithController(void);
 };
 

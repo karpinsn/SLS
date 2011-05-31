@@ -1,6 +1,6 @@
 #include "TriMesh.h"
 
-TriMesh::TriMesh(int width, int height)
+TriMesh::TriMesh(int width, int height) : m_width(width), m_height(height)
 {	
 }
 
@@ -24,48 +24,46 @@ void TriMesh::draw()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, m_triMeshVBOID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_triMeshIBOID);
-	glDrawElements(GL_TRIANGLE_STRIP, elementCount, GL_UNSIGNED_INT, NULL);
+    glDrawElements(GL_TRIANGLE_STRIP, m_elementCount, GL_UNSIGNED_INT, NULL);
 }
 
 void TriMesh::_generateIndices(void)
 {
-	const int meshWidth = 512;
-	const int meshHeight = 512;
-	
-	elementCount = (meshWidth * 2) * (meshHeight - 1) + (meshHeight - 2);
-	meshIndices = new unsigned int[elementCount];
+    //  More elements than the width * height due to genenerate verticies
+    m_elementCount = (m_width * 2) * (m_height - 1) + (m_height - 2);
+    m_meshIndices = new unsigned int[m_elementCount];
 	
 	int index = 0;
-	for(int row = 0; row < meshHeight - 1; row++)
+    for(int row = 0; row < m_height - 1; row++)
 	{
 		//	Check if we are on an even row
 		if(row % 2 == 0)
 		{
 			int x;
-			for(x = 0; x < meshWidth; x++)
+            for(x = 0; x < m_width; x++)
 			{
-				meshIndices[index++] = x + (row * meshWidth);
-				meshIndices[index++] = x + (row * meshWidth) + meshWidth;
+                m_meshIndices[index++] = x + (row * m_width);
+                m_meshIndices[index++] = x + (row * m_width) + m_width;
 			}
-			if(row != meshHeight -2)
+            if(row != m_height -2)
 			{
 				//	Insert degenerate vertex to preserve the front face
-				meshIndices[index++] = --x + (row * meshWidth);
+                m_meshIndices[index++] = --x + (row * m_width);
 			}
 		}
 		//	Odd Row
 		else
 		{
 			int x;
-			for(x = meshWidth - 1; x >= 0; x--)
+            for(x = m_width - 1; x >= 0; x--)
 			{
-				meshIndices[index++] = x + (row * meshWidth);
-				meshIndices[index++] = x + (row * meshWidth) + meshWidth;
+                m_meshIndices[index++] = x + (row * m_width);
+                m_meshIndices[index++] = x + (row * m_width) + m_width;
 			}
 			
-			if(row != meshHeight - 2)
+            if(row != m_height - 2)
 			{
-				meshIndices[index++] = ++x + (row * meshWidth);
+                m_meshIndices[index++] = ++x + (row * m_width);
 			}
 		}
 	}
@@ -73,20 +71,17 @@ void TriMesh::_generateIndices(void)
 
 void TriMesh::_generateTexturedVertices(void)
 {
-	int const meshWidth = 512;
-	int const meshHeight = 512;
-	
-	meshVertices = new Vertex[meshHeight * meshWidth];
-	for(int row = 0; row < meshHeight; row++)
+    m_meshVertices = new Vertex[m_height * m_width];
+    for(int row = 0; row < m_height; row++)
 	{
-		for(int column = 0; column < meshWidth; column++)
+        for(int column = 0; column < m_width; column++)
 		{
-			meshVertices[row * meshHeight + column].x = (float)row * 0.001953125 -.5;
-			meshVertices[row * meshHeight + column].y = (float)column * 0.001953125 + .5;
-			meshVertices[row * meshHeight + column].z = 0.0f;
+            m_meshVertices[row * m_height + column].x = (float)row / m_height;
+            m_meshVertices[row * m_height + column].y = (float)column / m_width;
+            m_meshVertices[row * m_height + column].z = 0.0f;
 			
-			meshVertices[row * meshHeight + column].u = (float)row / (float)meshHeight;
-			meshVertices[row * meshHeight + column].v = (float)column / (float)meshWidth;
+            m_meshVertices[row * m_height + column].u = (float)row / (float)m_height;
+            m_meshVertices[row * m_height + column].v = (float)column / (float)m_width;
 		}
 	}
 }
@@ -95,12 +90,12 @@ void TriMesh::_cacheTriMesh(void)
 {
 	glGenBuffers(1, &m_triMeshVBOID);
 	glBindBuffer(GL_ARRAY_BUFFER, m_triMeshVBOID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 512 * 512, meshVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_width * m_height, m_meshVertices, GL_STATIC_DRAW);
 	
 	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), 0);
 	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
 	
 	glGenBuffers(1, &m_triMeshIBOID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_triMeshIBOID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * elementCount, meshIndices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * m_elementCount, m_meshIndices, GL_STATIC_DRAW);
 }

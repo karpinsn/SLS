@@ -2,6 +2,7 @@
 
 ViewController::ViewController(QWidget* parent) : QWidget(parent)
 {
+  setupUi(this);
 }
 
 ViewController::~ViewController()
@@ -10,9 +11,8 @@ ViewController::~ViewController()
 
 void ViewController::init(void)
 {
-  OpenGLWidget *glWidget = findChild<OpenGLWidget*>(QString::fromUtf8("viewGLWidget"));
-  glWidget->setGLContext(&m_decoder);
-  glWidget->m_holoDecoder = &m_decoder;
+  viewGLWidget->setGLContext(&m_decoder);
+  viewGLWidget->m_holoDecoder = &m_decoder;
 }
 
 void ViewController::cameraSelectMode(int mode)

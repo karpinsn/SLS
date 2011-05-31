@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
-    <height>636</height>
+    <width>874</width>
+    <height>712</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -48,157 +48,28 @@
        <number>2</number>
       </property>
       <widget class="ViewController" name="viewController">
-       <widget class="OpenGLWidget" name="viewGLWidget" native="true">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>512</width>
-          <height>512</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>512</width>
-          <height>512</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>512</width>
-          <height>512</height>
-         </size>
-        </property>
-       </widget>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
       </widget>
       <widget class="EncoderController" name="encodeController">
-       <widget class="OpenGLWidget" name="encoderGLWidget" native="true">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>512</width>
-          <height>512</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>512</width>
-          <height>512</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>512</width>
-          <height>512</height>
-         </size>
-        </property>
-       </widget>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
       </widget>
       <widget class="CaptureController" name="captureController">
-       <widget class="QTabWidget" name="tabWidget">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>521</width>
-          <height>551</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="contextMenuPolicy">
-         <enum>Qt::NoContextMenu</enum>
-        </property>
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QWidget" name="threeDTab">
-         <attribute name="title">
-          <string>3D</string>
-         </attribute>
-         <widget class="OpenGLWidget" name="captureGLWidget" native="true">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>512</width>
-            <height>512</height>
-           </rect>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>512</width>
-            <height>512</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>512</width>
-            <height>512</height>
-           </size>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QWidget" name="cameraTab">
-         <attribute name="title">
-          <string>Camera</string>
-         </attribute>
-         <widget class="OpenGLWidget" name="cameraGLWidget" native="true">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>512</width>
-            <height>512</height>
-           </rect>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>512</width>
-            <height>512</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>512</width>
-            <height>512</height>
-           </size>
-          </property>
-         </widget>
-        </widget>
-       </widget>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
       </widget>
      </widget>
     </item>
@@ -243,7 +114,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>535</width>
+     <width>874</width>
      <height>25</height>
     </rect>
    </property>
@@ -268,6 +139,10 @@
     <property name="title">
      <string>Capture</string>
     </property>
+    <addaction name="separator"/>
+    <addaction name="actionConnectCamera"/>
+    <addaction name="actionDisconnectCamera"/>
+    <addaction name="separator"/>
     <addaction name="actionCalibrateRefrence"/>
    </widget>
    <addaction name="menuFile"/>
@@ -295,10 +170,29 @@
    <addaction name="actionRotate"/>
    <addaction name="actionZoom"/>
    <addaction name="actionPan"/>
-   <addaction name="separator"/>
-   <addaction name="modeView"/>
+  </widget>
+  <widget class="QToolBar" name="modeBar">
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::RightToLeft</enum>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftToolBarArea</set>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
    <addaction name="modeEncode"/>
    <addaction name="modeCapture"/>
+   <addaction name="modeView"/>
   </widget>
   <action name="actionOpenXYZM">
    <property name="text">
@@ -414,14 +308,18 @@
     <string>Calibrate Reference</string>
    </property>
   </action>
+  <action name="actionConnectCamera">
+   <property name="text">
+    <string>Connect Camera</string>
+   </property>
+  </action>
+  <action name="actionDisconnectCamera">
+   <property name="text">
+    <string>Disconnect Camera</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>OpenGLWidget</class>
-   <extends>QWidget</extends>
-   <header>OpenGLWidget.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>ViewController</class>
    <extends>QWidget</extends>

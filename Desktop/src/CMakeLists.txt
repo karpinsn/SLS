@@ -128,7 +128,7 @@ set(SOURCES
 	)	
 	
 # QT Files
-set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui)	
+set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui)
 set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h CameraConnectDialog.h)
 set(RESOURCES ui/Holoencoder.qrc)
 

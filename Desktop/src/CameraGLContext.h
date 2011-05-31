@@ -48,9 +48,14 @@ private:
   Texture* m_textureBuffer[2];
   int m_frontBufferIndex;		//	Index of the front buffer in m_bufferIds
 
+  bool m_hasBeenInit;
+
   VAO m_screen;
   VBO m_vertex;
   VBO m_texCoords;
+
+  float m_cameraWidth;
+  float m_cameraHeight;
 
 public:
   CameraGLContext(void);
@@ -63,6 +68,7 @@ public:
   virtual void mousePressEvent(int mouseX, int mouseY);
   virtual void mouseMoveEvent(int mouseX, int mouseY);
 
+  void resizeInput(float width, float height);
   void newImage(IplImage* image);
   void swapBuffers(void);
 private:

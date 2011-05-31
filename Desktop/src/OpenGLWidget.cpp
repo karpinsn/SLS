@@ -71,7 +71,7 @@ void OpenGLWidget::resizeGL(int width, int height)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  m_glContext->resize(512, 512);
+  m_glContext->resize(width, height);
 
   glMatrixMode(GL_MODELVIEW);
 }

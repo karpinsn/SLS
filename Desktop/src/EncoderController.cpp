@@ -2,6 +2,7 @@
 
 EncoderController::EncoderController(QWidget* parent) : QWidget(parent)
 {
+  setupUi(this);
 }
 
 EncoderController::~EncoderController()
@@ -10,8 +11,7 @@ EncoderController::~EncoderController()
 
 void EncoderController::init(void)
 {
-  OpenGLWidget *glWidget = findChild<OpenGLWidget*>(QString::fromUtf8("encoderGLWidget"));
-  glWidget->setGLContext(&m_encoder);
+  encoderGLWidget->setGLContext(&m_encoder);
 }
 
 void EncoderController::exportCurrentFrame(void)

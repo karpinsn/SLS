@@ -2,6 +2,7 @@
 
 CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
 {
+  setupUi(this);
 }
 
 CaptureController::~CaptureController()
@@ -12,19 +13,17 @@ void CaptureController::showEvent(QShowEvent *event)
 {
   //  Connect to camera
   m_frameCapture.start();
-  connectToCamera();
+  connectCamera();
 
-  _update3DGL();
-  _updateCameraGL();
+  captureGLWidget->updateScene();
+  cameraGLWidget->updateScene();
 }
 
 void CaptureController::init(void)
 {
-  OpenGLWidget *captureWidget = findChild<OpenGLWidget*>(QString::fromUtf8("captureGLWidget"));
-  captureWidget->setGLContext(&m_gl3DContext);
+  captureGLWidget->setGLContext(&m_gl3DContext);
 
-  OpenGLWidget *cameraWidget = findChild<OpenGLWidget*>(QString::fromUtf8("cameraGLWidget"));
-  cameraWidget->setGLContext(&m_glCameraContext);
+  cameraGLWidget->setGLContext(&m_glCameraContext);
 
   m_glCameraContext.setBuffer(&m_buffer);
   m_camera.init(&m_buffer);
@@ -38,7 +37,7 @@ void CaptureController::captureReference(void)
   m_gl3DContext.captureReferencePlane();
 }
 
-void CaptureController::connectToCamera(void)
+void CaptureController::connectCamera(void)
 {
   CameraConnectDialog dialog;
   lens::Camera *camera = dialog.getCamera();
@@ -46,61 +45,49 @@ void CaptureController::connectToCamera(void)
   m_camera.setCamera(camera);
 
   //  Reinitalize OpenGL stuff
+  captureGLWidget->makeCurrent();
   m_gl3DContext.resizeInput(camera->getWidth(), camera->getHeight());
+  cameraGLWidget->makeCurrent();
+  m_glCameraContext.resizeInput(camera->getWidth(), camera->getHeight());
+
   m_camera.start();
+}
+
+void CaptureController::disconnectCamera(void)
+{
+  m_camera.stop();
 }
 
 void CaptureController::newFrame(IplImage *frame)
 {
+  IplImage *im_gray = frame;
+  bool releaseGray = false;
+
+  if(frame->nChannels > 1)
+  {
+    im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
+    cvCvtColor(frame, im_gray, CV_RGB2GRAY);
+    releaseGray = true;
+  }
 
   //  Only do this if m_glCameraContex is visible
-  OpenGLWidget* cameraContext = findChild<OpenGLWidget*>(QString::fromUtf8("cameraGLWidget"));
-  if(cameraContext->isVisible())
+  if(cameraGLWidget->isVisible())
   {
-    cameraContext->makeCurrent();
-    m_glCameraContext.newImage(frame);
-    _updateCameraGL();
+    cameraGLWidget->makeCurrent();
+    m_glCameraContext.newImage(im_gray);
+    cameraGLWidget->updateScene();
   }
 
-  OpenGLWidget *captureContext = findChild<OpenGLWidget*>(QString::fromUtf8("captureGLWidget"));
-  captureContext->makeCurrent();
+  captureGLWidget->makeCurrent();
+  m_gl3DContext.newImage(im_gray);
 
-  //IplImage *im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
-  //cvCvtColor(frame, im_gray, CV_RGB2GRAY);
+  if(releaseGray)
+  {
+    cvReleaseImage(&im_gray);
+  }
 
-  m_gl3DContext.newImage(frame);
-
-  //cvReleaseImage(&im_gray);
   cvReleaseImage(&frame);
-  _update3DGL();
-}
-
-void CaptureController::_update3DGL(void)
-{
-  OpenGLWidget *glContext = findChild<OpenGLWidget*>(QString::fromUtf8("captureGLWidget"));
-
-  if(NULL != glContext)
-  {
-    glContext->updateScene();
-  }
-  else
-  {
-    Logger::logError("ViewController - _update3DGL: Unable to find 3D Decoding OpenGL Widget");
-  }
-}
-
-void CaptureController::_updateCameraGL(void)
-{
-  OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("cameraGLWidget"));
-
-  if(NULL != glContext)
-  {
-    glContext->updateScene();
-  }
-  else
-  {
-    Logger::logError("ViewController - _updateGL: Unable to find Camera view OpenGL Widget");
-  }
+  captureGLWidget->updateScene();
 }
 
 void CaptureController::_connectSignalsWithController(void)

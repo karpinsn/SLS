@@ -11,12 +11,15 @@
 #ifndef _VIEW_CONTROLLER_H_
 #define _VIEW_CONTROLLER_H_
 
+//	Qt auto generated headers
+#include "ui_View.h"
+
 #include <QWidget>
 #include <QtCore/QTimer>
 
 #include "OpenGLWidget.h"
 
-class ViewController : public QWidget
+class ViewController : public QWidget, private Ui::View
 {
   Q_OBJECT
 

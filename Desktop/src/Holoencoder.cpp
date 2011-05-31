@@ -121,8 +121,8 @@ Texture& Holoencoder::encode()
 
 void Holoencoder::resize(int width, int height)
 {
-	m_width = width;
-	m_height = height;
+    m_width = 512;
+    m_height = 512;
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 }
 

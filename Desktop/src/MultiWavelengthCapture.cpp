@@ -24,7 +24,6 @@ void MultiWavelengthCapture::init()
     m_camera.setMode(1);
 
     m_mesh = new TriMesh(640, 480);
-
     m_mesh->initMesh();
 
     m_fringeLoadingImage = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 3);
@@ -60,6 +59,7 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
     //  Resize the display mesh
     delete m_mesh;
     m_mesh = new TriMesh((int)width, (int)height);
+    m_mesh->initMesh();
 
     //  Resize the fringe loader
     cvReleaseImage(&m_fringeLoadingImage);

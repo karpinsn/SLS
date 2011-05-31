@@ -2,6 +2,9 @@
 
 CameraGLContext::CameraGLContext(void)
 {
+  m_hasBeenInit = false;
+  m_cameraWidth = 0.0;
+  m_cameraHeight = 0.0;
 }
 
 void CameraGLContext::setBuffer(ImageBuffer *buffer)
@@ -11,10 +14,17 @@ void CameraGLContext::setBuffer(ImageBuffer *buffer)
 
 void CameraGLContext::init()
 {
-  m_frontBufferIndex = 0;
-  _cacheQuad();
-  _initShaders();
-  _initTextures(1392, 1040);
+  if(!m_hasBeenInit)
+  {
+    m_cameraWidth = 640.0f;
+    m_cameraHeight = 480.0f;
+
+    m_frontBufferIndex = 0;
+    _cacheQuad();
+    _initShaders();
+    _initTextures((GLuint)m_cameraWidth, (GLuint)m_cameraHeight);
+    m_hasBeenInit = true;
+  }
 }
 
 void CameraGLContext::_initShaders(void)
@@ -32,7 +42,7 @@ void CameraGLContext::_initShaders(void)
 
 void CameraGLContext::_initTextures(GLuint width, GLuint height)
 {
-	m_frame0.init(width, height, GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE);
+  m_frame0.init(width, height, GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE);
   m_frame1.init(width, height, GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE);
   m_textureBuffer[0] = &m_frame0;
   m_textureBuffer[1] = &m_frame1;
@@ -56,9 +66,30 @@ void CameraGLContext::draw(void)
   OGLStatus::logOGLErrors("CameraGLContext - draw()");
 }
 
+void CameraGLContext::resizeInput(float width, float height)
+{
+  //  Make sure that it has been initalized first.
+  if(m_hasBeenInit)
+  {
+    m_cameraWidth = width;
+    m_cameraHeight = height;
+
+    m_frame0.init((GLuint)width, (GLuint)height, GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE);
+    m_frame1.init((GLuint)width, (GLuint)height, GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE);
+  }
+}
+
 void CameraGLContext::resize(int width, int height)
 {
+  //  Center the viewport
+  int x = (width - m_cameraWidth) / 2.0;
+  int y = (height - m_cameraHeight) / 2.0;
+  glViewport(x, y, m_cameraWidth, m_cameraHeight);
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
   glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+  glMatrixMode(GL_MODELVIEW);
 }
 
 void CameraGLContext::cameraSelectMode(int mode)

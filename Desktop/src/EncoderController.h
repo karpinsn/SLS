@@ -11,13 +11,16 @@
 #ifndef _ENCODER_CONTROLLER_H_
 #define _ENCODER_CONTROLLER_H_
 
+//	Qt auto generated headers
+#include "ui_Encode.h"
+
 #include <QWidget>
 
 #include "OpenGLWidget.h"
 #include "Holoencoder.h"
 #include "XYZFileIO.h"
 
-class EncoderController : public QWidget
+class EncoderController : public QWidget, private Ui::Encode
 {
   Q_OBJECT
 

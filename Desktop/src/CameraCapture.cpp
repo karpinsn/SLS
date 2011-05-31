@@ -26,6 +26,14 @@ void CameraCapture::start()
   }
 }
 
+void CameraCapture::stop()
+{
+  if(NULL != m_camera)
+  {
+    m_camera->close();
+  }
+}
+
 void CameraCapture::newFrame(IplImage* frame)
 {
   m_buffer->pushFrame(frame);

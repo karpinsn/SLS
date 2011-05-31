@@ -27,7 +27,7 @@
        <property name="minimumSize">
         <size>
          <width>80</width>
-         <height>144</height>
+         <height>263</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -47,23 +47,77 @@
          <item row="0" column="0">
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <widget class="QPushButton" name="pushButton">
-             <property name="text">
+            <widget class="QPushButton" name="openCameraButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>60</horstretch>
+               <verstretch>60</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>60</width>
+               <height>60</height>
+              </size>
+             </property>
+             <property name="toolTip">
               <string>Open Camera</string>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_2">
              <property name="text">
-              <string>Close Camera</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="Holoencoder.qrc">
+               <normaloff>:/../../resources/images/resources/images/CameraOpen.png</normaloff>:/../../resources/images/resources/images/CameraOpen.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>60</width>
+               <height>60</height>
+              </size>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_3">
+            <widget class="QPushButton" name="closeCameraButton">
+             <property name="toolTip">
+              <string>Close Camera</string>
+             </property>
              <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="Holoencoder.qrc">
+               <normaloff>:/../../resources/images/resources/images/CameraClose.png</normaloff>:/../../resources/images/resources/images/CameraClose.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>60</width>
+               <height>60</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="calibrateButton">
+             <property name="toolTip">
               <string>Calibrate</string>
+             </property>
+             <property name="autoFillBackground">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="Holoencoder.qrc">
+               <normaloff>:/../../resources/images/resources/images/Calibration.png</normaloff>:/../../resources/images/resources/images/Calibration.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>60</width>
+               <height>60</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -169,6 +223,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="Holoencoder.qrc"/>
+ </resources>
  <connections/>
 </ui>

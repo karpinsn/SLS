@@ -13,7 +13,6 @@ void CaptureController::showEvent(QShowEvent *event)
 {
   //  Connect to camera
   m_frameCapture.start();
-  connectCamera();
 
   captureGLWidget->updateScene();
   cameraGLWidget->updateScene();
@@ -93,4 +92,7 @@ void CaptureController::newFrame(IplImage *frame)
 void CaptureController::_connectSignalsWithController(void)
 {
   connect(&m_frameCapture, SIGNAL(newFrame(IplImage*)), this, SLOT(newFrame(IplImage*)));
+  connect(openCameraButton, SIGNAL(clicked()), this, SLOT(connectCamera()));
+  connect(closeCameraButton, SIGNAL(clicked()), this, SLOT(disconnectCamera()));
+  connect(calibrateButton, SIGNAL(clicked()), this, SLOT(captureReference()));
 }

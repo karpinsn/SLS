@@ -36,6 +36,11 @@ void CaptureController::captureReference(void)
   m_gl3DContext.captureReferencePlane();
 }
 
+void CaptureController::cameraSelectMode(int mode)
+{
+  m_gl3DContext.cameraSelectMode(mode);
+}
+
 void CaptureController::connectCamera(void)
 {
   CameraConnectDialog dialog;

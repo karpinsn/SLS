@@ -74,6 +74,11 @@ void MainWindowController::openHoloImage(void)
 void MainWindowController::toolSelect(int tool)
 {
     m_mainWindow->viewController->cameraSelectMode(tool);
+
+	if(m_mainWindow->captureController->isVisible())
+	{
+		m_mainWindow->captureController->cameraSelectMode(tool);
+	}
 }
 
 void MainWindowController::viewMode(void)

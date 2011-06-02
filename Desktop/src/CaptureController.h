@@ -47,6 +47,7 @@ public:
     ~CaptureController();
 
   void init(void);
+  void cameraSelectMode(int mode);
 
 protected:
     virtual void showEvent(QShowEvent *event);

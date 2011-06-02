@@ -13,6 +13,9 @@
 
 #include <QThread>
 
+#include <cv.h>
+#include <highgui.h>
+
 #include "Camera.h"
 
 using namespace std;
@@ -23,6 +26,8 @@ namespace lens
         {
     private:
       bool        m_running;
+      IplImage*   m_images[18];
+      int         currentImage;
     public:
       FileCamera();
       ~FileCamera();
@@ -37,7 +42,10 @@ namespace lens
 
     protected:
       void run();
-        };
+
+    private:
+      IplImage* _readImage(const string &filename);
+    };
 }
 
 #endif	// _FILE_CAMERA_H_

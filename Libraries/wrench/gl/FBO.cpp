@@ -31,6 +31,21 @@ bool wrench::gl::FBO::init(int width, int height)
   return true;
 }
 
+bool wrench::gl::FBO::reinit(int width, int height)
+{
+  m_width = width;
+  m_height = height;
+
+  _cacheQuad();
+
+  glDeleteFramebuffersEXT(1, &m_framebuffer);
+  _initFBO();
+
+  OGLStatus::logOGLErrors("FBOFacade - init()");
+
+  return true;
+}
+
 void wrench::gl::FBO::bind()
 {
   glBindFramebuffer(GL_FRAMEBUFFER_EXT, m_framebuffer);

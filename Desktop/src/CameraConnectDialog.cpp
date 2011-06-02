@@ -19,6 +19,10 @@ lens::Camera* CameraConnectDialog::getCamera(void)
     {
       m_camera = new lens::OpenCVCamera();
     }
+    else if(0 == QString::fromStdString(lens::FileCamera::cameraName()).compare(cameraDriverComboBox->currentText()))
+    {
+      m_camera = new lens::FileCamera();
+    }
 
 #ifdef USE_IC_CAMERA
     if(0 == QString::fromStdString(lens::ICCamera::cameraName()).compare(cameraDriverComboBox->currentText()))
@@ -41,6 +45,7 @@ lens::Camera* CameraConnectDialog::getCamera(void)
 void CameraConnectDialog::_initCameraDriverList(void)
 {
   cameraDriverComboBox->addItem(QString::fromStdString(lens::OpenCVCamera::cameraName()));
+  cameraDriverComboBox->addItem(QString::fromStdString(lens::FileCamera::cameraName()));
 
   //  Only add the cameras if they are being used
 #ifdef USE_IC_CAMERA

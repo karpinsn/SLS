@@ -14,8 +14,8 @@ void MultiWavelengthCapture::init()
 {
   if(!m_hasBeenInit)
   {
-    _initShaders(640, 480);
-    _initTextures(640, 480);
+    _initShaders(576, 576);
+    _initTextures(576, 576);
 
     m_axis.init();
 
@@ -23,10 +23,10 @@ void MultiWavelengthCapture::init()
     m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
     m_camera.setMode(1);
 
-    m_mesh = new TriMesh(640, 480);
+    m_mesh = new TriMesh(576, 576);
     m_mesh->initMesh();
 
-    m_fringeLoadingImage = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 3);
+    m_fringeLoadingImage = cvCreateImage(cvSize(576, 576), IPL_DEPTH_8U, 3);
 
     m_hasBeenInit = true;
   }
@@ -50,6 +50,14 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
     m_normalMap.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
     m_referencePhase.reinit   (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
 
+    //  Resize the image processor
+    m_imageProcessor.reinit(width, height);
+    m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);
+    m_imageProcessor.setTextureAttachPoint(m_phaseMap1, m_phaseMap1AttachPoint);
+    m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
+    m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
+    m_imageProcessor.unbind();
+
     //  Send the new size to all of the shaders
     m_phaseFilter.uniform("width", width);
     m_phaseFilter.uniform("height", height);
@@ -65,6 +73,8 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
     cvReleaseImage(&m_fringeLoadingImage);
     m_fringeLoadingImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3);
   }
+
+  OGLStatus::logOGLErrors("MultiWavelengthCapture - resizeInput()");
 }
 
 void MultiWavelengthCapture::_initShaders(float width, float height)

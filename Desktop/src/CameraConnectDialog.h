@@ -3,6 +3,7 @@
 
 #include "lens/Camera.h"
 #include "lens/OpenCVCamera.h"
+#include "lens/FileCamera.h"
 
 #include "lens/config-lens.h"
 

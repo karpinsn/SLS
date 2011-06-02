@@ -70,6 +70,7 @@ namespace wrench
       ~FBO();
 
       bool init(int width, int height);
+      bool reinit(int width, int height);
 
       void bind(void);
       void unbind(void);

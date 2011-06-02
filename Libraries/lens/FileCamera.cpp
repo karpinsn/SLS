@@ -10,7 +10,7 @@
 
 lens::FileCamera::FileCamera() : QThread()
 {
-
+  currentImage = 0;
 }
 
 lens::FileCamera::~FileCamera()
@@ -20,7 +20,25 @@ lens::FileCamera::~FileCamera()
 
 void lens::FileCamera::init(void)
 {
+  m_images[0] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O006.bmp");
+  m_images[1] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O007.bmp");
+  m_images[2] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O008.bmp");
+  m_images[3] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O012.bmp");
+  m_images[4] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O013.bmp");
+  m_images[5] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O014.bmp");
+  m_images[6] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O009.bmp");
+  m_images[7] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O010.bmp");
+  m_images[8] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O011.bmp");
 
+  m_images[9] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref1.bmp");
+  m_images[10] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref2.bmp");
+  m_images[11] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref3.bmp");
+  m_images[12] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref7.bmp");
+  m_images[13] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref8.bmp");
+  m_images[14] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref9.bmp");
+  m_images[15] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref4.bmp");
+  m_images[16] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref5.bmp");
+  m_images[17] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref6.bmp");
 }
 
 void lens::FileCamera::open(void)
@@ -36,12 +54,12 @@ void lens::FileCamera::close(void)
 
 float lens::FileCamera::getWidth(void)
 {
-  return 1.0;
+  return 576.0;
 }
 
 float lens::FileCamera::getHeight(void)
 {
-  return 1.0;
+  return 576.0;
 }
 
 std::string lens::FileCamera::cameraName(void)
@@ -53,6 +71,19 @@ void lens::FileCamera::run()
 {
   while(m_running)
   {
-    sleep(1000);
+    notifyObservers(m_images[currentImage]);
+
+    currentImage = ++currentImage % 18;
+
+    msleep(100);
   }
+}
+
+IplImage* lens::FileCamera::_readImage(const string &filename)
+{
+    IplImage* image = cvLoadImage(filename.c_str());
+
+    cvCvtColor(image, image, CV_BGR2RGB);
+
+    return image;
 }

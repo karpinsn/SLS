@@ -15,10 +15,12 @@ set(SOURCES
 	Camera.cpp
 	CameraObserver.cpp
 	OpenCVCamera.cpp
+	FileCamera.cpp
 
 	Camera.h
 	CameraObserver.h
 	OpenCVCamera.h
+	FileCamera.h
 )
 
 #	-----------------------------------------------

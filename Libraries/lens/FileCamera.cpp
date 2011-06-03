@@ -64,7 +64,7 @@ float lens::FileCamera::getHeight(void)
 
 std::string lens::FileCamera::cameraName(void)
 {
-        return "File Based Camera Driver";
+  return "File Based Camera Driver";
 }
 
 void lens::FileCamera::run()

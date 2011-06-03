@@ -21,7 +21,7 @@
 class ImageBuffer
 {
 public:
-  ImageBuffer(int size = 256);
+  ImageBuffer(int size = 2);
   ~ImageBuffer();
 
   void pushFrame(const IplImage *image);

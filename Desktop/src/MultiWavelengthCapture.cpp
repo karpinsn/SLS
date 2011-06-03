@@ -14,8 +14,8 @@ void MultiWavelengthCapture::init()
 {
   if(!m_hasBeenInit)
   {
-    _initShaders(576, 576);
-    _initTextures(576, 576);
+    _initShaders(256, 256);
+    _initTextures(256, 256);
     _initLighting();
 
     m_axis.init();
@@ -24,10 +24,10 @@ void MultiWavelengthCapture::init()
     m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
     m_camera.setMode(1);
 
-    m_mesh = new TriMesh(576, 576);
+    m_mesh = new TriMesh(256, 256);
     m_mesh->initMesh();
 
-    m_fringeLoadingImage = cvCreateImage(cvSize(576, 576), IPL_DEPTH_8U, 3);
+    m_fringeLoadingImage = cvCreateImage(cvSize(256, 256), IPL_DEPTH_8U, 3);
 
     m_hasBeenInit = true;
   }
@@ -46,10 +46,10 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
     m_fringeImage5.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
     m_fringeImage6.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 
-    m_phaseMap0.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-    m_phaseMap1.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-    m_normalMap.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-    m_referencePhase.reinit   (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+    m_phaseMap0.reinit        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
+    m_phaseMap1.reinit        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
+    m_normalMap.reinit        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
+    m_referencePhase.reinit   (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
 
     //  Resize the image processor
     m_imageProcessor.reinit(width, height);
@@ -148,10 +148,10 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
   m_fringeImages[1][1] = &m_fringeImage5;
   m_fringeImages[1][2] = &m_fringeImage6;
 
-  m_phaseMap0.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-  m_phaseMap1.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-  m_normalMap.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-  m_referencePhase.init   (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+  m_phaseMap0.init        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
+  m_phaseMap1.init        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
+  m_normalMap.init        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
+  m_referencePhase.init   (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
 
   m_imageProcessor.init(width, height);
   m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);
@@ -268,7 +268,12 @@ void MultiWavelengthCapture::draw(void)
 void MultiWavelengthCapture::resize(int width, int height)
 {
   m_camera.reshape(width, height);
+
+  glViewport(0, 0, width, height);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
   gluPerspective(45.0, 1.0, .00001, 10.0);
+  glMatrixMode(GL_MODELVIEW);
 }
 
 void MultiWavelengthCapture::cameraSelectMode(int mode)

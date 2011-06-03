@@ -36,8 +36,6 @@ bool wrench::gl::FBO::reinit(int width, int height)
   m_width = width;
   m_height = height;
 
-  _cacheQuad();
-
   glDeleteFramebuffersEXT(1, &m_framebuffer);
   _initFBO();
 

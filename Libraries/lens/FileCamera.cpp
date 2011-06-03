@@ -75,7 +75,7 @@ void lens::FileCamera::run()
 
     currentImage = ++currentImage % 18;
 
-    msleep(100);
+    msleep(10);
   }
 }
 

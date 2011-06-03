@@ -49,8 +49,8 @@ void CaptureController::connectCamera(void)
   m_camera.setCamera(camera);
 
   //  Reinitalize OpenGL stuff
-  //captureGLWidget->makeCurrent();
-  //m_gl3DContext.resizeInput(camera->getWidth(), camera->getHeight());
+  captureGLWidget->makeCurrent();
+  m_gl3DContext.resizeInput(camera->getWidth(), camera->getHeight());
   cameraGLWidget->makeCurrent();
   m_glCameraContext.resizeInput(camera->getWidth(), camera->getHeight());
 

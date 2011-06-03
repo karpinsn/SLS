@@ -111,9 +111,11 @@ public:
   void newImage(IplImage* image);
   void swapBuffers(void);
   void captureReferencePlane(void);
+
 private:
   void _initShaders(float width, float height);
   void _initTextures(GLuint width, GLuint height);
+  void _initLighting(void);
 };
 
 #endif	// _MULTI_WAVELENGTH_CAPTURE_H_

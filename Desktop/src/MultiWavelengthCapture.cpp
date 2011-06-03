@@ -16,6 +16,7 @@ void MultiWavelengthCapture::init()
   {
     _initShaders(576, 576);
     _initTextures(576, 576);
+    _initLighting();
 
     m_axis.init();
 
@@ -162,6 +163,33 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
   OGLStatus::logOGLErrors("MultiWavelengthCapture - initTextures()");
 }
 
+void MultiWavelengthCapture::_initLighting(void)
+{
+    GLfloat mat_specular[] = {.1f, .1f, .1f, .1f};
+    GLfloat mat_shininess[] = {1.0f};
+    GLfloat light_position[] = {-2.0f, 2.0f, 4.0f, 1.0f};
+    GLfloat white_light[] = {1.0f, 1.0f, 1.0f, 1.0f};
+
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+
+    glShadeModel(GL_SMOOTH);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
+    //	Setup light 0
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+
+    //	Enable lighting
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+}
+
 void MultiWavelengthCapture::draw(void)
 {
   if(m_captureReferencePhase)
@@ -171,9 +199,9 @@ void MultiWavelengthCapture::draw(void)
     {
       m_imageProcessor.bindDrawBuffer(m_referencePhaseAttachPoint);
       m_phaseCalculator.bind();
-      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE0);
-      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE1);
-      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE2);
+      m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
+      m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1);
+      m_fringeImages[m_frontBufferIndex][2]->bind(GL_TEXTURE2);
       m_imageProcessor.process();
     }
     m_imageProcessor.unbind();
@@ -188,9 +216,9 @@ void MultiWavelengthCapture::draw(void)
       //	Pass 1
       m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
       m_phaseCalculator.bind();
-      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE0);
-      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE1);
-      m_fringeImages[m_frontBufferIndex][m_currentFringeLoad]->bind(GL_TEXTURE2);
+      m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
+      m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1);
+      m_fringeImages[m_frontBufferIndex][2]->bind(GL_TEXTURE2);
       m_imageProcessor.process();
 
       //	Pass 2

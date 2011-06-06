@@ -21,7 +21,7 @@
 class ImageBuffer
 {
 public:
-  ImageBuffer(int size = 2);
+  ImageBuffer(int size = 256);
   ~ImageBuffer();
 
   void pushFrame(const IplImage *image);
@@ -32,6 +32,7 @@ private:
   const int m_bufferSize;
   QSemaphore *m_freeImages;
   QSemaphore *m_queuedImages;
+  QMutex     m_lock;
   QQueue<IplImage*> m_imageQueue;
 
 };

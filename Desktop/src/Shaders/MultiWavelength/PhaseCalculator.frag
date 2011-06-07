@@ -1,6 +1,6 @@
-#version 130	// This is needed for the round operator
+#version 330	// This is needed for the round operator
 
-//precision highp float;
+precision highp float;
 
 uniform sampler2D fringeImage1;
 uniform sampler2D fringeImage2;
@@ -26,18 +26,19 @@ void main(void)
 	float phi123 = mod(phi12 - phi13, 2.0 * pi);
 	
 	float P1=60.0;
-	float P2=102.0;
+	float P2=96.0;
 	float P3=90.0;
 	float P12=(P1*P2)/(P2-P1);
 	float P13=(P1*P3)/(P3-P1);
 	float P123=(P13*P12)/(P13-P12);
-	float k=round((phi123*(P123/P1)-phi1)/(2.0*pi));
+	float k=floor((phi123*(P123/P1)-phi1)/(2.0*pi));
 
 	float fringeMagnitude = length(fringe1) + length(fringe2) + length(fringe3);
 
 	if(fringeMagnitude >= .015)
 	{	
 		phase = vec4(k * 2.0 * pi + phi1);
+		//phase = vec4(phi1);
 	}
 	else
 	{

@@ -230,7 +230,7 @@ void MultiWavelengthCapture::draw(void)
       //	Pass 3
       m_imageProcessor.bindDrawBuffer(m_normalMapAttachPoint);
       m_normalCalculator.bind();
-      m_phaseMap1.bind(GL_TEXTURE0);
+      m_phaseMap0.bind(GL_TEXTURE0);
       m_imageProcessor.process();
 	}
 	m_imageProcessor.unbind();
@@ -252,7 +252,7 @@ void MultiWavelengthCapture::draw(void)
 	m_finalRender.bind();
 	{
       m_normalMap.bind(GL_TEXTURE0);
-      m_phaseMap1.bind(GL_TEXTURE1);
+      m_phaseMap0.bind(GL_TEXTURE1);
       m_referencePhase.bind(GL_TEXTURE2);
 
       // Draw a plane of pixels

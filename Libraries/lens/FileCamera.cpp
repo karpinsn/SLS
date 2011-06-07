@@ -20,6 +20,17 @@ lens::FileCamera::~FileCamera()
 
 void lens::FileCamera::init(void)
 {
+  m_images[0] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe1.png");
+  m_images[1] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe2.png");
+  m_images[2] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe3.png");
+  m_images[3] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe4.png");
+  m_images[4] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe5.png");
+  m_images[5] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe6.png");
+  m_images[6] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe7.png");
+  m_images[7] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe8.png");
+  m_images[8] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe9.png");
+
+  /*
   m_images[0] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O006.bmp");
   m_images[1] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O007.bmp");
   m_images[2] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O008.bmp");
@@ -29,7 +40,8 @@ void lens::FileCamera::init(void)
   m_images[6] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O009.bmp");
   m_images[7] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O010.bmp");
   m_images[8] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/O011.bmp");
-
+  */
+/*
   m_images[9] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref1.bmp");
   m_images[10] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref2.bmp");
   m_images[11] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref3.bmp");
@@ -39,6 +51,7 @@ void lens::FileCamera::init(void)
   m_images[15] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref4.bmp");
   m_images[16] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref5.bmp");
   m_images[17] = _readImage("/home/karpinsn/Dropbox/Research/Data/MultiwaveLength/Reference/ref6.bmp");
+  */
 }
 
 void lens::FileCamera::open(void)
@@ -73,9 +86,9 @@ void lens::FileCamera::run()
   {
     notifyObservers(m_images[currentImage]);
 
-    currentImage = ++currentImage % 18;
+    currentImage = ++currentImage % 9;
 
-    msleep(10);
+    msleep(100);
   }
 }
 

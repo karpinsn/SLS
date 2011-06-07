@@ -16,8 +16,8 @@ void CameraGLContext::init()
 {
   if(!m_hasBeenInit)
   {
-    m_cameraWidth = 640.0f;
-    m_cameraHeight = 480.0f;
+    m_cameraWidth = 256.0f;
+    m_cameraHeight = 256.0f;
 
     m_frontBufferIndex = 0;
     _cacheQuad();
@@ -127,8 +127,8 @@ void CameraGLContext::swapBuffers(void)
 
 void CameraGLContext::_cacheQuad(void)
 {
-  float* vertex   = new float[12];	// vertex array
-  float* tex      = new float[8];         // texture coord array
+  float vertex[12]; // vertex array
+  float tex[8];     // texture coord array
 
   vertex[0] = -1.0f; vertex[1]   =-1.0f; vertex[2]  = 0.0f;
   vertex[3] =  1.0f; vertex[4]   =-1.0f; vertex[5]  = 0.0f;
@@ -148,7 +148,4 @@ void CameraGLContext::_cacheQuad(void)
   m_texCoords.init(2, GL_FLOAT, GL_ARRAY_BUFFER);
   m_texCoords.bufferData(4, tex, GL_STATIC_DRAW);
   m_screen.addVBO(m_texCoords, "vertTexCoord");
-
-  delete [] vertex;
-  delete [] tex;
 }

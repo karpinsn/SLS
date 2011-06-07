@@ -33,12 +33,11 @@ void main(void)
 	float P123=(P13*P12)/(P13-P12);
 	float k=floor((phi123*(P123/P1)-phi1)/(2.0*pi));
 
-	float fringeMagnitude = length(fringe1) + length(fringe2) + length(fringe3);
+	float gamma = sqrt(pow((2 * fringe1.g - fringe1.r - fringe1.b), 2) + 3 * pow((fringe1.r - fringe1.b), 2)) / (fringe1.r + fringe1.g + fringe1.b);
 
-	if(fringeMagnitude >= .015)
+	if(gamma >= .3)
 	{	
 		phase = vec4(k * 2.0 * pi + phi1);
-		//phase = vec4(phi1);
 	}
 	else
 	{

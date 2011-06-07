@@ -67,12 +67,12 @@ void lens::FileCamera::close(void)
 
 float lens::FileCamera::getWidth(void)
 {
-  return 576.0;
+  return m_images[0]->width;
 }
 
 float lens::FileCamera::getHeight(void)
 {
-  return 576.0;
+  return m_images[0]->height;
 }
 
 std::string lens::FileCamera::cameraName(void)

@@ -3,6 +3,7 @@
 CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
 {
   setupUi(this);
+  m_dropFrame = false;
 }
 
 CaptureController::~CaptureController()
@@ -62,36 +63,49 @@ void CaptureController::disconnectCamera(void)
   m_camera.stop();
 }
 
+void CaptureController::dropFrame(void)
+{
+  m_dropFrame = true;
+}
+
+
 void CaptureController::newFrame(IplImage *frame)
 {
-  IplImage *im_gray = frame;
-  bool releaseGray = false;
-
-  if(frame->nChannels > 1)
+  if(!m_dropFrame)  //  If we dont drop a frame then process it
   {
-    im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
-    cvCvtColor(frame, im_gray, CV_RGB2GRAY);
-    releaseGray = true;
-  }
+    IplImage *im_gray = frame;
+    bool releaseGray = false;
 
-  //  Only do this if m_glCameraContex is visible
-  if(cameraGLWidget->isVisible())
+    if(frame->nChannels > 1)
+    {
+      im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
+      cvCvtColor(frame, im_gray, CV_RGB2GRAY);
+      releaseGray = true;
+    }
+
+    //  Only do this if m_glCameraContex is visible
+    if(cameraGLWidget->isVisible())
+    {
+      cameraGLWidget->makeCurrent();
+      m_glCameraContext.newImage(im_gray);
+      cameraGLWidget->updateScene();
+    }
+
+    captureGLWidget->makeCurrent();
+    m_gl3DContext.newImage(im_gray);
+
+    if(releaseGray)
+    {
+      cvReleaseImage(&im_gray);
+    }
+
+    cvReleaseImage(&frame);
+    captureGLWidget->updateScene();
+  }
+  else  // Drop a frame
   {
-    cameraGLWidget->makeCurrent();
-    m_glCameraContext.newImage(im_gray);
-    cameraGLWidget->updateScene();
+    m_dropFrame = false;  //  We only want to drop one frame so set it back
   }
-
-  captureGLWidget->makeCurrent();
-  m_gl3DContext.newImage(im_gray);
-
-  if(releaseGray)
-  {
-    cvReleaseImage(&im_gray);
-  }
-
-  cvReleaseImage(&frame);
-  captureGLWidget->updateScene();
 }
 
 void CaptureController::_connectSignalsWithController(void)
@@ -100,4 +114,5 @@ void CaptureController::_connectSignalsWithController(void)
   connect(openCameraButton, SIGNAL(clicked()), this, SLOT(connectCamera()));
   connect(closeCameraButton, SIGNAL(clicked()), this, SLOT(disconnectCamera()));
   connect(calibrateButton, SIGNAL(clicked()), this, SLOT(captureReference()));
+  connect(dropFrameButton, SIGNAL(clicked()), this, SLOT(dropFrame()));
 }

@@ -36,11 +36,14 @@ private:
   FrameCapture            m_frameCapture;
   ImageBuffer             m_buffer;
 
+  bool                    m_dropFrame;
+
 public slots:
   void newFrame(IplImage *frame);
   void captureReference(void);
   void connectCamera(void);
   void disconnectCamera(void);
+  void dropFrame(void);
 
 public:
     CaptureController(QWidget* parent = 0);

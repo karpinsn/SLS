@@ -3,26 +3,21 @@
 CameraGLContext::CameraGLContext(void)
 {
   m_hasBeenInit = false;
-  m_cameraWidth = 0.0;
-  m_cameraHeight = 0.0;
-}
-
-void CameraGLContext::setBuffer(ImageBuffer *buffer)
-{
-  m_buffer = buffer;
+  m_imageWidth = 0.0;
+  m_imageHeight = 0.0;
 }
 
 void CameraGLContext::init()
 {
   if(!m_hasBeenInit)
   {
-    m_cameraWidth = 256.0f;
-    m_cameraHeight = 256.0f;
+    m_imageWidth = 256.0f;
+    m_imageHeight = 256.0f;
 
     m_frontBufferIndex = 0;
     _cacheQuad();
     _initShaders();
-    _initTextures((GLuint)m_cameraWidth, (GLuint)m_cameraHeight);
+    _initTextures((GLuint)m_imageWidth, (GLuint)m_imageHeight);
     m_hasBeenInit = true;
   }
 }
@@ -66,13 +61,30 @@ void CameraGLContext::draw(void)
   OGLStatus::logOGLErrors("CameraGLContext - draw()");
 }
 
+void CameraGLContext::draw(Texture* texture)
+{
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glPushMatrix();
+  {
+    OGLStatus::logOGLErrors("CameraGLContext - draw(Texture)");
+    m_textureDisplay.bind();
+    {
+      texture->bind(GL_TEXTURE0);
+      m_screen.draw();
+    }
+    m_textureDisplay.unbind();
+  }
+  glPopMatrix();
+  OGLStatus::logOGLErrors("CameraGLContext - draw(Texture)");
+}
+
 void CameraGLContext::resizeInput(float width, float height)
 {
   //  Make sure that it has been initalized first.
   if(m_hasBeenInit)
   {
-    m_cameraWidth = width;
-    m_cameraHeight = height;
+    m_imageWidth = width;
+    m_imageHeight = height;
 
     m_frame0.init((GLuint)width, (GLuint)height, GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE);
     m_frame1.init((GLuint)width, (GLuint)height, GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE);
@@ -82,29 +94,14 @@ void CameraGLContext::resizeInput(float width, float height)
 void CameraGLContext::resize(int width, int height)
 {
   //  Center the viewport
-  int x = (width - m_cameraWidth) / 2.0;
-  int y = (height - m_cameraHeight) / 2.0;
-  glViewport(x, y, m_cameraWidth, m_cameraHeight);
+  int x = (width - m_imageWidth) / 2.0;
+  int y = (height - m_imageHeight) / 2.0;
+  glViewport(x, y, m_imageWidth, m_imageHeight);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
   glMatrixMode(GL_MODELVIEW);
-}
-
-void CameraGLContext::cameraSelectMode(int mode)
-{
-
-}
-
-void CameraGLContext::mousePressEvent(int mouseX, int mouseY)
-{
-
-}
-
-void CameraGLContext::mouseMoveEvent(int mouseX, int mouseY)
-{
-
 }
 
 void CameraGLContext::newImage(IplImage* image)

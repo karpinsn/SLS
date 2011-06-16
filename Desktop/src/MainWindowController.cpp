@@ -84,29 +84,19 @@ void MainWindowController::toolSelect(int tool)
 void MainWindowController::viewMode(void)
 {
   //  Ensure that the file list is hidden
+  m_mainWindow->infoBar->showMessage(tr("View Mode"));
   m_mainWindow->mainView->setCurrentWidget(m_mainWindow->viewController);
 }
 
 void MainWindowController::encodeMode(void)
 {
   //  Show the file list
-  //m_mainWindow->showFileList();
-
+  m_mainWindow->infoBar->showMessage(tr("Encode Mode"));
   m_mainWindow->mainView->setCurrentWidget(m_mainWindow->encodeController);
 }
 
 void MainWindowController::captureMode(void)
 {
+  m_mainWindow->infoBar->showMessage(tr("Capture Mode"));
   m_mainWindow->mainView->setCurrentWidget(m_mainWindow->captureController);
-
-  /*
-    //  Ensure that the file list is hidden
-    //m_mainWindow->hideFileList();
-    MultiWavelengthCapture *capture = new MultiWavelengthCapture();
-    //m_mainWindow->glWidget->setNewGLContext(capture);
-    capture->loadTestData();
-    //m_mainWindow->glWidget->updateGL();
-    capture->loadTestData();
-    //m_mainWindow->glWidget->updateGL();
-    */
 }

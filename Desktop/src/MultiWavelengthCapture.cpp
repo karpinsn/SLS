@@ -16,6 +16,7 @@ void MultiWavelengthCapture::init()
   {
     _initShaders(256, 256);
     _initTextures(256, 256);
+    m_textureDisplay.init();
     _initLighting();
 
     m_axis.init();
@@ -38,6 +39,8 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
   //  Make sure that it has been initalized first.
   if(m_hasBeenInit)
   {
+    m_textureDisplay.resizeInput(width, height);
+
     //  Resize all of the textures
     m_fringeImage1.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
     m_fringeImage2.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
@@ -192,6 +195,7 @@ void MultiWavelengthCapture::_initLighting(void)
 
 void MultiWavelengthCapture::draw(void)
 {
+
   if(m_captureReferencePhase)
   {
     //  If we dont have the reference phase then we are calculating it and we redraw

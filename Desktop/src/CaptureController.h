@@ -37,6 +37,7 @@ private:
   ImageBuffer             m_buffer;
 
   bool                    m_dropFrame;
+  QStatusBar*             m_infoBar;
 
 public slots:
   void newFrame(IplImage *frame);
@@ -50,6 +51,7 @@ public:
     ~CaptureController();
 
   void init(void);
+  void setInfoBar(QStatusBar* infoBar);
   void cameraSelectMode(int mode);
 
 protected:

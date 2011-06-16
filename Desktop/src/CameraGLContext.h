@@ -40,7 +40,6 @@ class CameraGLContext : public AbstractGLContext
 {
 private:
   Camera m_camera;
-  ImageBuffer *m_buffer;
 
   ShaderProgram m_textureDisplay;
   Texture m_frame0;
@@ -54,19 +53,19 @@ private:
   VBO m_vertex;
   VBO m_texCoords;
 
-  float m_cameraWidth;
-  float m_cameraHeight;
+  float m_imageWidth;
+  float m_imageHeight;
 
 public:
   CameraGLContext(void);
 
-  void setBuffer(ImageBuffer *buffer);
   virtual void init(void);
   virtual void draw(void);
+  void draw(Texture* texture);
   virtual void resize(int width, int height);
-  virtual void cameraSelectMode(int mode);
-  virtual void mousePressEvent(int mouseX, int mouseY);
-  virtual void mouseMoveEvent(int mouseX, int mouseY);
+  virtual void cameraSelectMode(int mode) {};
+  virtual void mousePressEvent(int mouseX, int mouseY) {};
+  virtual void mouseMoveEvent(int mouseX, int mouseY) {};
 
   void resizeInput(float width, float height);
   void newImage(IplImage* image);

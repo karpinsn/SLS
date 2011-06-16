@@ -5,14 +5,7 @@ MainWindowView::MainWindowView(QMainWindow* parent) : QMainWindow(parent)
   // Sets up the interface elements from Designer file
   setupUi(this);
 
-  //m_holoEncoder = new Holoencoder();
-  //m_holoDecoder = new Holodecoder();
-  //glWidget->setNewGLContext(m_holoEncoder);
-
-  //glWidget->m_glDecoder = m_holoDecoder;
-  //glWidget->m_glEncoder = m_holoEncoder;
-
-
+  captureController->setInfoBar(infoBar);
 
   QRect fileListInitial = fileList->geometry();
   QRect windowInitial = geometry();

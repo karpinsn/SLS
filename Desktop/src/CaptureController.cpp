@@ -16,20 +16,24 @@ void CaptureController::showEvent(QShowEvent *event)
   m_frameCapture.start();
 
   captureGLWidget->updateScene();
-  cameraGLWidget->updateScene();
+  //cameraGLWidget->updateScene();
 }
 
 void CaptureController::init(void)
 {
   captureGLWidget->setGLContext(&m_gl3DContext);
 
-  cameraGLWidget->setGLContext(&m_glCameraContext);
+  //cameraGLWidget->setGLContext(&m_glCameraContext);
 
-  m_glCameraContext.setBuffer(&m_buffer);
   m_camera.init(&m_buffer);
   m_frameCapture.init(&m_buffer);
 
   _connectSignalsWithController();
+}
+
+void CaptureController::setInfoBar(QStatusBar* infoBar)
+{
+  m_infoBar = infoBar;
 }
 
 void CaptureController::captureReference(void)
@@ -44,23 +48,27 @@ void CaptureController::cameraSelectMode(int mode)
 
 void CaptureController::connectCamera(void)
 {
+  m_infoBar->showMessage("Connecting to camera...");
+
   CameraConnectDialog dialog;
   lens::Camera *camera = dialog.getCamera();
 
   m_camera.setCamera(camera);
 
   //  Reinitalize OpenGL stuff
-  captureGLWidget->makeCurrent();
+  //captureGLWidget->makeCurrent();
   m_gl3DContext.resizeInput(camera->getWidth(), camera->getHeight());
-  cameraGLWidget->makeCurrent();
-  m_glCameraContext.resizeInput(camera->getWidth(), camera->getHeight());
+  //cameraGLWidget->makeCurrent();
+  //m_glCameraContext.resizeInput(camera->getWidth(), camera->getHeight());
 
   m_camera.start();
+  m_infoBar->showMessage("Connected to the camera");
 }
 
 void CaptureController::disconnectCamera(void)
 {
   m_camera.stop();
+  m_infoBar->showMessage("Camera stopped");
 }
 
 void CaptureController::dropFrame(void)
@@ -84,14 +92,14 @@ void CaptureController::newFrame(IplImage *frame)
     }
 
     //  Only do this if m_glCameraContex is visible
-    if(cameraGLWidget->isVisible())
+    /*if(cameraGLWidget->isVisible())
     {
       cameraGLWidget->makeCurrent();
       m_glCameraContext.newImage(im_gray);
       cameraGLWidget->updateScene();
-    }
+    }*/
 
-    captureGLWidget->makeCurrent();
+    //captureGLWidget->makeCurrent();
     m_gl3DContext.newImage(im_gray);
 
     if(releaseGray)

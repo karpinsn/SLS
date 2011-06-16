@@ -39,6 +39,7 @@
 #include <wrench/gl/AxisDisplay.h>
 
 #include "OpenGLWidget.h"
+#include "CameraGLContext.h"
 #include <wrench/gl/OGLStatus.h>
 
 #include <wrench/gl/Arcball.h>
@@ -79,6 +80,10 @@ private:
   Texture m_normalMap;
 
   FBO m_imageProcessor;
+
+  CameraGLContext m_textureDisplay;
+  bool m_displayPhase;
+  bool m_displayFringe;
 
   Camera m_camera;
   Arcball m_controller;

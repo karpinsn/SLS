@@ -27,7 +27,7 @@
        <property name="minimumSize">
         <size>
          <width>80</width>
-         <height>372</height>
+         <height>457</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -142,6 +142,26 @@
             </widget>
            </item>
            <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>View</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QComboBox" name="viewModeBox">
              <item>
               <property name="text">
@@ -161,17 +181,24 @@
             </widget>
            </item>
            <item>
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Gamma</string>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="gammaBox">
+             <property name="maximum">
+              <double>1.000000000000000</double>
              </property>
-            </spacer>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.300000000000000</double>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>

@@ -95,6 +95,7 @@ private:
   bool m_captureReferencePhase;
   int m_currentFringeLoad;
   int m_currentChannelLoad;
+  float m_gammaCutoff;
 
   bool m_hasBeenInit;
 
@@ -116,6 +117,7 @@ public:
   void newImage(IplImage* image);
   void swapBuffers(void);
   void captureReferencePlane(void);
+  void setGammaCutoff(float gamma);
 
 private:
   void _initShaders(float width, float height);

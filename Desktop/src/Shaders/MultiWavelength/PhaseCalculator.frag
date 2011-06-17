@@ -6,6 +6,8 @@ uniform sampler2D fringeImage1;
 uniform sampler2D fringeImage2;
 uniform sampler2D fringeImage3;
 
+uniform float gammaCutoff;
+
 in vec2 fragTexCoord;
 out vec4 phase;
 
@@ -35,7 +37,7 @@ void main(void)
 
 	float gamma = sqrt(pow((2 * fringe1.g - fringe1.r - fringe1.b), 2) + 3 * pow((fringe1.r - fringe1.b), 2)) / (fringe1.r + fringe1.g + fringe1.b);
 
-	if(gamma >= .3)
+	if(gamma >= gammaCutoff)
 	{	
 		phase = vec4(k * 2.0 * pi + phi1);
 	}

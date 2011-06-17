@@ -8,6 +8,7 @@ MultiWavelengthCapture::MultiWavelengthCapture(void)
   m_currentFringeLoad = 0;
   m_currentChannelLoad = 0;
   m_frontBufferIndex = 0;
+  m_gammaCutoff = .3;
 }
 
 void MultiWavelengthCapture::init()
@@ -94,12 +95,13 @@ void MultiWavelengthCapture::_initShaders(float width, float height)
   m_phaseCalculator.uniform("fringeImage1", 0);
   m_phaseCalculator.uniform("fringeImage2", 1);
   m_phaseCalculator.uniform("fringeImage3", 2);
+  m_phaseCalculator.uniform("gammaCutoff", m_gammaCutoff);
 
   m_phaseFilter.init();
   m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MedianFilter3x3.vert"));
   m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MedianFilter3x3.frag"));
-  m_phaseCalculator.bindAttributeLocation("vert", 0);
-  m_phaseCalculator.bindAttributeLocation("vertTexCoord", 1);
+  m_phaseFilter.bindAttributeLocation("vert", 0);
+  m_phaseFilter.bindAttributeLocation("vertTexCoord", 1);
 
   m_phaseFilter.link();
   m_phaseFilter.uniform("image", 0);
@@ -109,8 +111,8 @@ void MultiWavelengthCapture::_initShaders(float width, float height)
   m_normalCalculator.init();
   m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NormalCalculator.vert"));
   m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NormalCalculator.frag"));
-  m_phaseCalculator.bindAttributeLocation("vert", 0);
-  m_phaseCalculator.bindAttributeLocation("vertTexCoord", 1);
+  m_normalCalculator.bindAttributeLocation("vert", 0);
+  m_normalCalculator.bindAttributeLocation("vertTexCoord", 1);
 
   m_normalCalculator.link();
   m_normalCalculator.uniform("phaseA", 0);
@@ -193,6 +195,11 @@ void MultiWavelengthCapture::_initLighting(void)
     glDepthFunc(GL_LEQUAL);
 }
 
+void MultiWavelengthCapture::setGammaCutoff(float gamma)
+{
+  m_gammaCutoff = gamma;
+}
+
 void MultiWavelengthCapture::draw(void)
 {
 
@@ -220,6 +227,7 @@ void MultiWavelengthCapture::draw(void)
       //	Pass 1
       m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
       m_phaseCalculator.bind();
+      m_phaseCalculator.uniform("gammaCutoff", m_gammaCutoff);
       m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
       m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1);
       m_fringeImages[m_frontBufferIndex][2]->bind(GL_TEXTURE2);

@@ -76,6 +76,11 @@ void CaptureController::dropFrame(void)
   m_dropFrame = true;
 }
 
+void CaptureController::newGammaValue(double gammaValue)
+{
+  //  Set the new gamma value
+  m_gl3DContext.setGammaCutoff(gammaValue);
+}
 
 void CaptureController::newFrame(IplImage *frame)
 {
@@ -123,4 +128,5 @@ void CaptureController::_connectSignalsWithController(void)
   connect(closeCameraButton, SIGNAL(clicked()), this, SLOT(disconnectCamera()));
   connect(calibrateButton, SIGNAL(clicked()), this, SLOT(captureReference()));
   connect(dropFrameButton, SIGNAL(clicked()), this, SLOT(dropFrame()));
+  connect(gammaBox, SIGNAL(valueChanged(double)), this, SLOT(newGammaValue(double)));
 }

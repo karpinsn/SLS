@@ -103,8 +103,13 @@ private:
 
   OpenGLWidget* m_glContext;
 
+  bool m_show3D;
+  bool m_showPhase;
+  bool m_showFringe;
+
 public:
   MultiWavelengthCapture(void);
+  ~MultiWavelengthCapture();
 
   virtual void init(void);
   virtual void draw(void);
@@ -118,6 +123,9 @@ public:
   void swapBuffers(void);
   void captureReferencePlane(void);
   void setGammaCutoff(float gamma);
+  void show3D(void);
+  void showPhase(void);
+  void showFringe(void);
 
 private:
   void _initShaders(float width, float height);

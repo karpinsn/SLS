@@ -8,7 +8,16 @@ MultiWavelengthCapture::MultiWavelengthCapture(void)
   m_currentFringeLoad = 0;
   m_currentChannelLoad = 0;
   m_frontBufferIndex = 0;
-  m_gammaCutoff = .3;
+  m_gammaCutoff = 0.3f;
+}
+
+MultiWavelengthCapture::~MultiWavelengthCapture()
+{
+  if(m_hasBeenInit)
+  {
+    delete m_mesh;
+    cvReleaseImage(&m_fringeLoadingImage);
+  }
 }
 
 void MultiWavelengthCapture::init()
@@ -170,29 +179,29 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
 
 void MultiWavelengthCapture::_initLighting(void)
 {
-    GLfloat mat_specular[] = {.1f, .1f, .1f, .1f};
-    GLfloat mat_shininess[] = {1.0f};
-    GLfloat light_position[] = {-2.0f, 2.0f, 4.0f, 1.0f};
-    GLfloat white_light[] = {1.0f, 1.0f, 1.0f, 1.0f};
+  GLfloat mat_specular[] = {.1f, .1f, .1f, .1f};
+  GLfloat mat_shininess[] = {1.0f};
+  GLfloat light_position[] = {-2.0f, 2.0f, 4.0f, 1.0f};
+  GLfloat white_light[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
-    glClearColor(1.0, 1.0, 1.0, 0.0);
+  glClearColor(1.0, 1.0, 1.0, 0.0);
 
-    glShadeModel(GL_SMOOTH);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+  glShadeModel(GL_SMOOTH);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+  glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
-    //	Setup light 0
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
-    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+  //	Setup light 0
+  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 
-    //	Enable lighting
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
+  //	Enable lighting
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+  glEnable(GL_COLOR_MATERIAL);
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LEQUAL);
 }
 
 void MultiWavelengthCapture::setGammaCutoff(float gamma)

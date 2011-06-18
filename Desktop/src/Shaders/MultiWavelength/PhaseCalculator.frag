@@ -33,13 +33,20 @@ void main(void)
 	float P12=(P1*P2)/(P2-P1);
 	float P13=(P1*P3)/(P3-P1);
 	float P123=(P13*P12)/(P13-P12);
-	float k=floor((phi123*(P123/P1)-phi1)/(2.0*pi));
+
+	float k13 = round((phi123 * (P123/P13) - phi13) / (2.0 * pi));
+	float phase13 = k13 * 2.0 * pi + phi13;
+
+	float k = round((phase13 * (P13/P1) + phi1) / (2.0 * pi));
+
+	//float k=floor((phi123*(P123/P1)-phi1)/(2.0*pi));
 
 	float gamma = sqrt(pow((2 * fringe1.g - fringe1.r - fringe1.b), 2) + 3 * pow((fringe1.r - fringe1.b), 2)) / (fringe1.r + fringe1.g + fringe1.b);
 
 	if(gamma >= gammaCutoff)
 	{	
-		phase = vec4(k * 2.0 * pi + phi1);
+		//phase = vec4(k * 2.0 * pi - phi1);
+		phase = vec4(phase13);
 	}
 	else
 	{

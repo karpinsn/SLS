@@ -61,6 +61,7 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
 
     m_phaseMap0.reinit        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
     m_phaseMap1.reinit        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
+    m_depthMap.reinit	      (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
     m_normalMap.reinit        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
     m_referencePhase.reinit   (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
 
@@ -68,6 +69,7 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
     m_imageProcessor.reinit(width, height);
     m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_phaseMap1, m_phaseMap1AttachPoint);
+    m_imageProcessor.setTextureAttachPoint(m_depthMap, m_depthMapAttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
     m_imageProcessor.unbind();
@@ -105,6 +107,16 @@ void MultiWavelengthCapture::_initShaders(float width, float height)
   m_phaseCalculator.uniform("fringeImage2", 1);
   m_phaseCalculator.uniform("fringeImage3", 2);
   m_phaseCalculator.uniform("gammaCutoff", m_gammaCutoff);
+
+  m_depthCalculator.init();
+  m_depthCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/DepthCalculator.vert"));
+  m_depthCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/DepthCalculator.frag"));
+  m_depthCalculator.bindAttributeLocation("vert", 0);
+  m_depthCalculator.bindAttributeLocation("vertTexCoord", 1);
+
+  m_depthCalculator.link();
+  m_depthCalculator.uniform("actualPhase", 0);
+  m_depthCalculator.uniform("referencePhase", 1);
 
   m_phaseFilter.init();
   m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MedianFilter3x3.vert"));
@@ -145,8 +157,9 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
 
   m_phaseMap0AttachPoint      = GL_COLOR_ATTACHMENT0_EXT;
   m_phaseMap1AttachPoint      = GL_COLOR_ATTACHMENT1_EXT;
-  m_normalMapAttachPoint      = GL_COLOR_ATTACHMENT2_EXT;
-  m_referencePhaseAttachPoint = GL_COLOR_ATTACHMENT3_EXT;
+  m_depthMapAttachPoint	      = GL_COLOR_ATTACHMENT2_EXT;
+  m_normalMapAttachPoint      = GL_COLOR_ATTACHMENT3_EXT;
+  m_referencePhaseAttachPoint = GL_COLOR_ATTACHMENT4_EXT;
 
   m_fringeImage1.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
   m_fringeImage2.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
@@ -164,12 +177,14 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
 
   m_phaseMap0.init        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
   m_phaseMap1.init        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
+  m_depthMap.init	  (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
   m_normalMap.init        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
   m_referencePhase.init   (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
 
   m_imageProcessor.init(width, height);
   m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_phaseMap1, m_phaseMap1AttachPoint);
+  m_imageProcessor.setTextureAttachPoint(m_depthMap, m_depthMapAttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
   m_imageProcessor.unbind();

@@ -56,11 +56,13 @@ private:
 
   ShaderProgram m_phaseCalculator;
   ShaderProgram m_phaseFilter;
+  ShaderProgram m_depthCalculator;
   ShaderProgram m_normalCalculator;
   ShaderProgram m_finalRender;
 
   GLenum m_phaseMap0AttachPoint;
   GLenum m_phaseMap1AttachPoint;
+  GLenum m_depthMapAttachPoint;
   GLenum m_normalMapAttachPoint;
   GLenum m_referencePhaseAttachPoint;
 

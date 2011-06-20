@@ -7,12 +7,14 @@ include(FileCopyTargets)
 set(SHADER_VERT_SOURCES
 
 	PhaseCalculator.vert
+    DepthCalculator.vert
 	FinalRender.vert
 )
 
 set(SHADER_FRAG_SOURCES
 	
 	PhaseCalculator.frag
+    DepthCalculator.frag
 	FinalRender.frag
 )
 

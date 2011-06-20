@@ -9,6 +9,7 @@ MultiWavelengthCapture::MultiWavelengthCapture(void)
   m_currentChannelLoad = 0;
   m_frontBufferIndex = 0;
   m_gammaCutoff = 0.3f;
+  m_scalingFactor = 0.04f;
 }
 
 MultiWavelengthCapture::~MultiWavelengthCapture()
@@ -117,6 +118,7 @@ void MultiWavelengthCapture::_initShaders(float width, float height)
   m_depthCalculator.link();
   m_depthCalculator.uniform("actualPhase", 0);
   m_depthCalculator.uniform("referencePhase", 1);
+  m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
 
   m_phaseFilter.init();
   m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MedianFilter3x3.vert"));
@@ -145,8 +147,7 @@ void MultiWavelengthCapture::_initShaders(float width, float height)
   m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/FinalRender.frag"));
   m_finalRender.link();
   m_finalRender.uniform("normals", 0);
-  m_finalRender.uniform("phaseMap", 1);
-  m_finalRender.uniform("referencePhaseMap", 2);
+  m_finalRender.uniform("depthMap", 1);
 
   OGLStatus::logOGLErrors("MultiWavelengthCapture - initShaders()");
 }
@@ -224,6 +225,11 @@ void MultiWavelengthCapture::setGammaCutoff(float gamma)
   m_gammaCutoff = gamma;
 }
 
+void MultiWavelengthCapture::setScalingFactor(float scalingFactor)
+{
+  m_scalingFactor = scalingFactor;
+}
+
 void MultiWavelengthCapture::draw(void)
 {
 
@@ -248,7 +254,7 @@ void MultiWavelengthCapture::draw(void)
   {
 	m_imageProcessor.bind();
 	{
-      //	Pass 1
+      //	Pass 1 - Phase Calculation
       m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
       m_phaseCalculator.bind();
       m_phaseCalculator.uniform("gammaCutoff", m_gammaCutoff);
@@ -257,13 +263,21 @@ void MultiWavelengthCapture::draw(void)
       m_fringeImages[m_frontBufferIndex][2]->bind(GL_TEXTURE2);
       m_imageProcessor.process();
 
-      //	Pass 2
+      //	Pass 2 - Phase filtering
       m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
       m_phaseFilter.bind();
       m_phaseMap0.bind(GL_TEXTURE0);
       m_imageProcessor.process();
 
-      //	Pass 3
+      //    Pass 3 - Depth Calculator
+      m_imageProcessor.bindDrawBuffer(m_depthMapAttachPoint);
+      m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
+      m_depthCalculator.bind();
+      m_phaseMap1.bind(GL_TEXTURE0);
+      m_referencePhase.bind(GL_TEXTURE1);
+      m_imageProcessor.process();
+
+      //	Pass 4 - Normal Calculation
       m_imageProcessor.bindDrawBuffer(m_normalMapAttachPoint);
       m_normalCalculator.bind();
       m_phaseMap0.bind(GL_TEXTURE0);
@@ -288,8 +302,7 @@ void MultiWavelengthCapture::draw(void)
 	m_finalRender.bind();
 	{
       m_normalMap.bind(GL_TEXTURE0);
-      m_phaseMap0.bind(GL_TEXTURE1);
-      m_referencePhase.bind(GL_TEXTURE2);
+      m_depthMap.bind(GL_TEXTURE1);
 
       // Draw a plane of pixels
       m_mesh->draw();

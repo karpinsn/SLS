@@ -46,6 +46,7 @@ public slots:
   void disconnectCamera(void);
   void dropFrame(void);
   void newGammaValue(double gammaValue);
+  void newScalingFactor(double scalingFactor);
 
 public:
     CaptureController(QWidget* parent = 0);

@@ -79,6 +79,7 @@ private:
   Texture m_referencePhase;
   Texture m_phaseMap0;
   Texture m_phaseMap1;
+  Texture m_depthMap;
   Texture m_normalMap;
 
   FBO m_imageProcessor;
@@ -98,6 +99,7 @@ private:
   int m_currentFringeLoad;
   int m_currentChannelLoad;
   float m_gammaCutoff;
+  float m_scalingFactor;
 
   bool m_hasBeenInit;
 
@@ -125,6 +127,7 @@ public:
   void swapBuffers(void);
   void captureReferencePlane(void);
   void setGammaCutoff(float gamma);
+  void setScalingFactor(float scalingFactor);
   void show3D(void);
   void showPhase(void);
   void showFringe(void);

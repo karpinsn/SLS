@@ -82,6 +82,11 @@ void CaptureController::newGammaValue(double gammaValue)
   m_gl3DContext.setGammaCutoff(gammaValue);
 }
 
+void CaptureController::newScalingFactor(double scalingFactor)
+{
+  m_gl3DContext.setScalingFactor(scalingFactor);
+}
+
 void CaptureController::newFrame(IplImage *frame)
 {
   if(!m_dropFrame)  //  If we dont drop a frame then process it
@@ -129,4 +134,5 @@ void CaptureController::_connectSignalsWithController(void)
   connect(calibrateButton, SIGNAL(clicked()), this, SLOT(captureReference()));
   connect(dropFrameButton, SIGNAL(clicked()), this, SLOT(dropFrame()));
   connect(gammaBox, SIGNAL(valueChanged(double)), this, SLOT(newGammaValue(double)));
+  connect(scalingFactorBox, SIGNAL(valueChanged(double)), this, SLOT(newScalingFactor(double)));
 }

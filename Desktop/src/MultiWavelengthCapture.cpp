@@ -132,8 +132,8 @@ void MultiWavelengthCapture::_initShaders(float width, float height)
   m_phaseFilter.uniform("height", height);
 
   m_normalCalculator.init();
-  m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NormalCalculator.vert"));
-  m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NormalCalculator.frag"));
+  m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/NormalCalculator.vert"));
+  m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/NormalCalculator.frag"));
   m_normalCalculator.bindAttributeLocation("vert", 0);
   m_normalCalculator.bindAttributeLocation("vertTexCoord", 1);
 

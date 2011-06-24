@@ -35,6 +35,12 @@
 #include <vrj/Draw/OpenGL/ContextData.h>
 #endif
 
+#ifdef __APPLE__
+#define glGenVertexArrays glGenVertexArraysAPPLE
+#define glDeleteVertexArrays  glDeleteVertexArraysAPPLE
+#define glBindVertexArray	glBindVertexArrayAPPLE
+#endif
+
 namespace wrench 
 {
   namespace gl

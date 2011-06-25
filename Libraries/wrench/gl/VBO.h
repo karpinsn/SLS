@@ -1,6 +1,6 @@
 /*
- Filename:		FBO.h
- Author:		Nikolaus Karpinsky
+ @filename		VBO.h
+ @author		Nikolaus Karpinsky
  Date Created:	09/20/10
  Last Edited:	10/27/10
  
@@ -54,11 +54,41 @@ namespace wrench
       VBO(void);
       ~VBO();
 
+	  /**
+	  *	Initalizes the VBO.
+	  * 
+	  *	@param compSize - Number of components per vertex. Defined in glVertexAttribPointer as size.
+	  *	@param type - Component type. Defined in glVertexAttribPointer as type.
+	  * @param target - Defined in glBufferData as target.
+	  *
+	  * @return True or false based on whether or not initalization was successful.
+	  */
       bool init(GLint compSize, GLenum type, GLenum target);  // Here compSize is the number of components per vertex
+
+	  /**
+	  * Buffers the data to the GPU.
+	  * 
+	  *	@param size - Size of the data to buffer over.
+	  * @param data - Pointer to the first element of the data.
+	  * @param usage - Defined in glBufferData as usage.
+	  */
       void bufferData(GLsizei size, const GLvoid* data, GLenum usage);
 
+	  /**
+	  *	Returns the number of components per vertex. Defined in glVertexAttribPointer as size.
+	  */
       GLint getComponentSize(void);
+      
+      /**
+      *	Returns the type of the components. Defined in glVertexAttribPointer as type.
+      *
+      *	@return Type of component used by this VBO.
+      */
       GLenum getComponentType(void);
+      
+      /**
+      *	Returns the target of the VBO.
+      */
       GLenum getTarget(void);
       void bind(void);
       void unbind(void);

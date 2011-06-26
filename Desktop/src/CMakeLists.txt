@@ -75,6 +75,14 @@ set(LIBS ${LIBS} lens)
 include_directories(../../Common/src)
 
 #	---------------------------------------------------------------------------------------
+#	Generate Documentation
+#	---------------------------------------------------------------------------------------
+option(GENERATE_DOC "Build Doxygen Documentation" OFF)
+if(GENERATE_DOC)
+	add_subdirectory(../doc ${PROJECT_BINARY_DIR}/doc)
+endif(GENERATE_DOC)
+
+#	---------------------------------------------------------------------------------------
 #	List all of the sources to be compiled
 #	---------------------------------------------------------------------------------------
 

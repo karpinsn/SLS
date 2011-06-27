@@ -1,0 +1,45 @@
+# - Try to find Phantom Camera API
+# Once done this will define
+#  
+#  PHANTOM_FOUND        - System has the Phatom camera API
+#  PHANTOM_INCLUDE_DIR  - The Phantom Camera APIs include directory
+#  PHANTOM_LIBRARY_DIR  - The Phantom Camera APIs library directory
+#  PHANTOM_LIBRARY      - Link these to use the Phantom Camera API
+#   
+
+IF (PHANTOM_FOUND)
+  # Already in cache, be silent
+  SET(PHANTOM_FIND_QUIETLY TRUE)
+ENDIF (PHANTOM_FOUND)
+
+if( WIN32 )
+   if( MSVC80 )
+       set( COMPILER_PATH "C:/Program\ Files/Microsoft\ Visual\ Studio\ 8/VC" )
+   endif( MSVC80 )
+   if( MSVC71 )
+       set( COMPILER_PATH "C:/Program\ Files/Microsoft\ Visual\ Studio\ .NET\ 2003/Vc7" )
+   endif( MSVC71 )
+   FIND_PATH( PHANTOM_INCLUDE_DIR phcon.h PhFile.h phint.h
+              PATHS c:/Phantom/Inc ${COMPILER_PATH}/PlatformSDK/Include )
+   SET( PHANTOM_NAMES PhCon PhFile PhInt )
+   FIND_LIBRARY( PHANTOM_LIBRARY
+                 NAMES ${PHANTOM_NAMES}
+                 PATHS c:/Phantom/Lib ${COMPILER_PATH}/PlatformSDK/Lib )
+else( WIN32 )
+   message(ERROR "Phantom camera not supported on this OS")
+endif( WIN32 )
+
+GET_FILENAME_COMPONENT( PHANTOM_LIBRARY_DIR ${PHANTOM_LIBRARY} PATH )
+
+IF (PHANTOM_INCLUDE_DIR AND PHANTOM_LIBRARY)
+   SET(PHANTOM_FOUND TRUE)
+    SET( PHANTOM_LIBRARY_DIR ${PHANTOM_LIBRARY} )
+ELSE (PHANTOM_INCLUDE_DIR AND PHANTOM_LIBRARY)
+   SET( PHANTOM_FOUND FALSE )
+   SET( PHANTOM_LIBRARY_DIR )
+ENDIF (PHANTOM_INCLUDE_DIR AND PHANTOM_LIBRARY)
+
+MARK_AS_ADVANCED(
+  PHANTOM_LIBRARY
+  PHANTOM_INCLUDE_DIR
+)

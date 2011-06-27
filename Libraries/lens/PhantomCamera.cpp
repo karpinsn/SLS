@@ -74,6 +74,6 @@ void lens::PhantomCamera::run()
 
   while(m_running)
   {
-    PhGetImage(m_cameraNumber, &CINE_CURRENT, &range, GI_INTERPOLATED, m_cameraImage->imageData);
+    PhGetImage(m_cameraNumber, &CINE_CURRENT, &range, 0, m_cameraImage->imageData);
   }
 }

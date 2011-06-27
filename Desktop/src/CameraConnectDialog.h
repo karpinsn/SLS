@@ -13,6 +13,9 @@
 #ifdef USE_JAI_CAMERA
   #include "lens/JAICamera.h"
 #endif
+#ifdef USE_PHANTOM_CAMERA
+  #include "lens/PhantomCamera.h"
+#endif
 
 //	Qt auto generated headers
 #include "ui_CameraConnectDialog.h"

@@ -54,6 +54,21 @@ else()
 endif()
 
 #	----------------------------------------------
+#	Allow the option to compute with Phantom Camera
+#	----------------------------------------------
+option(LENS_PHANTOM_CAMERA "Build with Phantom Camera" OFF)
+if(LENS_PHANTOM_CAMERA)
+	SET(USE_PHANTOM_CAMERA ON)
+	message(STATUS "Building with Phantom Camera Functionality")
+	LIST(APPEND SOURCES
+		PhantomCamera.cpp
+		PhantomCamera.h
+	)
+else()
+	SET(USE_PHANTOM_CAMERA OFF)
+endif()
+
+#	----------------------------------------------
 #	Generate the config file for the code
 #	----------------------------------------------
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config-lens.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config-lens.h)

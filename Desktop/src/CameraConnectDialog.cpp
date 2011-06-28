@@ -37,6 +37,13 @@ lens::Camera* CameraConnectDialog::getCamera(void)
       m_camera = new lens::JAICamera();
     }
 #endif
+
+#ifdef USE_PHANTOM_CAMERA
+    if(0 == QString::fromStdString(lens::PhantomCamera::cameraName()).compare(cameraDriverComboBox->currentText()))
+    {
+      m_camera = new lens::PhantomCamera();
+    }
+#endif
   }
 
   return m_camera;
@@ -54,6 +61,10 @@ void CameraConnectDialog::_initCameraDriverList(void)
 
 #ifdef USE_JAI_CAMERA
   cameraDriverComboBox->addItem(QString::fromStdString(lens::JAICamera::cameraName()));
+#endif
+
+#ifdef USE_PHANTOM_CAMERA
+  cameraDriverComboBox->addItem(QString::fromStdString(lens::PhantomCamera::cameraName()));
 #endif
 
 }

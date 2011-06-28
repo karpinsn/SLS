@@ -25,9 +25,6 @@ if( WIN32 )
    FIND_LIBRARY( PHANTOM_LIBRARY
                  NAMES ${PHANTOM_NAMES}
                  PATHS c:/Phantom/Lib ${COMPILER_PATH}/PlatformSDK/Lib )
-else( WIN32 )
-   message(ERROR "Phantom camera not supported on this OS")
-endif( WIN32 )
 
 GET_FILENAME_COMPONENT( PHANTOM_LIBRARY_DIR ${PHANTOM_LIBRARY} PATH )
 
@@ -43,3 +40,8 @@ MARK_AS_ADVANCED(
   PHANTOM_LIBRARY
   PHANTOM_INCLUDE_DIR
 )
+
+else( WIN32 )
+   message(ERROR "Phantom camera not supported on this OS")
+endif( WIN32 )
+

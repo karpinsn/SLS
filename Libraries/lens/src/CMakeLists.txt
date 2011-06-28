@@ -30,10 +30,18 @@ option(LENS_JAI_CAMERA "Build with JAI SDK" OFF)
 if(LENS_JAI_CAMERA)
 	SET(USE_JAI_CAMERA ON)
 	message(STATUS "Building with JAI Camera Functionality")
-	LIST(APPEND SOURCES
-		JAICamera.cpp
-		JAICamera.h
-	)
+	
+	find_package(JAI REQUIRED)
+
+	if(JAI_FOUND)	
+		include_directories(${JAI_INCLUDE_DIR})
+		LIST(APPEND LIBS ${JAI_LIBRARIES})
+
+		LIST(APPEND SOURCES
+			JAICamera.cpp
+			JAICamera.h
+		)
+	endif(JAI_FOUND)
 else()
 	SET(USE_JAI_CAMERA OFF)
 endif()
@@ -60,10 +68,18 @@ option(LENS_PHANTOM_CAMERA "Build with Phantom Camera" OFF)
 if(LENS_PHANTOM_CAMERA)
 	SET(USE_PHANTOM_CAMERA ON)
 	message(STATUS "Building with Phantom Camera Functionality")
-	LIST(APPEND SOURCES
-		PhantomCamera.cpp
-		PhantomCamera.h
-	)
+	
+	find_package(Phantom REQUIRED)
+
+	if(PHANTOM_FOUND)
+		include_directories(${PHANTOM_INCLUDE_DIR})
+		LIST(APPEND LIBS ${PHANTOM_LIBRARIES})
+
+		LIST(APPEND SOURCES
+			PhantomCamera.cpp
+			PhantomCamera.h
+		)
+	endif(PHANTOM_FOUND)
 else()
 	SET(USE_PHANTOM_CAMERA OFF)
 endif()

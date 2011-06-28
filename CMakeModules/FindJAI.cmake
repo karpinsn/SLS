@@ -25,10 +25,8 @@ if( WIN32 )
    FIND_LIBRARY( JAI_LIBRARY
                  NAMES ${JAI_NAMES}
                  PATHS c:/Program Files/JAI ${COMPILER_PATH}/PlatformSDK/Lib )
-else( WIN32 )
-   message(ERROR "JAI camera not supported on this OS")
-endif( WIN32 )
 
+ 
 GET_FILENAME_COMPONENT( JAI_LIBRARY_DIR ${JAI_LIBRARY} PATH )
 
 IF (JAI_INCLUDE_DIR AND JAI_LIBRARY)
@@ -42,4 +40,8 @@ ENDIF (JAI_INCLUDE_DIR AND JAI_LIBRARY)
 MARK_AS_ADVANCED(
   JAI_LIBRARY
   JAI_INCLUDE_DIR
-)
+  )
+
+else( WIN32 )
+   message(ERROR "JAI camera not supported on this OS")
+endif( WIN32 )

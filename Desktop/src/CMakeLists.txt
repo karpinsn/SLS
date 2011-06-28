@@ -60,13 +60,13 @@ set(LIBS ${LIBS} glm)
 #	-----------------------------------------
 #	Wrench
 #	-----------------------------------------
-add_subdirectory(../../Libraries/wrench ${PROJECT_BINARY_DIR}/Libraries/wrench)
+add_subdirectory(../../Libraries/wrench/src ${PROJECT_BINARY_DIR}/Libraries/wrench)
 set(LIBS ${LIBS} wrench)
 
 #	-----------------------------------------
 #	Lens
 #	-----------------------------------------
-add_subdirectory(../../Libraries/lens ${PROJECT_BINARY_DIR}/Libraries/lens)
+add_subdirectory(../../Libraries/lens/src ${PROJECT_BINARY_DIR}/Libraries/lens)
 set(LIBS ${LIBS} lens)
 
 #	-----------------------------------------
@@ -77,10 +77,10 @@ include_directories(../../Common/src)
 #	---------------------------------------------------------------------------------------
 #	Generate Documentation
 #	---------------------------------------------------------------------------------------
-option(GENERATE_DOC "Build Doxygen Documentation" OFF)
-if(GENERATE_DOC)
+option(SLS_GENERATE_DOC "Build Doxygen Documentation" OFF)
+if(SLS_GENERATE_DOC)
 	add_subdirectory(../doc ${PROJECT_BINARY_DIR}/doc)
-endif(GENERATE_DOC)
+endif(SLS_GENERATE_DOC)
 
 #	---------------------------------------------------------------------------------------
 #	List all of the sources to be compiled

@@ -81,6 +81,14 @@ source_group("lens" FILES ${SOURCES})
 include_directories(..)
 
 #	---------------------------------------------------------------------------------------
+#	Generate Documentation
+#	---------------------------------------------------------------------------------------
+option(LENS_GENERATE_DOC "Build Doxygen Documentation" OFF)
+if(LENS_GENERATE_DOC)
+	add_subdirectory(../doc ${PROJECT_BINARY_DIR}/doc)
+endif(LENS_GENERATE_DOC)
+
+#	---------------------------------------------------------------------------------------
 #	Build the library
 #	---------------------------------------------------------------------------------------
 

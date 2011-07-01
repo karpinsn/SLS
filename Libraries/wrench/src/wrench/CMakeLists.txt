@@ -55,7 +55,7 @@ include_directories(..)
 #	---------------------------------------------------------------------------------------
 option(WRENCH_GENERATE_DOC "Build Doxygen Documentation" OFF)
 if(WRENCH_GENERATE_DOC)
-	add_subdirectory(../doc ${PROJECT_BINARY_DIR}/doc)
+	add_subdirectory(../../doc ${PROJECT_BINARY_DIR}/doc)
 endif(WRENCH_GENERATE_DOC)
 
 #	---------------------------------------------------------------------------------------

@@ -60,13 +60,15 @@ set(LIBS ${LIBS} glm)
 #	-----------------------------------------
 #	Wrench
 #	-----------------------------------------
-add_subdirectory(../../Libraries/wrench/src ${PROJECT_BINARY_DIR}/Libraries/wrench)
+add_subdirectory(../../Libraries/wrench/src/wrench ${PROJECT_BINARY_DIR}/Libraries/wrench)
+include_directories(../../Libraries/wrench/src)
 set(LIBS ${LIBS} wrench)
 
 #	-----------------------------------------
 #	Lens
 #	-----------------------------------------
-add_subdirectory(../../Libraries/lens/src ${PROJECT_BINARY_DIR}/Libraries/lens)
+add_subdirectory(../../Libraries/lens/src/lens ${PROJECT_BINARY_DIR}/Libraries/lens)
+include_directories(../../Libraries/lens/src)
 set(LIBS ${LIBS} lens)
 
 #	-----------------------------------------

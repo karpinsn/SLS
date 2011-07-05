@@ -1,11 +1,9 @@
-/*
- Filename:		Arcball.h
- Author:		Nikolaus Karpinsky
- Date Created:	09/01/09
- Last Edited:	09/01/09
- 
- Revision Log:
- 09/01/09 - Nik Karpinsky - Original creation.
+/**
+ *	@file
+ *	@author		Nikolaus Karpinsky
+ *
+ *	Class that provides an arcball manipulator for transforming objects in an
+ *	OpenGL scene.
  */
 
 #ifndef _ARCBALL_H_
@@ -50,10 +48,10 @@ namespace wrench
 			void applyTransform(void);
 			
 		protected:
-			glm::vec3   m_startVector;          //Saved click vector
-			glm::vec3   m_endVector;          //Saved drag vector
-			GLfloat     m_adjustWidth;		//Mouse bounds width
-			GLfloat     m_adjustHeight;		//Mouse bounds height
+			glm::vec3   m_startVector;      //	Saved click vector
+			glm::vec3   m_endVector;        //	Saved drag vector
+			GLfloat     m_adjustWidth;		//	Mouse bounds width
+			GLfloat     m_adjustHeight;		//	Mouse bounds height
 			
 			glm::mat4 m_transform;
 			glm::mat4 m_lastRotation;

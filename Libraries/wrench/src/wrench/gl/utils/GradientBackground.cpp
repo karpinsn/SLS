@@ -2,19 +2,21 @@
 
 wrench::gl::utils::GradientBackground::GradientBackground(void)
 {
+   //  Simply assign the background colors to be white and black
   for(int i = 0; i < 3; ++i)
   {
-    m_color1[i] = 1.0f;
-    m_color2[i] = 0.0f;
+    m_topColor[i] = 1.0f;			// Top color should be white
+    m_bottomColor[i] = 0.0f;		// Bottom color should be black
   }
 }
 
-wrench::gl::utils::GradientBackground::GradientBackground(GLfloat color1[3], GLfloat color2[3])
+wrench::gl::utils::GradientBackground::GradientBackground(GLfloat topColor[3], GLfloat bottomColor[3])
 {
+  //  Simply assign the background colors to the colors passed in
   for(int i = 0; i < 3; ++i)
   {
-    m_color1[i] = color1[i];
-    m_color2[i] = color2[i];
+    m_topColor[i] 		= topColor[i];
+    m_bottomColor[i] 	= bottomColor[i];
   }
 }
 
@@ -27,34 +29,35 @@ void wrench::gl::utils::GradientBackground::draw(void)
 {
   _setMatrices();                     //  Sets the projection and model view matrix
 
-  glDisable(GL_LIGHTING);
-  glDisable(GL_DEPTH_TEST);
-
-  glBegin (GL_QUADS);                 //  Draw a screen aligned quad
+  glPushAttrib(GL_ENABLE_BIT);		  //  Save the current state for the lighting and depth
   {
-    glColor3fv(m_color2);             //  Color for the bottom
-    glVertex3f (-1.0f, -1.0f, -1.0f);
-    glVertex3f (1.0f, -1.0f, -1.0f);
-
-    glColor3fv(m_color1);             //  Color for the top
-    glVertex3f (1.0f, 1.0f, -1.0f);
-    glVertex3f (-1.0f, 1.0f, -1.0f);
+	  glDisable(GL_LIGHTING);			  //  Disable lighting since it should not be lighting the background
+	  glDisable(GL_DEPTH_TEST);			  //  Disable depth so that it is the farthest object in the scene
+	
+	  glBegin (GL_QUADS);                 //  Draw a screen aligned quad
+	  {
+		glColor3fv(m_bottomColor);        //  Color for the bottom
+		glVertex3f (-1.0f, -1.0f, -1.0f);
+		glVertex3f (1.0f, -1.0f, -1.0f);
+	
+		glColor3fv(m_topColor);           //  Color for the top
+		glVertex3f (1.0f, 1.0f, -1.0f);
+		glVertex3f (-1.0f, 1.0f, -1.0f);
+	  }
+	  glEnd ();
   }
-  glEnd ();
-
-  glEnable(GL_LIGHTING);
-  glEnable(GL_DEPTH_TEST);
+  glPopAttrib();					 // Restore the enables that we disabled
 
   _restoreMatrices();                // Restores the projection and model view matrix
 }
 
-void wrench::gl::utils::GradientBackground::setColors(GLfloat color1[3], GLfloat color2[3])
+void wrench::gl::utils::GradientBackground::setColors(GLfloat topColor[3], GLfloat bottomColor[3])
 {
   //  Simply assign the background colors to the colors passed in
   for(int i = 0; i < 3; ++i)
   {
-    m_color1[i] = color1[i];
-    m_color2[i] = color2[i];
+    m_topColor[i] 		= topColor[i];
+    m_bottomColor[i] 	= bottomColor[i];
   }
 }
 

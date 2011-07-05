@@ -20,11 +20,11 @@ if( WIN32 )
        set( COMPILER_PATH "C:/Program\ Files/Microsoft\ Visual\ Studio\ .NET\ 2003/Vc7" )
    endif( MSVC71 )
    FIND_PATH( JAI_INCLUDE_DIR Jai_Factory.h
-              PATHS c:/Program Files/JAI ${COMPILER_PATH}/PlatformSDK/Include )
+	   PATHS "C:/Program\ Files/JAI" ${COMPILER_PATH}/PlatformSDK/Include )
    SET( JAI_NAMES Jai_Factory )
    FIND_LIBRARY( JAI_LIBRARY
                  NAMES ${JAI_NAMES}
-                 PATHS c:/Program Files/JAI ${COMPILER_PATH}/PlatformSDK/Lib )
+		 PATHS "C:/Program\ Files/JAI" ${COMPILER_PATH}/PlatformSDK/Lib )
 
  
 GET_FILENAME_COMPONENT( JAI_LIBRARY_DIR ${JAI_LIBRARY} PATH )

@@ -20,11 +20,13 @@ if( WIN32 )
        set( COMPILER_PATH "C:/Program\ Files/Microsoft\ Visual\ Studio\ .NET\ 2003/Vc7" )
    endif( MSVC71 )
    FIND_PATH( PHANTOM_INCLUDE_DIR phcon.h PhFile.h phint.h
-              PATHS c:/Phantom/Inc ${COMPILER_PATH}/PlatformSDK/Include )
+	   PATHS "C:/Program\ Files/Phantom/PhSDK/Inc" "C:/Program\ Files(x86)/Phantom/PhSDK/Inc" 
+	   ${COMPILER_PATH}/PlatformSDK/Include )
    SET( PHANTOM_NAMES PhCon PhFile PhInt )
    FIND_LIBRARY( PHANTOM_LIBRARY
                  NAMES ${PHANTOM_NAMES}
-                 PATHS c:/Phantom/Lib ${COMPILER_PATH}/PlatformSDK/Lib )
+		 PATHS "C:/Program\ Files/Phantom/PhSDK/Lib" "C:/Program\ Files(x86)/Phantom/PhSDK/Lib" 
+		 ${COMPILER_PATH}/PlatformSDK/Lib )
 
 GET_FILENAME_COMPONENT( PHANTOM_LIBRARY_DIR ${PHANTOM_LIBRARY} PATH )
 

@@ -21,12 +21,16 @@ void Holodecoder::init()
 
 		m_mesh = new TriMesh(512, 512);
 		
-		m_mesh->initMesh();
+        m_mesh->initMesh();
         haveHoloImage = false;
 		m_hasBeenInit = true;
 		
 		m_holoImages[0] = &m_holoImage0;
 		m_holoImages[1] = &m_holoImage1;
+
+        GLfloat topColor[3] = {.8, .8, .8};
+        GLfloat bottomColor[3] = {.7, .7, .7};
+        m_background.setColors(topColor, bottomColor);
 	}
 }
 
@@ -103,6 +107,8 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
 
 void Holodecoder::draw(void)
 {
+  m_background.draw();
+
     if(haveHoloImage)
     {
       m_imageProcessor.bind();
@@ -157,6 +163,7 @@ void Holodecoder::resize(int width, int height)
 {
 	m_camera.reshape(width, height);
 	gluPerspective(45.0, 1.0, .00001, 10.0);
+    m_background.resize(width, height);
 }
 
 void Holodecoder::cameraSelectMode(int mode)

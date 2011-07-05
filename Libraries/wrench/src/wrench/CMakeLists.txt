@@ -13,26 +13,23 @@ set(NAME wrench)
 
 set(GL_SOURCES 
 	
-	gl/Arcball.cpp
+	
 	gl/Camera.cpp
 	gl/FBO.cpp
         gl/ShaderProgram.cpp 
 	gl/Shader.cpp
 	gl/Texture.cpp
 	gl/OGLStatus.cpp
-	gl/AxisDisplay.cpp
 	gl/VBO.cpp
 	gl/VAO.cpp
 	gl/Converter.cpp
 
-	gl/Arcball.h
 	gl/Camera.h
 	gl/FBO.h
         gl/ShaderProgram.h
 	gl/Shader.h
 	gl/Texture.h
 	gl/OGLStatus.h
-	gl/AxisDisplay.h
 	gl/VBO.h
 	gl/VAO.h
 	gl/Converter.h
@@ -40,8 +37,12 @@ set(GL_SOURCES
 
 set(GL_UTILS_SOURCES
 	gl/utils/GradientBackground.cpp
+	gl/utils/Arcball.cpp
+	gl/utils/AxisDisplay.cpp
 
 	gl/utils/GradientBackground.h
+	gl/utils/Arcball.h
+	gl/utils/AxisDisplay.h
 )
 
 set(SOURCES

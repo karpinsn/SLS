@@ -36,18 +36,19 @@
 #include <wrench/gl/Shader.h>
 #include <wrench/gl/Texture.h>
 #include <wrench/gl/FBO.h>
-#include <wrench/gl/AxisDisplay.h>
+#include <wrench/gl/utils/AxisDisplay.h>
 
 #include "OpenGLWidget.h"
 #include "CameraGLContext.h"
 #include <wrench/gl/OGLStatus.h>
 
-#include <wrench/gl/Arcball.h>
+#include <wrench/gl/utils/Arcball.h>
 
 class OpenGLWidget;
 
 using namespace wrench;
 using namespace wrench::gl;
+using namespace wrench::gl::utils;
 
 class MultiWavelengthCapture : public AbstractGLContext
 {

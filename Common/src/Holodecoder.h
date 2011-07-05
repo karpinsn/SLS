@@ -38,10 +38,12 @@
 
 #include <wrench/gl/OGLStatus.h>
 
-#include <wrench/gl/Arcball.h>
+#include <wrench/gl/utils/Arcball.h>
+#include <wrench/gl/utils/GradientBackground.h>
 
 using namespace wrench;
 using namespace wrench::gl;
+using namespace wrench::gl::utils;
 
 class Holodecoder : public AbstractGLContext
 {
@@ -67,6 +69,7 @@ private:
 	
 	Camera m_camera;
 	Arcball m_controller;
+    GradientBackground m_background;
 	
 	TriMesh* m_mesh;
 	

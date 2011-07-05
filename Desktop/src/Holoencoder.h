@@ -31,7 +31,7 @@
 #include <wrench/gl/Shader.h>
 #include <wrench/gl/ShaderProgram.h>
 #include <wrench/gl/Camera.h>
-#include <wrench/gl/Arcball.h>
+#include <wrench/gl/utils/Arcball.h>
 #include <wrench/gl/Texture.h>
 
 #include "AbstractMesh.h"

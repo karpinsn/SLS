@@ -8,15 +8,15 @@
 
 #include "AxisDisplay.h"
 
-wrench::gl::AxisDisplay::AxisDisplay(void)
+wrench::gl::utils::AxisDisplay::AxisDisplay(void)
 {
 }
 
-wrench::gl::AxisDisplay::~AxisDisplay()
+wrench::gl::utils::AxisDisplay::~AxisDisplay()
 {
 }
 
-bool wrench::gl::AxisDisplay::init()
+bool wrench::gl::utils::AxisDisplay::init()
 {
     OGLStatus::logOGLErrors("wrench::gl::AxisDisplay - init()");
 
@@ -61,7 +61,7 @@ bool wrench::gl::AxisDisplay::init()
     return true;
 }
 
-void wrench::gl::AxisDisplay::draw(glm::mat4 modelViewMatrix)
+void wrench::gl::utils::AxisDisplay::draw(glm::mat4 modelViewMatrix)
 {
     glPushAttrib(GL_VIEWPORT_BIT);
     {

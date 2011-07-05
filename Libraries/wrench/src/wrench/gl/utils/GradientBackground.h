@@ -31,6 +31,9 @@ namespace wrench
         GLfloat m_topColor[3];    	//  Top color
         GLfloat m_bottomColor[3];   //  Bottom color
 
+        int m_width;                //  Width of the OpenGL viewport
+        int m_height;               //  Height of the OpenGL viewport
+
       public:
       
       	/**
@@ -75,6 +78,18 @@ namespace wrench
         *	@param bottomColor[3] 	A 3 component vector which specifies the bottom color of the gradient
         */
         void setColors(GLfloat topColor[3], GLfloat bottomColor[3]);
+
+        /**
+          * Called when the window is resized
+          *
+          * This method should be called when the window OpenGL is in is resized. This is
+          * the viewport can be set in the draw function to be the whole size of the window
+          * and then have the background span the entire size.
+          *
+          * @param width    New width of the OpenGL window
+          * @param height   New height of the OpenGL window
+          */
+        void resize(int width, int height);
 
       private:
         void _setMatrices(void);

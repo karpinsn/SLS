@@ -38,6 +38,12 @@ set(GL_SOURCES
 	gl/Converter.h
 )
 
+set(GL_UTILS_SOURCES
+	gl/utils/GradientBackground.cpp
+
+	gl/utils/GradientBackground.h
+)
+
 set(SOURCES
 	
 	Logger.cpp
@@ -47,6 +53,7 @@ set(SOURCES
 
 source_group("wrench" FILES ${SOURCES})
 source_group("wrench::gl" FILES ${GL_SOURCES})
+source_group("wrench::gl::utils" FILES ${GL_UTILS_SOURCES})
 
 include_directories(..)
 
@@ -62,5 +69,5 @@ endif(WRENCH_GENERATE_DOC)
 #	Build the library
 #	---------------------------------------------------------------------------------------
 
-add_library(${NAME} ${SOURCES} ${GL_SOURCES})
+add_library(${NAME} ${SOURCES} ${GL_SOURCES} ${GL_UTILS_SOURCES})
 

@@ -6,24 +6,36 @@
 
 lens::PhantomCamera::PhantomCamera(void) : QThread()
 {
+	m_CineBMI = (PBITMAPINFO)&CineBMI;
+	m_params = new ACQUIPARAMS;
 	m_cameraImage = NULL;
     m_cameraNumber = 0;
 }
 
+lens::PhantomCamera::~PhantomCamera()
+{
+	delete m_params;
+}
+
 void lens::PhantomCamera::init(void)
 {
-  string workingDirectory("/home/karpinsn/tmp");
-
-  int registrationStatus = PhLVRegisterClientEx(workingDirectory.c_str(), NULL, PHCONHEADERVERSION);
+  int registrationStatus = PhLVRegisterClientEx("/home/karpinsn/tmp", NULL, PHCONHEADERVERSION);
 
   if(registrationStatus < 0)
   {
     //  Failed to register
+	std::cout << "Failed to register with Phantom camera" << std::endl;
   }
   else
   {
     //  Connected
+	  std::cout << "Registered with the Phantom Camera" << std::endl;
   }
+
+  float width = getWidth();
+  float height = getHeight();
+  m_cameraImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+  setFrameRate(30);
 }
 
 void lens::PhantomCamera::open(void)
@@ -41,24 +53,23 @@ void lens::PhantomCamera::close(void)
 
 float lens::PhantomCamera::getWidth(void)
 {
-  PACQUIPARAMS pParams = new ACQUIPARAMS;
-  PhGetCineParams ( m_CN, 1, pParams, pCineBMI);
-
-  float width = pParams->ImWidth;
-  delete pParams;
-
-  return width;
+  PhGetCineParams ( m_cameraNumber, CINE_DEFAULT, m_params, m_CineBMI);
+ 
+  return m_params->ImWidth;
 }
 
 float lens::PhantomCamera::getHeight(void)
 {
-  PACQUIPARAMS pParams = new ACQUIPARAMS;
-  PhGetCineParams ( m_CN, 1, pParams, pCineBMI);
+  PhGetCineParams ( m_cameraNumber, CINE_DEFAULT, m_params, m_CineBMI);
+ 
+  return m_params->ImHeight;
+}
 
-  float height = pParams->ImHeight;
-  delete pParams;
-
-  return height;
+void lens::PhantomCamera::setFrameRate(int fps)
+{
+  PhGetCineParams ( m_cameraNumber, CINE_DEFAULT, m_params, m_CineBMI);
+  m_params->FrameRate = fps;	//	Set the framerate
+  PhSetCineParams( m_cameraNumber, CINE_DEFAULT, m_params);
 }
 
 std::string lens::PhantomCamera::cameraName(void)
@@ -69,11 +80,13 @@ std::string lens::PhantomCamera::cameraName(void)
 void lens::PhantomCamera::run()
 {
   IMRANGE range;
-  range.First = BMP_NO;
+  range.First = 0;
   range.Cnt = 1;
 
   while(m_running)
   {
-    PhGetImage(m_cameraNumber, &CINE_CURRENT, &range, 0, m_cameraImage->imageData);
+	int cineNumber = CINE_CURRENT;
+    PhGetImage(m_cameraNumber, &cineNumber, &range, 0, (PBYTE)m_cameraImage->imageData);
+	notifyObservers(m_cameraImage);
   }
 }

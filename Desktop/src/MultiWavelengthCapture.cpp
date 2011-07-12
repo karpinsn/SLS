@@ -138,7 +138,7 @@ void MultiWavelengthCapture::_initShaders(float width, float height)
   m_normalCalculator.bindAttributeLocation("vertTexCoord", 1);
 
   m_normalCalculator.link();
-  m_normalCalculator.uniform("phaseA", 0);
+  m_normalCalculator.uniform("depthMap", 0);
   m_normalCalculator.uniform("width", width);
   m_normalCalculator.uniform("height", height);
 
@@ -178,7 +178,7 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
 
   m_phaseMap0.init        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
   m_phaseMap1.init        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
-  m_depthMap.init	  (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
+  m_depthMap.init         (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
   m_normalMap.init        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
   m_referencePhase.init   (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
 

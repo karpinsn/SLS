@@ -9,7 +9,13 @@
 #define _PHANTOM_CAMERA_H_
 #define USE_PHANTOM_CAMERA
 
-#include <Phcon.h>
+#ifdef _WIN32
+	#include <windows.h>	//	Needed by windows for typedefs in phcon.h
+#endif
+
+#include <iostream>
+#include <phcon.h>			//	Phantom camera includes
+#include <QThread>			//	Qt Includes
 
 #include "Camera.h"
 
@@ -24,15 +30,30 @@ namespace lens
         bool            m_running;
 
         unsigned int    m_cameraNumber;
+
+		//	Bitmap Info structure used by the camera
+		BYTE			CineBMI[sizeof(BITMAPINFOHEADER)+256*sizeof(RGBQUAD)];
+		LPBITMAPINFO    m_CineBMI;
+
+		//	Acquisition parameters of the camera
+		PACQUIPARAMS	m_params;
+
     public:
       PhantomCamera(void);
+	  ~PhantomCamera();
+
       virtual void init(void);
       virtual void open(void);
       virtual void close(void);
 	  virtual float getWidth(void);
       virtual float getHeight(void);
 
+	  void setFrameRate(int fps);
+
       static std::string cameraName(void);
+
+    protected:
+      void run();
 
 	private:
 		void _openFactory(void);

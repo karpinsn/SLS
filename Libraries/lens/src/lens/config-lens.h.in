@@ -7,4 +7,5 @@
 
 #cmakedefine USE_IC_CAMERA
 #cmakedefine USE_JAI_CAMERA
+#cmakedefine USE_PHANTOM_CAMERA
 

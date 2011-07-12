@@ -50,11 +50,13 @@ class Holodecoder : public AbstractGLContext
 private:
     ShaderProgram m_phaseCalculator;
     ShaderProgram m_phaseFilter;
+    ShaderProgram m_depthCalculator;
     ShaderProgram m_normalCalculator;
     ShaderProgram m_finalRender;
 
 	GLenum m_phaseMap0AttachPoint;
 	GLenum m_phaseMap1AttachPoint;
+    GLenum m_depthMapAttachPoint;
 	GLenum m_normalMapAttachPoint;
 	
 	Texture* m_holoImages[2];
@@ -63,6 +65,7 @@ private:
 	
 	Texture m_phaseMap0;
 	Texture m_phaseMap1;
+    Texture m_depthMap;
 	Texture m_normalMap;
 	
 	FBO m_imageProcessor;

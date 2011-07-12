@@ -23,7 +23,7 @@ void main()
 	vec4 Ispec = gl_FrontLightProduct[0].specular * pow(max(dot(R,E),0.0), gl_FrontMaterial.shininess);
 	
 	//	Total color
-	if(holoFrag.r <= 0.0 && holoFrag.g <= 0.0)
+	if(holoFrag.rgb == vec3(0.0))
 	{
 		gl_FragColor = vec4(0.0,0.0,0.0,0.0);
 	}

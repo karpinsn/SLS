@@ -66,11 +66,9 @@ void OpenGLWidget::paintGL()
 
 void OpenGLWidget::resizeGL(int width, int height)
 {
-  glViewport(0, 0, 512, 512);
-
+  glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-
   m_glContext->resize(width, height);
 
   glMatrixMode(GL_MODELVIEW);

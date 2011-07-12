@@ -3,7 +3,7 @@
 in vec3 vert;
 in vec2 vertTexCoord;
 
-out vec2 fragTexCoord
+out vec2 fragTexCoord;
 
 void main(void)
 {

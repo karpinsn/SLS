@@ -6,6 +6,10 @@ int main(int argc, char **argv)
 {
 	// Create the Qt application
 	QApplication app(argc, argv);
+
+    QCoreApplication::setOrganizationName("SL Studios");
+    QCoreApplication::setOrganizationDomain("SLStudios.org");
+    QCoreApplication::setApplicationName("SLS-Desktop");
 	
 	// Create a main widget and start it up
 	MainWindowController* mainWindowController = new MainWindowController();

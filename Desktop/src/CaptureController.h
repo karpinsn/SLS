@@ -25,6 +25,10 @@
 #include "ImageBuffer.h"
 #include "FrameCapture.h"
 
+
+#define SettingsScalingFactor "CaptureScalingFactor"
+#define SettingsGammaValue    "CaptureGammaFactor"
+
 class CaptureController : public QWidget, private Ui::Capture
 {
   Q_OBJECT
@@ -38,6 +42,8 @@ private:
 
   bool                    m_dropFrame;
   QStatusBar*             m_infoBar;
+
+  QSettings               m_settings;
 
 public slots:
   void newFrame(IplImage *frame);
@@ -61,6 +67,7 @@ protected:
 
 private:
     void _connectSignalsWithController(void);
+    void _readSettings(void);
 };
 
 #endif	// _CAPTURE_CONTROLLER_H_

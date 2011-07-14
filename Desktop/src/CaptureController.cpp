@@ -2,7 +2,10 @@
 
 CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
 {
-  setupUi(this);
+  setupUi(this);                    //  Creates the UI objects
+  _connectSignalsWithController();  //  Connects the UI objects to the slots in the controller
+  _readSettings();                  //  Reads the persisted settings
+
   m_dropFrame = false;
 }
 
@@ -16,19 +19,14 @@ void CaptureController::showEvent(QShowEvent *event)
   m_frameCapture.start();
 
   captureGLWidget->updateScene();
-  //cameraGLWidget->updateScene();
 }
 
 void CaptureController::init(void)
 {
   captureGLWidget->setGLContext(&m_gl3DContext);
 
-  //cameraGLWidget->setGLContext(&m_glCameraContext);
-
   m_camera.init(&m_buffer);
   m_frameCapture.init(&m_buffer);
-
-  _connectSignalsWithController();
 }
 
 void CaptureController::setInfoBar(QStatusBar* infoBar)
@@ -56,10 +54,7 @@ void CaptureController::connectCamera(void)
   m_camera.setCamera(camera);
 
   //  Reinitalize OpenGL stuff
-  //captureGLWidget->makeCurrent();
   m_gl3DContext.resizeInput(camera->getWidth(), camera->getHeight());
-  //cameraGLWidget->makeCurrent();
-  //m_glCameraContext.resizeInput(camera->getWidth(), camera->getHeight());
 
   m_camera.start();
   m_infoBar->showMessage("Connected to the camera");
@@ -80,11 +75,17 @@ void CaptureController::newGammaValue(double gammaValue)
 {
   //  Set the new gamma value
   m_gl3DContext.setGammaCutoff(gammaValue);
+
+  //  Persist the new gamma value
+  m_settings.setValue(SettingsGammaValue, gammaValue);
 }
 
 void CaptureController::newScalingFactor(double scalingFactor)
 {
   m_gl3DContext.setScalingFactor(scalingFactor);
+
+  //  Persist the new scaling factor
+  m_settings.setValue(SettingsScalingFactor, scalingFactor);
 }
 
 void CaptureController::newFrame(IplImage *frame)
@@ -101,15 +102,6 @@ void CaptureController::newFrame(IplImage *frame)
       releaseGray = true;
     }
 
-    //  Only do this if m_glCameraContex is visible
-    /*if(cameraGLWidget->isVisible())
-    {
-      cameraGLWidget->makeCurrent();
-      m_glCameraContext.newImage(im_gray);
-      cameraGLWidget->updateScene();
-    }*/
-
-    //captureGLWidget->makeCurrent();
     m_gl3DContext.newImage(im_gray);
 
     if(releaseGray)
@@ -128,11 +120,18 @@ void CaptureController::newFrame(IplImage *frame)
 
 void CaptureController::_connectSignalsWithController(void)
 {
-  connect(&m_frameCapture, SIGNAL(newFrame(IplImage*)), this, SLOT(newFrame(IplImage*)));
-  connect(openCameraButton, SIGNAL(clicked()), this, SLOT(connectCamera()));
-  connect(closeCameraButton, SIGNAL(clicked()), this, SLOT(disconnectCamera()));
-  connect(calibrateButton, SIGNAL(clicked()), this, SLOT(captureReference()));
-  connect(dropFrameButton, SIGNAL(clicked()), this, SLOT(dropFrame()));
-  connect(gammaBox, SIGNAL(valueChanged(double)), this, SLOT(newGammaValue(double)));
-  connect(scalingFactorBox, SIGNAL(valueChanged(double)), this, SLOT(newScalingFactor(double)));
+  connect(&m_frameCapture,    SIGNAL(newFrame(IplImage*)),  this, SLOT(newFrame(IplImage*)));
+  connect(openCameraButton,   SIGNAL(clicked()),            this, SLOT(connectCamera()));
+  connect(closeCameraButton,  SIGNAL(clicked()),            this, SLOT(disconnectCamera()));
+  connect(calibrateButton,    SIGNAL(clicked()),            this, SLOT(captureReference()));
+  connect(dropFrameButton,    SIGNAL(clicked()),            this, SLOT(dropFrame()));
+  connect(gammaBox,           SIGNAL(valueChanged(double)), this, SLOT(newGammaValue(double)));
+  connect(scalingFactorBox,   SIGNAL(valueChanged(double)), this, SLOT(newScalingFactor(double)));
+}
+
+void CaptureController::_readSettings(void)
+{
+  //  Read in the settings file and set the settings
+  gammaBox->setValue(         m_settings.value(QString("CaptureGammaValue"),    .30).toDouble());
+  scalingFactorBox->setValue( m_settings.value(QString("CaptureScalingFactor"), .04).toDouble());
 }

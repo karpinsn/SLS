@@ -60,7 +60,8 @@ set(LIBS ${LIBS} glm)
 #	-----------------------------------------
 #	Wrench
 #	-----------------------------------------
-add_subdirectory(../../Libraries/wrench ${PROJECT_BINARY_DIR}/Libraries/wrench)
+add_subdirectory(../../Libraries/wrench/src/wrench ${PROJECT_BINARY_DIR}/Libraries/wrench)
+include_directories(../../Libraries/wrench/src)
 set(LIBS ${LIBS} wrench)
 
 #	-----------------------------------------

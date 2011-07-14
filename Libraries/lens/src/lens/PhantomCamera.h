@@ -49,6 +49,7 @@ namespace lens
       virtual float getHeight(void);
 
 	  void setFrameRate(int fps);
+	  void setTrigger(unsigned int triggerMode);
 
       static std::string cameraName(void);
 

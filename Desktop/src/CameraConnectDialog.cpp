@@ -15,31 +15,31 @@ lens::Camera* CameraConnectDialog::getCamera(void)
 
   if(this->exec() == QDialog::Accepted)
   {
-    if(0 == QString::fromStdString(lens::OpenCVCamera::cameraName()).compare(cameraDriverComboBox->currentText()))
+    if(0 == QString(lens::OpenCVCamera::cameraName().c_str()).compare(cameraDriverComboBox->currentText()))
     {
       m_camera = new lens::OpenCVCamera();
     }
-    else if(0 == QString::fromStdString(lens::FileCamera::cameraName()).compare(cameraDriverComboBox->currentText()))
+    else if(0 == QString(lens::FileCamera::cameraName().c_str()).compare(cameraDriverComboBox->currentText()))
     {
       m_camera = new lens::FileCamera();
     }
 
 #ifdef USE_IC_CAMERA
-    if(0 == QString::fromStdString(lens::ICCamera::cameraName()).compare(cameraDriverComboBox->currentText()))
+    if(0 == QString(lens::ICCamera::cameraName().c_str()).compare(cameraDriverComboBox->currentText()))
     {
       m_camera = new lens::ICCamera();
     }
 #endif
 
 #ifdef USE_JAI_CAMERA
-    if(0 == QString::fromStdString(lens::JAICamera::cameraName()).compare(cameraDriverComboBox->currentText()))
+    if(0 == QString(lens::JAICamera::cameraName().c_str()).compare(cameraDriverComboBox->currentText()))
     {
       m_camera = new lens::JAICamera();
     }
 #endif
 
 #ifdef USE_PHANTOM_CAMERA
-    if(0 == QString::fromStdString(lens::PhantomCamera::cameraName()).compare(cameraDriverComboBox->currentText()))
+	if(0 == QString(lens::PhantomCamera::cameraName().c_str()).compare(cameraDriverComboBox->currentText()))
     {
       m_camera = new lens::PhantomCamera();
     }
@@ -51,20 +51,20 @@ lens::Camera* CameraConnectDialog::getCamera(void)
 
 void CameraConnectDialog::_initCameraDriverList(void)
 {
-  cameraDriverComboBox->addItem(QString::fromStdString(lens::OpenCVCamera::cameraName()));
-  cameraDriverComboBox->addItem(QString::fromStdString(lens::FileCamera::cameraName()));
+	cameraDriverComboBox->addItem(QString(lens::OpenCVCamera::cameraName().c_str()));
+  cameraDriverComboBox->addItem(QString(lens::FileCamera::cameraName().c_str()));
 
   //  Only add the cameras if they are being used
 #ifdef USE_IC_CAMERA
-  cameraDriverComboBox->addItem(QString::fromStdString(lens::ICCamera::cameraName()));
+  cameraDriverComboBox->addItem(QString(lens::ICCamera::cameraName().c_str()));
 #endif
 
 #ifdef USE_JAI_CAMERA
-  cameraDriverComboBox->addItem(QString::fromStdString(lens::JAICamera::cameraName()));
+  cameraDriverComboBox->addItem(QString(lens::JAICamera::cameraName().c_str()));
 #endif
 
 #ifdef USE_PHANTOM_CAMERA
-  cameraDriverComboBox->addItem(QString::fromStdString(lens::PhantomCamera::cameraName()));
+  cameraDriverComboBox->addItem(QString(lens::PhantomCamera::cameraName().c_str()));
 #endif
 
 }

@@ -35,7 +35,8 @@ void lens::PhantomCamera::init(void)
   float width = getWidth();
   float height = getHeight();
   m_cameraImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
-  setFrameRate(30);
+  setFrameRate(36);
+  setTrigger(SYNC_EXTERNAL);
 }
 
 void lens::PhantomCamera::open(void)
@@ -69,6 +70,13 @@ void lens::PhantomCamera::setFrameRate(int fps)
 {
   PhGetCineParams ( m_cameraNumber, CINE_DEFAULT, m_params, m_CineBMI);
   m_params->FrameRate = fps;	//	Set the framerate
+  PhSetCineParams( m_cameraNumber, CINE_DEFAULT, m_params);
+}
+
+void lens::PhantomCamera::setTrigger(unsigned int triggerMode)
+{
+  PhGetCineParams ( m_cameraNumber, CINE_DEFAULT, m_params, m_CineBMI);
+  m_params->SyncImaging = triggerMode;	//	Set the trigger mode
   PhSetCineParams( m_cameraNumber, CINE_DEFAULT, m_params);
 }
 

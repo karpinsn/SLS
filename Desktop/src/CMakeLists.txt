@@ -69,7 +69,9 @@ set(LIBS ${LIBS} wrench)
 #	-----------------------------------------
 add_subdirectory(../../Libraries/lens/src/lens ${PROJECT_BINARY_DIR}/Libraries/lens)
 include_directories(../../Libraries/lens/src)
-set(LIBS ${LIBS} lens)
+include_directories(${LENS_INCLUDE_DIRS})
+
+set(LIBS ${LIBS} lens "${LENS_LIBRARIES}")
 
 #	-----------------------------------------
 #	Common
@@ -165,7 +167,6 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 # Build and link the app!
 add_executable(${PROJECT_NAME}
 	MACOSX_BUNDLE
-	WIN32
 	${SOURCES}
 	${GENERATED_SOURCES}
 	${HEADERS}

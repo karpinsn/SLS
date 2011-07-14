@@ -37,6 +37,10 @@ if(LENS_JAI_CAMERA)
 		include_directories(${JAI_INCLUDE_DIR})
 		LIST(APPEND LIBS ${JAI_LIBRARIES})
 
+		# Add the include dirs and libraries to the Lens files
+		SET(LENS_INCLUDE_DIRS ${LENS_INCLUDE_DIRS} ${JAI_INCLUDE_DIR})
+		SET(LENS_LIBRARIES ${LENS_LIBRARIES} ${JAI_LIBRARIES})
+
 		LIST(APPEND SOURCES
 			JAICamera.cpp
 			JAICamera.h
@@ -75,6 +79,9 @@ if(LENS_PHANTOM_CAMERA)
 		include_directories(${PHANTOM_INCLUDE_DIR})
 		LIST(APPEND LIBS ${PHANTOM_LIBRARIES})
 
+		SET(LENS_INCLUDE_DIRS ${LENS_INCLUDE_DIRS} ${PHANTOM_INCLUDE_DIR})
+		SET(LENS_LIBRARIES ${LENS_LIBRARIES} ${PHANTOM_LIBRARIES})
+
 		LIST(APPEND SOURCES
 			PhantomCamera.cpp
 			PhantomCamera.h
@@ -107,6 +114,9 @@ endif(LENS_GENERATE_DOC)
 #	---------------------------------------------------------------------------------------
 #	Build the library
 #	---------------------------------------------------------------------------------------
+
+set(LENS_INCLUDE_DIRS ${LENS_INCLUDE_DIRS} PARENT_SCOPE)
+set(LENS_LIBRARIES ${LENS_LIBRARIES} PARENT_SCOPE)
 
 add_library(${NAME} ${SOURCES})
 

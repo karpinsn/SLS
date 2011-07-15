@@ -16,12 +16,11 @@ lens::JAICamera::JAICamera(void)
 void lens::JAICamera::init(void)
 {
 	_openFactory();
+	_openCamera();
 }
 
 void lens::JAICamera::open(void)
 {
-	_openCamera();
-
 	J_STATUS_TYPE	retval = J_ST_SUCCESS;
 	int64_t int64Val;
 	SIZE	ViewSize;
@@ -61,12 +60,16 @@ void lens::JAICamera::close(void)
 
 float lens::JAICamera::getWidth(void)
 {
-	return 1392.0;
+	int64_t width;
+	J_Camera_GetValueInt64(m_camera, NODE_NAME_WIDTH, &width);
+	return (float)width;
 }
 
 float lens::JAICamera::getHeight(void)
 {
-	return 1040.0;
+	int64_t height;
+	J_Camera_GetValueInt64(m_camera, NODE_NAME_HEIGHT, &height);
+	return (float)height;
 }
 
 //--------------------------------------------------------------------------------------------------

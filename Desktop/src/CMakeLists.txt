@@ -104,7 +104,6 @@ set(SOURCES
     CameraCapture.cpp
     ViewController.cpp
     EncoderController.cpp
-    CameraGLContext.cpp
     ImageBuffer.cpp
     FrameCapture.cpp
     CameraConnectDialog.cpp
@@ -125,7 +124,6 @@ set(SOURCES
     CameraCapture.h
     ViewController.h
     EncoderController.h
-    CameraGLContext.h
     ImageBuffer.h
     FrameCapture.h
     CameraConnectDialog.h

@@ -20,7 +20,6 @@
 #include "CameraConnectDialog.h"
 
 #include "MultiWavelengthCapture.h"
-#include "CameraGLContext.h"
 #include "CameraCapture.h"
 #include "ImageBuffer.h"
 #include "FrameCapture.h"
@@ -35,7 +34,6 @@ class CaptureController : public QWidget, private Ui::Capture
 
 private:
   MultiWavelengthCapture  m_gl3DContext;
-  CameraGLContext         m_glCameraContext;
   CameraCapture           m_camera;
   FrameCapture            m_frameCapture;
   ImageBuffer             m_buffer;
@@ -53,7 +51,7 @@ public slots:
   void dropFrame(void);
   void newGammaValue(double gammaValue);
   void newScalingFactor(double scalingFactor);
-
+  void newViewMode(QString viewMode);
 public:
     CaptureController(QWidget* parent = 0);
     ~CaptureController();

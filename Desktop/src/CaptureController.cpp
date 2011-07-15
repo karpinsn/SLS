@@ -88,6 +88,18 @@ void CaptureController::newScalingFactor(double scalingFactor)
   m_settings.setValue(SettingsScalingFactor, scalingFactor);
 }
 
+void CaptureController::newViewMode(QString viewMode)
+{
+  if(0 == viewMode.compare(QString("3D")))
+  {
+    m_gl3DContext.show3D();
+  }
+  else if(0 == viewMode.compare(QString("Phase")))
+  {
+    m_gl3DContext.showPhase();
+  }
+}
+
 void CaptureController::newFrame(IplImage *frame)
 {
   if(!m_dropFrame)  //  If we dont drop a frame then process it
@@ -127,6 +139,7 @@ void CaptureController::_connectSignalsWithController(void)
   connect(dropFrameButton,    SIGNAL(clicked()),            this, SLOT(dropFrame()));
   connect(gammaBox,           SIGNAL(valueChanged(double)), this, SLOT(newGammaValue(double)));
   connect(scalingFactorBox,   SIGNAL(valueChanged(double)), this, SLOT(newScalingFactor(double)));
+  connect(viewModeBox,        SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
 }
 
 void CaptureController::_readSettings(void)

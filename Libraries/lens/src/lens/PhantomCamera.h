@@ -65,4 +65,4 @@ namespace lens
 	};
 }
 
-#endif	// _JAI_CAMERA_H_
+#endif	// _PHANTOM_CAMERA_H_

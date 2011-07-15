@@ -39,10 +39,12 @@ set(GL_UTILS_SOURCES
 	gl/utils/GradientBackground.cpp
 	gl/utils/Arcball.cpp
 	gl/utils/AxisDisplay.cpp
+	gl/utils/TextureDisplay.cpp
 
 	gl/utils/GradientBackground.h
 	gl/utils/Arcball.h
 	gl/utils/AxisDisplay.h
+	gl/utils/TextureDisplay.h
 )
 
 set(SOURCES

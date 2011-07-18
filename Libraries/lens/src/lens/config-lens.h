@@ -7,5 +7,5 @@
 
 /* #undef USE_IC_CAMERA */
 /* #undef USE_JAI_CAMERA */
-#define USE_PHANTOM_CAMERA
+/* #undef USE_PHANTOM_CAMERA */
 

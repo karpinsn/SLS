@@ -6,3 +6,6 @@
 
 # Ignore all User files
 *.user
+
+# Ignore configuration files
+Libraries/lens/src/lens/config-lens.h

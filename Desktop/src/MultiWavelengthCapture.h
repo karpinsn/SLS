@@ -39,9 +39,10 @@
 #include <wrench/gl/utils/AxisDisplay.h>
 
 #include "OpenGLWidget.h"
-#include "CameraGLContext.h"
+
 #include <wrench/gl/OGLStatus.h>
 
+#include <wrench/gl/utils/TextureDisplay.h>
 #include <wrench/gl/utils/Arcball.h>
 
 class OpenGLWidget;
@@ -84,14 +85,10 @@ private:
   Texture m_normalMap;
 
   FBO m_imageProcessor;
-
-  CameraGLContext m_textureDisplay;
-  bool m_displayPhase;
-  bool m_displayFringe;
+  TextureDisplay m_textureDisplay;
 
   Camera m_camera;
   Arcball m_controller;
-
   TriMesh* m_mesh;
 
   bool haveFringeImages;
@@ -108,9 +105,12 @@ private:
 
   OpenGLWidget* m_glContext;
 
-  bool m_show3D;
-  bool m_showPhase;
-  bool m_showFringe;
+  enum DisplayMode
+  {
+    Geometry,
+    Phase
+  };
+  DisplayMode m_displayMode;
 
 public:
   MultiWavelengthCapture(void);
@@ -131,7 +131,6 @@ public:
   void setScalingFactor(float scalingFactor);
   void show3D(void);
   void showPhase(void);
-  void showFringe(void);
 
 private:
   void _initShaders(float width, float height);

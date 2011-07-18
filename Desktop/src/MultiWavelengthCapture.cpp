@@ -10,6 +10,7 @@ MultiWavelengthCapture::MultiWavelengthCapture(void)
   m_frontBufferIndex = 0;
   m_gammaCutoff = 0.3f;
   m_scalingFactor = 0.04f;
+  m_displayMode = Geometry;
 }
 
 MultiWavelengthCapture::~MultiWavelengthCapture()
@@ -50,8 +51,6 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
   //  Make sure that it has been initalized first.
   if(m_hasBeenInit)
   {
-    m_textureDisplay.resizeInput(width, height);
-
     //  Resize all of the textures
     m_fringeImage1.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
     m_fringeImage2.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
@@ -250,7 +249,7 @@ void MultiWavelengthCapture::draw(void)
     m_haveReferencePhase = true;
     m_captureReferencePhase = false;
   }
-  else if(m_haveReferencePhase)
+  else if(m_haveReferencePhase && Geometry == m_displayMode)
   {
 	m_imageProcessor.bind();
 	{
@@ -311,12 +310,17 @@ void MultiWavelengthCapture::draw(void)
 
 	glPopMatrix();
   }
+  else if(m_haveReferencePhase && Phase == m_displayMode)
+  {
+    m_textureDisplay.draw(&m_referencePhase);
+  }
   OGLStatus::logOGLErrors("MultiWavelengthCapture - draw()");
 }
 
 void MultiWavelengthCapture::resize(int width, int height)
 {
   m_camera.reshape(width, height);
+  m_textureDisplay.resize(width, height);
 
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
@@ -379,4 +383,14 @@ void MultiWavelengthCapture::swapBuffers(void)
 void MultiWavelengthCapture::captureReferencePlane(void)
 {
   m_captureReferencePhase = true;
+}
+
+void MultiWavelengthCapture::show3D(void)
+{
+  m_displayMode = Geometry;
+}
+
+void MultiWavelengthCapture::showPhase(void)
+{
+  m_displayMode = Phase;
 }

@@ -1,7 +1,7 @@
 #version 130
 
 /*
-  3x3 Median Filter
+  Phase Median Filter
 
   Author: Nik Karpinsky
 
@@ -29,6 +29,7 @@ float step_h = 1.0/height;
 
 void main(void)
 {
+  float twoPi = 2.0 * 3.14159;
   float v[9];
   float t;
 
@@ -46,6 +47,11 @@ void main(void)
   m5(v[1], v[2], v[3], v[4], v[6]);
   m4(v[2], v[3], v[4], v[7]);
   m3(v[3], v[4], v[8]);
-   
-  filteredImage = vec4(v[4], 0.0, 0.0, 0.0);
+  
+  // Using the median phase value and the actual find the correct number of phase jumps
+  float originalValue = texture2D(image, fragTexCoord).x;
+  float phaseJump = (v[4] - originalValue) / twoPi;
+  int jumps = phaseJump < 0 ? int(phaseJump - .5) : int(phaseJump + .5); 
+
+  filteredImage = vec4(originalValue + (jumps * twoPi), 0.0, 0.0, 0.0);
 }

@@ -16,21 +16,21 @@ void main(void)
   offset[3] = vec2(-step_w, step_h); 	offset[2] = vec2(0.0, step_h); 	offset[1] = vec2(step_w, step_h);
   offset[4] = vec2(-step_w, 0.0);   					offset[0] = vec2(step_w, 0.0);		offset[8] = vec2(step_w, 0.0);
   offset[5] = vec2(-step_w, -step_h);  	offset[6] = vec2(0.0, -step_h);	offset[7] = vec2(step_w, -step_h); 
- 
+
   vec3 newVertex = vec3(fragTexCoord.s-.5, fragTexCoord.t-.5, 0.0);
-  newVertex.z = texture2D(depthMap, fragTexCoord).x;
 
   vec3 normal = vec3(0.0);
+
 
   for(int i=0; i<8; ++i)
   {
     vec3 currentNeighbor = newVertex;
     currentNeighbor.xy = currentNeighbor.xy + offset[i];
-    currentNeighbor.z = texture2D(depthMap, fragTexCoord +offset[i]).x;
+    currentNeighbor.z = texture2D(depthMap, fragTexCoord + offset[i]).x;
 
     vec3 nextNeighbor = newVertex;
     nextNeighbor.xy = nextNeighbor.xy + offset[i+1];
-    nextNeighbor.z = texture2D(depthMap, fragTexCoord + offset[i+1]).x;
+    nextNeighbor.z = texture2D(depthMap, fragTexCoord + offset[i]).x;
 
     vec3 v1 = normalize(currentNeighbor - newVertex);
     vec3 v2 = normalize(nextNeighbor - newVertex);

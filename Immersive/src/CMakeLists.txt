@@ -75,11 +75,13 @@ include_directories(../../Common/src)
 set(SOURCES
   mainVRJ.cpp
   MainWindowController.cpp
+  FrameReceiver.cpp
   ../../Common/src/TriMesh.cpp
   ../../Common/src/ImageIO.cpp
   ../../Common/src/Holodecoder.cpp
 
   MainWindowController.h
+  FrameReceiver.h
   ../../Common/src/Holodecoder.h
   ../../Common/src/TriMesh.h
   ../../Common/src/ImageIO.h

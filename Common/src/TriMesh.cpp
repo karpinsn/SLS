@@ -24,6 +24,9 @@ void TriMesh::draw()
   //glBindBuffer(GL_ARRAY_BUFFER, m_triMeshVBOID);
   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_triMeshIBOID);
   //glDrawElements(GL_TRIANGLE_STRIP, m_elementCount, GL_UNSIGNED_INT, NULL);
+
+  glPolygonMode(GL_FRONT, GL_LINE);
+  m_meshIndices.bind();
   m_mesh.draw();
 }
 
@@ -31,7 +34,7 @@ void TriMesh::_generateIndices(void)
 {
   //  More elements than the width * height due to genenerate verticies
   m_elementCount = (m_width * 2) * (m_height - 1) + (m_height - 2);
-  GLuint indicies[m_elementCount];
+  GLuint *indicies = new GLuint[m_elementCount];
 
   //m_meshIndices = new unsigned int[m_elementCount];
 
@@ -70,8 +73,10 @@ void TriMesh::_generateIndices(void)
     }
   }
 
-  m_meshIndices.init(1, GL_UNSIGNED_INT, GL_ELEMENT_ARRAY_BUFFER);
+  m_meshIndices.init(1, GL_UNSIGNED_INT);
   m_meshIndices.bufferData(m_elementCount, indicies, GL_STATIC_DRAW);
+
+  delete [] indicies;
 }
 
 void TriMesh::_generateTexturedVertices(void)
@@ -83,9 +88,9 @@ void TriMesh::_generateTexturedVertices(void)
   {
     for(int column = 0; column < m_width; column++)
     {
-      verticies[row * m_height + column].x = (float)row / m_height;
-      verticies[row * m_height + column].y = (float)column / m_width;
-      verticies[row * m_height + column].z = 0.0f;
+      verticies[row * m_width + column].x = (float)row / (float)m_height;
+      verticies[row * m_width + column].y = (float)column / (float)m_width;
+      verticies[row * m_width + column].z = 0.0f;
 
       texCoord[row * m_height + column].u = (float)row / (float)m_height;
       texCoord[row * m_height + column].v = (float)column / (float)m_width;
@@ -107,11 +112,11 @@ void TriMesh::_generateTexturedVertices(void)
 void TriMesh::_cacheTriMesh(void)
 {
   m_mesh.init(GL_TRIANGLE_STRIP, m_elementCount);
+  m_mesh.addIBO(m_meshIndices);
 
-  //m_mesh.addVBO(m_meshIndices, "index");
   m_mesh.addVBO(m_meshVertices, "vert");
   m_mesh.addVBO(m_meshTextureCoords, "vertTexCoord");
-  m_meshIndices.bind();
+
 
   /*
   glGenBuffers(1, &m_triMeshVBOID);

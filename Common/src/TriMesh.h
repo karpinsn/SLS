@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <wrench/gl/IBO.h>
 #include <wrench/gl/VBO.h>
 #include <wrench/gl/VAO.h>
 
@@ -49,7 +50,7 @@ private:
     };
 	
     VAO m_mesh;
-    VBO m_meshIndices;
+    IBO m_meshIndices;
     VBO m_meshVertices;
     VBO m_meshTextureCoords;
 

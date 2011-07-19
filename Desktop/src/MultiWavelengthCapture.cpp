@@ -82,7 +82,7 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
 
     //  Resize the display mesh
     delete m_mesh;
-    m_mesh = new TriMesh((int)width, (int)height);
+    m_mesh = new TriMesh(6, 4);
     m_mesh->initMesh();
 
     //  Resize the fringe loader
@@ -313,6 +313,7 @@ void MultiWavelengthCapture::draw(void)
   {
     m_textureDisplay.draw(&m_referencePhase);
   }
+
   OGLStatus::logOGLErrors("MultiWavelengthCapture - draw()");
 }
 

@@ -11,6 +11,7 @@
 wrench::gl::VAO::VAO(void)
 {
     m_vaoID = 0;
+    m_indexCount = 0;
 }
 
 wrench::gl::VAO::~VAO()
@@ -42,9 +43,19 @@ void wrench::gl::VAO::addVBO(VBO& vbo, std::string attributeName)
     glEnableVertexAttribArray(attributeAddress);
 
     m_vertexAttributes.insert(pair<std::string, int>(attributeName, attributeAddress));
-    //_unbind();
+    _unbind();
 
     OGLStatus::logOGLErrors("wrench::gl::VAO - addVBO()");
+}
+
+void wrench::gl::VAO::addIBO(IBO& ibo)
+{
+  _bind();
+
+  m_indexCount = ibo.getComponentCount();
+
+  ibo.bind();
+  _unbind();
 }
 
 GLuint wrench::gl::VAO::getVertexAttributeAddress(std::string attributeName)
@@ -58,8 +69,14 @@ void wrench::gl::VAO::draw()
     //  Bind the VAO
     _bind();
 
-    glDrawArrays(m_mode, 0, m_count);
-
+    if(m_indexCount > 0)  // If we have an IBO then we need to draw using draw elements
+    {
+      glDrawElements(m_mode, m_indexCount, GL_UNSIGNED_INT, 0);
+    }
+    else // Otherwise its just VBOs and draw the array
+    {
+      glDrawArrays(m_mode, 0, m_count);
+    }
     _unbind();
 
     OGLStatus::logOGLErrors("wrench::gl::VAO - draw()");

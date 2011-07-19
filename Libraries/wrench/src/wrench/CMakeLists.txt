@@ -21,6 +21,7 @@ set(GL_SOURCES
 	gl/Texture.cpp
 	gl/OGLStatus.cpp
 	gl/VBO.cpp
+	gl/IBO.cpp
 	gl/VAO.cpp
 	gl/Converter.cpp
 
@@ -31,6 +32,7 @@ set(GL_SOURCES
 	gl/Texture.h
 	gl/OGLStatus.h
 	gl/VBO.h
+	gl/IBO.h
 	gl/VAO.h
 	gl/Converter.h
 )

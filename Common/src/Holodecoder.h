@@ -74,7 +74,7 @@ private:
 	Arcball m_controller;
     GradientBackground m_background;
 	
-	TriMesh* m_mesh;
+    TriMesh* m_mesh;
 	
 	bool haveHoloImage;
 	

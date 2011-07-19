@@ -30,6 +30,7 @@
 #include "../Logger.h"
 #include "OGLStatus.h"
 #include "VBO.h"
+#include "IBO.h"
 
 #ifdef USE_VRJ
 #include <vrj/Draw/OpenGL/ContextData.h>
@@ -59,6 +60,10 @@ namespace wrench
 
       GLenum  m_mode;     // Defined by glDrawArrays: GL_TRIANGLE_STRIP, GL_QUAD, etc...
       GLsizei m_count;    // Defined by glDrawArrays: Number of things to draw
+
+      // Defined by glDrawElements: Number of inidices. Should have a value if an IBO is added
+      GLsizei m_indexCount;
+
 
       std::map<std::string, int> m_vertexAttributes;
     public:
@@ -91,6 +96,8 @@ namespace wrench
       */
       void addVBO(VBO& vbo, std::string attributeName);
       
+      void addIBO(IBO& ibo);
+
       /**
       *	Returns the address of the specified attribute.
       *

@@ -42,7 +42,7 @@ void wrench::gl::VAO::addVBO(VBO& vbo, std::string attributeName)
     glEnableVertexAttribArray(attributeAddress);
 
     m_vertexAttributes.insert(pair<std::string, int>(attributeName, attributeAddress));
-    _unbind();
+    //_unbind();
 
     OGLStatus::logOGLErrors("wrench::gl::VAO - addVBO()");
 }

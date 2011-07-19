@@ -231,7 +231,6 @@ void MultiWavelengthCapture::setScalingFactor(float scalingFactor)
 
 void MultiWavelengthCapture::draw(void)
 {
-
   if(m_captureReferencePhase)
   {
     //  If we dont have the reference phase then we are calculating it and we redraw
@@ -282,8 +281,8 @@ void MultiWavelengthCapture::draw(void)
       m_phaseMap0.bind(GL_TEXTURE0);
       m_imageProcessor.process();
 	}
-	m_imageProcessor.unbind();
-	
+    m_imageProcessor.unbind();
+
 	glMatrixMode(GL_MODELVIEW);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
@@ -308,7 +307,7 @@ void MultiWavelengthCapture::draw(void)
 	}
 	m_finalRender.unbind();
 
-	glPopMatrix();
+    glPopMatrix();
   }
   else if(m_haveReferencePhase && Phase == m_displayMode)
   {

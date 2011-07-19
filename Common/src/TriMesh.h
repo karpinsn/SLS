@@ -27,34 +27,32 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef USE_VRJ
-    #include <vrj/Draw/OpenGL/ContextData.h>
-#endif
+#include <wrench/gl/VBO.h>
+#include <wrench/gl/VAO.h>
+
+using namespace wrench::gl;
 
 class TriMesh : public AbstractMesh
 {
 private:
 	struct Vertex 
 	{
-		float x;
-		float y;
-		float z;
-		float u;
-		float v;
+      float x;
+      float y;
+      float z;
 	};
+
+    struct TextureCoordinate
+    {
+      float u;
+      float v;
+    };
 	
-	#ifdef USE_VRJ
-        vrj::opengl::ContextData<GLuint> vrjVBOHandle;
-        vrj::opengl::ContextData<GLuint> vrjIBOHandle;
-	#define m_triMeshVBOID   (*vrjVBOHandle)
-	#define m_triMeshIBOID (*vrjIBOHandle)
-	#else
-		GLuint m_triMeshVBOID;
-		GLuint m_triMeshIBOID;
-	#endif
-	
-    unsigned int	*m_meshIndices;
-    Vertex			*m_meshVertices;
+    VAO m_mesh;
+    VBO m_meshIndices;
+    VBO m_meshVertices;
+    VBO m_meshTextureCoords;
+
     unsigned int	m_elementCount;
     unsigned int    m_width;
     unsigned int    m_height;

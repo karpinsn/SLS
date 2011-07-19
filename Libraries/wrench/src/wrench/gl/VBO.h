@@ -13,6 +13,9 @@
 #ifndef _WRENCH_GL_VBO_H_
 #define _WRENCH_GL_VBO_H_
 
+//  Used to calculate buffer offsets for the buffer object pointers
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
 #ifdef __APPLE__
 #include <glew.h>
 #include <OpenGL/gl.h>
@@ -90,6 +93,11 @@ namespace wrench
       *	Returns the target of the VBO.
       */
       GLenum getTarget(void);
+
+      void setVertexPointer(int vertexComponentCount, int offset);
+      void setTexCoordPointer(int texCoordComponentCount, int offset);
+      void setNormalPointer(int offset);
+
       void bind(void);
       void unbind(void);
     };

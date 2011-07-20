@@ -21,11 +21,6 @@ void TriMesh::initMesh(void)
 
 void TriMesh::draw()
 {
-  //glBindBuffer(GL_ARRAY_BUFFER, m_triMeshVBOID);
-  //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_triMeshIBOID);
-  //glDrawElements(GL_TRIANGLE_STRIP, m_elementCount, GL_UNSIGNED_INT, NULL);
-
-  glPolygonMode(GL_FRONT, GL_LINE);
   m_meshIndices.bind();
   m_mesh.draw();
 }
@@ -47,8 +42,8 @@ void TriMesh::_generateIndices(void)
       int x;
       for(x = 0; x < m_width; x++)
       {
-        indicies[index++] = x + (row * m_width);
         indicies[index++] = x + (row * m_width) + m_width;
+        indicies[index++] = x + (row * m_width);
       }
       if(row != m_height -2)
       {
@@ -62,8 +57,8 @@ void TriMesh::_generateIndices(void)
       int x;
       for(x = m_width - 1; x >= 0; x--)
       {
-        indicies[index++] = x + (row * m_width);
         indicies[index++] = x + (row * m_width) + m_width;
+        indicies[index++] = x + (row * m_width);
       }
 
       if(row != m_height - 2)
@@ -88,12 +83,13 @@ void TriMesh::_generateTexturedVertices(void)
   {
     for(int column = 0; column < m_width; column++)
     {
-      verticies[row * m_width + column].x = (float)row / (float)m_height;
-      verticies[row * m_width + column].y = (float)column / (float)m_width;
+      //  - 1.0 on the width and height is so that the values range from (0, 1)
+      verticies[row * m_width + column].x = (float)column / (float)(m_width - 1.0);
+      verticies[row * m_width + column].y = (float)row / (float)(m_height - 1.0);
       verticies[row * m_width + column].z = 0.0f;
 
-      texCoord[row * m_height + column].u = (float)row / (float)m_height;
-      texCoord[row * m_height + column].v = (float)column / (float)m_width;
+      texCoord[row * m_height + column].u = (float)row / (float)(m_height - 1.0);
+      texCoord[row * m_height + column].v = (float)column / (float)(m_width - 1.0);
     }
   }
 
@@ -116,17 +112,4 @@ void TriMesh::_cacheTriMesh(void)
 
   m_mesh.addVBO(m_meshVertices, "vert");
   m_mesh.addVBO(m_meshTextureCoords, "vertTexCoord");
-
-
-  /*
-  glGenBuffers(1, &m_triMeshVBOID);
-  glBindBuffer(GL_ARRAY_BUFFER, m_triMeshVBOID);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_width * m_height, m_meshVertices, GL_STATIC_DRAW);
-
-  glVertexPointer(3, GL_FLOAT, sizeof(Vertex), 0);
-  glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
-
-  glGenBuffers(1, &m_triMeshIBOID);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_triMeshIBOID);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * m_elementCount, m_meshIndices, GL_STATIC_DRAW);*/
 }

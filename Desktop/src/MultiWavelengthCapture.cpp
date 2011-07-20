@@ -82,7 +82,7 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
 
     //  Resize the display mesh
     delete m_mesh;
-    m_mesh = new TriMesh(6, 4);
+    m_mesh = new TriMesh(width, height);
     m_mesh->initMesh();
 
     //  Resize the fringe loader

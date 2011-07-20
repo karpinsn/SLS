@@ -1,12 +1,9 @@
-/*
- Filename:		TriMesh.h
- Author:		Nikolaus Karpinsky
- Date Created:	09/01/09
- Last Edited:	09/01/09
- 
- Revision Log:
- 09/01/09 - Nik Karpinsky - Original creation.
- */
+/**
+ @file  		TriMesh.h
+ @author:		Nikolaus Karpinsky
+
+
+*/
 
 #ifndef _TRI_MESH_H_
 #define _TRI_MESH_H_

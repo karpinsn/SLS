@@ -1,4 +1,4 @@
-/*
+/**
  @filename		VBO.h
  @author		Nikolaus Karpinsky
  Date Created:	09/20/10

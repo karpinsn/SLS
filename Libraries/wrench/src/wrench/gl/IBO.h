@@ -1,16 +1,13 @@
 /**
  @file          IBO.h
  @author		Nikolaus Karpinsky
- Date Created:	09/20/10
- Last Edited:	10/27/10
 
+ Index Buffer Object (IBO) which holds the index values for a
+ Vertex Array Object (VAO).
  */
 
 #ifndef _WRENCH_GL_IBO_H_
 #define _WRENCH_GL_IBO_H_
-
-//  Used to calculate buffer offsets for the buffer object pointers
-#define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 #ifdef __APPLE__
 #include <glew.h>
@@ -41,7 +38,7 @@ namespace wrench
     private:
 #ifdef USE_VRJ
       vrj::opengl::ContextData<GLuint>  vrjIBOID;
-#define m_vboID             (*vrjIBOID)
+      #define m_vboID             (*vrjIBOID)
 #else
       GLuint m_iboID;
 #endif
@@ -50,7 +47,16 @@ namespace wrench
       GLenum  m_componentType;    // Defined in glVertexAttribPointer as type
       GLsizei m_componentCount;   // Number of indices stored by this IBO
     public:
+
+      /**
+        * Creates a new Index Buffer Object which can be used to store indicies for a
+        * Vertex Array Object (VAO)
+        */
       IBO(void);
+
+      /**
+        * Default destructor which releases the GPU memory used to hold the IBO
+        */
       ~IBO();
 
 	  /**
@@ -72,10 +78,18 @@ namespace wrench
 	  */
       void bufferData(GLsizei size, const GLvoid* data, GLenum usage);
 
+      /**
+        * Returns the number of components (indicies) held in this IBO.
+        *
+        * @return Number of components (indicies) held in this IBO.
+        */
       GLsizei getComponentCount(void);
 
 	  /**
-	  *	Returns the number of components per vertex. Defined in glVertexAttribPointer as size.
+      *	Returns the number of components per index. Defined in glVertexAttribPointer as size.
+      *
+      * @return Number of components per index. This is typically 1, but can differ under certain
+      *         circumstances
 	  */
       GLint getComponentSize(void);
       
@@ -86,7 +100,15 @@ namespace wrench
       */
       GLenum getComponentType(void);
 
+      /**
+        * Binds the IBO as the current GL_ELEMENT_ARRAY_BUFFER.
+        */
       void bind(void);
+
+      /**
+        * Unbinds the IBO as the current GL_ELEMENT_ARRAY_BUFFER, setting
+        * the currently bound to 0.
+        */
       void unbind(void);
     };
   }

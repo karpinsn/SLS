@@ -2,7 +2,9 @@
 
 uniform sampler2D depthMap;
 
-varying vec3 v;
+in vec3 vert;
+
+out vec3 fragVert;
 
 void main()
 {	
@@ -10,7 +12,7 @@ void main()
 	
 	float depth = texture2D(depthMap, gl_MultiTexCoord0.st).x;
 	
-	vec4 newVertexPosition = gl_Vertex;	
+	vec4 newVertexPosition = vert;	
 	newVertexPosition.z = depth;
 
 	v = vec3(gl_ModelViewMatrix * newVertexPosition);

@@ -3,14 +3,14 @@
 uniform sampler2D phaseMap;
 uniform sampler2D normals;
 
-varying vec3 v;
+in vec3 fragVert;
 
 void main()
 {
 	float phase = texture2D(phaseMap, gl_TexCoord[0].st).r;
 	vec3 Normal = normalize(gl_NormalMatrix * vec3(texture2D(normals, gl_TexCoord[0].st)));
-	vec3 L = normalize(gl_LightSource[0].position.xyz - v);
-	vec3 E = normalize(-v);
+	vec3 L = normalize(gl_LightSource[0].position.xyz - fragVert);
+	vec3 E = normalize(-fragVert);
 	vec3 R = normalize(-reflect(L,Normal));
 	
 	//	Ambient light

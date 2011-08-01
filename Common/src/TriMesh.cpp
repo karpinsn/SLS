@@ -21,6 +21,7 @@ void TriMesh::initMesh(void)
 
 void TriMesh::draw()
 {
+  glDisable(GL_CULL_FACE);
   m_meshIndices.bind();
   m_mesh.draw();
 }

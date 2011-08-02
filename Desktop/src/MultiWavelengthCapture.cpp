@@ -282,7 +282,7 @@ void MultiWavelengthCapture::draw(void)
       //	Pass 4 - Normal Calculation
       m_imageProcessor.bindDrawBuffer(m_normalMapAttachPoint);
       m_normalCalculator.bind();
-      m_phaseMap0.bind(GL_TEXTURE0);
+      m_depthMap.bind(GL_TEXTURE0);
       m_imageProcessor.process();
 	}
     m_imageProcessor.unbind();

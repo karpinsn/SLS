@@ -60,10 +60,15 @@ void lens::OpenCVCamera::run()
     if(NULL != m_capture)
     {
       IplImage* image = cvQueryFrame(m_capture);
-      msleep(3.0);
+      msleep(30.0);
       if(NULL != image)
       {
         notifyObservers(image);
+      }
+      else
+      {
+        cvReleaseCapture(&m_capture);
+        m_capture = cvCaptureFromAVI("/home/karpinsn/Output.avi");
       }
     }
   }

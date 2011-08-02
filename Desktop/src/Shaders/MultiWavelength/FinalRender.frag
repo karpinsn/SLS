@@ -3,14 +3,16 @@
 uniform sampler2D phaseMap;
 uniform sampler2D normals;
 
-in vec3 fragVert;
+in vec4 fragVert;
+in vec2 fragTexCoord;
 
 void main()
 {
-	float phase = texture2D(phaseMap, gl_TexCoord[0].st).r;
-	vec3 Normal = normalize(gl_NormalMatrix * vec3(texture2D(normals, gl_TexCoord[0].st)));
-	vec3 L = normalize(gl_LightSource[0].position.xyz - fragVert);
-	vec3 E = normalize(-fragVert);
+	float phase = texture2D(phaseMap, fragTexCoord).r;
+	vec3 Normal = gl_NormalMatrix * normalize(vec3(texture2D(normals, fragTexCoord)));
+
+	vec3 L = normalize(gl_LightSource[0].position.xyz - fragVert.xyz);
+	vec3 E = normalize(-fragVert.xyz);
 	vec3 R = normalize(-reflect(L,Normal));
 	
 	//	Ambient light
@@ -22,11 +24,9 @@ void main()
 	//	Specular light
 	vec4 Ispec = gl_FrontLightProduct[0].specular * pow(max(dot(R,E),0.0), gl_FrontMaterial.shininess);
 
-	if(0.0 == phase)
-	{
-		gl_FragColor = vec4(0.0);
-	}
-	else
+	gl_FragColor = vec4(0.0);
+	
+	if(0.0 != phase)
 	{
 		gl_FragColor = gl_FrontLightModelProduct.sceneColor + Iamb + Idiff + Ispec;
 	}

@@ -89,8 +89,8 @@ void TriMesh::_generateTexturedVertices(void)
       verticies[row * m_width + column].y = (float)row / (float)(m_height - 1.0);
       verticies[row * m_width + column].z = 0.0f;
 
-      texCoord[row * m_height + column].u = (float)row / (float)(m_height - 1.0);
-      texCoord[row * m_height + column].v = (float)column / (float)(m_width - 1.0);
+      texCoord[row * m_height + column].u = (float)column / (float)(m_width - 1.0);
+      texCoord[row * m_height + column].v = (float)row / (float)(m_height - 1.0);
     }
   }
 

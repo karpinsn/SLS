@@ -144,9 +144,13 @@ void MultiWavelengthCapture::_initShaders(float width, float height)
   m_finalRender.init();
   m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/FinalRender.vert"));
   m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/FinalRender.frag"));
+  m_finalRender.bindAttributeLocation("vert", 0);
+  m_finalRender.bindAttributeLocation("vertTexCoord", 1);
+
   m_finalRender.link();
   m_finalRender.uniform("normals", 0);
   m_finalRender.uniform("depthMap", 1);
+  m_finalRender.uniform("phaseMap", 2);
 
   OGLStatus::logOGLErrors("MultiWavelengthCapture - initShaders()");
 }
@@ -301,12 +305,14 @@ void MultiWavelengthCapture::draw(void)
 	{
       m_normalMap.bind(GL_TEXTURE0);
       m_depthMap.bind(GL_TEXTURE1);
+      m_phaseMap1.bind(GL_TEXTURE2);
 
       // Draw a plane of pixels
       m_mesh->draw();
 	}
 	m_finalRender.unbind();
 
+    //m_mesh->draw();
     glPopMatrix();
   }
   else if(m_haveReferencePhase && Phase == m_displayMode)
@@ -325,7 +331,7 @@ void MultiWavelengthCapture::resize(int width, int height)
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(45.0, 1.0, .00001, 10.0);
+  gluPerspective(45.0, 1.0, .00001, 1000.0);
   glMatrixMode(GL_MODELVIEW);
 }
 

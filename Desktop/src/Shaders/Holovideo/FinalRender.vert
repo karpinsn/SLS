@@ -3,14 +3,17 @@
 uniform sampler2D depthMap;
 uniform float width;
 
+in vec4 vert;
+in vec2 vertTexCoord;
+
 varying vec3 v;
 
 void main()
 {	
-	gl_TexCoord[0] = gl_MultiTexCoord0;
+	gl_TexCoord[0].st = vertTexCoord;
 
-	vec4 newVertexPosition = gl_Vertex;		
-	newVertexPosition.z = texture2D(depthMap, gl_MultiTexCoord0.st).x;
+	vec4 newVertexPosition = vert;		
+	newVertexPosition.z = texture2D(depthMap, vertTexCoord).x;
 
 	v = vec3(gl_ModelViewMatrix * newVertexPosition);
 	gl_Position = gl_ModelViewProjectionMatrix * newVertexPosition;

@@ -81,6 +81,8 @@ void Holodecoder::initShaders(void)
     m_finalRender.init();
     m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holovideo/FinalRender.vert"));
     m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holovideo/FinalRender.frag"));
+    m_finalRender.bindAttributeLocation("vert", 0);
+    m_finalRender.bindAttributeLocation("vertTexCoord", 1);
 
     m_finalRender.link();
     m_finalRender.uniform("normals", 0);

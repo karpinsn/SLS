@@ -291,9 +291,11 @@ void MultiWavelengthCapture::draw(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
 	glLoadIdentity();
-	
-	m_camera.applyMatrix();
+
+    glRotatef(180, 0.0, 0.0, 1.0);
+    m_camera.applyMatrix();
     m_controller.applyTransform();
+    glTranslatef(-.5,0.5,-1.0);
 
 	glColor3f(0.0f, 1.0f, 0.0f);
 

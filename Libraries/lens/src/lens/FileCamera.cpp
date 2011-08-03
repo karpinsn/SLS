@@ -42,15 +42,15 @@ void lens::FileCamera::init(void)
   m_images[7] = _readImage("/tmp/img008.bmp");
   m_images[8] = _readImage("/tmp/img009.bmp");
 
-  m_images[9] = _readImage("/tmp/img226.bmp");
-  m_images[10] = _readImage("/tmp/img227.bmp");
-  m_images[11] = _readImage("/tmp/img228.bmp");
-  m_images[12] = _readImage("/tmp/img229.bmp");
-  m_images[13] = _readImage("/tmp/img230.bmp");
-  m_images[14] = _readImage("/tmp/img231.bmp");
-  m_images[15] = _readImage("/tmp/img232.bmp");
-  m_images[16] = _readImage("/tmp/img233.bmp");
-  m_images[17] = _readImage("/tmp/img234.bmp");
+  m_images[9] = _readImage("/tmp/img010.bmp");
+  m_images[10] = _readImage("/tmp/img011.bmp");
+  m_images[11] = _readImage("/tmp/img012.bmp");
+  m_images[12] = _readImage("/tmp/img013.bmp");
+  m_images[13] = _readImage("/tmp/img014.bmp");
+  m_images[14] = _readImage("/tmp/img015.bmp");
+  m_images[15] = _readImage("/tmp/img016.bmp");
+  m_images[16] = _readImage("/tmp/img017.bmp");
+  m_images[17] = _readImage("/tmp/img018.bmp");
 }
 
 void lens::FileCamera::open(void)

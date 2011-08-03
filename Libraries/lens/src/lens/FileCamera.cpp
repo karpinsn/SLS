@@ -20,7 +20,7 @@ lens::FileCamera::~FileCamera()
 
 void lens::FileCamera::init(void)
 {
-  /*
+/*
   m_images[0] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe1.png");
   m_images[1] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe2.png");
   m_images[2] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe3.png");
@@ -32,26 +32,25 @@ void lens::FileCamera::init(void)
   m_images[8] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/MultiwavelengthPatters/fringe9.png");
 */
 
-  m_images[0] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_002.bmp");
-  m_images[1] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_003.bmp");
-  m_images[2] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_004.bmp");
-  m_images[3] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_005.bmp");
-  m_images[4] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_006.bmp");
-  m_images[5] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_007.bmp");
-  m_images[6] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_008.bmp");
-  m_images[7] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_009.bmp");
-  m_images[8] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_010.bmp");
+  m_images[0] = _readImage("/tmp/img001.bmp");
+  m_images[1] = _readImage("/tmp/img002.bmp");
+  m_images[2] = _readImage("/tmp/img003.bmp");
+  m_images[3] = _readImage("/tmp/img004.bmp");
+  m_images[4] = _readImage("/tmp/img005.bmp");
+  m_images[5] = _readImage("/tmp/img006.bmp");
+  m_images[6] = _readImage("/tmp/img007.bmp");
+  m_images[7] = _readImage("/tmp/img008.bmp");
+  m_images[8] = _readImage("/tmp/img009.bmp");
 
-  m_images[9] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_101.bmp");
-  m_images[10] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_102.bmp");
-  m_images[11] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_103.bmp");
-  m_images[12] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_104.bmp");
-  m_images[13] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_105.bmp");
-  m_images[14] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_106.bmp");
-  m_images[15] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_107.bmp");
-  m_images[16] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_108.bmp");
-  m_images[17] = _readImage("/home/karpinsn/Dropbox/Documents/Grad School/Deere Particle Track/DataCapture/8-1-2011/Raw Images/RecordedImage_RM-1327GE_00-11-1C-F0-1E-86_109.bmp");
-
+  m_images[9] = _readImage("/tmp/img226.bmp");
+  m_images[10] = _readImage("/tmp/img227.bmp");
+  m_images[11] = _readImage("/tmp/img228.bmp");
+  m_images[12] = _readImage("/tmp/img229.bmp");
+  m_images[13] = _readImage("/tmp/img230.bmp");
+  m_images[14] = _readImage("/tmp/img231.bmp");
+  m_images[15] = _readImage("/tmp/img232.bmp");
+  m_images[16] = _readImage("/tmp/img233.bmp");
+  m_images[17] = _readImage("/tmp/img234.bmp");
 }
 
 void lens::FileCamera::open(void)
@@ -86,9 +85,9 @@ void lens::FileCamera::run()
   {
     notifyObservers(m_images[currentImage]);
 
-    currentImage = ++currentImage % 9;
+    currentImage = ++currentImage % 18;
 
-    msleep(33.3);
+    msleep(100);
   }
 }
 

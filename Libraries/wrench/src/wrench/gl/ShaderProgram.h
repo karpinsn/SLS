@@ -70,8 +70,11 @@ namespace wrench
 			void unbind();
 			
                         void uniform(const string name, const int data);
-			void uniform(const string name, const float data);
+                        void uniform(const string name, const float data);
+                        void uniform(const string name, const glm::vec3 data);
+                        void uniform(const string name, const glm::vec4 data);
                         void uniform(const string name, const glm::mat3 data);
+                        void uniform(const string name, const glm::mat4 data);
                         void uniformMat4(const string name, GLboolean transpose, const GLfloat *value);
                         void bindAttributeLocation(const string name, const GLuint index);
 			

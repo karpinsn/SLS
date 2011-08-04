@@ -221,6 +221,11 @@ void MultiWavelengthCapture::_initLighting(void)
   glEnable(GL_COLOR_MATERIAL);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
+
+  m_finalRender.uniform("lightPosition", glm::vec3(-2.0f, 2.0f, 4.0f));
+  m_finalRender.uniform("ambientColor", glm::vec4(.1, .1, .1, 1.0));
+  m_finalRender.uniform("diffuseColor", glm::vec4(.8, .8, .8, 1.0));
+  m_finalRender.uniform("specularColor", glm::vec4(.1, .1, .1, 1.0));
 }
 
 void MultiWavelengthCapture::setGammaCutoff(float gamma)
@@ -292,19 +297,24 @@ void MultiWavelengthCapture::draw(void)
 	glPushMatrix();
 	glLoadIdentity();
 
-    glRotatef(180, 0.0, 0.0, 1.0);
+    //glRotatef(180, 0.0, 0.0, 1.0);
     m_camera.applyMatrix();
     m_controller.applyTransform();
-    glTranslatef(-.5,0.5,-1.0);
+    //glTranslatef(-.5,0.5,-1.0);
 
 	glColor3f(0.0f, 1.0f, 0.0f);
 
-    glm::mat4 mvMatrix;
-    glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(mvMatrix));
-    m_axis.draw(mvMatrix);
+    glm::mat4 modelViewMatrix;
+    glm::mat4 projectionMatrix;
+    glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(modelViewMatrix));
+    glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(projectionMatrix));
+    m_axis.draw(modelViewMatrix);
 
 	m_finalRender.bind();
 	{
+      m_finalRender.uniform("modelViewMatrix", modelViewMatrix);
+      m_finalRender.uniform("projectionMatrix", projectionMatrix);
+
       m_normalMap.bind(GL_TEXTURE0);
       m_depthMap.bind(GL_TEXTURE1);
       m_phaseMap1.bind(GL_TEXTURE2);
@@ -314,7 +324,6 @@ void MultiWavelengthCapture::draw(void)
 	}
 	m_finalRender.unbind();
 
-    //m_mesh->draw();
     glPopMatrix();
   }
   else if(m_haveReferencePhase && Phase == m_displayMode)

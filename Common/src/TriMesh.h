@@ -42,8 +42,8 @@ private:
 
     struct TextureCoordinate
     {
-      float u;
-      float v;
+      float s;
+      float t;
     };
 	
     VAO m_mesh;

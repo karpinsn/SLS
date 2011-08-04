@@ -23,8 +23,7 @@ lens::OpenCVCamera::~OpenCVCamera()
 
 void lens::OpenCVCamera::init(void)
 {
-  //m_capture = cvCaptureFromCAM(CV_CAP_ANY);
-  m_capture = cvCaptureFromAVI("/home/karpinsn/Output.avi");
+  m_capture = cvCaptureFromCAM(CV_CAP_ANY);
 }
 
 void lens::OpenCVCamera::open(void)
@@ -60,16 +59,7 @@ void lens::OpenCVCamera::run()
     if(NULL != m_capture)
     {
       IplImage* image = cvQueryFrame(m_capture);
-      msleep(30.0);
-      if(NULL != image)
-      {
-        notifyObservers(image);
-      }
-      else
-      {
-        cvReleaseCapture(&m_capture);
-        m_capture = cvCaptureFromAVI("/home/karpinsn/Output.avi");
-      }
+      notifyObservers(image);
     }
   }
 }

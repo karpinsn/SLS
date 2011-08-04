@@ -51,13 +51,21 @@ void CaptureController::connectCamera(void)
   CameraConnectDialog dialog;
   lens::Camera *camera = dialog.getCamera();
 
-  m_camera.setCamera(camera);
+  //  Make sure that we have a new camera
+  if(NULL != camera)
+  {
+    m_camera.setCamera(camera);
 
-  //  Reinitalize OpenGL stuff
-  m_gl3DContext.resizeInput(camera->getWidth(), camera->getHeight());
+    //  Reinitalize OpenGL stuff
+    m_gl3DContext.resizeInput(camera->getWidth(), camera->getHeight());
 
-  m_camera.start();
-  m_infoBar->showMessage("Connected to the camera");
+    m_camera.start();
+    m_infoBar->showMessage("Connected to the camera");
+  }
+  else
+  {
+    m_infoBar->showMessage("Not connected");
+  }
 }
 
 void CaptureController::disconnectCamera(void)
@@ -132,13 +140,13 @@ void CaptureController::newFrame(IplImage *frame)
 
 void CaptureController::_connectSignalsWithController(void)
 {
-  connect(&m_frameCapture,    SIGNAL(newFrame(IplImage*)),  this, SLOT(newFrame(IplImage*)));
-  connect(openCameraButton,   SIGNAL(clicked()),            this, SLOT(connectCamera()));
-  connect(closeCameraButton,  SIGNAL(clicked()),            this, SLOT(disconnectCamera()));
-  connect(calibrateButton,    SIGNAL(clicked()),            this, SLOT(captureReference()));
-  connect(dropFrameButton,    SIGNAL(clicked()),            this, SLOT(dropFrame()));
-  connect(gammaBox,           SIGNAL(valueChanged(double)), this, SLOT(newGammaValue(double)));
-  connect(scalingFactorBox,   SIGNAL(valueChanged(double)), this, SLOT(newScalingFactor(double)));
+  connect(&m_frameCapture,    SIGNAL(newFrame(IplImage*)),          this, SLOT(newFrame(IplImage*)));
+  connect(openCameraButton,   SIGNAL(clicked()),                    this, SLOT(connectCamera()));
+  connect(closeCameraButton,  SIGNAL(clicked()),                    this, SLOT(disconnectCamera()));
+  connect(calibrateButton,    SIGNAL(clicked()),                    this, SLOT(captureReference()));
+  connect(dropFrameButton,    SIGNAL(clicked()),                    this, SLOT(dropFrame()));
+  connect(gammaBox,           SIGNAL(valueChanged(double)),         this, SLOT(newGammaValue(double)));
+  connect(scalingFactorBox,   SIGNAL(valueChanged(double)),         this, SLOT(newScalingFactor(double)));
   connect(viewModeBox,        SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
 }
 

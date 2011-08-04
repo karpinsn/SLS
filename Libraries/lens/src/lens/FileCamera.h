@@ -12,6 +12,7 @@
 #define _FILE_CAMERA_H_
 
 #include <QThread>
+#include <QFileDialog>
 
 #include <cv.h>
 #include <highgui.h>
@@ -25,9 +26,11 @@ namespace lens
     class FileCamera : public Camera, QThread
         {
     private:
+      CvCapture   *m_capture;
       bool        m_running;
-      IplImage*   m_images[18];
-      int         currentImage;
+
+      string      m_currentFileName;
+
     public:
       FileCamera();
       ~FileCamera();
@@ -42,9 +45,6 @@ namespace lens
 
     protected:
       void run();
-
-    private:
-      IplImage* _readImage(const string &filename);
     };
 }
 

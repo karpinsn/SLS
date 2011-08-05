@@ -94,10 +94,6 @@ namespace wrench
       */
       GLenum getTarget(void);
 
-      void setVertexPointer(int vertexComponentCount, int offset);
-      void setTexCoordPointer(int texCoordComponentCount, int offset);
-      void setNormalPointer(int offset);
-
       void bind(void);
       void unbind(void);
     };

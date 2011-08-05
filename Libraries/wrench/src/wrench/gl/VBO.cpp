@@ -56,24 +56,6 @@ GLenum wrench::gl::VBO::getTarget(void)
     return m_target;
 }
 
-void wrench::gl::VBO::setVertexPointer(int vertexComponentCount, int offset)
-{
-  bind();
-  glVertexPointer(vertexComponentCount, m_componentType, m_componentSize * Converter::typeToSize(m_componentType), BUFFER_OFFSET(offset));
-}
-
-void wrench::gl::VBO::setTexCoordPointer(int texCoordComponentCount, int offset)
-{
-  bind();
-  glTexCoordPointer(texCoordComponentCount, m_componentType, m_componentSize * Converter::typeToSize(m_componentType), BUFFER_OFFSET(offset));
-}
-
-void wrench::gl::VBO::setNormalPointer(int offset)
-{
-  bind();
-  glNormalPointer(m_componentType, m_componentSize * Converter::typeToSize(m_componentType), BUFFER_OFFSET(offset));
-}
-
 void wrench::gl::VBO::bind()
 {
   glBindBuffer(m_target, m_vboID);

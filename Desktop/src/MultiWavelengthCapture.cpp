@@ -82,7 +82,7 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
 
     //  Resize the display mesh
     delete m_mesh;
-    m_mesh = new TriMesh(width, height);
+    m_mesh = new TriMesh(320, 180);
     m_mesh->initMesh();
 
     //  Resize the fringe loader
@@ -198,34 +198,13 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
 
 void MultiWavelengthCapture::_initLighting(void)
 {
-  GLfloat mat_specular[] = {.1f, .1f, .1f, .1f};
-  GLfloat mat_shininess[] = {1.0f};
-  GLfloat light_position[] = {-2.0f, 2.0f, 4.0f, 1.0f};
-  GLfloat white_light[] = {1.0f, 1.0f, 1.0f, 1.0f};
-
-  glClearColor(1.0, 1.0, 1.0, 0.0);
-
-  glShadeModel(GL_SMOOTH);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-  glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-
-  //	Setup light 0
-  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
-  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
-
-  //	Enable lighting
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
-  glEnable(GL_COLOR_MATERIAL);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
 
-  m_finalRender.uniform("lightPosition", glm::vec3(-2.0f, 2.0f, 4.0f));
+  m_finalRender.uniform("lightPosition", glm::vec3(0.5f, 0.5f, 4.0f));
   m_finalRender.uniform("ambientColor", glm::vec4(.1, .1, .1, 1.0));
-  m_finalRender.uniform("diffuseColor", glm::vec4(.8, .8, .8, 1.0));
-  m_finalRender.uniform("specularColor", glm::vec4(.1, .1, .1, 1.0));
+  m_finalRender.uniform("diffuseColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
+  m_finalRender.uniform("specularColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
 }
 
 void MultiWavelengthCapture::setGammaCutoff(float gamma)

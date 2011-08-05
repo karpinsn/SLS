@@ -21,7 +21,6 @@ void TriMesh::initMesh(void)
 
 void TriMesh::draw()
 {
-  glPolygonMode(GL_FRONT, GL_POINT);
   glDisable(GL_CULL_FACE);
   m_meshIndices.bind();
   m_mesh.draw();
@@ -90,18 +89,16 @@ void TriMesh::_generateTexturedVertices(void)
       verticies[row * m_width + column].y = (float)row / (float)(m_height - 1.0);
       verticies[row * m_width + column].z = 0.0f;
 
-      texCoord[row * m_height + column].s = (float)column / (float)(m_width - 1.0);
-      texCoord[row * m_height + column].t = (float)row / (float)(m_height - 1.0);
+      texCoord[row * m_width + column].s = (float)column / (float)(m_width - 1.0);
+      texCoord[row * m_width + column].t = (float)row / (float)(m_height - 1.0);
     }
   }
 
   m_meshVertices.init(3, GL_FLOAT, GL_ARRAY_BUFFER);
   m_meshVertices.bufferData(m_height * m_width, verticies, GL_STATIC_DRAW);
-  m_meshVertices.setVertexPointer(3, 0);
 
   m_meshTextureCoords.init(2, GL_FLOAT, GL_ARRAY_BUFFER);
   m_meshTextureCoords.bufferData(m_height * m_width, texCoord, GL_STATIC_DRAW);
-  m_meshTextureCoords.setTexCoordPointer(2, 0);
 
   delete [] verticies;
   delete [] texCoord;

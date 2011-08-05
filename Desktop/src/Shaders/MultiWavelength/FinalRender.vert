@@ -15,13 +15,17 @@ smooth out vec3 lightDirection;
 
 void main()
 {	
-	fragTexCoord = vertTexCoord.xy;
-	lightDirection = lightPosition;
+	fragTexCoord = vertTexCoord;
 		
 	float depth = texture2D(depthMap, vertTexCoord).x;
 			
 	vec4 newVertexPosition = vert;	
 	newVertexPosition.z = depth;
-		
-	gl_Position = projectionMatrix * modelViewMatrix * newVertexPosition;
+	
+	vec4 mvNewVert = modelViewMatrix * newVertexPosition;
+	vec3 mvNewVert3 = mvNewVert.xyz / mvNewVert.w;
+
+	lightDirection = normalize(lightPosition - mvNewVert3);	
+
+	gl_Position = projectionMatrix * mvNewVert;
 } 

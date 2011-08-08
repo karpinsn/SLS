@@ -7,6 +7,8 @@ CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
   _readSettings();                  //  Reads the persisted settings
 
   m_dropFrame = false;
+  m_fpsLabel.setText(QString(""));
+  m_infoBar = NULL;
 }
 
 CaptureController::~CaptureController()
@@ -14,12 +16,24 @@ CaptureController::~CaptureController()
 }
 
 void CaptureController::showEvent(QShowEvent *event)
-{
+{  
   //  Connect to camera
   m_frameCapture.start();
   m_frameRateTimer.start(1000);
 
+  //  Display the current FPS
+  m_infoBar->addPermanentWidget(&m_fpsLabel);
+
   captureGLWidget->updateScene();
+}
+
+void CaptureController::hideEvent(QHideEvent *)
+{
+  //  Remove the FPS counter
+  if(NULL != m_infoBar)
+  {
+    m_infoBar->removeWidget(&m_fpsLabel);
+  }
 }
 
 void CaptureController::init(void)
@@ -113,9 +127,9 @@ void CaptureController::updateFPS(void)
 {
   double frameRate = m_gl3DContext.getFrameRate();
   QString frameRateMessage = QString("FPS: ");
-  frameRateMessage.append(QString("%1").arg(frameRate));
+  frameRateMessage.append(QString("%1").arg(frameRate, 0, 'f', 3));
 
-  m_infoBar->showMessage(frameRateMessage.toAscii());
+  m_fpsLabel.setText(frameRateMessage);
 }
 
 void CaptureController::newFrame(IplImage *frame)

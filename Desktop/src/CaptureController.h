@@ -40,6 +40,7 @@ private:
 
   bool                    m_dropFrame;
   QStatusBar*             m_infoBar;
+  QLabel                  m_fpsLabel;
 
   QSettings               m_settings;
   QTimer                  m_frameRateTimer;
@@ -65,6 +66,7 @@ public:
 
 protected:
     virtual void showEvent(QShowEvent *event);
+    virtual void hideEvent(QHideEvent *);
 
 private:
     void _connectSignalsWithController(void);

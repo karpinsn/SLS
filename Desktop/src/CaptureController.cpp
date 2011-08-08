@@ -17,6 +17,7 @@ void CaptureController::showEvent(QShowEvent *event)
 {
   //  Connect to camera
   m_frameCapture.start();
+  m_frameRateTimer.start(1000);
 
   captureGLWidget->updateScene();
 }
@@ -108,6 +109,15 @@ void CaptureController::newViewMode(QString viewMode)
   }
 }
 
+void CaptureController::updateFPS(void)
+{
+  double frameRate = m_gl3DContext.getFrameRate();
+  QString frameRateMessage = QString("FPS: ");
+  frameRateMessage.append(QString("%1").arg(frameRate));
+
+  m_infoBar->showMessage(frameRateMessage.toAscii());
+}
+
 void CaptureController::newFrame(IplImage *frame)
 {
   if(!m_dropFrame)  //  If we dont drop a frame then process it
@@ -148,6 +158,7 @@ void CaptureController::_connectSignalsWithController(void)
   connect(gammaBox,           SIGNAL(valueChanged(double)),         this, SLOT(newGammaValue(double)));
   connect(scalingFactorBox,   SIGNAL(valueChanged(double)),         this, SLOT(newScalingFactor(double)));
   connect(viewModeBox,        SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
+  connect(&m_frameRateTimer,  SIGNAL(timeout()),                    this, SLOT(updateFPS()));
 }
 
 void CaptureController::_readSettings(void)

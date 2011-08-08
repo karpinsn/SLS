@@ -36,7 +36,9 @@
 #include <wrench/gl/Shader.h>
 #include <wrench/gl/Texture.h>
 #include <wrench/gl/FBO.h>
+
 #include <wrench/gl/utils/AxisDisplay.h>
+#include <wrench/gl/utils/FPSCalculator.h>
 
 #include "OpenGLWidget.h"
 
@@ -91,6 +93,8 @@ private:
   Arcball m_controller;
   TriMesh* m_mesh;
 
+  FPSCalculator m_fpsCalculator;
+
   bool haveFringeImages;
   bool m_haveReferencePhase;
   bool m_captureReferencePhase;
@@ -123,14 +127,15 @@ public:
   virtual void mousePressEvent(int mouseX, int mouseY);
   virtual void mouseMoveEvent(int mouseX, int mouseY);
 
-  void resizeInput(float width, float height);
-  void newImage(IplImage* image);
-  void swapBuffers(void);
-  void captureReferencePlane(void);
-  void setGammaCutoff(float gamma);
-  void setScalingFactor(float scalingFactor);
-  void show3D(void);
-  void showPhase(void);
+  void    resizeInput(float width, float height);
+  void    newImage(IplImage* image);
+  void    swapBuffers(void);
+  void    captureReferencePlane(void);
+  void    setGammaCutoff(float gamma);
+  void    setScalingFactor(float scalingFactor);
+  void    show3D(void);
+  void    showPhase(void);
+  double  getFrameRate(void);
 
 private:
   void _initShaders(float width, float height);

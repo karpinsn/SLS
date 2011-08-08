@@ -42,6 +42,7 @@ private:
   QStatusBar*             m_infoBar;
 
   QSettings               m_settings;
+  QTimer                  m_frameRateTimer;
 
 public slots:
   void newFrame(IplImage *frame);
@@ -52,6 +53,8 @@ public slots:
   void newGammaValue(double gammaValue);
   void newScalingFactor(double scalingFactor);
   void newViewMode(QString viewMode);
+  void updateFPS(void);
+
 public:
     CaptureController(QWidget* parent = 0);
     ~CaptureController();

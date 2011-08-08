@@ -93,7 +93,7 @@ void Holoencoder::draw(void)
       glTranslatef(-.1, -.2, .1);
 
       m_encoderShader.bind();
-      m_encoderShader.uniformMat4("projectorModelView", false, glm::value_ptr(projectorModelView));
+      m_encoderShader.uniform("projectorModelView", projectorModelView);
 
       glColor3f(.8, .8, .8);
 

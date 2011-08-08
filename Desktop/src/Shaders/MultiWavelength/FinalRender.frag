@@ -3,7 +3,7 @@
 uniform sampler2D phaseMap;
 uniform sampler2D normals;
 
-uniform mat4 modelViewMatrix;
+uniform mat4 normalMatrix;
 
 uniform vec4 ambientColor;
 uniform vec4 diffuseColor;
@@ -22,22 +22,20 @@ void main()
 		discard;
 	}
 
-	vec3 normal = normalize(modelViewMatrix * texture2D(normals, fragTexCoord)).xyz;
+	vec3 normal = normalize(normalMatrix * texture2D(normals, fragTexCoord)).xyz;
+	vec3 L = normalize(lightDirection);		// Light direction
+	vec3 R = normalize(-reflect(L, normal));	// Reflection direction
+
+	//	Ambient
+	vec4 Iamb = ambientColor;
 
 	//	Diffuse
-	float diffuseIntensity = max(0.0, dot(normal, normalize(lightDirection)));
-	fragColor = diffuseIntensity * diffuseColor;
-	
-	//	Ambient
-	fragColor += ambientColor;
+	vec4 Idiff = diffuseColor * max(dot(normal,L), 0.0);
+	Idiff = clamp(Idiff, 0.0, 1.0);
 
 	//	Specular
 	vec3 reflection = normalize(-reflect(normalize(lightDirection), normal));
-	float spec = max(0.0, dot(normal, reflection));
+	float Ispec = pow(max(dot(normal, R), 0.0), 128.0);
 
-	if(diffuseIntensity != 0.0)
-	{
-		float fspec = pow(spec, 128.0);
-		fragColor.rgb += vec3(fspec, fspec, fspec);
-	}		
+	fragColor = Iamb + Idiff + Ispec;
 }

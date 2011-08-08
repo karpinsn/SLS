@@ -53,5 +53,10 @@ void main(void)
 	{
 		phase = vec4(0.0);
 	}	
+
+	if(isnan(phi1))
+	{
+		phase = vec4(0.0);
+	}
 }
 

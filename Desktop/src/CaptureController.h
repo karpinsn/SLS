@@ -24,7 +24,6 @@
 #include "ImageBuffer.h"
 #include "FrameCapture.h"
 
-
 #define SettingsScalingFactor "CaptureScalingFactor"
 #define SettingsGammaValue    "CaptureGammaFactor"
 
@@ -41,6 +40,7 @@ private:
   bool                    m_dropFrame;
   QStatusBar*             m_infoBar;
   QLabel                  m_fpsLabel;
+  QLabel                  m_3dpsLabel;
 
   QSettings               m_settings;
   QTimer                  m_frameRateTimer;

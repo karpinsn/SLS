@@ -8,6 +8,7 @@ CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
 
   m_dropFrame = false;
   m_fpsLabel.setText(QString(""));
+  m_3dpsLabel.setText(QString(""));
   m_infoBar = NULL;
 }
 
@@ -23,6 +24,7 @@ void CaptureController::showEvent(QShowEvent *event)
 
   //  Display the current FPS
   m_infoBar->addPermanentWidget(&m_fpsLabel);
+  m_infoBar->addPermanentWidget(&m_3dpsLabel);
 
   captureGLWidget->updateScene();
 }
@@ -33,6 +35,7 @@ void CaptureController::hideEvent(QHideEvent *)
   if(NULL != m_infoBar)
   {
     m_infoBar->removeWidget(&m_fpsLabel);
+    m_infoBar->removeWidget(&m_3dpsLabel);
   }
 }
 
@@ -128,8 +131,12 @@ void CaptureController::updateFPS(void)
   double frameRate = m_gl3DContext.getFrameRate();
   QString frameRateMessage = QString("FPS: ");
   frameRateMessage.append(QString("%1").arg(frameRate, 0, 'f', 3));
-
   m_fpsLabel.setText(frameRateMessage);
+
+  double threeDRate = m_gl3DContext.get3DRate();
+  QString threeDRateMessage = QString("3DPS: ");
+  threeDRateMessage.append(QString("%1").arg(threeDRate, 0, 'f', 3));
+  m_3dpsLabel.setText(threeDRateMessage);
 }
 
 void CaptureController::newFrame(IplImage *frame)
@@ -146,7 +153,10 @@ void CaptureController::newFrame(IplImage *frame)
       releaseGray = true;
     }
 
-    m_gl3DContext.newImage(im_gray);
+    if(m_gl3DContext.newImage(im_gray))
+    {
+      captureGLWidget->updateScene();
+    }
 
     if(releaseGray)
     {
@@ -154,7 +164,6 @@ void CaptureController::newFrame(IplImage *frame)
     }
 
     cvReleaseImage(&frame);
-    captureGLWidget->updateScene();
   }
   else  // Drop a frame
   {

@@ -94,6 +94,7 @@ private:
   TriMesh* m_mesh;
 
   FPSCalculator m_fpsCalculator;
+  FPSCalculator m_3dpsCalculator; // 3D frames per second
 
   bool haveFringeImages;
   bool m_haveReferencePhase;
@@ -128,7 +129,7 @@ public:
   virtual void mouseMoveEvent(int mouseX, int mouseY);
 
   void    resizeInput(float width, float height);
-  void    newImage(IplImage* image);
+  bool    newImage(IplImage* image);
   void    swapBuffers(void);
   void    captureReferencePlane(void);
   void    setGammaCutoff(float gamma);
@@ -136,6 +137,7 @@ public:
   void    show3D(void);
   void    showPhase(void);
   double  getFrameRate(void);
+  double  get3DRate(void);
 
 private:
   void _initShaders(float width, float height);

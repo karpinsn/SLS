@@ -255,11 +255,17 @@ void MultiWavelengthCapture::draw(void)
       m_phaseMap0.bind(GL_TEXTURE0);
       m_imageProcessor.process();
 
+      //	Pass 2 - Phase filtering ... again
+      m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
+      m_phaseFilter.bind();
+      m_phaseMap1.bind(GL_TEXTURE0);
+      m_imageProcessor.process();
+
       //    Pass 3 - Depth Calculator
       m_imageProcessor.bindDrawBuffer(m_depthMapAttachPoint);
       m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
       m_depthCalculator.bind();
-      m_phaseMap1.bind(GL_TEXTURE0);
+      m_phaseMap0.bind(GL_TEXTURE0);
       m_referencePhase.bind(GL_TEXTURE1);
       m_imageProcessor.process();
 
@@ -300,7 +306,7 @@ void MultiWavelengthCapture::draw(void)
 
       m_normalMap.bind(GL_TEXTURE0);
       m_depthMap.bind(GL_TEXTURE1);
-      m_phaseMap1.bind(GL_TEXTURE2);
+      m_phaseMap0.bind(GL_TEXTURE2);
 
       // Draw a plane of pixels
       m_mesh->draw();
@@ -345,8 +351,10 @@ void MultiWavelengthCapture::mouseMoveEvent(int mouseX, int mouseY)
   m_camera.mouseMotion(mouseX, mouseY);
 }
 
-void MultiWavelengthCapture::newImage(IplImage* image)
+bool MultiWavelengthCapture::newImage(IplImage* image)
 {
+  bool needRedraw = false;
+
   cvSetImageCOI(m_fringeLoadingImage, (m_currentChannelLoad + 1));
   cvCopy(image, m_fringeLoadingImage);
   cvSetImageCOI(m_fringeLoadingImage, 0);
@@ -366,10 +374,13 @@ void MultiWavelengthCapture::newImage(IplImage* image)
     m_currentChannelLoad = 0;
     m_currentFringeLoad = 0;
     swapBuffers();
+    m_3dpsCalculator.frameUpdate();
+    needRedraw = true;
   }
 
   //	Make sure we dont have any errors
   OGLStatus::logOGLErrors("MultiWavelengthCapture - setBackHoloBuffer()");
+  return needRedraw;
 }
 
 void MultiWavelengthCapture::swapBuffers(void)
@@ -399,4 +410,9 @@ void MultiWavelengthCapture::showPhase(void)
 double MultiWavelengthCapture::getFrameRate(void)
 {
   return m_fpsCalculator.getFrameRate();
+}
+
+double MultiWavelengthCapture::get3DRate(void)
+{
+  return m_3dpsCalculator.getFrameRate();
 }

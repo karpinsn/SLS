@@ -76,6 +76,5 @@ void lens::FileCamera::run()
         m_capture = cvCaptureFromAVI(m_currentFileName.c_str());
       }
     }
-    msleep(20.0);
   }
 }

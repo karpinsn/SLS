@@ -7,6 +7,9 @@ CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
   _readSettings();                  //  Reads the persisted settings
 
   m_dropFrame = false;
+  m_fpsLabel.setText(QString(""));
+  m_3dpsLabel.setText(QString(""));
+  m_infoBar = NULL;
 }
 
 CaptureController::~CaptureController()
@@ -14,11 +17,26 @@ CaptureController::~CaptureController()
 }
 
 void CaptureController::showEvent(QShowEvent *event)
-{
+{  
   //  Connect to camera
   m_frameCapture.start();
+  m_frameRateTimer.start(1000);
+
+  //  Display the current FPS
+  m_infoBar->addPermanentWidget(&m_fpsLabel);
+  m_infoBar->addPermanentWidget(&m_3dpsLabel);
 
   captureGLWidget->updateScene();
+}
+
+void CaptureController::hideEvent(QHideEvent *)
+{
+  //  Remove the FPS counter
+  if(NULL != m_infoBar)
+  {
+    m_infoBar->removeWidget(&m_fpsLabel);
+    m_infoBar->removeWidget(&m_3dpsLabel);
+  }
 }
 
 void CaptureController::init(void)
@@ -108,6 +126,19 @@ void CaptureController::newViewMode(QString viewMode)
   }
 }
 
+void CaptureController::updateFPS(void)
+{
+  double frameRate = m_gl3DContext.getFrameRate();
+  QString frameRateMessage = QString("FPS: ");
+  frameRateMessage.append(QString("%1").arg(frameRate, 0, 'f', 3));
+  m_fpsLabel.setText(frameRateMessage);
+
+  double threeDRate = m_gl3DContext.get3DRate();
+  QString threeDRateMessage = QString("3DPS: ");
+  threeDRateMessage.append(QString("%1").arg(threeDRate, 0, 'f', 3));
+  m_3dpsLabel.setText(threeDRateMessage);
+}
+
 void CaptureController::newFrame(IplImage *frame)
 {
   if(!m_dropFrame)  //  If we dont drop a frame then process it
@@ -122,7 +153,10 @@ void CaptureController::newFrame(IplImage *frame)
       releaseGray = true;
     }
 
-    m_gl3DContext.newImage(im_gray);
+    if(m_gl3DContext.newImage(im_gray))
+    {
+      captureGLWidget->updateScene();
+    }
 
     if(releaseGray)
     {
@@ -130,7 +164,6 @@ void CaptureController::newFrame(IplImage *frame)
     }
 
     cvReleaseImage(&frame);
-    captureGLWidget->updateScene();
   }
   else  // Drop a frame
   {
@@ -148,6 +181,7 @@ void CaptureController::_connectSignalsWithController(void)
   connect(gammaBox,           SIGNAL(valueChanged(double)),         this, SLOT(newGammaValue(double)));
   connect(scalingFactorBox,   SIGNAL(valueChanged(double)),         this, SLOT(newScalingFactor(double)));
   connect(viewModeBox,        SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
+  connect(&m_frameRateTimer,  SIGNAL(timeout()),                    this, SLOT(updateFPS()));
 }
 
 void CaptureController::_readSettings(void)

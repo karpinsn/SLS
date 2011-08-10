@@ -7,6 +7,9 @@
  *	your OpenGL draw loop to render the background. 
  */
 
+#ifndef _GRADIENT_BACKGROUND_H_
+#define _GRADIENT_BACKGROUND_H_
+
 #ifdef __APPLE__
 #include <glew.h>
 #include <OpenGL/gl.h>
@@ -99,3 +102,5 @@ namespace wrench
     }
   }
 }
+
+#endif  //_GRADIENT_BACKGROUND_H_

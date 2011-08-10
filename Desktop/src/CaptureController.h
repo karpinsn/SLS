@@ -24,7 +24,6 @@
 #include "ImageBuffer.h"
 #include "FrameCapture.h"
 
-
 #define SettingsScalingFactor "CaptureScalingFactor"
 #define SettingsGammaValue    "CaptureGammaFactor"
 
@@ -40,8 +39,11 @@ private:
 
   bool                    m_dropFrame;
   QStatusBar*             m_infoBar;
+  QLabel                  m_fpsLabel;
+  QLabel                  m_3dpsLabel;
 
   QSettings               m_settings;
+  QTimer                  m_frameRateTimer;
 
 public slots:
   void newFrame(IplImage *frame);
@@ -52,6 +54,8 @@ public slots:
   void newGammaValue(double gammaValue);
   void newScalingFactor(double scalingFactor);
   void newViewMode(QString viewMode);
+  void updateFPS(void);
+
 public:
     CaptureController(QWidget* parent = 0);
     ~CaptureController();
@@ -62,6 +66,7 @@ public:
 
 protected:
     virtual void showEvent(QShowEvent *event);
+    virtual void hideEvent(QHideEvent *);
 
 private:
     void _connectSignalsWithController(void);

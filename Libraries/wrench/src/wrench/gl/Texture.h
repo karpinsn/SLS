@@ -80,11 +80,8 @@ public:
 
   bool	transferFromTexture(IplImage* image);
   bool	transferToTexture(const IplImage* image);
-  bool  transferChannelToTexture(const IplImage* image, int channelNumber);
 
 private:
-  void	_transferFloatData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep);
-  void	_transferByteData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep);
   bool	_checkImageCompatibility(const IplImage* image) const;
 };
 }

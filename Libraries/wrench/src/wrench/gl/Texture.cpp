@@ -137,7 +137,6 @@ bool wrench::gl::Texture::transferFromTexture(IplImage* image)
   if(compatible)
   {
     const int channelCount = getChannelCount();
-    int widthStep = m_width * channelCount * m_dataSize;
     size_t dataSize = m_width * m_height * channelCount * m_dataSize;
 
     bind();
@@ -146,18 +145,15 @@ bool wrench::gl::Texture::transferFromTexture(IplImage* image)
     glReadPixels(0, 0, m_width, m_height, m_format, m_dataType, 0);
     char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
 
-    if(m_dataType == GL_FLOAT)
+    //  Actual data transfer
+    for (int i = 0; i < m_height; i++)
     {
-      _transferFloatData(gpuMem, image->imageData, channelCount, image->nChannels, widthStep, image->widthStep);
-      glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB); // release pointer to mapping buffer
-      glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
+        //  OpenCV does not guarentee continous memory blocks so it has to be copied row by row
+        memcpy(image->imageData + (i * image->widthStep), gpuMem + (i * m_width * 3), m_width * channelCount * m_dataSize);
     }
-    else if(m_dataType == GL_UNSIGNED_BYTE)
-    {
-      _transferByteData(gpuMem, image->imageData, channelCount, image->nChannels, widthStep, image->widthStep);
-      glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB); // release pointer to mapping buffer
-      glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
-    }
+
+    glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB); // release pointer to mapping buffer
+    glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
   }
   return compatible;
 }
@@ -169,7 +165,6 @@ bool wrench::gl::Texture::transferToTexture(const IplImage* image)
   if(compatible)
   {
     const int channelCount = getChannelCount();
-    int widthStep = m_width * channelCount * m_dataSize;
     size_t dataSize = m_width * m_height * channelCount * m_dataSize;
 
     bind();
@@ -177,95 +172,29 @@ bool wrench::gl::Texture::transferToTexture(const IplImage* image)
     glBufferData(GL_PIXEL_UNPACK_BUFFER_ARB, dataSize, NULL, GL_STREAM_DRAW);
     char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
 
-    if(m_dataType == GL_FLOAT)
+    //  Actual data transfer
+    for (int i = 0; i < m_height; i++)
     {
-      _transferFloatData(image->imageData, gpuMem, image->nChannels, channelCount, image->widthStep, widthStep);
-      glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
-      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
-      glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+        //  OpenCV does not guarentee continous memory blocks so it has to be copied row by row
+        memcpy(gpuMem + (i * m_width * 3), image->imageData + (i * image->widthStep), m_width * channelCount * m_dataSize);
     }
-    else if(m_dataType == GL_UNSIGNED_BYTE)
-    {
-      _transferByteData(image->imageData, gpuMem, image->nChannels, channelCount, image->widthStep, widthStep);
-      glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
-      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
-      glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    }
+
+    glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
+    glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
   }
   return compatible;
-}
-
-bool wrench::gl::Texture::transferChannelToTexture(const IplImage* image, int channelNumber)
-{
-  const int channelCount = getChannelCount();
-  int widthStep = m_width * channelCount * m_dataSize;
-  size_t dataSize = m_width * m_height * channelCount * m_dataSize;
-
-  bind();
-  glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, m_PBOId);
-  glBufferData(GL_PIXEL_UNPACK_BUFFER_ARB, dataSize, NULL, GL_STREAM_DRAW);
-  char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
-
-  if(m_dataType == GL_FLOAT)
-  {
-    gpuMem += channelNumber; // Offset to the correct channel
-    _transferFloatData(image->imageData, gpuMem, image->nChannels, channelCount, image->widthStep, widthStep);
-    glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
-    glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-  }
-  else if(m_dataType == GL_UNSIGNED_BYTE)
-  {
-    gpuMem += channelNumber; // Offset to the correct channel
-    _transferByteData(image->imageData, gpuMem, image->nChannels, channelCount, image->widthStep, widthStep);
-    glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_dataType, 0);
-    glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-  }
-
-  return false;
-}
-
-void wrench::gl::Texture::_transferFloatData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep)
-{
-  for(unsigned int y = 0; y < m_height; ++y)
-  {
-    for(unsigned int x = 0; x < m_width; ++x)
-    {
-      float* sourcePointer = (float*)(source + sourceWidthStep*y);
-      float* destPointer = (float*)(dest + destWidthStep*y);
-
-      for(int channel = 0; channel < sourceNChannels && channel < destNChannels; channel++)
-      {
-        destPointer[x*destNChannels+channel] = sourcePointer[x*sourceNChannels+channel];
-      }
-    }
-  }
-}
-
-void wrench::gl::Texture::_transferByteData(const char* source, char* dest, int sourceNChannels, int destNChannels, int sourceWidthStep, int destWidthStep)
-{
-  for(unsigned int y = 0; y < m_height; ++y)
-  {
-    for(unsigned int x = 0; x < m_width; ++x)
-    {
-      uchar* sourcePointer = (uchar*)(source + sourceWidthStep*y);
-      uchar* destPointer = (uchar*)(dest + destWidthStep*y);
-
-      for(int channel = 0; channel < sourceNChannels && channel < destNChannels; channel++)
-      {
-        destPointer[x*destNChannels+channel] = sourcePointer[x*sourceNChannels+channel];
-      }
-    }
-  }
 }
 
 bool wrench::gl::Texture::_checkImageCompatibility(const IplImage* image) const
 {
   bool compatible = false;
 
-  if(image->width		== (GLint)m_width &&
-      image->height	== (GLint)m_height)
+  //    Number of channels must be the same so that memcpy can be used. This is for
+  //    the shear speed of memcpy
+  if(image->width	== (GLint)m_width &&
+      image->height	== (GLint)m_height &&
+      image->nChannels  == getChannelCount())
   {
     compatible = true;
   }

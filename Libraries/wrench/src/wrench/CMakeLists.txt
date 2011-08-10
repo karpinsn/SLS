@@ -52,8 +52,10 @@ set(GL_UTILS_SOURCES
 set(SOURCES
 	
 	Logger.cpp
-	
+	Timer.cpp	
+
 	Logger.h
+	Timer.h
 )
 
 source_group("wrench" FILES ${SOURCES})

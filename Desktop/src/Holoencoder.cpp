@@ -8,28 +8,33 @@ Holoencoder::Holoencoder(void)
 
 void Holoencoder::init()
 {	
-	if(!m_hasBeenInit)
-	{
-		m_width = 512;
-		m_height = 512;
-	
-		m_currentMesh = NULL;
-        _initFBO();
-	
-		m_controller.init(m_width, m_height);
-        _initShaders();
+  init(512, 512);
+}
 
-		m_camera = new Camera();
-        m_camera->init(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-		m_camera->setMode(4);
-		
-        //	Define the projector projection matrix
-        m_projectorModelView = glm::mat4();
-        m_projectorModelView = m_projectorModelView * glm::gtx::transform::rotate(30.0f, 0.0f, 1.0f, 0.0f);
+void Holoencoder::init(float width, float height)
+{
+  if(!m_hasBeenInit)
+  {
+      m_width = width;
+      m_height = height;
+
+      m_currentMesh = NULL;
+      _initFBO();
+
+      m_controller.init(m_width, m_height);
+      _initShaders();
+
+      m_camera = new Camera();
+      m_camera->init(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+      m_camera->setMode(4);
+
+      //	Define the projector projection matrix
+      m_projectorModelView = glm::mat4();
+      m_projectorModelView = m_projectorModelView * glm::gtx::transform::rotate(30.0f, 0.0f, 1.0f, 0.0f);
 
 
-		m_hasBeenInit = true;
-	}
+      m_hasBeenInit = true;
+  }
 }
 
 void Holoencoder::_initFBO()

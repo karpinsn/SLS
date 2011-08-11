@@ -8,30 +8,35 @@ Holodecoder::Holodecoder(void)
 
 void Holodecoder::init()
 {
-    if(!m_hasBeenInit)
-    {
-        initShaders();
+  init(512,512);
+}
 
-        _initTextures(512, 512);
-        _initLighting();
+void Holodecoder::init(float width, float height)
+{
+  if(!m_hasBeenInit)
+  {
+      initShaders();
 
-        m_controller.init(512, 512);
-        m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
-        m_camera.setMode(1);
+      _initTextures(width, height);
+      _initLighting();
 
-        m_mesh = new TriMesh(512, 512);
+      m_controller.init(512, 512);
+      m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
+      m_camera.setMode(1);
 
-        m_mesh->initMesh();
-        haveHoloImage = false;
-        m_hasBeenInit = true;
+      m_mesh = new TriMesh(512, 512);
 
-        m_holoImages[0] = &m_holoImage0;
-        m_holoImages[1] = &m_holoImage1;
+      m_mesh->initMesh();
+      haveHoloImage = false;
+      m_hasBeenInit = true;
 
-        GLfloat topColor[3] = {.8, .8, .8};
-        GLfloat bottomColor[3] = {.7, .7, .7};
-        m_background.setColors(topColor, bottomColor);
-    }
+      m_holoImages[0] = &m_holoImage0;
+      m_holoImages[1] = &m_holoImage1;
+
+      GLfloat topColor[3] = {.8, .8, .8};
+      GLfloat bottomColor[3] = {.7, .7, .7};
+      m_background.setColors(topColor, bottomColor);
+  }
 }
 
 void Holodecoder::initShaders(void)

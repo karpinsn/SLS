@@ -37,12 +37,6 @@ using namespace wrench::gl;
 class ImageIO
 {
 private:
-	CvVideoWriter *m_videoWriterHandle;
-	bool m_videoWriterInUse;
-	
-	CvCapture *m_videoReaderHandle;
-	bool m_videoReaderInUse;
-	
 	IplImage *m_imageHandle;
 	unsigned int m_imageHeight;
 	unsigned int m_imageWidth;
@@ -58,17 +52,6 @@ public:
 	
 	//	Read Image Methods
 	IplImage* readImage(const string &filename);
-	
-	//	Save Avi File Methods
-	bool saveAviFile(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps);
-	bool saveAviFileWriteFrame(Texture& texture);
-	bool saveAviFileFinish(void);
-	
-	//	Read Avi File Methods
-	bool readAviFile(const string &filename);
-	IplImage* readAviFileFrame();
-	bool readAviFileFinish(void);
-	bool aviFileOpen(void);
 	
 private:
 	void ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight, const unsigned int channelCount);

@@ -137,11 +137,10 @@ bool wrench::gl::Texture::transferFromTexture(IplImage* image)
   if(compatible)
   {
     const int channelCount = getChannelCount();
-    size_t dataSize = m_width * m_height * channelCount * m_dataSize;
 
     bind();
     glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, m_PBOId);
-    glBufferData(GL_PIXEL_PACK_BUFFER_ARB, dataSize, NULL, GL_STREAM_READ);
+    glBufferData(GL_PIXEL_PACK_BUFFER_ARB, m_width * m_height * channelCount * m_dataSize, NULL, GL_STREAM_READ);
     glReadPixels(0, 0, m_width, m_height, m_format, m_dataType, 0);
     char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
 
@@ -165,11 +164,10 @@ bool wrench::gl::Texture::transferToTexture(const IplImage* image)
   if(compatible)
   {
     const int channelCount = getChannelCount();
-    size_t dataSize = m_width * m_height * channelCount * m_dataSize;
 
     bind();
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, m_PBOId);
-    glBufferData(GL_PIXEL_UNPACK_BUFFER_ARB, dataSize, NULL, GL_STREAM_DRAW);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER_ARB, m_width * m_height * channelCount * m_dataSize, NULL, GL_STREAM_DRAW);
     char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
 
     //  Actual data transfer

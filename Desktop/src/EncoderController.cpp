@@ -3,6 +3,7 @@
 EncoderController::EncoderController(QWidget* parent) : QWidget(parent)
 {
   setupUi(this);
+  _connectSignalsWithController();
 }
 
 EncoderController::~EncoderController()
@@ -34,8 +35,8 @@ void EncoderController::exportEntireVideo(QListWidget* fileList)
 
   if(!fileName.isEmpty())
   {
-      ImageIO io;
-      bool canSaveFile = io.saveAviFile(fileName.toAscii().constData(), 512, 512, 30);
+      VideoIO io;
+      bool canSaveFile = io.openSaveStream(fileName.toAscii().constData(), 512, 512, 30);
 
       if(canSaveFile)
       {
@@ -56,14 +57,14 @@ void EncoderController::exportEntireVideo(QListWidget* fileList)
               m_encoder.setCurrentMesh(currentMesh);
 
               Texture holoimage = m_encoder.encode();
-              io.saveAviFileWriteFrame(holoimage);
+              io.saveStream(holoimage);
           }
 
           //	Last one done!
           progress.setValue(fileList->count());
 
           Logger::logDebug("EncoderController - exportEntireVideo: Encoding complete!");
-          io.saveAviFileFinish();
+          io.closeSaveStream();
       }
   }
 }
@@ -89,4 +90,80 @@ void EncoderController::_updateGL(void)
   {
     Logger::logError("ViewController - _updateGL: Unable to find OpenGL Widget");
   }
+}
+
+void EncoderController::encode(void)
+{
+  //  Open source media
+  VideoIO io;
+  io.openReadStream("/home/karpinsn/tmp/Output.avi");
+  IplImage* frame = io.readStream();
+
+  //  Get the decoder
+  MultiWavelengthCapture* decoder = new MultiWavelengthCapture();
+  encoderGLWidget->setGLContext(decoder);
+  encoderGLWidget->reinit(frame->width, frame->height);
+
+  //  Get the encoder
+  DepthCodec* encoder = new DepthCodec();
+
+  bool calculateReference = true;
+  if(NULL != frame)
+  {
+    encoder->openEncodeStream(frame->width, frame->height);
+
+    while(NULL != frame)
+    {
+      //  Actual encoding
+      IplImage *im_gray = frame;
+      bool releaseGray = false;
+
+      if(frame->nChannels > 1)
+      {
+        im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
+        cvCvtColor(frame, im_gray, CV_RGB2GRAY);
+        releaseGray = true;
+      }
+
+      if(decoder->newImage(im_gray)) //  Check if we have decoded a new 3D frame
+      {
+        if(calculateReference)
+        {
+          calculateReference = false;
+          decoder->captureReferencePlane();
+        }
+        else
+        {
+          MeshInterchange mesh;
+          //mesh.setData(&decoder.decode());
+          encoderGLWidget->encode();
+          mesh.setData(&decoder->m_depthMap);
+          encoder->encode(mesh);
+        }
+      }
+
+      if(releaseGray)
+      {
+        cvReleaseImage(&im_gray);
+      }
+
+      frame = io.readStream();
+    }
+
+    encoder->closeEncodeStream();
+  }
+
+  io.closeReadStream();
+
+  //  Reset the context
+  encoderGLWidget->setGLContext(&m_encoder);
+
+  //  Get rid of our encoder and decoder
+  delete decoder;
+  delete encoder;
+}
+
+void EncoderController::_connectSignalsWithController(void)
+{
+  connect(encodeButton, SIGNAL(clicked()), this, SLOT(encode()));
 }

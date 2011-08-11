@@ -20,12 +20,19 @@
 #include "Holoencoder.h"
 #include "XYZFileIO.h"
 
+#include "DepthCodec.h"
+#include "MultiWavelengthCapture.h"
+
+#include "VideoIO.h"
+
 class EncoderController : public QWidget, private Ui::Encode
 {
   Q_OBJECT
 
 private:
   Holoencoder m_encoder;
+
+  //MultiWavelengthCapture m_decoder;
 
 public:
   EncoderController(QWidget* parent = 0);
@@ -37,8 +44,12 @@ public:
 
   void init(void);
 
+public slots:
+  void encode(void);
+
 private:
   void _updateGL(void);
+  void _connectSignalsWithController(void);
 };
 
 #endif	// _ENCODER_CONTROLLER_H_

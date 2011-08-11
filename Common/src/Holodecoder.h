@@ -86,6 +86,7 @@ public:
     Holodecoder();
 	
 	virtual void init(void);
+    virtual void init(float width, float height);
 	virtual void draw(void);
 	virtual void resize(int width, int height);
 	virtual void cameraSelectMode(int mode);

@@ -74,6 +74,13 @@ include_directories(${LENS_INCLUDE_DIRS})
 set(LIBS ${LIBS} lens "${LENS_LIBRARIES}")
 
 #	-----------------------------------------
+#	Antenna
+#	-----------------------------------------
+add_subdirectory(../../Libraries/antenna/src/antenna ${PROJECT_BINARY_DIR}/Libraries/antenna)
+include_directories(../../Libraries/antenna/src)
+set(LIBS ${LIBS} antenna)
+
+#	-----------------------------------------
 #	Common
 #	-----------------------------------------
 include_directories(../../Common/src)
@@ -96,7 +103,8 @@ set(SOURCES
 	MainWindowView.cpp
 	MainWindowController.cpp
 	OpenGLWidget.cpp
-	Holoencoder.cpp
+    EncodingOpenGLWidget.cpp
+    Holoencoder.cpp
     XYZFileIO.cpp
 	XYZMesh.cpp
 	MultiWavelengthCapture.cpp
@@ -109,13 +117,20 @@ set(SOURCES
     CameraConnectDialog.cpp
 
     ../../Common/src/ImageIO.cpp
+    ../../Common/src/VideoIO.cpp
 	../../Common/src/PointCloudMesh.cpp		
 	../../Common/src/TriMesh.cpp
     ../../Common/src/Holodecoder.cpp
+	../../Common/src/MeshInterchange.cpp
+	../../Common/src/MeshInterchange.h
+	../../Common/src/Codec.h
+	../../Common/src/DepthCodec.cpp
+	../../Common/src/DepthCodec.h
 
 	MainWindowView.h
 	MainWindowController.h
 	OpenGLWidget.h
+    EncodingOpenGLWidget.h
 	Holoencoder.h
 	XYZFileIO.h
 	XYZMesh.h
@@ -129,6 +144,7 @@ set(SOURCES
     CameraConnectDialog.h
 
     ../../Common/src/ImageIO.h
+    ../../Common/src/VideoIO.h
 	../../Common/src/XYZPoint.h
 	../../Common/src/AbstractMesh.h
 	../../Common/src/PointCloudMesh.h
@@ -139,7 +155,7 @@ set(SOURCES
 	
 # QT Files
 set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui)
-set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h CameraConnectDialog.h)
+set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h EncodingOpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h CameraConnectDialog.h)
 set(RESOURCES ui/Holoencoder.qrc)
 
 #	---------------------------------------------------------------------------------------

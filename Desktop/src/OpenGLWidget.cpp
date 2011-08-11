@@ -38,6 +38,7 @@ void OpenGLWidget::initializeGL()
 void OpenGLWidget::setGLContext(AbstractGLContext* glContext)
 {
   m_glContext = glContext;
+  makeCurrent();
 }
 
 void OpenGLWidget::updateScene()

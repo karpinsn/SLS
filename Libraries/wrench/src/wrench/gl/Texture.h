@@ -40,15 +40,15 @@ namespace gl
 class Texture
 {
 private:
-  GLuint	m_width;			//	Width of the texture
-  GLuint	m_height;			//	Height of the texture
+  GLuint  m_width;			//	Width of the texture
+  GLuint  m_height;			//	Height of the texture
 
-  int		m_dataSize;			//	Size of the data. i.e. sizeof(m_dataType...)
+  int     m_dataSize;		//	Size of the data. i.e. sizeof(m_dataType...)
 
   //	Consult glTexImage2D for what these variables do
-  GLint	m_internalFormat;	//	Internal format of the texture to render to
-  GLenum	m_format;			//	Format of the texture
-  GLenum	m_dataType;			//	Data type of the texture
+  GLint   m_internalFormat;	//	Internal format of the texture to render to
+  GLenum  m_format;			//	Format of the texture
+  GLenum  m_dataType;		//	Data type of the texture
 
 #ifdef USE_VRJ
   vrj::opengl::ContextData<GLuint> vrjTextureHandle;
@@ -64,11 +64,11 @@ public:
   Texture(void);
   ~Texture();
 
-  bool		init(const GLuint width, const GLuint height, GLint internalFormat = GL_RGBA32F_ARB, GLenum format = GL_RGBA, GLenum dataType = GL_FLOAT);
-  bool      reinit(const GLuint width, const GLuint height, GLint internalFormat = GL_RGBA32F_ARB, GLenum format = GL_RGBA, GLenum dataType = GL_FLOAT);
-  void      bind();
-  void      bind(GLenum texture);
-  void		unbind();
+  bool	init  (const GLuint width, const GLuint height, GLint internalFormat = GL_RGBA32F_ARB, GLenum format = GL_RGBA, GLenum dataType = GL_FLOAT);
+  bool  reinit(const GLuint width, const GLuint height, GLint internalFormat = GL_RGBA32F_ARB, GLenum format = GL_RGBA, GLenum dataType = GL_FLOAT);
+  void  bind();
+  void  bind(GLenum texture);
+  void	unbind();
 
   const	GLuint	getTextureId(void)      const;
   const	GLenum	getTextureTarget(void)	const;

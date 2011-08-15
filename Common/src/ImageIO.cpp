@@ -2,8 +2,6 @@
 
 ImageIO::ImageIO(void)
 {
-	m_videoWriterInUse = false;
-	m_videoReaderInUse = false;
 	m_imageWidth = 1;
 	m_imageHeight = 1;
 	
@@ -12,12 +10,7 @@ ImageIO::ImageIO(void)
 
 ImageIO::~ImageIO()
 {
-	if (m_videoWriterInUse) 
-	{
-		clog << "Video writer stream not properly closed. Closing video writer stream" << endl;
-		cvReleaseVideoWriter(&m_videoWriterHandle);
-	}
-	cvReleaseImage(&m_imageHandle);
+    cvReleaseImage(&m_imageHandle);   //  TODO comeback and fix this
 }
 
 bool ImageIO::saveRGBImage(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight)
@@ -94,131 +87,6 @@ IplImage* ImageIO::readImage(const string &filename)
 
 	
 	return image;
-}
-
-bool ImageIO::saveAviFile(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps)
-{
-	bool openedVideoWriter = false;
-	
-	if(!m_videoWriterInUse)
-	{
-        m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), 0, fps, cvSize(videoWidth, videoHeight), 1);
-		m_videoWriterInUse = true;
-		
-		openedVideoWriter = m_videoWriterInUse;
-	}
-	else
-	{
-		clog << "A video stream is already in use. Cannot open another one till the first one is closed" << endl;
-	}
-
-	return openedVideoWriter;
-}
-
-bool ImageIO::saveAviFileWriteFrame(Texture& texture)
-{
-	if (m_videoWriterInUse) 
-	{
-		ensureImageSize(texture.getWidth(), texture.getHeight(), texture.getChannelCount());
-		texture.transferFromTexture(m_imageHandle);
-		
-		if(texture.getFormat() == GL_RGBA || texture.getFormat() == GL_RGB)
-		{
-			if(3 == m_imageHandle->nChannels)
-			{
-				cvCvtColor(m_imageHandle, m_imageHandle, CV_RGB2BGR);
-			}
-			else if(4 == m_imageHandle->nChannels)
-			{
-				cvCvtColor(m_imageHandle, m_imageHandle, CV_RGBA2BGRA);
-			}
-		}
-	
-		cvWriteFrame(m_videoWriterHandle, m_imageHandle);
-	}
-	else 
-	{
-		clog << "Unable to write frame out to file as no current video writer handle exists" << endl;
-	}
-	
-	return m_videoWriterInUse;
-}
-
-bool ImageIO::saveAviFileFinish(void)
-{
-	bool successfullyClosed = false;
-	
-	if (m_videoWriterInUse)
-	{
-		cvReleaseVideoWriter(&m_videoWriterHandle);
-		m_videoWriterInUse = false;
-		successfullyClosed = true;
-	}
-	else 
-	{
-		clog << "Attempt to close video writer before it was opened" << endl;
-	}
-	
-	return successfullyClosed;
-}
-
-bool ImageIO::readAviFile(const string &filename)
-{
-	bool openedVideoReader = false;
-	
-	if(!m_videoReaderInUse)
-	{
-		m_videoReaderHandle = cvCaptureFromAVI(filename.c_str());
-		m_videoReaderInUse = true;
-		
-		openedVideoReader = m_videoReaderInUse;
-	}
-	else
-	{
-		clog << "A video reader is already in use. Cannot open another one till the first one is closed" << endl;
-	}
-	
-	return openedVideoReader;
-}
-
-IplImage* ImageIO::readAviFileFrame()
-{
-	IplImage *frame = NULL;
-	
-	if(m_videoReaderInUse)
-	{
-		frame = cvQueryFrame(m_videoReaderHandle);
-        cvCvtColor(frame, frame, CV_BGR2RGB);
-	}
-	else 
-	{
-		clog << "Unable to read frame as no current video reader handle exists" << endl;
-	}
-
-    return frame;
-}
-
-bool ImageIO::readAviFileFinish(void)
-{
-	bool successfullyClosed = false;
-	
-	if (m_videoReaderInUse)
-	{
-		cvReleaseCapture(&m_videoReaderHandle);
-		m_videoReaderInUse = false;
-		successfullyClosed = true;
-	}
-	else 
-	{
-		clog << "Attempt to close video reader before it was opened" << endl;
-	}
-	
-	return successfullyClosed;
-}
-
-bool ImageIO::aviFileOpen(void)
-{
-	return m_videoReaderInUse;
 }
 
 void ImageIO::ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight, const unsigned int channelCount)

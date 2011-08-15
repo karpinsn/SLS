@@ -69,6 +69,7 @@ public:
 	Holoencoder(void);
 	
         virtual void          init();
+        virtual void          init(float width, float height);
         virtual void          draw(void);
         wrench::gl::Texture&  encode();
         virtual void          resize(int width, int height);

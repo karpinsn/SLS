@@ -19,6 +19,8 @@
 
 #include "OpenGLWidget.h"
 
+#include "VideoIO.h"
+
 class ViewController : public QWidget, private Ui::View
 {
   Q_OBJECT
@@ -26,7 +28,7 @@ class ViewController : public QWidget, private Ui::View
 private:
   Holodecoder m_decoder;
   QTime m_movieTimer;
-  ImageIO m_aviIO;
+  VideoIO m_aviIO;
 
 public:
   ViewController(QWidget* parent = 0);

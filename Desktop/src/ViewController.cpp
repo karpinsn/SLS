@@ -42,13 +42,13 @@ void ViewController::openHoloImage(void)
 
 void ViewController::playMovie(string movieFile)
 {
-  if(!m_aviIO.aviFileOpen())
+  if(!m_aviIO.readStreamIsOpen())
   {
-    bool fileOpened = m_aviIO.readAviFile(movieFile.c_str());
+    bool fileOpened = m_aviIO.openReadStream(movieFile.c_str());
 
     if(fileOpened)
     {
-      IplImage *frame = m_aviIO.readAviFileFrame();
+      IplImage *frame = m_aviIO.readStream();
       if(frame)
       {
         m_decoder.setBackHoloBuffer(frame);
@@ -71,7 +71,7 @@ void ViewController::timerEvent(QTimerEvent* event)
     m_movieTimer.restart();
     //	Need to fetch the next frame
 
-    IplImage* frame = m_aviIO.readAviFileFrame();
+    IplImage* frame = m_aviIO.readStream();
 
     if(frame)
     {

@@ -55,7 +55,7 @@ using namespace wrench::gl::utils;
 
 class MultiWavelengthCapture : public AbstractGLContext
 {
-private:
+public: //  TODO FIx this
   AxisDisplay m_axis;
 
   ShaderProgram m_phaseCalculator;
@@ -128,6 +128,7 @@ public:
   virtual void mousePressEvent(int mouseX, int mouseY);
   virtual void mouseMoveEvent(int mouseX, int mouseY);
 
+  void    init(float width, float height);
   void    resizeInput(float width, float height);
   bool    newImage(IplImage* image);
   void    swapBuffers(void);
@@ -138,11 +139,17 @@ public:
   void    showPhase(void);
   double  getFrameRate(void);
   double  get3DRate(void);
+  Texture& decode(void);
 
 private:
   void _initShaders(float width, float height);
   void _initTextures(GLuint width, GLuint height);
   void _initLighting(void);
+
+  void _drawCalculatePhase();
+  void _drawFilterPhase();
+  void _drawCalculateDepthMap();
+  void _drawCalculateNormalMap();
 };
 
 #endif	// _MULTI_WAVELENGTH_CAPTURE_H_

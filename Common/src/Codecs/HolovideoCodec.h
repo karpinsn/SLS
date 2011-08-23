@@ -1,15 +1,15 @@
-#ifndef _DEPTH_CODEC_H_
-#define _DEPTH_CODEC_H_
+#ifndef _HOLOVIDEO_CODEC_H_
+#define _HOLOVIDEO_CODEC_H_
 
 #include <string>
-#include "Codec.h"
-#include "MeshInterchange.h"
+#include "../Codec.h"
+#include "../MeshInterchange.h"
 
-#include "VideoIO.h"
+#include "../VideoIO.h"
 
 using namespace std;
 
-class DepthCodec : public Codec
+class HolovideoCodec : public Codec
 {
 private:
   VideoIO m_io;
@@ -20,4 +20,4 @@ public:
   void closeEncodeStream(void);
 };
 
-#endif  //_DEPTH_CODEC_H_
+#endif  //_HOLOVIDEO_CODEC_H_

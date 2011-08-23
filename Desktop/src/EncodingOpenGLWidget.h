@@ -24,7 +24,7 @@
 #endif
 
 #include <QtCore/QTimer>
-#include <QMutex>
+#include <QSemaphore>
 #include <QtGui>
 #include <iostream>
 
@@ -35,8 +35,8 @@ class EncodingOpenGLWidget : public QGLWidget
   Q_OBJECT
 
 private:
-  QColor  m_clearColor;
-  QMutex  m_encodingMutex;
+  QColor		m_clearColor;
+  QSemaphore	m_encodingLock;
 
   float m_width;
   float m_height;

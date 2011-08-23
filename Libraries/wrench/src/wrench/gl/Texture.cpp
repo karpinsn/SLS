@@ -145,7 +145,7 @@ bool wrench::gl::Texture::transferFromTexture(IplImage* image)
     char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
 
     //  Actual data transfer
-    for (int i = 0; i < m_height; i++)
+    for (unsigned int i = 0; i < m_height; i++)
     {
         //  OpenCV does not guarentee continous memory blocks so it has to be copied row by row
         memcpy(image->imageData + (i * image->widthStep), gpuMem + (i * m_width * 3), m_width * channelCount * m_dataSize);
@@ -171,7 +171,7 @@ bool wrench::gl::Texture::transferToTexture(const IplImage* image)
     char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
 
     //  Actual data transfer
-    for (int i = 0; i < m_height; i++)
+    for (unsigned int i = 0; i < m_height; i++)
     {
         //  OpenCV does not guarentee continous memory blocks so it has to be copied row by row
         memcpy(gpuMem + (i * m_width * 3), image->imageData + (i * image->widthStep), m_width * channelCount * m_dataSize);

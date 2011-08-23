@@ -61,10 +61,10 @@ void EncodingOpenGLWidget::updateScene()
 void EncodingOpenGLWidget::encode()
 {
   //  Lock the mutex
-  m_encodingMutex.lock();
+  m_encodingLock.acquire();
   updateGL(); //  Once this is finished it will unlock the mutex
-  m_encodingMutex.lock();
-  m_encodingMutex.unlock();
+  m_encodingLock.acquire();
+  m_encodingLock.release();
 }
 
 void EncodingOpenGLWidget::paintGL()
@@ -87,7 +87,7 @@ void EncodingOpenGLWidget::paintGL()
   {
     cout << "OpenGL Error: " << gluErrorString(error) << endl;
   }
-  m_encodingMutex.unlock();
+  m_encodingLock.release();
 }
 
 void EncodingOpenGLWidget::resizeGL(int width, int height)

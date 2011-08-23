@@ -116,17 +116,6 @@ set(SOURCES
     FrameCapture.cpp
     CameraConnectDialog.cpp
 
-    ../../Common/src/ImageIO.cpp
-    ../../Common/src/VideoIO.cpp
-	../../Common/src/PointCloudMesh.cpp		
-	../../Common/src/TriMesh.cpp
-    ../../Common/src/Holodecoder.cpp
-	../../Common/src/MeshInterchange.cpp
-	../../Common/src/MeshInterchange.h
-	../../Common/src/Codec.h
-	../../Common/src/DepthCodec.cpp
-	../../Common/src/DepthCodec.h
-
 	MainWindowView.h
 	MainWindowController.h
 	OpenGLWidget.h
@@ -142,16 +131,41 @@ set(SOURCES
     ImageBuffer.h
     FrameCapture.h
     CameraConnectDialog.h
+	)	
 
-    ../../Common/src/ImageIO.h
+SET(SOURCES_COMMON_HEADERS
+	../../Common/src/ImageIO.h
     ../../Common/src/VideoIO.h
 	../../Common/src/XYZPoint.h
 	../../Common/src/AbstractMesh.h
 	../../Common/src/PointCloudMesh.h
 	../../Common/src/TriMesh.h
 	../../Common/src/AbstractGLContext.h
-    	../../Common/src/Holodecoder.h
-	)	
+    ../../Common/src/Holodecoder.h
+	../../Common/src/MeshInterchange.h
+	../../Common/src/Codec.h
+	../../Common/src/DepthCodec.h
+)	
+
+SET(SOURCES_COMMON_CODECS_HEADERS
+	../../Common/src/Codecs/HolovideoCodec.h
+	../../Common/src/Codecs/MultiWavelengthCodec.h
+)
+
+SET(SOURCES_COMMON_SOURCES
+	../../Common/src/ImageIO.cpp
+    ../../Common/src/VideoIO.cpp
+	../../Common/src/PointCloudMesh.cpp		
+	../../Common/src/TriMesh.cpp
+    ../../Common/src/Holodecoder.cpp
+	../../Common/src/MeshInterchange.cpp
+	../../Common/src/DepthCodec.cpp
+)
+
+SET(SOURCES_COMMON_CODECS_SOURCES
+	../../Common/src/Codecs/HolovideoCodec.cpp
+	../../Common/src/Codecs/MultiWavelengthCodec.cpp
+)
 	
 # QT Files
 set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui)
@@ -182,6 +196,10 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 add_executable(${PROJECT_NAME}
 	MACOSX_BUNDLE
 	${SOURCES}
+	${SOURCES_COMMON_SOURCES}
+	${SOURCES_COMMON_HEADERS}
+	${SOURCES_COMMON_CODECS_SOURCES}
+	${SOURCES_COMMON_CODECS_HEADERS}
 	${GENERATED_SOURCES}
 	${HEADERS}
 	${UIS}
@@ -214,3 +232,8 @@ foreach(shader ${SHADER_SOURCES})
 endforeach()
 
 source_group("Shaders" FILES ${SHADERS_QUALIFIED})
+
+source_group("Common/Source Files" FILES ${SOURCES_COMMON_SOURCES})
+source_group("Common/Header Files" FILES ${SOURCES_COMMON_HEADERS})
+source_group("Common/Codecs/Source Files" FILES ${SOURCES_COMMON_CODECS_SOURCES})
+source_group("Common/Codecs/Header Files" FILES ${SOURCES_COMMON_CODECS_HEADERS})

@@ -46,6 +46,8 @@ public:
 
 public slots:
   void encode(void);
+  void selectSourceFile(void);
+  void selectDestinationFile(void);
 
 private:
   void _updateGL(void);

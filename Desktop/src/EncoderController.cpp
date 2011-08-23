@@ -92,11 +92,32 @@ void EncoderController::_updateGL(void)
   }
 }
 
+void EncoderController::selectSourceFile(void)
+{
+  QString file = QFileDialog::getOpenFileName(this, "Select source file to Open", "/", "Video (*.avi)");
+
+  if(!file.isEmpty())
+  {
+	sourceFileBox->setText(file);
+  }
+}
+
+void EncoderController::selectDestinationFile(void)
+{
+  QString file = QFileDialog::getOpenFileName(this, "Select destination file to save to", "/", "Video (*.avi)");
+
+  if(!file.isEmpty())
+  {
+	destFileBox->setText(file);
+  }
+}
+
 void EncoderController::encode(void)
 {
   //  Open source media
+  QString sourceFilename = sourceFileBox->text();
   VideoIO io;
-  io.openReadStream("/home/karpinsn/tmp/Output.avi");
+  io.openReadStream(sourceFilename.toStdString());
   IplImage* frame = io.readStream();
 
   //  Get the decoder
@@ -110,7 +131,8 @@ void EncoderController::encode(void)
   bool calculateReference = true;
   if(NULL != frame)
   {
-    encoder->openEncodeStream(frame->width, frame->height);
+	QString destFilename = destFileBox->text();
+    encoder->openEncodeStream(destFilename.toStdString(), frame->width, frame->height);
 
     while(NULL != frame)
     {
@@ -165,5 +187,7 @@ void EncoderController::encode(void)
 
 void EncoderController::_connectSignalsWithController(void)
 {
-  connect(encodeButton, SIGNAL(clicked()), this, SLOT(encode()));
+  connect(encodeButton,				SIGNAL(clicked()), this, SLOT(encode()));
+  connect(sourceFileChooseButton,	SIGNAL(clicked()), this, SLOT(selectSourceFile()));
+  connect(destFileChooseButton,		SIGNAL(clicked()), this, SLOT(selectDestinationFile()));
 }

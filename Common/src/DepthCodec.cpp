@@ -1,9 +1,9 @@
 #include "DepthCodec.h"
 
-void DepthCodec::openEncodeStream(int width, int height)
+void DepthCodec::openEncodeStream(string& filename, int width, int height)
 {
   //  Open the stream to write to
-  m_io.openSaveStream("/home/karpinsn/tmp/Depth.avi", width, height, 30);
+  m_io.openSaveStream(filename, width, height, 30);
 }
 
 void DepthCodec::encode(MeshInterchange& data)

@@ -2,7 +2,7 @@
 #define _HOLOVIDEO_CODEC_H_
 
 #include <string>
-#include "../Codec.h"
+#include "Codec.h"
 #include "../MeshInterchange.h"
 
 #include "../VideoIO.h"

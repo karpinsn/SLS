@@ -38,6 +38,8 @@ namespace wrench
 {
 namespace gl
 {
+class FBO;
+
 class Texture
 {
 private:

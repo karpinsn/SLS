@@ -20,8 +20,9 @@
 #include "Holoencoder.h"
 #include "XYZFileIO.h"
 
-#include "DepthCodec.h"
+#include "Codecs/DepthCodec.h"
 #include "MultiWavelengthCapture.h"
+#include "Holodecoder.h"
 
 #include "VideoIO.h"
 

@@ -8,6 +8,7 @@ VideoIO::VideoIO(void)
     m_imageHeight = 1;
 
     m_imageHandle = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_8U, 3);
+	m_floatImageHandle = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 3);
 }
 
 VideoIO::~VideoIO()
@@ -26,7 +27,7 @@ bool VideoIO::openSaveStream(const string &filename, const unsigned int videoWid
 
     if(!m_videoWriterInUse)
     {
-        m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), 0, fps, cvSize(videoWidth, videoHeight), 1);
+        m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), -1, fps, cvSize(videoWidth, videoHeight), 1);
         m_videoWriterInUse = true;
 
         openedVideoWriter = m_videoWriterInUse;
@@ -48,12 +49,10 @@ bool VideoIO::saveStream(Texture& texture)
 {
     if (m_videoWriterInUse)
     {
-        ensureImageSize(texture.getWidth(), texture.getHeight(), texture.getChannelCount());
-        texture.transferFromTexture(m_imageHandle);
+	  ensureImageSize(texture.getWidth(), texture.getHeight(), texture.getChannelCount());
+      texture.transferFromTexture(m_imageHandle);
 
-
-
-        if(texture.getFormat() == GL_RGBA || texture.getFormat() == GL_RGB)
+	  if(texture.getFormat() == GL_RGBA || texture.getFormat() == GL_RGB)
         {
             if(3 == m_imageHandle->nChannels)
             {
@@ -158,11 +157,30 @@ bool VideoIO::readStreamIsOpen(void)
 void VideoIO::ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight, const unsigned int channelCount)
 {
     //	Check and see if the image is the correct size. If it is do nothing
-    if (m_imageWidth != imageWidth || m_imageHeight != imageHeight || (unsigned int)m_imageHandle->nChannels != channelCount)
+  if (m_imageWidth != imageWidth || m_imageHeight != imageHeight || (unsigned int)m_imageHandle->nChannels != channelCount)
     {
         cvReleaseImage(&m_imageHandle);
-        m_imageHandle = cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_8U, channelCount);
+		cvReleaseImage(&m_floatImageHandle);
         m_imageWidth = imageWidth;
         m_imageHeight = imageHeight;
+
+		m_imageHandle = cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_8U, channelCount);
+		m_floatImageHandle = cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_32F, channelCount);
     }
+}
+
+int VideoIO::_getTextureDepth(Texture& texture)
+{
+  int depth = -1;
+
+  if(texture.getDataType() == GL_FLOAT)
+  {
+	depth = IPL_DEPTH_32F;
+  }
+  else if(texture.getDataType() == GL_UNSIGNED_BYTE)
+  {
+	depth = IPL_DEPTH_8U;
+  }
+
+  return depth;
 }

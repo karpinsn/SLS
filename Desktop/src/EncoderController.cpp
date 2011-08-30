@@ -121,7 +121,7 @@ void EncoderController::encode(void)
   IplImage* frame = io.readStream();
 
   //  Get the decoder
-  MultiWavelengthCapture* decoder = new MultiWavelengthCapture();
+  Holodecoder* decoder = new Holodecoder();
   encoderGLWidget->setGLContext(decoder);
   encoderGLWidget->reinit(frame->width, frame->height);
 
@@ -140,29 +140,32 @@ void EncoderController::encode(void)
       IplImage *im_gray = frame;
       bool releaseGray = false;
 
+	  /*
       if(frame->nChannels > 1)
       {
         im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
         cvCvtColor(frame, im_gray, CV_RGB2GRAY);
         releaseGray = true;
-      }
+      }*/
 
-      if(decoder->newImage(im_gray)) //  Check if we have decoded a new 3D frame
-      {
-        if(calculateReference)
-        {
-          calculateReference = false;
-          decoder->captureReferencePlane();
-        }
-        else
-        {
+	  decoder->setBackHoloBuffer(im_gray);
+	  decoder->swapBuffers();
+      //if() //  Check if we have decoded a new 3D frame
+      //{
+        //if(calculateReference)
+        //{
+         // calculateReference = false;
+          //decoder->captureReferencePlane();
+        //}
+        //else
+        //{
           MeshInterchange mesh;
           //mesh.setData(&decoder.decode());
           encoderGLWidget->encode();
           mesh.setData(&decoder->m_depthMap);
           encoder->encode(mesh);
-        }
-      }
+        //}
+      //}
 
       if(releaseGray)
       {

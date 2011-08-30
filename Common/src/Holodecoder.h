@@ -47,7 +47,7 @@ using namespace wrench::gl::utils;
 
 class Holodecoder : public AbstractGLContext
 {
-private:
+public:	//	TODO Comeback and FIX this
     ShaderProgram m_phaseCalculator;
     ShaderProgram m_phaseFilter;
     ShaderProgram m_depthCalculator;
@@ -96,6 +96,8 @@ public:
 	void setBackHoloBuffer(IplImage* image);
 	void swapBuffers(void);
 	
+	Texture& decode(void);
+	
 private:
 	void initShaders(void);
 	void _initTextures(GLuint width, GLuint height);
@@ -103,6 +105,10 @@ private:
 	
 	int DATA_SIZE;
 	GLubyte* imageData;
+
+    void _drawCalculatePhase();
+    void _drawFilterPhase();
+    void _drawCalculateDepthMap();
 };
 
 #endif	// _HOLODECODER_H_

@@ -19,5 +19,12 @@ void main()
 	float phaseR = (vertPosition.x * W) * ((2.0*pi*cos(theta))/P);
 	float phaseA = texture2D(phaseMap, fragTexCoord).x;
 			
-	depthMap = vec4((phaseA - phaseR) * P / (W * sin(theta)*2.0*pi));
+	if(0.0 == phaseA)
+	{
+		depthMap = vec4(0.0);
+	}
+	else
+	{
+		depthMap = vec4((phaseA - phaseR) * P / (W * sin(theta)*2.0*pi));
+	}
 }

@@ -237,6 +237,7 @@ Texture& MultiWavelengthCapture::decode(void)
   }
   m_imageProcessor.unbind();
 
+  OGLStatus::logOGLErrors("MultiWavelengthCapture - decode()");
   return m_depthMap;
 }
 

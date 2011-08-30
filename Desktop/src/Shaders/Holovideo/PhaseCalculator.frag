@@ -17,7 +17,13 @@ void main(void)
 	float I2 = holoPhase.y * 255.0;
 	float I3 = floor(holoPhase.z * 1.0 / stepHeight);
 
-	float phaseA = atan((I1 - 127.5), (I2 - 127.5)) + (2.0 * pi * I3);
-
-	phase = vec4(phaseA);
+	if(holoPhase.rgb == vec3(0.0))
+	{
+		phase = vec4(0.0);
+	}
+	else
+	{
+		float phaseA = atan((I1 - 127.5), (I2 - 127.5)) + (2.0 * pi * I3);
+		phase = vec4(phaseA);
+	}
 }

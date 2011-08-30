@@ -143,13 +143,13 @@ SET(SOURCES_COMMON_HEADERS
 	../../Common/src/AbstractGLContext.h
     ../../Common/src/Holodecoder.h
 	../../Common/src/MeshInterchange.h
-	../../Common/src/Codec.h
-	../../Common/src/DepthCodec.h
 )	
 
 SET(SOURCES_COMMON_CODECS_HEADERS
 	../../Common/src/Codecs/HolovideoCodec.h
 	../../Common/src/Codecs/MultiWavelengthCodec.h
+	../../Common/src/Codecs/Codec.h
+	../../Common/src/Codecs/DepthCodec.h
 )
 
 SET(SOURCES_COMMON_SOURCES
@@ -159,12 +159,12 @@ SET(SOURCES_COMMON_SOURCES
 	../../Common/src/TriMesh.cpp
     ../../Common/src/Holodecoder.cpp
 	../../Common/src/MeshInterchange.cpp
-	../../Common/src/DepthCodec.cpp
 )
 
 SET(SOURCES_COMMON_CODECS_SOURCES
 	../../Common/src/Codecs/HolovideoCodec.cpp
 	../../Common/src/Codecs/MultiWavelengthCodec.cpp
+	../../Common/src/Codecs/DepthCodec.cpp
 )
 	
 # QT Files

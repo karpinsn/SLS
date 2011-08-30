@@ -24,6 +24,8 @@ private:
     bool m_videoReaderInUse;
 
     IplImage *m_imageHandle;
+	IplImage *m_floatImageHandle;
+
     unsigned int m_imageHeight;
     unsigned int m_imageWidth;
 
@@ -45,6 +47,7 @@ public:
 
 private:
     void ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight, const unsigned int channelCount);
+	int _getTextureDepth(Texture& texture);
 };
 
 #endif  //_VIDEO_IO_H_

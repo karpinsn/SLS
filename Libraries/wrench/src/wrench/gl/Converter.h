@@ -23,6 +23,9 @@
 
 #include "../Logger.h"
 
+#include <cv.h>
+#include <highgui.h>
+
 namespace wrench
 {
 namespace gl

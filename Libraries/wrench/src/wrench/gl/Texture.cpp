@@ -13,6 +13,7 @@ wrench::gl::Texture::Texture()
 {
   m_width = 0;
   m_height = 0;
+  m_fbo = NULL;
 }
 
 wrench::gl::Texture::~Texture()
@@ -22,6 +23,11 @@ wrench::gl::Texture::~Texture()
   {
     glDeleteTextures(1, &m_textureId);
     glDeleteBuffers(1, &m_PBOId);
+  }
+
+  if(NULL != m_fbo)
+  {
+    delete m_fbo;
   }
 }
 
@@ -132,6 +138,13 @@ const GLuint wrench::gl::Texture::getDataType(void) const
 
 bool wrench::gl::Texture::transferFromTexture(IplImage* image)
 {
+  if(NULL == m_fbo)
+  {
+    m_fbo = new FBO();
+    m_fbo->init(m_width, m_height);
+    m_fbo->setTextureAttachPoint(*this, GL_COLOR_ATTACHMENT0_EXT);
+  }
+
   bool compatible = _checkImageCompatibility(image);
 
   if(compatible)
@@ -139,6 +152,10 @@ bool wrench::gl::Texture::transferFromTexture(IplImage* image)
     const int channelCount = getChannelCount();
 
     bind();
+    m_fbo->bind();
+    m_fbo->bindDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
+    glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+
     glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, m_PBOId);
     glBufferData(GL_PIXEL_PACK_BUFFER_ARB, m_width * m_height * channelCount * m_dataSize, NULL, GL_STREAM_READ);
     glReadPixels(0, 0, m_width, m_height, m_format, m_dataType, 0);

@@ -27,6 +27,7 @@
 
 #include "Converter.h"
 #include "OGLStatus.h"
+#include "FBO.h"
 #include <cv.h>
 
 #ifdef USE_VRJ
@@ -49,6 +50,8 @@ private:
   GLint   m_internalFormat;	//	Internal format of the texture to render to
   GLenum  m_format;			//	Format of the texture
   GLenum  m_dataType;		//	Data type of the texture
+  FBO    *m_fbo;                //  Used to read back from the texture if needed (lazy init)
+
 
 #ifdef USE_VRJ
   vrj::opengl::ContextData<GLuint> vrjTextureHandle;

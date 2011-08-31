@@ -30,19 +30,17 @@ private:
   glm::vec3*  m_data;
 
 public:
+  MeshInterchange();
+  MeshInterchange(IplImage* image);
+  MeshInterchange(Texture* texture);
+
   //  TODO: Come back and fix this
   Texture*    m_texture;
   IplImage*   m_image;
 
-  bool              setData(IplImage* image);
-  bool              setData(Texture* texture);
-  const glm::vec3*  getDataPointer();
-
   int getWidth();
   int getHeight();
-
-private:
-  void _checkClearData(void);
+  bool isEmpty();
 };
 
 #endif // _MESH_INTERCHANGE_H_

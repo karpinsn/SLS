@@ -15,9 +15,13 @@ private:
   VideoIO m_io;
 
 public:
-  void openEncodeStream(string& filename, int width, int height);
+  void openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height);
   void encode(MeshInterchange& data);
   void closeEncodeStream(void);
+
+  void openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename);
+  MeshInterchange* decode();
+  void closeDecodeStream(void);
 };
 
 #endif  //_DEPTH_CODEC_H_

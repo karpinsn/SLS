@@ -21,6 +21,7 @@
 #include "XYZFileIO.h"
 
 #include "Codecs/DepthCodec.h"
+#include "Codecs/MultiWavelengthCodec.h"
 #include "MultiWavelengthCapture.h"
 #include "Holodecoder.h"
 

@@ -115,75 +115,35 @@ void EncoderController::selectDestinationFile(void)
 void EncoderController::encode(void)
 {
   //  Open source media
+  Codec* decoder = new MultiWavelengthCodec();
   QString sourceFilename = sourceFileBox->text();
-  VideoIO io;
-  io.openReadStream(sourceFilename.toStdString());
-  IplImage* frame = io.readStream();
-
-  //  Get the decoder
-  Holodecoder* decoder = new Holodecoder();
-  encoderGLWidget->setGLContext(decoder);
-  encoderGLWidget->reinit(frame->width, frame->height);
+  string str = sourceFilename.toStdString();
+  decoder->openDecodeStream(decoderGLWidget, str);
 
   //  Get the encoder
-  DepthCodec* encoder = new DepthCodec();
+  Codec* encoder = new DepthCodec();
+  QString destFilename = destFileBox->text();
+  string str2 = destFilename.toStdString();
+  encoder->openEncodeStream(encoderGLWidget, str2, 512, 512); //  TODO comeback and fix this
 
-  bool calculateReference = true;
-  if(NULL != frame)
+  //  As long as we have meshes decode and encode them
+  MeshInterchange* mesh = decoder->decode();
+  while(NULL != mesh)
   {
-	QString destFilename = destFileBox->text();
-    encoder->openEncodeStream(destFilename.toStdString(), frame->width, frame->height);
-
-    while(NULL != frame)
-    {
-      //  Actual encoding
-      IplImage *im_gray = frame;
-      bool releaseGray = false;
-
-	  /*
-      if(frame->nChannels > 1)
-      {
-        im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
-        cvCvtColor(frame, im_gray, CV_RGB2GRAY);
-        releaseGray = true;
-      }*/
-
-	  decoder->setBackHoloBuffer(im_gray);
-	  decoder->swapBuffers();
-      //if() //  Check if we have decoded a new 3D frame
-      //{
-        //if(calculateReference)
-        //{
-         // calculateReference = false;
-          //decoder->captureReferencePlane();
-        //}
-        //else
-        //{
-          MeshInterchange mesh;
-          //mesh.setData(&decoder.decode());
-          encoderGLWidget->encode();
-          mesh.setData(&decoder->m_depthMap);
-          encoder->encode(mesh);
-        //}
-      //}
-
-      if(releaseGray)
-      {
-        cvReleaseImage(&im_gray);
-      }
-
-      frame = io.readStream();
-    }
-
-    encoder->closeEncodeStream();
+    encoder->encode(*mesh);
+    delete mesh;
+    mesh = decoder->decode();
   }
 
-  io.closeReadStream();
+  //  Close up
+  encoder->closeEncodeStream();
+  decoder->closeDecodeStream();
 
-  //  Reset the context
-  encoderGLWidget->setGLContext(&m_encoder);
+  //  Make sure our codec widgets are not pointing to anything
+  encoderGLWidget->setGLContext(NULL);
+  decoderGLWidget->setGLContext(NULL);
 
-  //  Get rid of our encoder and decoder
+  //  Delete the encoder and decoder
   delete decoder;
   delete encoder;
 }

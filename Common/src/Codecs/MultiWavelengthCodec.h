@@ -6,6 +6,7 @@
 #include "../MeshInterchange.h"
 
 #include "../VideoIO.h"
+#include "MultiWavelengthCapture.h"
 
 using namespace std;
 
@@ -13,11 +14,18 @@ class MultiWavelengthCodec : public Codec
 {
 private:
   VideoIO m_io;
+  MultiWavelengthCapture m_coder;
+  bool m_calculateReference;
+  EncodingOpenGLWidget* m_glWidget;
 
 public:
-  void openEncodeStream(string& filename, int width, int height);
+  void openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height);
   void encode(MeshInterchange& data);
   void closeEncodeStream(void);
+
+  void openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename);
+  MeshInterchange* decode();
+  void closeDecodeStream(void);
 };
 
 #endif  //_MULTI_WAVELENGTH_CODEC_H_

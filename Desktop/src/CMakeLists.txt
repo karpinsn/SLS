@@ -141,6 +141,7 @@ SET(SOURCES_COMMON_HEADERS
 	../../Common/src/PointCloudMesh.h
 	../../Common/src/TriMesh.h
 	../../Common/src/AbstractGLContext.h
+	../../Common/src/EncodingGLContext.h
     ../../Common/src/Holodecoder.h
 	../../Common/src/MeshInterchange.h
 )	

@@ -186,7 +186,7 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
 
   m_phaseMap0.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_phaseMap1.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
-  m_depthMap.init         (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+  m_depthMap.init         (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
   m_normalMap.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_referencePhase.init   (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
@@ -356,9 +356,11 @@ bool MultiWavelengthCapture::newImage(IplImage* image)
 {
   bool needRedraw = false;
 
+  cvSetImageCOI(image, 1);
   cvSetImageCOI(m_fringeLoadingImage, (m_currentChannelLoad + 1));
   cvCopy(image, m_fringeLoadingImage);
   cvSetImageCOI(m_fringeLoadingImage, 0);
+  cvSetImageCOI(image, 0);
 
   m_currentChannelLoad++;
 

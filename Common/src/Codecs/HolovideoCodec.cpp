@@ -25,7 +25,7 @@ void HolovideoCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, string& fi
 
 MeshInterchange* HolovideoCodec::decode()
 {
-
+  return NULL;
 }
 
 void HolovideoCodec::closeDecodeStream(void)

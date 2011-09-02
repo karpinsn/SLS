@@ -24,6 +24,7 @@ void DepthCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, string& filena
 
 MeshInterchange* DepthCodec::decode()
 {
+  return NULL;
 }
 
 void DepthCodec::closeDecodeStream(void)

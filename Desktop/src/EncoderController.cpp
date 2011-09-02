@@ -124,7 +124,7 @@ void EncoderController::encode(void)
   Codec* encoder = new DepthCodec();
   QString destFilename = destFileBox->text();
   string str2 = destFilename.toStdString();
-  encoder->openEncodeStream(encoderGLWidget, str2, 512, 512); //  TODO comeback and fix this
+  encoder->openEncodeStream(encoderGLWidget, str2, 480, 480); //  TODO comeback and fix this
 
   //  As long as we have meshes decode and encode them
   MeshInterchange* mesh = decoder->decode();

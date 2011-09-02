@@ -31,7 +31,7 @@ void MultiWavelengthCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, stri
   m_glWidget = glWidget;
 
   m_glWidget->setGLContext(&m_coder);
-  m_glWidget->reinit(512, 512); //  TODO comeback and fix this
+  m_glWidget->reinit(480, 480); //  TODO comeback and fix this
 }
 
 MeshInterchange* MultiWavelengthCodec::decode()
@@ -42,8 +42,36 @@ MeshInterchange* MultiWavelengthCodec::decode()
     return NULL;
   }
 
+  if(_streamUntilNewFrame())
+  {
+    //  End of the file. Return an empty mesh
+    return NULL;
+  }
+
+  if(m_calculateReference)
+  {
+	//	Capture the reference plane
+    m_calculateReference = false;
+    m_coder.captureReferencePlane();
+	m_glWidget->encode();
+
+	//	Stream again until we get an actual frame
+	_streamUntilNewFrame();
+  }
+
+  m_glWidget->encode();
+
+  return new MeshInterchange(&m_coder.m_depthMap);
+}
+
+void MultiWavelengthCodec::closeDecodeStream(void)
+{
+  m_glWidget = NULL;
+}
+
+bool MultiWavelengthCodec::_streamUntilNewFrame(void)
+{
   IplImage* frame = m_io.readStream();
-  m_coder.newImage(frame);
 
   //  While the frame is not null
   //  and we dont have a new 3D frame
@@ -52,28 +80,5 @@ MeshInterchange* MultiWavelengthCodec::decode()
     frame = m_io.readStream();
   }
 
-  if(NULL == frame)
-  {
-    //  End of the file. Return an empty mesh
-    return NULL;
-  }
-
-  if(m_calculateReference)
-  {
-    m_calculateReference = false;
-    m_coder.captureReferencePlane();
-
-    frame = m_io.readStream();
-    while(NULL != frame && !m_coder.newImage(frame))
-    {
-      frame = m_io.readStream();
-    }
-  }
-
-  return new MeshInterchange(&m_coder.m_depthMap);
-}
-
-void MultiWavelengthCodec::closeDecodeStream(void)
-{
-  m_glWidget = NULL;
+  return frame == NULL;
 }

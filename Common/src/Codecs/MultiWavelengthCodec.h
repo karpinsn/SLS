@@ -26,6 +26,9 @@ public:
   void openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename);
   MeshInterchange* decode();
   void closeDecodeStream(void);
+
+private:
+  bool _streamUntilNewFrame(void);
 };
 
 #endif  //_MULTI_WAVELENGTH_CODEC_H_

@@ -4,6 +4,7 @@ EncoderController::EncoderController(QWidget* parent) : QWidget(parent)
 {
   setupUi(this);
   _connectSignalsWithController();
+  _addCodecs();
 }
 
 EncoderController::~EncoderController()
@@ -78,7 +79,7 @@ void EncoderController::selectXYZM(const string &filename)
 
 void EncoderController::_updateGL(void)
 {
-  Logger::logDebug("ViewController - _updateGL: Enter");
+  Logger::logDebug("EncoderController - _updateGL: Enter");
 
   OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("encoderGLWidget"));
 
@@ -88,7 +89,7 @@ void EncoderController::_updateGL(void)
   }
   else
   {
-    Logger::logError("ViewController - _updateGL: Unable to find OpenGL Widget");
+    Logger::logError("EncoderController - _updateGL: Unable to find OpenGL Widget");
   }
 }
 
@@ -114,22 +115,32 @@ void EncoderController::selectDestinationFile(void)
 
 void EncoderController::encode(void)
 {
-  //  Open source media
-  Codec* decoder = new MultiWavelengthCodec();
+  Codec* decoder = _getDecoder();
+  Codec* encoder = _getEncoder();
+
+  if(NULL == decoder || NULL == encoder)
+  {
+	//	Invalid codec
+	return;
+  }
+
+  //  Setup decoder
   QString sourceFilename = sourceFileBox->text();
   string str = sourceFilename.toStdString();
   decoder->openDecodeStream(decoderGLWidget, str);
 
-  //  Get the encoder
-  Codec* encoder = new DepthCodec();
+  //  Setup encoder
   QString destFilename = destFileBox->text();
   string str2 = destFilename.toStdString();
-  encoder->openEncodeStream(encoderGLWidget, str2, 480, 480); //  TODO comeback and fix this
+  encoder->openEncodeStream(encoderGLWidget, str2, decoder->getDecodeStreamWidth(), decoder->getDecodeStreamHeight());
 
   //  As long as we have meshes decode and encode them
   MeshInterchange* mesh = decoder->decode();
   while(NULL != mesh)
   {
+	// Indicate to the user the current progress
+	encodingProgress->setValue(decoder->getDecodeStreamProgress() * 100);
+
     encoder->encode(*mesh);
     delete mesh;
     mesh = decoder->decode();
@@ -153,4 +164,44 @@ void EncoderController::_connectSignalsWithController(void)
   connect(encodeButton,				SIGNAL(clicked()), this, SLOT(encode()));
   connect(sourceFileChooseButton,	SIGNAL(clicked()), this, SLOT(selectSourceFile()));
   connect(destFileChooseButton,		SIGNAL(clicked()), this, SLOT(selectDestinationFile()));
+}
+
+void EncoderController::_addCodecs(void)
+{
+  //  Add decoders
+  decoderComboBox->addItem(QString(MultiWavelengthCodec::codecName().c_str()));
+  decoderComboBox->addItem(QString(HolovideoCodec::codecName().c_str()));
+
+  //  Add encoders
+  encoderComboBox->addItem(QString(DepthCodec::codecName().c_str()));
+}
+
+Codec* EncoderController::_getEncoder(void)
+{
+  Codec* encoder = NULL;
+
+  if(0 == QString(DepthCodec::codecName().c_str()).compare(encoderComboBox->currentText()))
+  {
+	//	Create and initalize a new depth codec
+    encoder = new DepthCodec();
+  }
+
+  return encoder;
+}
+
+Codec* EncoderController::_getDecoder(void)
+{
+  Codec* decoder = NULL;
+
+  if(0 == QString(MultiWavelengthCodec::codecName().c_str()).compare(decoderComboBox->currentText()))
+  {
+	decoder = new MultiWavelengthCodec();
+  }
+  else
+  {
+	//	Unknown decoder
+	Logger::logError("EncoderController - encode: Unable to get a valid decoder");
+  }
+
+  return decoder;
 }

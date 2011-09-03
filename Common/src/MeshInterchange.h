@@ -33,6 +33,7 @@ public:
   MeshInterchange();
   MeshInterchange(IplImage* image);
   MeshInterchange(Texture* texture);
+  MeshInterchange(Texture& texture);
 
   //  TODO: Come back and fix this
   Texture*    m_texture;

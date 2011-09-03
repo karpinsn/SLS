@@ -30,6 +30,7 @@
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
 #include "AbstractGLContext.h"
+#include "EncodingGLContext.h"
 
 #include <wrench/gl/Camera.h>
 #include <wrench/gl/ShaderProgram.h>
@@ -53,7 +54,7 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class MultiWavelengthCapture : public AbstractGLContext
+class MultiWavelengthCapture : public AbstractGLContext, public EncodingGLContext
 {
 public: //  TODO FIx this
   AxisDisplay m_axis;
@@ -139,7 +140,7 @@ public:
   void    showPhase(void);
   double  getFrameRate(void);
   double  get3DRate(void);
-  Texture& decode(void);
+  MeshInterchange* decode(void);
 
 private:
   void _initShaders(float width, float height);

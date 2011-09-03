@@ -32,3 +32,23 @@ void HolovideoCodec::closeDecodeStream(void)
 {
 
 }
+
+int HolovideoCodec::getDecodeStreamWidth(void)
+{
+  return 0;
+}
+
+int HolovideoCodec::getDecodeStreamHeight(void)
+{
+  return 0;
+}
+
+float HolovideoCodec::getDecodeStreamProgress(void)
+{
+  return m_io.readStreamPosition();
+}
+
+string HolovideoCodec::codecName(void)
+{
+  return "Holovideo Codec";
+}

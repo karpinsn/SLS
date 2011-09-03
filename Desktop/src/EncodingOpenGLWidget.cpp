@@ -53,18 +53,25 @@ void EncodingOpenGLWidget::setGLContext(AbstractGLContext* glContext)
   makeCurrent();
 }
 
+void EncodingOpenGLWidget::setEncodingContext(EncodingGLContext* encodingContext)
+{
+  m_encodingContext = encodingContext;
+}
+
 void EncodingOpenGLWidget::updateScene()
 {
   updateGL();
 }
 
-void EncodingOpenGLWidget::encode()
+MeshInterchange* EncodingOpenGLWidget::encode()
 {
   //  Lock the mutex
   m_encodingLock.acquire();
   updateGL(); //  Once this is finished it will unlock the mutex
   m_encodingLock.acquire();
   m_encodingLock.release();
+
+  return m_encodingContext->decode();
 }
 
 void EncodingOpenGLWidget::paintGL()

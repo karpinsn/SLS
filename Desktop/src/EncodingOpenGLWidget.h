@@ -29,6 +29,7 @@
 #include <iostream>
 
 #include "AbstractGLContext.h"
+#include "EncodingGLContext.h"
 
 class EncodingOpenGLWidget : public QGLWidget
 {
@@ -41,6 +42,8 @@ private:
   float m_width;
   float m_height;
 
+  EncodingGLContext* m_encodingContext;
+
 public:
   EncodingOpenGLWidget(QWidget *parent);
   EncodingOpenGLWidget(QWidget* parent, AbstractGLContext* glContext, QColor clearColor);
@@ -50,8 +53,9 @@ public:
   void initializeGL();
   void updateScene();
   void setGLContext(AbstractGLContext* glContext);
+  void setEncodingContext(EncodingGLContext* encodingContext);
   void cameraSelectMode(int mode);
-  void encode();
+  MeshInterchange* encode();
 
   AbstractGLContext*    m_glContext;
 

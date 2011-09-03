@@ -22,6 +22,11 @@ public:
   void openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename);
   MeshInterchange* decode();
   void closeDecodeStream(void);
+  int getDecodeStreamWidth(void);
+  int getDecodeStreamHeight(void);
+  float getDecodeStreamProgress(void);
+
+  static string codecName(void);
 };
 
 #endif  //_HOLOVIDEO_CODEC_H_

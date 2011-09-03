@@ -22,7 +22,7 @@
 
 #include "Codecs/DepthCodec.h"
 #include "Codecs/MultiWavelengthCodec.h"
-#include "MultiWavelengthCapture.h"
+#include "Codecs/HolovideoCodec.h"
 #include "Holodecoder.h"
 
 #include "VideoIO.h"
@@ -54,6 +54,10 @@ public slots:
 private:
   void _updateGL(void);
   void _connectSignalsWithController(void);
+  void _addCodecs(void);
+
+  Codec* _getEncoder(void);
+  Codec* _getDecoder(void);
 };
 
 #endif	// _ENCODER_CONTROLLER_H_

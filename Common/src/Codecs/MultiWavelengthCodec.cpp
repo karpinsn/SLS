@@ -31,20 +31,21 @@ void MultiWavelengthCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, stri
   m_glWidget = glWidget;
 
   m_glWidget->setGLContext(&m_coder);
-  m_glWidget->reinit(480, 480); //  TODO comeback and fix this
+  m_glWidget->setEncodingContext(&m_coder);
+  m_glWidget->reinit(getDecodeStreamWidth(), getDecodeStreamHeight());
 }
 
 MeshInterchange* MultiWavelengthCodec::decode()
 {
   if(NULL == m_glWidget)
   {
-    //  No OpenGL encoding widget. Return an empty MeshInterchange
+    //  No OpenGL encoding widget. Return a NULL MeshInterchange
     return NULL;
   }
 
   if(_streamUntilNewFrame())
   {
-    //  End of the file. Return an empty mesh
+    //  End of the file. Return a NULL mesh
     return NULL;
   }
 
@@ -59,9 +60,7 @@ MeshInterchange* MultiWavelengthCodec::decode()
 	_streamUntilNewFrame();
   }
 
-  m_glWidget->encode();
-
-  return new MeshInterchange(&m_coder.m_depthMap);
+  return m_glWidget->encode();
 }
 
 void MultiWavelengthCodec::closeDecodeStream(void)
@@ -81,4 +80,24 @@ bool MultiWavelengthCodec::_streamUntilNewFrame(void)
   }
 
   return frame == NULL;
+}
+
+int MultiWavelengthCodec::getDecodeStreamWidth(void)
+{
+  return m_io.readStreamWidth();
+}
+
+int MultiWavelengthCodec::getDecodeStreamHeight(void)
+{
+  return m_io.readStreamHeight();
+}
+
+float MultiWavelengthCodec::getDecodeStreamProgress(void)
+{
+  return m_io.readStreamPosition();
+}
+
+string MultiWavelengthCodec::codecName(void)
+{
+  return "Multi Wavelength Codec";
 }

@@ -36,6 +36,7 @@ public:
     //	Save Avi File Methods
     bool openSaveStream(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps);
     bool saveStream(Texture& texture);
+	bool saveStream(IplImage* image);
     bool saveStream(MeshInterchange& mesh);
     bool closeSaveStream(void);
 
@@ -44,6 +45,9 @@ public:
     IplImage* readStream();
     bool closeReadStream(void);
     bool readStreamIsOpen(void);
+	int readStreamWidth(void);
+	int readStreamHeight(void);
+	float readStreamPosition(void);
 
 private:
     void ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight, const unsigned int channelCount);

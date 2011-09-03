@@ -42,7 +42,7 @@ bool VideoIO::openSaveStream(const string &filename, const unsigned int videoWid
 
 bool VideoIO::saveStream(MeshInterchange& mesh)
 {
-  return saveStream(*(mesh.m_texture));
+  return saveStream(mesh.m_image);
 }
 
 bool VideoIO::saveStream(Texture& texture)
@@ -84,6 +84,19 @@ bool VideoIO::saveStream(Texture& texture)
   }
 
   cvWriteFrame(m_videoWriterHandle, m_imageHandle);
+
+  return m_videoWriterInUse;
+}
+
+bool VideoIO::saveStream(IplImage* image)
+{
+  if(!m_videoWriterInUse)
+  {
+    clog << "Unable to write frame out to file as no current video writer handle exists" << endl;
+    return false;
+  }
+
+  cvWriteFrame(m_videoWriterHandle, image);
 
   return m_videoWriterInUse;
 }
@@ -166,6 +179,39 @@ bool VideoIO::closeReadStream(void)
 bool VideoIO::readStreamIsOpen(void)
 {
   return m_videoReaderInUse;
+}
+
+int VideoIO::readStreamWidth(void)
+{
+  if(!m_videoReaderInUse)
+  {
+	clog << "Unable to get width as no current video reader handle exists" << endl;
+	return 0;
+  }
+
+  return cvGetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_FRAME_WIDTH);
+}
+
+int VideoIO::readStreamHeight(void)
+{
+  if(!m_videoReaderInUse)
+  {
+	clog << "Unable to get height as no current video reader handle exists" << endl;
+	return 0;
+  }
+
+  return cvGetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_FRAME_HEIGHT);
+}
+
+float VideoIO::readStreamPosition(void)
+{
+  if(!m_videoReaderInUse)
+  {
+	clog << "Unable to get stream position as no current video reader handle exists" << endl;
+	return 0.0;
+  }
+
+  return cvGetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_POS_AVI_RATIO);
 }
 
 void VideoIO::ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight, const unsigned int channelCount)

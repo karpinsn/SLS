@@ -64,11 +64,11 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
     m_fringeImage5.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
     m_fringeImage6.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 
-    m_phaseMap0.reinit        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
-    m_phaseMap1.reinit        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
-    m_depthMap.reinit         (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
-    m_normalMap.reinit        (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
-    m_referencePhase.reinit   (width, height, GL_RGB16F_ARB, GL_RGB, GL_FLOAT);
+    m_phaseMap0.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+    m_phaseMap1.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+    m_depthMap.reinit         (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+    m_normalMap.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+    m_referencePhase.reinit   (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
     //  Resize the image processor
     m_imageProcessor.reinit(width, height);
@@ -186,7 +186,7 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
 
   m_phaseMap0.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_phaseMap1.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
-  m_depthMap.init         (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+  m_depthMap.init         (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_normalMap.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_referencePhase.init   (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
@@ -222,7 +222,7 @@ void MultiWavelengthCapture::setScalingFactor(float scalingFactor)
   m_scalingFactor = scalingFactor;
 }
 
-Texture& MultiWavelengthCapture::decode(void)
+MeshInterchange* MultiWavelengthCapture::decode(void)
 {
   m_imageProcessor.bind();
   {
@@ -238,7 +238,7 @@ Texture& MultiWavelengthCapture::decode(void)
   m_imageProcessor.unbind();
 
   OGLStatus::logOGLErrors("MultiWavelengthCapture - decode()");
-  return m_depthMap;
+  return new MeshInterchange(m_depthMap);
 }
 
 void MultiWavelengthCapture::draw(void)

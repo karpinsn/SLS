@@ -18,6 +18,11 @@ MeshInterchange::MeshInterchange(Texture* texture)
   m_texture = texture;
 }
 
+MeshInterchange::MeshInterchange(Texture& texture)
+{
+  m_texture = &texture;
+}
+
 int MeshInterchange::getHeight()
 {
   return m_height;

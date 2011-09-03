@@ -159,14 +159,27 @@ bool wrench::gl::Texture::transferFromTexture(IplImage* image)
     glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, m_PBOId);
     glBufferData(GL_PIXEL_PACK_BUFFER_ARB, m_width * m_height * channelCount * m_dataSize, NULL, GL_STREAM_READ);
     glReadPixels(0, 0, m_width, m_height, m_format, m_dataType, 0);
-    char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
 
-    //  Actual data transfer
-    for (unsigned int i = 0; i < m_height; i++)
-    {
-        //  OpenCV does not guarentee continous memory blocks so it has to be copied row by row
-        memcpy(image->imageData + (i * image->widthStep), gpuMem + (i * m_width * 3), m_width * channelCount * m_dataSize);
-    }
+	if(GL_FLOAT == getDataType())
+	{
+	  float* gpuMem = (float*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
+	  //  Actual data transfer
+	  for (unsigned int i = 0; i < m_height; i++)
+	  {
+		  //  OpenCV does not guarentee continous memory blocks so it has to be copied row by row
+		  memcpy(image->imageData + (i * image->widthStep), gpuMem + (i * m_width * 3), m_width * channelCount * m_dataSize);
+	  }
+	}
+	else
+	{
+	  char* gpuMem = (char*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
+	  //  Actual data transfer
+	  for (unsigned int i = 0; i < m_height; i++)
+	  {
+		  //  OpenCV does not guarentee continous memory blocks so it has to be copied row by row
+		  memcpy(image->imageData + (i * image->widthStep), gpuMem + (i * m_width * 3), m_width * channelCount * m_dataSize);
+	  }
+	}
 
     glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB); // release pointer to mapping buffer
     glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);

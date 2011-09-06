@@ -42,7 +42,18 @@ bool VideoIO::openSaveStream(const string &filename, const unsigned int videoWid
 
 bool VideoIO::saveStream(MeshInterchange& mesh)
 {
-  return saveStream(mesh.m_image);
+  bool successful = false;
+
+  if(MeshInterchange::TEXTURE_FORMAT == mesh.getPreferedFormat())
+  {
+	return saveStream(*mesh.getTexture());
+  }
+  else if(MeshInterchange::VERTEX_FORMAT == mesh.getPreferedFormat())
+  {
+	return saveStream(mesh.getIplImage());
+  }
+
+  return successful;
 }
 
 bool VideoIO::saveStream(Texture& texture)

@@ -54,13 +54,13 @@ MeshInterchange* MultiWavelengthCodec::decode()
 	//	Capture the reference plane
     m_calculateReference = false;
     m_coder.captureReferencePlane();
-	m_glWidget->encode();
+	m_glWidget->decode();
 
 	//	Stream again until we get an actual frame
 	_streamUntilNewFrame();
   }
 
-  return m_glWidget->encode();
+  return m_glWidget->decode();
 }
 
 void MultiWavelengthCodec::closeDecodeStream(void)

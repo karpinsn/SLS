@@ -23,6 +23,36 @@ MeshInterchange::MeshInterchange(Texture& texture)
   m_texture = &texture;
 }
 
+int MeshInterchange::getPreferedFormat(void)
+{
+  if(NULL != m_texture)
+  {
+	return TEXTURE_FORMAT;
+  }
+  else if(NULL != m_image)
+  {
+	return IMAGE_FORMAT;
+  }
+  else if(NULL != m_data)
+  {
+	return VERTEX_FORMAT;
+  }
+  else
+  {
+	return -1;
+  }
+}
+
+Texture* MeshInterchange::getTexture()
+{
+  return m_texture;
+}
+
+IplImage* MeshInterchange::getIplImage()
+{
+  return m_image;
+}
+
 int MeshInterchange::getHeight()
 {
   return m_height;

@@ -63,7 +63,7 @@ void EncodingOpenGLWidget::updateScene()
   updateGL();
 }
 
-MeshInterchange* EncodingOpenGLWidget::encode()
+MeshInterchange* EncodingOpenGLWidget::decode()
 {
   //  Lock the mutex
   m_encodingLock.acquire();

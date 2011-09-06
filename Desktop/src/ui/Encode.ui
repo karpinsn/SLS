@@ -25,7 +25,7 @@
         <property name="minimumSize">
          <size>
           <width>200</width>
-          <height>0</height>
+          <height>100</height>
          </size>
         </property>
         <property name="frameShape">
@@ -34,44 +34,85 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QFormLayout" name="formLayout">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="leftMargin">
+          <number>0</number>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>File(s):</string>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QWidget" name="widget_4" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Decoder:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="decoderComboBox"/>
-         </item>
-         <item row="0" column="1">
-          <widget class="QWidget" name="widget_2" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <layout class="QFormLayout" name="formLayout_3">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+            </property>
+            <property name="horizontalSpacing">
+             <number>9</number>
+            </property>
+            <property name="verticalSpacing">
+             <number>9</number>
+            </property>
             <property name="margin">
              <number>0</number>
             </property>
-            <item>
-             <widget class="QLineEdit" name="sourceFileBox"/>
-            </item>
-            <item>
-             <widget class="QPushButton" name="sourceFileChooseButton">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_2">
               <property name="text">
-               <string>...</string>
+               <string>File(s):</string>
               </property>
              </widget>
             </item>
+            <item row="0" column="1">
+             <widget class="QWidget" name="widget_2" native="true">
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLineEdit" name="sourceFileBox"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="sourceFileChooseButton">
+                 <property name="text">
+                  <string>...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Decoder:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="decoderComboBox"/>
+            </item>
            </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QStackedWidget" name="decoderOptionsStackedWidget">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <widget class="QWidget" name="encoderOptionsStackedWidgetPage1"/>
           </widget>
          </item>
         </layout>
@@ -110,41 +151,71 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QFormLayout" name="formLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>File(s):</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Encoder</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="encoderComboBox"/>
-         </item>
-         <item row="0" column="1">
-          <widget class="QWidget" name="widget_3" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QWidget" name="widget_6" native="true">
+           <layout class="QFormLayout" name="formLayout">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+            </property>
             <property name="margin">
              <number>0</number>
             </property>
-            <item>
-             <widget class="QLineEdit" name="destFileBox"/>
-            </item>
-            <item>
-             <widget class="QPushButton" name="destFileChooseButton">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>...</string>
+               <string>File(s):</string>
               </property>
              </widget>
             </item>
+            <item row="0" column="1">
+             <widget class="QWidget" name="widget_3" native="true">
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLineEdit" name="destFileBox"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="destFileChooseButton">
+                 <property name="text">
+                  <string>...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Encoder</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="encoderComboBox"/>
+            </item>
            </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QStackedWidget" name="encoderOptionsStackedWidget">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <widget class="QWidget" name="defaultOptions"/>
+           <widget class="DepthmapCodecOptionsController" name="depthMapOptions"/>
           </widget>
          </item>
         </layout>
@@ -190,6 +261,12 @@
    <class>EncodingOpenGLWidget</class>
    <extends>QWidget</extends>
    <header>EncodingOpenGLWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DepthmapCodecOptionsController</class>
+   <extends>QWidget</extends>
+   <header>DepthmapCodecOptionsController.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -34,8 +34,6 @@ class EncoderController : public QWidget, private Ui::Encode
 private:
   Holoencoder m_encoder;
 
-  //MultiWavelengthCapture m_decoder;
-
 public:
   EncoderController(QWidget* parent = 0);
   ~EncoderController();
@@ -50,6 +48,9 @@ public slots:
   void encode(void);
   void selectSourceFile(void);
   void selectDestinationFile(void);
+
+  void newEncoder(const QString& text);
+  void newDecoder(const QString& text);
 
 private:
   void _updateGL(void);

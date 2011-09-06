@@ -23,10 +23,17 @@ using namespace wrench::gl;
 
 class MeshInterchange
 {
+public:
+  static const int TEXTURE_FORMAT = 0;
+  static const int IMAGE_FORMAT = 1;
+  static const int VERTEX_FORMAT = 2;
+
 private:
   int         m_width;
   int         m_height;
 
+  Texture*    m_texture;
+  IplImage*   m_image;
   glm::vec3*  m_data;
 
 public:
@@ -35,9 +42,10 @@ public:
   MeshInterchange(Texture* texture);
   MeshInterchange(Texture& texture);
 
-  //  TODO: Come back and fix this
-  Texture*    m_texture;
-  IplImage*   m_image;
+  int getPreferedFormat(void);
+
+  Texture*	getTexture(void);
+  IplImage* getIplImage(void);
 
   int getWidth();
   int getHeight();

@@ -113,6 +113,18 @@ void EncoderController::selectDestinationFile(void)
   }
 }
 
+void EncoderController::newDecoder(const QString& text)
+{
+}
+
+void EncoderController::newEncoder(const QString& text)
+{
+  if(0 == QString(DepthCodec::codecName().c_str()).compare(encoderComboBox->currentText()))
+  {
+	  encoderOptionsStackedWidget->setCurrentWidget(depthMapOptions);
+  }
+}
+
 void EncoderController::encode(void)
 {
   Codec* decoder = _getDecoder();
@@ -164,6 +176,8 @@ void EncoderController::_connectSignalsWithController(void)
   connect(encodeButton,				SIGNAL(clicked()), this, SLOT(encode()));
   connect(sourceFileChooseButton,	SIGNAL(clicked()), this, SLOT(selectSourceFile()));
   connect(destFileChooseButton,		SIGNAL(clicked()), this, SLOT(selectDestinationFile()));
+  connect(decoderComboBox,			SIGNAL(currentIndexChanged(const QString&)), this, SLOT(newDecoder(const QString&)));
+  connect(encoderComboBox,			SIGNAL(currentIndexChanged(const QString&)), this, SLOT(newEncoder(const QString&)));
 }
 
 void EncoderController::_addCodecs(void)
@@ -183,7 +197,7 @@ Codec* EncoderController::_getEncoder(void)
   if(0 == QString(DepthCodec::codecName().c_str()).compare(encoderComboBox->currentText()))
   {
 	//	Create and initalize a new depth codec
-    encoder = new DepthCodec();
+	encoder = depthMapOptions->getDepthmapCodec();
   }
 
   return encoder;

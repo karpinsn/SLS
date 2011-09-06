@@ -17,9 +17,13 @@ class DepthCodec : public Codec
 private:
   VideoIO m_io;
 
-  IplImage* m_floatImageHandle;
-  IplImage* m_floatImageHandle2;
+  IplImage* m_floatImageHandleThreeChannel;
+  IplImage* m_floatImageHandleSingleChannel;
   IplImage* m_byteImageHandle;
+
+  bool m_stretchContrast;
+  float m_minContrastValue;
+  float m_maxContrastValue;
 
 public:
   void openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height);
@@ -32,6 +36,9 @@ public:
   int getDecodeStreamWidth(void);
   int getDecodeStreamHeight(void);
   float getDecodeStreamProgress(void);
+
+  void enableContrastStretching(float min, float max);
+  void disableContrastStretching();
 
   static string codecName(void);
 };

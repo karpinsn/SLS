@@ -115,6 +115,7 @@ set(SOURCES
     ImageBuffer.cpp
     FrameCapture.cpp
     CameraConnectDialog.cpp
+	DepthmapCodecOptionsController.cpp
 
 	MainWindowView.h
 	MainWindowController.h
@@ -131,6 +132,7 @@ set(SOURCES
     ImageBuffer.h
     FrameCapture.h
     CameraConnectDialog.h
+	DepthmapCodecOptionsController.h
 	)	
 
 SET(SOURCES_COMMON_HEADERS
@@ -169,8 +171,8 @@ SET(SOURCES_COMMON_CODECS_SOURCES
 )
 	
 # QT Files
-set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui)
-set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h EncodingOpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h CameraConnectDialog.h)
+set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui ui/DepthmapCodecOptions.ui)
+set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h EncodingOpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h CameraConnectDialog.h DepthmapCodecOptionsController.h)
 set(RESOURCES ui/Holoencoder.qrc)
 
 #	---------------------------------------------------------------------------------------

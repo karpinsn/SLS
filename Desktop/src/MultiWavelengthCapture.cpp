@@ -224,19 +224,6 @@ void MultiWavelengthCapture::setScalingFactor(float scalingFactor)
 
 MeshInterchange* MultiWavelengthCapture::decode(void)
 {
-  m_imageProcessor.bind();
-  {
-    //	Pass 1 - Phase Calculation
-    _drawCalculatePhase();
-
-    //	Pass 2 - Phase filtering
-    _drawFilterPhase();
-
-    //    Pass 3 - Depth Calculator
-    _drawCalculateDepthMap();
-  }
-  m_imageProcessor.unbind();
-
   OGLStatus::logOGLErrors("MultiWavelengthCapture - decode()");
   return new MeshInterchange(m_depthMap);
 }

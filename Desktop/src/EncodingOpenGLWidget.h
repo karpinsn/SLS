@@ -55,7 +55,7 @@ public:
   void setGLContext(AbstractGLContext* glContext);
   void setEncodingContext(EncodingGLContext* encodingContext);
   void cameraSelectMode(int mode);
-  MeshInterchange* encode();
+  MeshInterchange* decode();
 
   AbstractGLContext*    m_glContext;
 

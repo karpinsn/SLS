@@ -21,6 +21,13 @@ public:
   ~DepthmapCodecOptionsController();
 
   Codec* getDepthmapCodec(void);
+
+
+public slots:
+  void contrastStretchValueChange(int checkState);
+
+private:
+  void _connectSignalsWithController(void);
 };
 
 #endif	// _DEPTHMAP_CODEC_OPTIONS_CONTROLLER_H_

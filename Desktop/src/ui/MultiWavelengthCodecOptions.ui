@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DepthmapCodecOptions</class>
- <widget class="QWidget" name="DepthmapCodecOptions">
+ <class>MultiWavelengthCodecOptions</class>
+ <widget class="QWidget" name="MultiWavelengthCodecOptions">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -26,47 +26,43 @@
       <item row="0" column="0">
        <widget class="QGroupBox" name="groupBox">
         <property name="title">
-         <string>Contrast Stretching</string>
+         <string>Settings</string>
         </property>
         <layout class="QFormLayout" name="formLayout">
+         <property name="fieldGrowthPolicy">
+          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+         </property>
          <item row="0" column="0">
-          <widget class="QCheckBox" name="contrastStretchCheckBox">
+          <widget class="QLabel" name="gammaCutoffLabel">
            <property name="text">
-            <string>Enable Contrast Stretching</string>
+            <string>Gamma Cutoff:</string>
            </property>
-           <property name="checked">
-            <bool>true</bool>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="gammaCutoffBox">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.010000000000000</double>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="minValueLabel">
+          <widget class="QLabel" name="scalingLabel">
            <property name="text">
-            <string>Minimum Value:</string>
+            <string>Scaling:</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="minValueBox">
+          <widget class="QDoubleSpinBox" name="scalingBox">
            <property name="maximum">
-            <double>10000.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QDoubleSpinBox" name="maxValueBox">
-           <property name="maximum">
-            <double>10000.000000000000000</double>
+            <double>100.000000000000000</double>
            </property>
            <property name="value">
             <double>1.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="maxValueBox_2">
-           <property name="text">
-            <string>Maximum Value:</string>
            </property>
           </widget>
          </item>

@@ -97,6 +97,16 @@ float MultiWavelengthCodec::getDecodeStreamProgress(void)
   return m_io.readStreamPosition();
 }
 
+float MultiWavelengthCodec::setGammaCutoff(float gammaValue)
+{
+  m_coder.setGammaCutoff(gammaValue);
+}
+
+float MultiWavelengthCodec::setScalingFactor(float scaling)
+{
+  m_coder.setScalingFactor(scaling);
+}
+
 string MultiWavelengthCodec::codecName(void)
 {
   return "Multi Wavelength Codec";

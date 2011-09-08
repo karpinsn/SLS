@@ -115,7 +115,6 @@ set(SOURCES
     ImageBuffer.cpp
     FrameCapture.cpp
     CameraConnectDialog.cpp
-	DepthmapCodecOptionsController.cpp
 
 	MainWindowView.h
 	MainWindowController.h
@@ -132,8 +131,16 @@ set(SOURCES
     ImageBuffer.h
     FrameCapture.h
     CameraConnectDialog.h
-	DepthmapCodecOptionsController.h
+    
 	)	
+
+SET(SOURCES_ENCODER
+    Encoder/DepthmapCodecOptionsController.cpp
+    Encoder/MultiWavelengthCodecOptionsController.cpp
+
+    Encoder/DepthmapCodecOptionsController.h
+    Encoder/MultiWavelengthCodecOptionsController.h
+)
 
 SET(SOURCES_COMMON_HEADERS
 	../../Common/src/ImageIO.h
@@ -171,8 +178,8 @@ SET(SOURCES_COMMON_CODECS_SOURCES
 )
 	
 # QT Files
-set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui ui/DepthmapCodecOptions.ui)
-set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h EncodingOpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h CameraConnectDialog.h DepthmapCodecOptionsController.h)
+set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui ui/DepthmapCodecOptions.ui ui/MultiWavelengthCodecOptions.ui)
+set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h EncodingOpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h CameraConnectDialog.h Encoder/DepthmapCodecOptionsController.h Encoder/MultiWavelengthCodecOptionsController.h)
 set(RESOURCES ui/Holoencoder.qrc)
 
 #	---------------------------------------------------------------------------------------
@@ -199,6 +206,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 add_executable(${PROJECT_NAME}
 	MACOSX_BUNDLE
 	${SOURCES}
+	${SOURCES_ENCODER}
 	${SOURCES_COMMON_SOURCES}
 	${SOURCES_COMMON_HEADERS}
 	${SOURCES_COMMON_CODECS_SOURCES}

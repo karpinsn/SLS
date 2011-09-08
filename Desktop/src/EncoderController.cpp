@@ -36,37 +36,37 @@ void EncoderController::exportEntireVideo(QListWidget* fileList)
 
   if(!fileName.isEmpty())
   {
-      VideoIO io;
-      bool canSaveFile = io.openSaveStream(fileName.toAscii().constData(), 512, 512, 30);
+    VideoIO io;
+    bool canSaveFile = io.openSaveStream(fileName.toAscii().constData(), 512, 512, 30);
 
-      if(canSaveFile)
+    if(canSaveFile)
+    {
+      XYZFileIO fileIO;
+
+      //	Inform the user of the progress
+      QProgressDialog progress("Encoding frames...", 0, 0, fileList->count(), this);
+
+      Logger::logDebug("EncoderController - exportEntireVideo: Encoding frames");
+      for(int itemNumber = 0; itemNumber < fileList->count(); itemNumber++)
       {
-          XYZFileIO fileIO;
+        //	Increase the progress
+        progress.setValue(itemNumber);
 
-          //	Inform the user of the progress
-          QProgressDialog progress("Encoding frames...", 0, 0, fileList->count(), this);
+        QListWidgetItem *item = fileList->item(itemNumber);
 
-          Logger::logDebug("EncoderController - exportEntireVideo: Encoding frames");
-          for(int itemNumber = 0; itemNumber < fileList->count(); itemNumber++)
-          {
-              //	Increase the progress
-              progress.setValue(itemNumber);
+        AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toAscii().constData());
+        m_encoder.setCurrentMesh(currentMesh);
 
-              QListWidgetItem *item = fileList->item(itemNumber);
-
-              AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toAscii().constData());
-              m_encoder.setCurrentMesh(currentMesh);
-
-              Texture holoimage = m_encoder.encode();
-              io.saveStream(holoimage);
-          }
-
-          //	Last one done!
-          progress.setValue(fileList->count());
-
-          Logger::logDebug("EncoderController - exportEntireVideo: Encoding complete!");
-          io.closeSaveStream();
+        Texture holoimage = m_encoder.encode();
+        io.saveStream(holoimage);
       }
+
+      //	Last one done!
+      progress.setValue(fileList->count());
+
+      Logger::logDebug("EncoderController - exportEntireVideo: Encoding complete!");
+      io.closeSaveStream();
+    }
   }
 }
 
@@ -115,13 +115,25 @@ void EncoderController::selectDestinationFile(void)
 
 void EncoderController::newDecoder(const QString& text)
 {
+  if(0 == QString(MultiWavelengthCodec::codecName().c_str()).compare(text))
+  {
+    decoderOptionsStackedWidget->setCurrentWidget(multiWavelengthOptions);
+  }
+  else
+  {
+    decoderOptionsStackedWidget->setCurrentWidget(defaultDecoderOptions);
+  }
 }
 
 void EncoderController::newEncoder(const QString& text)
 {
-  if(0 == QString(DepthCodec::codecName().c_str()).compare(encoderComboBox->currentText()))
+  if(0 == QString(DepthCodec::codecName().c_str()).compare(text))
   {
-	  encoderOptionsStackedWidget->setCurrentWidget(depthMapOptions);
+    encoderOptionsStackedWidget->setCurrentWidget(depthMapOptions);
+  }
+  else
+  {
+    decoderOptionsStackedWidget->setCurrentWidget(defaultEncoderOptions);
   }
 }
 

@@ -48,6 +48,7 @@ public:
 	int readStreamWidth(void);
 	int readStreamHeight(void);
 	float readStreamPosition(void);
+	void setReadStreamPosition(float position);
 
 private:
     void ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight, const unsigned int channelCount);

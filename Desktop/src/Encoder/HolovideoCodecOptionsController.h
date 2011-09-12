@@ -6,7 +6,7 @@
 #define _HOLOVIDEO_CODEC_OPTIONS_CONTROLLER_H_
 
 //	Qt auto generated headers
-#include "ui_DepthmapCodecOptions.h"
+#include "ui_HolovideoCodecOptions.h"
 
 #include <QWidget>
 

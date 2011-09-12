@@ -3,6 +3,7 @@
 ViewController::ViewController(QWidget* parent) : QWidget(parent)
 {
   setupUi(this);
+  _connectSignalsWithController();
 }
 
 ViewController::~ViewController()
@@ -62,6 +63,10 @@ void ViewController::playMovie(string movieFile)
   _updateGL();
 }
 
+void ViewController::pauseMovie()
+{
+}
+
 void ViewController::timerEvent(QTimerEvent* event)
 {
   int elapsed = m_movieTimer.elapsed();
@@ -72,6 +77,9 @@ void ViewController::timerEvent(QTimerEvent* event)
     //	Need to fetch the next frame
 
     IplImage* frame = m_aviIO.readStream();
+	
+	float position = m_aviIO.readStreamPosition() * 100.0;
+	positionSlider->setValue(position);
 
     if(frame)
     {
@@ -87,6 +95,11 @@ void ViewController::timerEvent(QTimerEvent* event)
   _updateGL();
 }
 
+void ViewController::changeMoviePosition(int position)
+{
+  m_aviIO.setReadStreamPosition((float)position / 100.0f);
+}
+
 void ViewController::_updateGL(void)
 {
   OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("viewGLWidget"));
@@ -99,4 +112,10 @@ void ViewController::_updateGL(void)
   {
     Logger::logError("ViewController - _updateGL: Unable to find OpenGL Widget");
   }
+}
+
+void ViewController::_connectSignalsWithController(void)
+{
+  connect(positionSlider, SIGNAL(sliderMoved(int)),	this, SLOT(changeMoviePosition(int)));
+  connect(positionSlider, SIGNAL(sliderPressed()),	this, SLOT(pauseMovie()));
 }

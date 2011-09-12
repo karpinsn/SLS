@@ -65,6 +65,7 @@ MeshInterchange* MultiWavelengthCodec::decode()
 
 void MultiWavelengthCodec::closeDecodeStream(void)
 {
+  m_io.closeReadStream();
   m_glWidget = NULL;
 }
 
@@ -97,12 +98,12 @@ float MultiWavelengthCodec::getDecodeStreamProgress(void)
   return m_io.readStreamPosition();
 }
 
-float MultiWavelengthCodec::setGammaCutoff(float gammaValue)
+void MultiWavelengthCodec::setGammaCutoff(float gammaValue)
 {
   m_coder.setGammaCutoff(gammaValue);
 }
 
-float MultiWavelengthCodec::setScalingFactor(float scaling)
+void MultiWavelengthCodec::setScalingFactor(float scaling)
 {
   m_coder.setScalingFactor(scaling);
 }

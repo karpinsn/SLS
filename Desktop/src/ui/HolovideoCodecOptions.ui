@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MultiWavelengthCodecOptions</class>
- <widget class="QWidget" name="MultiWavelengthCodecOptions">
+ <class>HolovideoCodecOptions</class>
+ <widget class="QWidget" name="HolovideoCodecOptions">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -33,36 +33,36 @@
           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="gammaCutoffLabel">
+          <widget class="QLabel" name="widthLabel">
            <property name="text">
-            <string>Gamma Cutoff:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QDoubleSpinBox" name="gammaCutoffBox">
-           <property name="maximum">
-            <double>1.000000000000000</double>
-           </property>
-           <property name="singleStep">
-            <double>0.010000000000000</double>
+            <string>Width:</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="scalingLabel">
+          <widget class="QLabel" name="heightLabel">
            <property name="text">
-            <string>Scaling:</string>
+            <string>Height:</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="scalingBox">
+          <widget class="QSpinBox" name="heightBox">
            <property name="maximum">
-            <double>100.000000000000000</double>
+            <number>10000</number>
            </property>
            <property name="value">
-            <double>1.000000000000000</double>
+            <number>512</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="widthBox">
+           <property name="maximum">
+            <number>10000</number>
+           </property>
+           <property name="value">
+            <number>512</number>
            </property>
           </widget>
          </item>

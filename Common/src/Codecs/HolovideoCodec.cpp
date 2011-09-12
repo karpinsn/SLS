@@ -20,27 +20,55 @@ void HolovideoCodec::closeEncodeStream(void)
 
 void HolovideoCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename)
 {
+  if(NULL == glWidget)
+  {
+	//  No OpenGL encoding widget. Cant open decode stream
+	return;
+  }
 
+  m_io.openReadStream(filename);
+  m_glWidget = glWidget;
+
+  m_glWidget->setGLContext(&m_decoder);
+  m_glWidget->setEncodingContext(&m_decoder);
+  m_glWidget->reinit(getDecodeStreamWidth(), getDecodeStreamHeight());
 }
 
 MeshInterchange* HolovideoCodec::decode()
 {
-  return NULL;
+  if(NULL == m_glWidget)
+  {
+    //  No OpenGL encoding widget. Return a NULL MeshInterchange
+    return NULL;
+  }
+
+  IplImage* frame = m_io.readStream();
+  if(NULL == frame)
+  {
+	//	At the end of the file
+	return NULL;
+  }
+
+  m_decoder.setBackHoloBuffer(frame);
+  m_decoder.swapBuffers();
+
+  return m_glWidget->decode();
 }
 
 void HolovideoCodec::closeDecodeStream(void)
 {
-
+  m_io.closeReadStream();
+  m_glWidget = NULL;
 }
 
 int HolovideoCodec::getDecodeStreamWidth(void)
 {
-  return 0;
+  return m_io.readStreamWidth();
 }
 
 int HolovideoCodec::getDecodeStreamHeight(void)
 {
-  return 0;
+  return m_io.readStreamHeight();
 }
 
 float HolovideoCodec::getDecodeStreamProgress(void)

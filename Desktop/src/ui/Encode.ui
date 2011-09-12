@@ -107,6 +107,7 @@
             </sizepolicy>
            </property>
            <widget class="QWidget" name="defaultDecoderOptions"/>
+           <widget class="HolovideoCodecOptionsController" name="holovideoOptions"/>
            <widget class="MultiWavelengthCodecOptionsController" name="multiWavelengthOptions"/>
           </widget>
          </item>
@@ -268,6 +269,12 @@
    <class>MultiWavelengthCodecOptionsController</class>
    <extends>QWidget</extends>
    <header>Encoder/MultiWavelengthCodecOptionsController.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>HolovideoCodecOptionsController</class>
+   <extends>QWidget</extends>
+   <header>Encoder/HolovideoCodecOptionsController.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

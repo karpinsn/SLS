@@ -30,8 +30,8 @@ public:
   int getDecodeStreamHeight(void);
   float getDecodeStreamProgress(void);
 
-  float setGammaCutoff(float gammaValue);
-  float setScalingFactor(float scaling);
+  void setGammaCutoff(float gammaValue);
+  void setScalingFactor(float scaling);
 
   static string codecName(void);
 

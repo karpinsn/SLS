@@ -119,6 +119,10 @@ void EncoderController::newDecoder(const QString& text)
   {
     decoderOptionsStackedWidget->setCurrentWidget(multiWavelengthOptions);
   }
+  else if(0 == QString(HolovideoCodec::codecName().c_str()).compare(text))
+  {
+	decoderOptionsStackedWidget->setCurrentWidget(holovideoOptions);
+  }
   else
   {
     decoderOptionsStackedWidget->setCurrentWidget(defaultDecoderOptions);
@@ -209,7 +213,12 @@ Codec* EncoderController::_getEncoder(void)
   if(0 == QString(DepthCodec::codecName().c_str()).compare(encoderComboBox->currentText()))
   {
 	//	Create and initalize a new depth codec
-	encoder = depthMapOptions->getDepthmapCodec();
+	encoder = depthMapOptions->getCodec();
+  }
+  else
+  {
+	//	Unknown decoder
+	Logger::logError("EncoderController - encode: Unable to get a valid encoder");
   }
 
   return encoder;
@@ -221,7 +230,11 @@ Codec* EncoderController::_getDecoder(void)
 
   if(0 == QString(MultiWavelengthCodec::codecName().c_str()).compare(decoderComboBox->currentText()))
   {
-	decoder = new MultiWavelengthCodec();
+	decoder = multiWavelengthOptions->getCodec();
+  }
+  else if(0 == QString(HolovideoCodec::codecName().c_str()).compare(decoderComboBox->currentText()))
+  {
+	decoder = holovideoOptions->getCodec();
   }
   else
   {

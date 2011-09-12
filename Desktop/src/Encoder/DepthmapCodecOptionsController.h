@@ -20,7 +20,7 @@ public:
   DepthmapCodecOptionsController(QWidget* parent = 0);
   ~DepthmapCodecOptionsController();
 
-  Codec* getDepthmapCodec(void);
+  Codec* getCodec(void);
 
 
 public slots:

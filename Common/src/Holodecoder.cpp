@@ -110,10 +110,10 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
 
   m_holoImage0.init   (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
   m_holoImage1.init   (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-  m_phaseMap0.init    (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-  m_phaseMap1.init    (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-  m_depthMap.init     (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-  m_normalMap.init    (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+  m_phaseMap0.init    (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+  m_phaseMap1.init    (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+  m_depthMap.init     (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+  m_normalMap.init    (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
   m_imageProcessor.init(width, height);
   m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);
@@ -177,23 +177,10 @@ void Holodecoder::draw(void)
 }
 
 
-Texture& Holodecoder::decode(void)
+MeshInterchange* Holodecoder::decode(void)
 {
-  m_imageProcessor.bind();
-  {
-	//	Pass 1 - Phase Calculation
-	_drawCalculatePhase();
-
-	//	Pass 2 - Phase filtering
-	_drawFilterPhase();
-
-	//    Pass 3 - Depth Calculator
-	_drawCalculateDepthMap();
-  }
-  m_imageProcessor.unbind();
-
   OGLStatus::logOGLErrors("Holodecoder - decode()");
-  return m_depthMap;
+  return new MeshInterchange(m_depthMap);
 }
 
 void Holodecoder::resize(int width, int height)

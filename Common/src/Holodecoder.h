@@ -29,6 +29,7 @@
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
 #include "AbstractGLContext.h"
+#include "EncodingGLContext.h"
 
 #include <wrench/gl/Camera.h>
 #include <wrench/gl/ShaderProgram.h>
@@ -45,7 +46,7 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class Holodecoder : public AbstractGLContext
+class Holodecoder : public AbstractGLContext, public EncodingGLContext
 {
 public:	//	TODO Comeback and FIX this
     ShaderProgram m_phaseCalculator;
@@ -96,7 +97,7 @@ public:
 	void setBackHoloBuffer(IplImage* image);
 	void swapBuffers(void);
 	
-	Texture& decode(void);
+	MeshInterchange* decode(void);
 	
 private:
 	void initShaders(void);

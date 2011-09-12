@@ -48,7 +48,7 @@ bool VideoIO::saveStream(MeshInterchange& mesh)
   {
 	return saveStream(*mesh.getTexture());
   }
-  else if(MeshInterchange::VERTEX_FORMAT == mesh.getPreferedFormat())
+  else if(MeshInterchange::IMAGE_FORMAT == mesh.getPreferedFormat())
   {
 	return saveStream(mesh.getIplImage());
   }
@@ -212,6 +212,17 @@ int VideoIO::readStreamHeight(void)
   }
 
   return cvGetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_FRAME_HEIGHT);
+}
+
+void VideoIO::setReadStreamPosition(float position)
+{
+  if(position < 0.0 || position > 1.0)
+  {
+	//	Invalid seeking location
+	return;
+  }
+  cvSetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_POS_FRAMES, position);
+  //cvSetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_POS_AVI_RATIO, position);
 }
 
 float VideoIO::readStreamPosition(void)

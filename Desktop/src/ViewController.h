@@ -40,12 +40,16 @@ public:
   void playMovie(string movieFile);
   void openHoloImage(void);
 
+  public slots:
+	void changeMoviePosition(int position);
+	void pauseMovie(void);
+
 protected:
   void timerEvent(QTimerEvent* event);
 
 private:
   void _updateGL(void);
-
+  void _connectSignalsWithController(void);
 };
 
 #endif	// _VIEW_CONTROLLER_H_

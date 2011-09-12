@@ -24,7 +24,7 @@ void DepthmapCodecOptionsController::contrastStretchValueChange(int checkState)
   }
 }
 
-Codec* DepthmapCodecOptionsController::getDepthmapCodec(void)
+Codec* DepthmapCodecOptionsController::getCodec(void)
 {
   DepthCodec* codec = new DepthCodec();
    

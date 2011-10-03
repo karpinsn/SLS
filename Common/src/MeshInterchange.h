@@ -19,6 +19,8 @@
 //  Wrench Includes
 #include <wrench/gl/Texture.h>
 
+#include "AbstractMesh.h"
+
 using namespace wrench::gl;
 
 class MeshInterchange
@@ -35,17 +37,20 @@ private:
   Texture*    m_texture;
   IplImage*   m_image;
   glm::vec3*  m_data;
+  AbstractMesh* m_mesh;
 
 public:
   MeshInterchange();
   MeshInterchange(IplImage* image);
   MeshInterchange(Texture* texture);
   MeshInterchange(Texture& texture);
+  MeshInterchange(AbstractMesh* mesh);
 
   int getPreferedFormat(void);
 
   Texture*	getTexture(void);
   IplImage* getIplImage(void);
+  AbstractMesh* getMesh(void);
 
   int getWidth();
   int getHeight();

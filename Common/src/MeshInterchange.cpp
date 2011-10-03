@@ -23,6 +23,11 @@ MeshInterchange::MeshInterchange(Texture& texture)
   m_texture = &texture;
 }
 
+MeshInterchange::MeshInterchange(AbstractMesh* mesh)
+{
+  m_mesh = mesh;
+}
+
 int MeshInterchange::getPreferedFormat(void)
 {
   if(NULL != m_texture)
@@ -43,14 +48,19 @@ int MeshInterchange::getPreferedFormat(void)
   }
 }
 
-Texture* MeshInterchange::getTexture()
+Texture* MeshInterchange::getTexture(void)
 {
   return m_texture;
 }
 
-IplImage* MeshInterchange::getIplImage()
+IplImage* MeshInterchange::getIplImage(void)
 {
   return m_image;
+}
+
+AbstractMesh* MeshInterchange::getMesh(void)
+{
+  return m_mesh;
 }
 
 int MeshInterchange::getHeight()

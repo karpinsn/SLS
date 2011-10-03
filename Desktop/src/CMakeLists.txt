@@ -162,6 +162,7 @@ SET(SOURCES_COMMON_CODECS_HEADERS
 	../../Common/src/Codecs/MultiWavelengthCodec.h
 	../../Common/src/Codecs/Codec.h
 	../../Common/src/Codecs/DepthCodec.h
+    ../../Common/src/Codecs/XYZMCodec.h
 )
 
 SET(SOURCES_COMMON_SOURCES
@@ -177,6 +178,7 @@ SET(SOURCES_COMMON_CODECS_SOURCES
 	../../Common/src/Codecs/HolovideoCodec.cpp
 	../../Common/src/Codecs/MultiWavelengthCodec.cpp
 	../../Common/src/Codecs/DepthCodec.cpp
+    ../../Common/src/Codecs/XYZMCodec.cpp
 )
 	
 # QT Files

@@ -123,6 +123,10 @@ void EncoderController::newDecoder(const QString& text)
   {
 	decoderOptionsStackedWidget->setCurrentWidget(holovideoOptions);
   }
+  else if(0 == QString(XYZMCodec::codecName().c_str()).compare(text))
+  {
+    decoderOptionsStackedWidget->setCurrentWidget(xyzmOptions);
+  }
   else
   {
     decoderOptionsStackedWidget->setCurrentWidget(defaultDecoderOptions);
@@ -201,6 +205,7 @@ void EncoderController::_addCodecs(void)
   //  Add decoders
   decoderComboBox->addItem(QString(MultiWavelengthCodec::codecName().c_str()));
   decoderComboBox->addItem(QString(HolovideoCodec::codecName().c_str()));
+  decoderComboBox->addItem(QString(XYZMCodec::codecName().c_str()));
 
   //  Add encoders
   encoderComboBox->addItem(QString(DepthCodec::codecName().c_str()));
@@ -235,6 +240,11 @@ Codec* EncoderController::_getDecoder(void)
   else if(0 == QString(HolovideoCodec::codecName().c_str()).compare(decoderComboBox->currentText()))
   {
 	decoder = holovideoOptions->getCodec();
+  }
+  else if(0 == QString(XYZMCodec::codecName().c_str()).compare(decoderComboBox->currentText()))
+  {
+    //  Return the XYZMCodec
+    decoder = xyzmOptions->getCodec();
   }
   else
   {

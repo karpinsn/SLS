@@ -23,6 +23,8 @@
 #include "Codecs/DepthCodec.h"
 #include "Codecs/MultiWavelengthCodec.h"
 #include "Codecs/HolovideoCodec.h"
+#include "Codecs/XYZMCodec.h"
+
 #include "Holodecoder.h"
 
 #include "VideoIO.h"

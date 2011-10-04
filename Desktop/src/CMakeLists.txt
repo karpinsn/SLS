@@ -138,10 +138,12 @@ SET(SOURCES_ENCODER
     Encoder/DepthmapCodecOptionsController.cpp
     Encoder/MultiWavelengthCodecOptionsController.cpp
     Encoder/HolovideoCodecOptionsController.cpp
+    Encoder/XYZMCodecOptionsController.cpp
 
     Encoder/DepthmapCodecOptionsController.h
     Encoder/MultiWavelengthCodecOptionsController.h
     Encoder/HolovideoCodecOptionsController.h
+    Encoder/XYZMCodecOptionsController.h
 )
 
 SET(SOURCES_COMMON_HEADERS
@@ -182,8 +184,8 @@ SET(SOURCES_COMMON_CODECS_SOURCES
 )
 	
 # QT Files
-set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui ui/DepthmapCodecOptions.ui ui/MultiWavelengthCodecOptions.ui ui/HolovideoCodecOptions.ui)
-set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h EncodingOpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h CameraConnectDialog.h Encoder/DepthmapCodecOptionsController.h Encoder/MultiWavelengthCodecOptionsController.h Encoder/HolovideoCodecOptionsController.h)
+set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui ui/DepthmapCodecOptions.ui ui/MultiWavelengthCodecOptions.ui ui/HolovideoCodecOptions.ui ui/XYZMCodecOptions.ui)
+set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h EncodingOpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h CameraConnectDialog.h Encoder/DepthmapCodecOptionsController.h Encoder/MultiWavelengthCodecOptionsController.h Encoder/HolovideoCodecOptionsController.h Encoder/XYZMCodecOptionsController.h)
 set(RESOURCES ui/Holoencoder.qrc)
 
 #	---------------------------------------------------------------------------------------

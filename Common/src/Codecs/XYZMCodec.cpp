@@ -52,18 +52,28 @@ void XYZMCodec::closeDecodeStream(void)
 
 int XYZMCodec::getDecodeStreamWidth(void)
 {
-  return 640;
+  if(NULL == m_mesh)
+  {
+    return 0;
+  }
+
+  return ((XYZMesh*)m_mesh)->getMeshWidth();
 }
 
 int XYZMCodec::getDecodeStreamHeight(void)
 {
-  return 480;
+  if(NULL == m_mesh)
+  {
+    return 0;
+  }
+
+  return ((XYZMesh*)m_mesh)->getMeshHeight();
 }
 
 float XYZMCodec::getDecodeStreamProgress(void)
 {
-  //return m_io.readStreamPosition();
-  return 100;
+  //  TODO fix this position
+  return 1;
 }
 
 string XYZMCodec::codecName(void)

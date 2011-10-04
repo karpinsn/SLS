@@ -6,6 +6,7 @@
 #include "../MeshInterchange.h"
 
 #include "XYZFileIO.h"
+#include "XYZMesh.h"
 
 using namespace std;
 

@@ -21,21 +21,57 @@
   </property>
   <property name="styleSheet">
    <string notr="true">#MainWindow {
-background:rgb(63, 63, 63);
-color:rgb(187,187,187);
+background:rgb(69, 69, 69);
+color:rgb(220,220,220);
 }
 
 QStatusBar{
-background:rgb(63, 63, 63);
-color:rgb(187,187,187);
+background:rgb(69, 69, 69);
+color:rgb(220,220,220);
 }
 
 QLabel{
-color:rgb(187,187,187);
+color:rgb(220,220,220);
 }
 
 QAction{
-color:rgb(187,187,187);
+color:rgb(220,220,220);
+}
+
+QPushButton{
+color:rgb(220,220,220);
+background:rgb(69, 69, 69);
+border-width: 1px;
+border-color: rgb(185, 206, 43);
+border-style: solid;
+border-radius: 7;
+padding: 5px;
+}
+
+QComboBox{
+color:rgb(220,220,220);
+background:rgb(69, 69, 69);
+border-width: 1px;
+border-color: rgb(185, 206, 43);
+border-style: solid;
+border-radius: 7;
+padding: 5px;
+}
+
+QGroupBox{
+color:rgb(220,220,220);
+border-width: 1px;
+border-color: rgb(60, 60, 60);
+}
+
+QAbstractSpinBox{
+color:rgb(220,220,220);
+background:rgb(69, 69, 69);
+border-width: 1px;
+border-color: rgb(185, 206, 43);
+border-style: solid;
+border-radius: 7;
+padding: 5px;
 }</string>
   </property>
   <widget class="QWidget" name="MainWidget">
@@ -134,7 +170,7 @@ color:rgb(187,187,187);
      <x>0</x>
      <y>0</y>
      <width>874</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

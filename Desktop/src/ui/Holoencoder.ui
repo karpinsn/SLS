@@ -19,6 +19,25 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#MainWindow {
+background:rgb(63, 63, 63);
+color:rgb(187,187,187);
+}
+
+QStatusBar{
+background:rgb(63, 63, 63);
+color:rgb(187,187,187);
+}
+
+QLabel{
+color:rgb(187,187,187);
+}
+
+QAction{
+color:rgb(187,187,187);
+}</string>
+  </property>
   <widget class="QWidget" name="MainWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -45,7 +64,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="ViewController" name="viewController">
        <property name="sizePolicy">

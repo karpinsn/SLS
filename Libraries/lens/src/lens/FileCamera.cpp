@@ -28,7 +28,7 @@ void lens::FileCamera::init(void)
   //	If we dont have a currently selected item then selected the first in the list
   if (NULL != file && !file.isEmpty())
   {
-    m_currentFileName = file.toStdString();
+    m_currentFileName = file.toLocal8Bit().constData();
     m_capture = cvCaptureFromAVI(m_currentFileName.c_str());
   }
 }

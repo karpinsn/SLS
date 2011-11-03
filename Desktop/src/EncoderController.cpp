@@ -158,12 +158,12 @@ void EncoderController::encode(void)
 
   //  Setup decoder
   QString sourceFilename = sourceFileBox->text();
-  string str = sourceFilename.toStdString();
+  string str = sourceFilename.toLocal8Bit().constData();
   decoder->openDecodeStream(decoderGLWidget, str);
 
   //  Setup encoder
   QString destFilename = destFileBox->text();
-  string str2 = destFilename.toStdString();
+  string str2 = destFilename.toLocal8Bit().constData();
   encoder->openEncodeStream(encoderGLWidget, str2, decoder->getDecodeStreamWidth(), decoder->getDecodeStreamHeight());
 
   //  As long as we have meshes decode and encode them

@@ -39,23 +39,13 @@ color:rgb(220,220,220);
 }
 
 QPushButton{
-color:rgb(220,220,220);
-background:rgb(69, 69, 69);
-border-width: 1px;
-border-color: rgb(185, 206, 43);
-border-style: solid;
-border-radius: 7;
-padding: 5px;
-}
-
-QComboBox{
-color:rgb(220,220,220);
-background:rgb(69, 69, 69);
-border-width: 1px;
-border-color: rgb(185, 206, 43);
-border-style: solid;
-border-radius: 7;
-padding: 5px;
+	color:rgb(220,220,220);
+	background:qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0, stop:0 rgba(48, 48, 48, 255), stop:1 rgba(69, 69, 69, 255));
+	border-width: 1px;
+	border-color: rgb(177, 214, 49);	
+	border-style: solid;
+	border-radius: 3px;
+	padding: 5px;
 }
 
 QGroupBox{
@@ -68,11 +58,80 @@ QAbstractSpinBox{
 color:rgb(220,220,220);
 background:rgb(69, 69, 69);
 border-width: 1px;
-border-color: rgb(185, 206, 43);
+border-color: rgb(177, 214, 49);
 border-style: solid;
-border-radius: 7;
+     border-radius: 3px;
 padding: 5px;
-}</string>
+}
+
+/* QCombobox Styles*/
+QComboBox {
+	color:rgb(220,220,220);
+    border-style: solid;
+	border-width: 1px;
+	border-color: rgb(177, 214, 49);
+    border-radius: 3px;
+    padding: 1px 18px 1px 3px;
+ }
+
+ QComboBox:editable {
+	/* Change the background possibly */
+ }
+
+ QComboBox:!editable, QComboBox::drop-down:editable {
+	background:qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0, stop:0 rgba(48, 48, 48, 255), stop:1 rgba(69, 69, 69, 255))
+ }
+
+ /* QComboBox gets the &quot;on&quot; state when the popup is open */
+ QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+	background:qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0, stop:0 rgba(48, 48, 48, 255), stop:1 rgba(69, 69, 69, 255))
+ }
+
+ QComboBox:on { /* shift the text when the popup opens */
+     padding-top: 3px;
+     padding-left: 4px;
+ }
+
+ QComboBox::drop-down {
+     subcontrol-origin: padding;
+     subcontrol-position: top right;
+     width: 15px;
+
+     border-left-width: 1px;
+     border-left-color: darkgray;
+     border-left-style: solid; /* just a single line */
+     border-top-right-radius: 3px; /* same radius as the QComboBox */
+     border-bottom-right-radius: 3px;
+ }
+
+ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+     top: 1px;
+     left: 1px;
+ }
+
+ QComboBox QAbstractItemView {
+	color:rgb(220,220,220);
+    border-width:1px;
+	border-style: solid;
+	border-color: rgb(177, 214, 49);
+	background: rgba(48, 48, 48, 255);
+    selection-background-color:  rgba(69, 69, 69, 255);
+ }
+
+/* QGroupBox styles */
+ QGroupBox {
+     border-width: 1px;
+     border-style: solid;
+	 border-color: rgb(177, 214, 49);
+     border-radius: 3px;
+     margin-top: 1ex; /* leave space at the top for the title */
+ }
+
+ QGroupBox::title {
+	subcontrol-position: top left;
+     subcontrol-origin: margin;
+	padding:2 20px;
+ }</string>
   </property>
   <widget class="QWidget" name="MainWidget">
    <property name="sizePolicy">

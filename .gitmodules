@@ -1,0 +1,9 @@
+[submodule "Libraries/Wrench"]
+	path = Libraries/Wrench
+	url = git@github.com:karpinsn/Wrench.git
+[submodule "Libraries/Antenna"]
+	path = Libraries/Antenna
+	url = git@github.com:karpinsn/Antenna.git
+[submodule "Libraries/Lens"]
+	path = Libraries/Lens
+	url = git@github.com:karpinsn/Lens.git

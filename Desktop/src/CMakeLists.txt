@@ -60,25 +60,25 @@ set(LIBS ${LIBS} glm)
 #	-----------------------------------------
 #	Wrench
 #	-----------------------------------------
-add_subdirectory(../../Libraries/wrench/src/wrench ${PROJECT_BINARY_DIR}/Libraries/wrench)
-include_directories(../../Libraries/wrench/src)
-set(LIBS ${LIBS} wrench)
+add_subdirectory(../../Libraries/Wrench/src/wrench ${PROJECT_BINARY_DIR}/Libraries/Wrench)
+include_directories(../../Libraries/Wrench/src)
+set(LIBS ${LIBS} Wrench)
 
 #	-----------------------------------------
 #	Lens
 #	-----------------------------------------
-add_subdirectory(../../Libraries/lens/src/lens ${PROJECT_BINARY_DIR}/Libraries/lens)
-include_directories(../../Libraries/lens/src)
+add_subdirectory(../../Libraries/Lens/src/lens ${PROJECT_BINARY_DIR}/Libraries/Lens)
+include_directories(../../Libraries/Lens/src)
 include_directories(${LENS_INCLUDE_DIRS})
 
-set(LIBS ${LIBS} lens "${LENS_LIBRARIES}")
+set(LIBS ${LIBS} Lens "${LENS_LIBRARIES}")
 
 #	-----------------------------------------
 #	Antenna
 #	-----------------------------------------
-add_subdirectory(../../Libraries/antenna/src/antenna ${PROJECT_BINARY_DIR}/Libraries/antenna)
-include_directories(../../Libraries/antenna/src)
-set(LIBS ${LIBS} antenna)
+add_subdirectory(../../Libraries/Antenna/src/antenna ${PROJECT_BINARY_DIR}/Libraries/Antenna)
+include_directories(../../Libraries/Antenna/src)
+set(LIBS ${LIBS} Antenna)
 
 #	-----------------------------------------
 #	Common

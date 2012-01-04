@@ -62,7 +62,7 @@ set(LIBS ${LIBS} glm)
 #	-----------------------------------------
 add_subdirectory(../../Libraries/Wrench/src/wrench ${PROJECT_BINARY_DIR}/Libraries/Wrench)
 include_directories(../../Libraries/Wrench/src)
-set(LIBS ${LIBS} Wrench)
+set(LIBS ${LIBS} wrench)
 
 #	-----------------------------------------
 #	Lens
@@ -71,14 +71,14 @@ add_subdirectory(../../Libraries/Lens/src/lens ${PROJECT_BINARY_DIR}/Libraries/L
 include_directories(../../Libraries/Lens/src)
 include_directories(${LENS_INCLUDE_DIRS})
 
-set(LIBS ${LIBS} Lens "${LENS_LIBRARIES}")
+set(LIBS ${LIBS} lens "${LENS_LIBRARIES}")
 
 #	-----------------------------------------
 #	Antenna
 #	-----------------------------------------
 add_subdirectory(../../Libraries/Antenna/src/antenna ${PROJECT_BINARY_DIR}/Libraries/Antenna)
 include_directories(../../Libraries/Antenna/src)
-set(LIBS ${LIBS} Antenna)
+set(LIBS ${LIBS} antenna)
 
 #	-----------------------------------------
 #	Common
@@ -155,7 +155,8 @@ SET(SOURCES_COMMON_HEADERS
 	../../Common/src/TriMesh.h
 	../../Common/src/AbstractGLContext.h
 	../../Common/src/EncodingGLContext.h
-    ../../Common/src/Holodecoder.h
+    ../../Common/src/DecodingGLContext.h
+	../../Common/src/Holodecoder.h
 	../../Common/src/MeshInterchange.h
 )	
 

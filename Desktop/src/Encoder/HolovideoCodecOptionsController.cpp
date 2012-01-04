@@ -2,16 +2,25 @@
 
 HolovideoCodecOptionsController::HolovideoCodecOptionsController(QWidget* parent) : QWidget(parent)
 {
+  m_codec = NULL;
   setupUi(this);
 }
 
 HolovideoCodecOptionsController::~HolovideoCodecOptionsController()
 {
+  if(NULL != m_codec)
+  {
+	delete m_codec;
+  }
 }
 
 Codec* HolovideoCodecOptionsController::getCodec(void)
 {
-  HolovideoCodec* codec = new HolovideoCodec();
+  // Lazy init
+  if(m_codec == NULL)
+  {
+	m_codec = new HolovideoCodec();
+  }
 
-  return codec;
+  return m_codec;
 }

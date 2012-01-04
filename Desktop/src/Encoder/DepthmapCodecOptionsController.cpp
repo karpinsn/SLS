@@ -2,12 +2,18 @@
 
 DepthmapCodecOptionsController::DepthmapCodecOptionsController(QWidget* parent) : QWidget(parent)
 {
+  m_codec = NULL;
+
   setupUi(this);
   _connectSignalsWithController();
 }
 
 DepthmapCodecOptionsController::~DepthmapCodecOptionsController()
 {
+  if(NULL != m_codec)
+  {
+	delete m_codec;
+  }
 }
 
 void DepthmapCodecOptionsController::contrastStretchValueChange(int checkState)
@@ -26,18 +32,22 @@ void DepthmapCodecOptionsController::contrastStretchValueChange(int checkState)
 
 Codec* DepthmapCodecOptionsController::getCodec(void)
 {
-  DepthCodec* codec = new DepthCodec();
+  // Lazy init
+  if(NULL == m_codec)
+  {
+	m_codec = new DepthCodec();
+  }
    
   if(Qt::Checked == contrastStretchCheckBox->checkState())
   {
-    codec->enableContrastStretching(minValueBox->value(), maxValueBox->value());
+    m_codec->enableContrastStretching(minValueBox->value(), maxValueBox->value());
   }
   else
   {
-    codec->disableContrastStretching();
+    m_codec->disableContrastStretching();
   }
 
-  return codec;
+  return m_codec;
 }
 
 void DepthmapCodecOptionsController::_connectSignalsWithController(void)

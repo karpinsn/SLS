@@ -112,11 +112,10 @@ void Holoencoder::draw(void)
 	glPopMatrix();
 }
 
-Texture& Holoencoder::encode()
+Texture& Holoencoder::encodeOldWay()
 {	
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
 	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	draw();
 	
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
@@ -156,4 +155,23 @@ void Holoencoder::setCurrentMesh(AbstractMesh* current)
 	}
 	
 	m_currentMesh = current;
+}
+
+void Holoencoder::setCurrentMesh(MeshInterchange* current)
+{
+  m_currentMesh = current->getMesh();
+}
+
+void Holoencoder::encode(void)
+{
+  OGLStatus::logOGLErrors("MultiWavelengthCapture - decode()");
+  
+  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
+  draw();
+  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+}
+
+MeshInterchange* Holoencoder::getEncodedData()
+{
+  return new MeshInterchange(m_holoimage);
 }

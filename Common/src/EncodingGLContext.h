@@ -14,7 +14,8 @@ class EncodingGLContext
 public:
   virtual ~EncodingGLContext(void) {};
 
-  virtual MeshInterchange* decode() = 0;
+  virtual void encode() = 0;
+  virtual MeshInterchange* getEncodedData() = 0;
 };
 
 #endif	// _ENCODING_GL_CONTEXT_H_

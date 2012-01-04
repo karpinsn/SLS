@@ -59,29 +59,12 @@
             <property name="margin">
              <number>0</number>
             </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>File(s):</string>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="1">
              <widget class="QWidget" name="widget_2" native="true">
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <property name="margin">
                 <number>0</number>
                </property>
-               <item>
-                <widget class="QLineEdit" name="sourceFileBox"/>
-               </item>
-               <item>
-                <widget class="QPushButton" name="sourceFileChooseButton">
-                 <property name="text">
-                  <string>...</string>
-                 </property>
-                </widget>
-               </item>
               </layout>
              </widget>
             </item>
@@ -164,29 +147,12 @@
             <property name="margin">
              <number>0</number>
             </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>File(s):</string>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="1">
              <widget class="QWidget" name="widget_3" native="true">
               <layout class="QHBoxLayout" name="horizontalLayout_5">
                <property name="margin">
                 <number>0</number>
                </property>
-               <item>
-                <widget class="QLineEdit" name="destFileBox"/>
-               </item>
-               <item>
-                <widget class="QPushButton" name="destFileChooseButton">
-                 <property name="text">
-                  <string>...</string>
-                 </property>
-                </widget>
-               </item>
               </layout>
              </widget>
             </item>
@@ -212,6 +178,7 @@
             </sizepolicy>
            </property>
            <widget class="QWidget" name="defaultEncoderOptions"/>
+           <widget class="HolovideoCodecOptionsController" name="holovideoEncodeOptions"/>
            <widget class="DepthmapCodecOptionsController" name="depthMapOptions"/>
           </widget>
          </item>

@@ -16,6 +16,9 @@ class HolovideoCodecOptionsController : public QWidget, private Ui::HolovideoCod
 {
   Q_OBJECT
 
+private:
+  HolovideoCodec* m_codec;
+
 public:
   HolovideoCodecOptionsController(QWidget* parent = 0);
   ~HolovideoCodecOptionsController();

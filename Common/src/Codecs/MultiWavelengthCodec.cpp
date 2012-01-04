@@ -31,7 +31,7 @@ void MultiWavelengthCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, stri
   m_glWidget = glWidget;
 
   m_glWidget->setGLContext(&m_coder);
-  m_glWidget->setEncodingContext(&m_coder);
+  m_glWidget->setDecodingContext(&m_coder);
   m_glWidget->reinit(getDecodeStreamWidth(), getDecodeStreamHeight());
 }
 

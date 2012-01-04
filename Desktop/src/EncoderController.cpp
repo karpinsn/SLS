@@ -23,7 +23,7 @@ void EncoderController::exportCurrentFrame(void)
   if(!fileName.isEmpty())
   {
     ImageIO io;
-    Texture holoimage = m_encoder.encode();
+    Texture holoimage = m_encoder.encodeOldWay();
     io.saveTexture(fileName.toAscii().constData(), holoimage);
   }
 }
@@ -57,7 +57,7 @@ void EncoderController::exportEntireVideo(QListWidget* fileList)
         AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toAscii().constData());
         m_encoder.setCurrentMesh(currentMesh);
 
-        Texture holoimage = m_encoder.encode();
+        Texture holoimage = m_encoder.encodeOldWay();
         io.saveStream(holoimage);
       }
 
@@ -139,6 +139,10 @@ void EncoderController::newEncoder(const QString& text)
   {
     encoderOptionsStackedWidget->setCurrentWidget(depthMapOptions);
   }
+  else if(0 == QString(HolovideoCodec::codecName().c_str()).compare(text))
+  {
+	encoderOptionsStackedWidget->setCurrentWidget(holovideoEncodeOptions);
+  }
   else
   {
     decoderOptionsStackedWidget->setCurrentWidget(defaultEncoderOptions);
@@ -209,6 +213,7 @@ void EncoderController::_addCodecs(void)
 
   //  Add encoders
   encoderComboBox->addItem(QString(DepthCodec::codecName().c_str()));
+  encoderComboBox->addItem(QString(HolovideoCodec::codecName().c_str()));
 }
 
 Codec* EncoderController::_getEncoder(void)
@@ -219,6 +224,10 @@ Codec* EncoderController::_getEncoder(void)
   {
 	//	Create and initalize a new depth codec
 	encoder = depthMapOptions->getCodec();
+  }
+  else if(0 == QString(HolovideoCodec::codecName().c_str()).compare(encoderComboBox->currentText()))
+  {
+	encoder = holovideoOptions->getCodec();
   }
   else
   {

@@ -1,9 +1,14 @@
 #include "XYZMCodec.h"
 
+XYZMCodec::XYZMCodec(const QListWidget* xyzmList)
+{
+  m_listPosition = 0;
+  m_xyzmList = xyzmList;
+}
+
 void XYZMCodec::openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height)
 {
   //  Open the stream to write to
-
 }
 
 void XYZMCodec::encode(MeshInterchange& data)
@@ -24,7 +29,6 @@ void XYZMCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, string& filenam
 	return;
   }
 
-  m_mesh = m_io.newMeshFromFile(filename);
   m_glWidget = glWidget;
 }
 
@@ -36,13 +40,21 @@ MeshInterchange* XYZMCodec::decode()
     return NULL;
   }
 
-  if(NULL == m_mesh)
+  AbstractMesh* mesh = NULL;
+  if(NULL != m_xyzmList && m_listPosition < m_xyzmList->count())
+  {
+	QListWidgetItem *item = m_xyzmList->item(m_listPosition);
+	mesh = m_io.newMeshFromFile(item->text().toAscii().constData());
+	m_listPosition++; // Dont forget to increment the position
+  }
+
+  if(NULL == mesh)
   {
 	//	At the end of the file
 	return NULL;
   }
 
-  return new MeshInterchange(m_mesh);
+  return new MeshInterchange(mesh);
 }
 
 void XYZMCodec::closeDecodeStream(void)
@@ -52,28 +64,44 @@ void XYZMCodec::closeDecodeStream(void)
 
 int XYZMCodec::getDecodeStreamWidth(void)
 {
-  if(NULL == m_mesh)
+  if(NULL != m_xyzmList && m_listPosition < m_xyzmList->count())
   {
-    return 0;
-  }
+	QListWidgetItem *item = m_xyzmList->item(m_listPosition);
+	AbstractMesh* mesh = m_io.newMeshFromFile(item->text().toAscii().constData());
+	int width = ((XYZMesh*)mesh)->getMeshWidth();
+	delete mesh;
 
-  return ((XYZMesh*)m_mesh)->getMeshWidth();
+	return width;
+  }
+  
+  return 0;
 }
 
 int XYZMCodec::getDecodeStreamHeight(void)
 {
-  if(NULL == m_mesh)
+  if(NULL != m_xyzmList && m_listPosition < m_xyzmList->count())
   {
-    return 0;
-  }
+	QListWidgetItem *item = m_xyzmList->item(m_listPosition);
+	AbstractMesh* mesh = m_io.newMeshFromFile(item->text().toAscii().constData());
+	int height = ((XYZMesh*)mesh)->getMeshHeight();
+	delete mesh;
 
-  return ((XYZMesh*)m_mesh)->getMeshHeight();
+	return height;
+  }
+  
+  return 0;
 }
 
 float XYZMCodec::getDecodeStreamProgress(void)
 {
-  //  TODO fix this position
-  return 1;
+  float progress = 0.0f;
+  
+  if(NULL != m_xyzmList)
+  {
+	progress = (float)m_xyzmList->count()/(float)m_listPosition;
+  }
+
+  return progress;
 }
 
 string XYZMCodec::codecName(void)

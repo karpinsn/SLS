@@ -16,6 +16,9 @@ class DepthmapCodecOptionsController : public QWidget, private Ui::DepthmapCodec
 {
   Q_OBJECT
 
+private:
+  DepthCodec* m_codec;
+
 public:
   DepthmapCodecOptionsController(QWidget* parent = 0);
   ~DepthmapCodecOptionsController();

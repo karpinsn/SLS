@@ -15,9 +15,13 @@ class XYZMCodec : public Codec
 private:
   XYZFileIO m_io;
   EncodingOpenGLWidget* m_glWidget;
-  AbstractMesh* m_mesh;
+
+  const QListWidget *m_xyzmList;
+  int m_listPosition;
 
 public:
+  XYZMCodec(const QListWidget* xyzmList);
+
   void openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height);
   void encode(MeshInterchange& data);
   void closeEncodeStream(void);

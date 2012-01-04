@@ -4,27 +4,34 @@ MeshInterchange::MeshInterchange()
 {
   m_image = NULL;
   m_texture = NULL;
+  m_mesh = NULL;
 }
 
 MeshInterchange::MeshInterchange(IplImage* image)
 {
   m_texture = NULL;
   m_image = image;
+  m_mesh = NULL;
 }
 
 MeshInterchange::MeshInterchange(Texture* texture)
 {
   m_image = NULL;
   m_texture = texture;
+  m_mesh = NULL;
 }
 
 MeshInterchange::MeshInterchange(Texture& texture)
 {
+  m_image = NULL;
   m_texture = &texture;
+  m_mesh = NULL;
 }
 
 MeshInterchange::MeshInterchange(AbstractMesh* mesh)
 {
+  m_image = NULL;
+  m_texture = NULL;
   m_mesh = mesh;
 }
 

@@ -8,6 +8,7 @@
 #include "../VideoIO.h"
 
 #include "Holodecoder.h"
+#include "Holoencoder.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ class HolovideoCodec : public Codec
 private:
   VideoIO m_io;
   Holodecoder m_decoder;
+  Holoencoder m_encoder;
   EncodingOpenGLWidget* m_glWidget;
 
 public:

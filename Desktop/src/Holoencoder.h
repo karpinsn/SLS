@@ -36,11 +36,13 @@
 
 #include "AbstractMesh.h"
 #include "AbstractGLContext.h"
+#include "MeshInterchange.h"
+#include "EncodingGLContext.h"
 
 using namespace std;
 using namespace wrench::gl;
 
-class Holoencoder : public AbstractGLContext
+class Holoencoder : public AbstractGLContext, public EncodingGLContext
 {
 private:
         ShaderProgram m_encoderShader;
@@ -71,13 +73,16 @@ public:
         virtual void          init();
         virtual void          init(float width, float height);
         virtual void          draw(void);
-        wrench::gl::Texture&  encode();
+        wrench::gl::Texture&  encodeOldWay();
         virtual void          resize(int width, int height);
         virtual void          cameraSelectMode(int mode);
         virtual void          mousePressEvent(int mouseX, int mouseY);
         virtual void          mouseMoveEvent(int mouseX, int mouseY);
         void                  setCurrentMesh(AbstractMesh* current);
-	
+		void				  setCurrentMesh(MeshInterchange* current);
+		void				  encode(void);
+		MeshInterchange*	  getEncodedData(void);
+
 private:
         void _initFBO(void);
         void _initShaders(void);

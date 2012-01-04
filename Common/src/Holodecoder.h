@@ -29,7 +29,7 @@
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
 #include "AbstractGLContext.h"
-#include "EncodingGLContext.h"
+#include "DecodingGLContext.h"
 
 #include <wrench/gl/Camera.h>
 #include <wrench/gl/ShaderProgram.h>
@@ -46,7 +46,7 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class Holodecoder : public AbstractGLContext, public EncodingGLContext
+class Holodecoder : public AbstractGLContext, public DecodingGLContext
 {
 public:	//	TODO Comeback and FIX this
     ShaderProgram m_phaseCalculator;

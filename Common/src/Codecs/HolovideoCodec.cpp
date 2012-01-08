@@ -1,6 +1,20 @@
 #include "HolovideoCodec.h"
 
-void HolovideoCodec::openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height)
+HolovideoCodec::HolovideoCodec()
+{
+  m_width	  = -1;
+  m_height	  = -1;
+  m_filename  = "";
+}
+
+void HolovideoCodec::initCodec(string& filename, int width, int height)
+{
+  m_width	  = width;
+  m_height	  = height;
+  m_filename  = filename;
+}
+
+void HolovideoCodec::openEncodeStream(EncodingOpenGLWidget* glWidget)
 {
   //  Open the stream to write to
   if(NULL == glWidget)
@@ -12,9 +26,9 @@ void HolovideoCodec::openEncodeStream(EncodingOpenGLWidget* glWidget, string& fi
   m_glWidget = glWidget;
   m_glWidget->setEncodingContext(&m_encoder);
   m_glWidget->setGLContext(&m_encoder);
-  m_glWidget->reinit(width, height);
+  m_glWidget->reinit(m_width, m_height);
 
-  m_io.openSaveStream(filename, width, height, 30);
+  m_io.openSaveStream(m_filename, m_width, m_height, 30);
 }
 
 void HolovideoCodec::encode(MeshInterchange& data)
@@ -31,6 +45,20 @@ void HolovideoCodec::encode(MeshInterchange& data)
 
   //  Encode to the stream
   m_io.saveStream(*(mesh->getTexture()));
+}
+
+void HolovideoCodec::previewEncode(MeshInterchange& data)
+{
+  if(NULL == m_glWidget)
+  {
+    //  No OpenGL encoding widget. Return. Should error
+    return;
+  }
+
+  m_encoder.setCurrentMesh(&data);
+
+  //  Dont want to encode, only draw
+  m_glWidget->updateScene();
 }
 
 void HolovideoCodec::closeEncodeStream(void)

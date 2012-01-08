@@ -6,8 +6,7 @@ XYZMCodecOptionsController::XYZMCodecOptionsController(QWidget* parent) : QWidge
 
   setupUi(this);
 
-  //  Connect signals with controller
-  connect(addButton, SIGNAL(clicked()), this, SLOT(addFiles()));
+  _connectSignalsWithController();
 }
 
 XYZMCodecOptionsController::~XYZMCodecOptionsController()
@@ -50,4 +49,10 @@ void XYZMCodecOptionsController::addFiles(void)
 			xyzmListWidget->setCurrentRow(0);
 		}
 	}
+}
+
+void XYZMCodecOptionsController::_connectSignalsWithController(void)
+{
+  //  Connect signals with controller
+  connect(addButton, SIGNAL(clicked()), this, SLOT(addFiles()));
 }

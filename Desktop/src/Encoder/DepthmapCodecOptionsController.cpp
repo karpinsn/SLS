@@ -50,7 +50,18 @@ Codec* DepthmapCodecOptionsController::getCodec(void)
   return m_codec;
 }
 
+void DepthmapCodecOptionsController::selectFile(void)
+{
+  QString file = QFileDialog::getOpenFileName(this, "Select source file to Open", "/", "Video (*.avi)");
+
+  if(!file.isEmpty())
+  {
+	sourceFileBox->setText(file);
+  }
+}
+
 void DepthmapCodecOptionsController::_connectSignalsWithController(void)
 {
   connect(contrastStretchCheckBox, SIGNAL(stateChanged(int)), this, SLOT(contrastStretchValueChange(int)));
+  connect(sourceFileChooseButton, SIGNAL(clicked()), this, SLOT(selectFile()));
 }

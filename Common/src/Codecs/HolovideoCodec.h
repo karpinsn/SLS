@@ -20,9 +20,16 @@ private:
   Holoencoder m_encoder;
   EncodingOpenGLWidget* m_glWidget;
 
+  int m_width;
+  int m_height;
+  string m_filename;
+
 public:
-  void openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height);
+  HolovideoCodec();
+  void initCodec(string& filename, int width, int height);
+  void openEncodeStream(EncodingOpenGLWidget* glWidget);
   void encode(MeshInterchange& data);
+  void previewEncode(MeshInterchange& data);
   void closeEncodeStream(void);
 
   void openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename);

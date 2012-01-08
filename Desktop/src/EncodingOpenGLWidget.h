@@ -69,6 +69,9 @@ public:
 protected:
   void paintGL();
   void resizeGL(int width, int height);
+  void mousePressEvent(QMouseEvent *event);
+  void mouseMoveEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent* event);
 };
 
 #endif	// _ENCODING_OPEN_GL_WIDGET_H_

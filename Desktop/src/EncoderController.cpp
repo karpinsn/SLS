@@ -93,26 +93,6 @@ void EncoderController::_updateGL(void)
   }
 }
 
-void EncoderController::selectSourceFile(void)
-{
-  QString file = QFileDialog::getOpenFileName(this, "Select source file to Open", "/", "Video (*.avi)");
-
-  if(!file.isEmpty())
-  {
-	sourceFileBox->setText(file);
-  }
-}
-
-void EncoderController::selectDestinationFile(void)
-{
-  QString file = QFileDialog::getOpenFileName(this, "Select destination file to save to", "/", "Video (*.avi)");
-
-  if(!file.isEmpty())
-  {
-	destFileBox->setText(file);
-  }
-}
-
 void EncoderController::newDecoder(const QString& text)
 {
   if(0 == QString(MultiWavelengthCodec::codecName().c_str()).compare(text))
@@ -147,6 +127,11 @@ void EncoderController::newEncoder(const QString& text)
   {
     decoderOptionsStackedWidget->setCurrentWidget(defaultEncoderOptions);
   }
+
+  if(this->isVisible())
+  {
+	_previewEncoding();
+  }
 }
 
 void EncoderController::encode(void)
@@ -161,14 +146,9 @@ void EncoderController::encode(void)
   }
 
   //  Setup decoder
-  QString sourceFilename = sourceFileBox->text();
-  string str = sourceFilename.toLocal8Bit().constData();
+  string str = "TODO.fix";
   decoder->openDecodeStream(decoderGLWidget, str);
-
-  //  Setup encoder
-  QString destFilename = destFileBox->text();
-  string str2 = destFilename.toLocal8Bit().constData();
-  encoder->openEncodeStream(encoderGLWidget, str2, decoder->getDecodeStreamWidth(), decoder->getDecodeStreamHeight());
+  encoder->openEncodeStream(encoderGLWidget);
 
   //  As long as we have meshes decode and encode them
   MeshInterchange* mesh = decoder->decode();
@@ -189,17 +169,11 @@ void EncoderController::encode(void)
   //  Make sure our codec widgets are not pointing to anything
   encoderGLWidget->setGLContext(NULL);
   decoderGLWidget->setGLContext(NULL);
-
-  //  Delete the encoder and decoder
-  delete decoder;
-  delete encoder;
 }
 
 void EncoderController::_connectSignalsWithController(void)
 {
   connect(encodeButton,				SIGNAL(clicked()), this, SLOT(encode()));
-  connect(sourceFileChooseButton,	SIGNAL(clicked()), this, SLOT(selectSourceFile()));
-  connect(destFileChooseButton,		SIGNAL(clicked()), this, SLOT(selectDestinationFile()));
   connect(decoderComboBox,			SIGNAL(currentIndexChanged(const QString&)), this, SLOT(newDecoder(const QString&)));
   connect(encoderComboBox,			SIGNAL(currentIndexChanged(const QString&)), this, SLOT(newEncoder(const QString&)));
 }
@@ -216,6 +190,33 @@ void EncoderController::_addCodecs(void)
   encoderComboBox->addItem(QString(HolovideoCodec::codecName().c_str()));
 }
 
+void EncoderController::_previewEncoding(void)
+{
+  Codec* decoder = _getDecoder();
+  Codec* encoder = _getEncoder();
+
+  if(NULL == decoder || NULL == encoder)
+  {
+	//	Invalid codec
+	return;
+  }
+
+  string str = "TODO fix";
+  decoder->openDecodeStream(decoderGLWidget, str);
+  encoder->openEncodeStream(encoderGLWidget);
+
+  MeshInterchange* mesh = decoder->decode();
+
+  if(NULL != mesh)
+  {
+    encoder->previewEncode(*mesh);
+  }
+
+  //  Close up
+  encoder->closeEncodeStream();
+  decoder->closeDecodeStream();
+}
+
 Codec* EncoderController::_getEncoder(void)
 {
   Codec* encoder = NULL;
@@ -227,7 +228,7 @@ Codec* EncoderController::_getEncoder(void)
   }
   else if(0 == QString(HolovideoCodec::codecName().c_str()).compare(encoderComboBox->currentText()))
   {
-	encoder = holovideoOptions->getCodec();
+	encoder = holovideoEncodeOptions->getCodec();
   }
   else
   {

@@ -28,6 +28,7 @@ public:
 
 public slots:
   void contrastStretchValueChange(int checkState);
+  void selectFile(void);
 
 private:
   void _connectSignalsWithController(void);

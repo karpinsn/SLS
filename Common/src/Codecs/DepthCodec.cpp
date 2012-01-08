@@ -1,13 +1,23 @@
 #include "DepthCodec.h"
 
-void DepthCodec::openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height)
+void DepthCodec::openEncodeStream(EncodingOpenGLWidget* glWidget)
 {
+  //  TODO comeback and fix this
+  string filename = "";
+  int width = 512;
+  int height = 512;
+
   //  Open the stream to write to
   m_io.openSaveStream(filename, width, height, 30);
 
   m_floatImageHandleThreeChannel = cvCreateImage(cvSize(width, height), IPL_DEPTH_32F, 3);
   m_floatImageHandleSingleChannel = cvCreateImage(cvSize(width, height), IPL_DEPTH_32F, 1);
   m_byteImageHandle = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+}
+
+void DepthCodec::previewEncode(MeshInterchange& data)
+{
+  return; //  TODO comeback and fix this
 }
 
 void DepthCodec::encode(MeshInterchange& data)

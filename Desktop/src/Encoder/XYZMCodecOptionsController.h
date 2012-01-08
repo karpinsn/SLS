@@ -26,6 +26,9 @@ public:
 
   public slots:
 	void addFiles(void);
+
+private:
+  void _connectSignalsWithController(void);
 };
 
 #endif	// _XYZM_CODEC_OPTIONS_CONTROLLER_H_

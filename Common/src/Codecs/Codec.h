@@ -9,8 +9,9 @@ class Codec
 public:
   virtual ~Codec() {};
 
-  virtual void openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height) = 0;
+  virtual void openEncodeStream(EncodingOpenGLWidget* glWidget) = 0;
   virtual void encode(MeshInterchange& data) = 0;
+  virtual void previewEncode(MeshInterchange& data) = 0;
   virtual void closeEncodeStream(void) = 0;
 
   virtual void openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename) = 0;

@@ -48,9 +48,6 @@ public:
 
 public slots:
   void encode(void);
-  void selectSourceFile(void);
-  void selectDestinationFile(void);
-
   void newEncoder(const QString& text);
   void newDecoder(const QString& text);
 
@@ -58,6 +55,7 @@ private:
   void _updateGL(void);
   void _connectSignalsWithController(void);
   void _addCodecs(void);
+  void _previewEncoding(void);
 
   Codec* _getEncoder(void);
   Codec* _getDecoder(void);

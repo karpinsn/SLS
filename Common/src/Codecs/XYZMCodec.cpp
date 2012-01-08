@@ -6,9 +6,14 @@ XYZMCodec::XYZMCodec(const QListWidget* xyzmList)
   m_xyzmList = xyzmList;
 }
 
-void XYZMCodec::openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height)
+void XYZMCodec::openEncodeStream(EncodingOpenGLWidget* glWidget)
 {
   //  Open the stream to write to
+}
+
+void XYZMCodec::previewEncode(MeshInterchange& data)
+{
+  return; // TODO comeback and fix this
 }
 
 void XYZMCodec::encode(MeshInterchange& data)

@@ -26,8 +26,9 @@ private:
   float m_maxContrastValue;
 
 public:
-  void openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height);
+  void openEncodeStream(EncodingOpenGLWidget* glWidget);
   void encode(MeshInterchange& data);
+  void previewEncode(MeshInterchange& data);
   void closeEncodeStream(void);
 
   void openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename);

@@ -111,6 +111,11 @@ void EncodingOpenGLWidget::paintGL()
 	{
 	  m_glContext->draw();
 	}
+	else
+	{
+	  //  Neither encode or decode, probably preview. Just draw
+	  m_glContext->draw();
+	}
   }
 
   glPopMatrix();
@@ -136,4 +141,21 @@ void EncodingOpenGLWidget::resizeGL(int width, int height)
   }
 
   glMatrixMode(GL_MODELVIEW);
+}
+
+void EncodingOpenGLWidget::mousePressEvent(QMouseEvent *event)
+{
+  m_glContext->mousePressEvent(event->pos().x(), event->pos().y());
+  updateGL();
+}
+
+void EncodingOpenGLWidget::mouseMoveEvent(QMouseEvent *event)
+{
+  m_glContext->mouseMoveEvent(event->pos().x(), event->pos().y());
+  updateGL();
+}
+
+void EncodingOpenGLWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+  updateGL();
 }

@@ -1,9 +1,18 @@
 #include "MultiWavelengthCodec.h"
 
-void MultiWavelengthCodec::openEncodeStream(EncodingOpenGLWidget* glWidget, string& filename, int width, int height)
+void MultiWavelengthCodec::openEncodeStream(EncodingOpenGLWidget* glWidget)
 {
+  string filename = "";
+  int width = 512;
+  int height = 512;
+
   //  Open the stream to write to
   m_io.openSaveStream(filename, width, height, 30);
+}
+
+void MultiWavelengthCodec::previewEncode(MeshInterchange& data)
+{
+  return; //  TODO comeback and fix this
 }
 
 void MultiWavelengthCodec::encode(MeshInterchange& data)

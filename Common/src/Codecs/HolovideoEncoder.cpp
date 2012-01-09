@@ -67,5 +67,5 @@ void HolovideoEncoder::previewProcess(MeshInterchange* data)
 
 string HolovideoEncoder::codecName(void)
 {
-  return "Holovideo Codec";
+  return "Holovideo Encoder";
 }

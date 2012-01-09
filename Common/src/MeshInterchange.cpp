@@ -99,5 +99,5 @@ int MeshInterchange::getWidth()
 bool MeshInterchange::isEmpty()
 {
   //  If the texture and image are both NULL then its empty
-  return NULL == m_texture && NULL == m_image;
+  return NULL == m_texture && NULL == m_image && NULL == m_mesh;
 }

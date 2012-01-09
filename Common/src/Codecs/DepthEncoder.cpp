@@ -66,5 +66,5 @@ void DepthEncoder::disableContrastStretching()
 
 string DepthEncoder::codecName(void)
 {
-  return "Depthmap Codec";
+  return "Depthmap Encoder";
 }

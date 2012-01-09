@@ -103,5 +103,5 @@ void MultiWavelengthDecoder::setScalingFactor(float scaling)
 
 string MultiWavelengthDecoder::codecName(void)
 {
-  return "Multi Wavelength Codec";
+  return "Multi Wavelength Decoder";
 }

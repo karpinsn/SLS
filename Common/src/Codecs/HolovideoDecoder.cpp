@@ -76,5 +76,5 @@ float HolovideoDecoder::getStreamLocation(void)
 
 string HolovideoDecoder::codecName(void)
 {
-  return "Holovideo Codec";
+  return "Holovideo Decoder";
 }

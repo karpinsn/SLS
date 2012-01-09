@@ -90,15 +90,21 @@ void EncoderController::encode(void)
   //  As long as we have meshes decode and encode them
   MeshInterchange* mesh = new MeshInterchange();
   decoder->process(mesh);
-  while(NULL != mesh)
+  while(NULL != mesh && !mesh->isEmpty())
   {
 	// Indicate to the user the current progress
     encodingProgress->setValue(decoder->getStreamLocation() * 100);
 
     encoder->process(mesh);
-    delete mesh;
+	
+	//	TODO Comeback and fix this
+	delete mesh->getMesh();
+	mesh->setMesh(NULL);
+
     decoder->process(mesh);
   }
+
+  delete mesh;
 
   //  Close up
   encoder->closeCodec();

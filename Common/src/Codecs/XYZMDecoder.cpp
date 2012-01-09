@@ -99,5 +99,5 @@ float XYZMDecoder::getStreamLocation(void)
 
 string XYZMDecoder::codecName(void)
 {
-  return "XYZM Codec";
+  return "XYZM Decoder";
 }

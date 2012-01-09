@@ -24,9 +24,9 @@ void HolovideoEncoder::openCodec(EncodingOpenGLWidget* glWidget)
   m_glWidget = glWidget;
   m_glWidget->setEncodingContext(&m_encoder);
   m_glWidget->setGLContext(&m_encoder);
-  m_glWidget->reinit(m_width, m_height);
+  m_glWidget->reinit(getWidth(), getHeight());
 
-  m_io.openSaveStream(m_filename, m_width, m_height, 30);
+  m_io.openSaveStream(m_filename, getWidth(), getHeight(), 30);
 }
 
 void HolovideoEncoder::closeCodec(void)

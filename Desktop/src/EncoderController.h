@@ -34,16 +34,9 @@ class EncoderController : public QWidget, private Ui::Encode
 {
   Q_OBJECT
 
-private:
-  Holoencoder m_encoder;
-
 public:
   EncoderController(QWidget* parent = 0);
   ~EncoderController();
-
-  void exportCurrentFrame(void);
-  void exportEntireVideo(QListWidget* fileList);
-  void selectXYZM(const string &filename);
 
   void init(void);
 

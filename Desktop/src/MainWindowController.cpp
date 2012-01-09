@@ -16,17 +16,6 @@ void MainWindowController::showWidget()
   m_mainWindow->show();
 }
 
-void MainWindowController::exportSingleFrame()
-{
-	Logger::logDebug("MainWindowController - exportSingleFrame: Enter");
-    m_mainWindow->encodeController->exportCurrentFrame();
-}
-
-void MainWindowController::exportEntireVideo()
-{
-    m_mainWindow->encodeController->exportEntireVideo(m_mainWindow->fileList);
-}
-
 void MainWindowController::onOpenXYZM()
 {
 	QStringList files = QFileDialog::getOpenFileNames(m_mainWindow, "Select XYZM Files to Open", "/", "Images (*.xyzm)");
@@ -48,12 +37,6 @@ void MainWindowController::onOpenXYZM()
 			m_mainWindow->fileList->setCurrentRow(0);
 		}
 	}
-}
-
-void MainWindowController::selectXYZM(QListWidgetItem* current, QListWidgetItem* previous)
-{
-	Logger::logDebug("MainWindowController - selectXYZM: Enter");
-    m_mainWindow->encodeController->selectXYZM(current->text().toAscii().constData());
 }
 
 void MainWindowController::playVideo(void)

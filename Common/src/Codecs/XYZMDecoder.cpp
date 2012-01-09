@@ -47,7 +47,7 @@ void XYZMDecoder::process(MeshInterchange* data)
   }
 
   //  TODO Comeback and fix this
-  data = new MeshInterchange(mesh);
+  data->setMesh(mesh);
 }
 
 void XYZMDecoder::previewProcess(MeshInterchange* data)

@@ -47,10 +47,7 @@ public:
 	void showWidget();
 
 public slots:
-	void exportSingleFrame();
-	void exportEntireVideo();
 	void onOpenXYZM();
-	void selectXYZM(QListWidgetItem* current, QListWidgetItem* previous);
 	void playVideo(void);
 	void openHoloImage(void);
 	

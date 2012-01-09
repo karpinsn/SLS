@@ -70,7 +70,6 @@ set(LIBS ${LIBS} wrench)
 add_subdirectory(../../Libraries/Lens/src/lens ${PROJECT_BINARY_DIR}/Libraries/Lens)
 include_directories(../../Libraries/Lens/src)
 include_directories(${LENS_INCLUDE_DIRS})
-
 set(LIBS ${LIBS} lens "${LENS_LIBRARIES}")
 
 #	-----------------------------------------
@@ -79,6 +78,14 @@ set(LIBS ${LIBS} lens "${LENS_LIBRARIES}")
 add_subdirectory(../../Libraries/Antenna/src/antenna ${PROJECT_BINARY_DIR}/Libraries/Antenna)
 include_directories(../../Libraries/Antenna/src)
 set(LIBS ${LIBS} antenna)
+
+#	-----------------------------------------
+#	Reactor
+#	-----------------------------------------
+add_subdirectory(../../Libraries/Reactor/src/reactor ${PROJECT_BINARY_DIR}/Libraries/Reactor)
+include_directories(../../Libraries/Reactor/src)
+include_directories(${REACTOR_INCLUDE_DIRS})
+set(LIBS ${LIBS} reactor "${REACTOR_LIBRARIES}")
 
 #	-----------------------------------------
 #	Common

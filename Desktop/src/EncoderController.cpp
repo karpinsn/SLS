@@ -13,68 +13,6 @@ EncoderController::~EncoderController()
 
 void EncoderController::init(void)
 {
-  encoderGLWidget->setGLContext(&m_encoder);
-}
-
-void EncoderController::exportCurrentFrame(void)
-{
-  QString fileName = QFileDialog::getSaveFileName(this, "Save File", "/", "Images (*.png)");
-
-  if(!fileName.isEmpty())
-  {
-    ImageIO io;
-    Texture holoimage = m_encoder.encodeOldWay();
-    io.saveTexture(fileName.toAscii().constData(), holoimage);
-  }
-}
-
-void EncoderController::exportEntireVideo(QListWidget* fileList)
-{
-  Logger::logDebug("EncoderController - exportEntireVideo: Enter");
-
-  QString fileName = QFileDialog::getSaveFileName(this, "Save File", "/", "Video (*.avi)");
-
-  if(!fileName.isEmpty())
-  {
-    VideoIO io;
-    bool canSaveFile = io.openSaveStream(fileName.toAscii().constData(), 512, 512, 30);
-
-    if(canSaveFile)
-    {
-      XYZFileIO fileIO;
-
-      //	Inform the user of the progress
-      QProgressDialog progress("Encoding frames...", 0, 0, fileList->count(), this);
-
-      Logger::logDebug("EncoderController - exportEntireVideo: Encoding frames");
-      for(int itemNumber = 0; itemNumber < fileList->count(); itemNumber++)
-      {
-        //	Increase the progress
-        progress.setValue(itemNumber);
-
-        QListWidgetItem *item = fileList->item(itemNumber);
-
-        AbstractMesh* currentMesh = fileIO.newMeshFromFile(item->text().toAscii().constData());
-        m_encoder.setCurrentMesh(currentMesh);
-
-        Texture holoimage = m_encoder.encodeOldWay();
-        io.saveStream(holoimage);
-      }
-
-      //	Last one done!
-      progress.setValue(fileList->count());
-
-      Logger::logDebug("EncoderController - exportEntireVideo: Encoding complete!");
-      io.closeSaveStream();
-    }
-  }
-}
-
-void EncoderController::selectXYZM(const string &filename)
-{
-  XYZFileIO fileIO;
-  AbstractMesh* currentMesh = fileIO.newMeshFromFile(filename);
-  m_encoder.setCurrentMesh(currentMesh);
 }
 
 void EncoderController::_updateGL(void)
@@ -150,7 +88,7 @@ void EncoderController::encode(void)
   encoder->openCodec(encoderGLWidget);
 
   //  As long as we have meshes decode and encode them
-  MeshInterchange* mesh;
+  MeshInterchange* mesh = new MeshInterchange();
   decoder->process(mesh);
   while(NULL != mesh)
   {
@@ -204,7 +142,7 @@ void EncoderController::_previewEncoding(void)
   decoder->openCodec(decoderGLWidget);
   encoder->openCodec(encoderGLWidget);
 
-  MeshInterchange* mesh;
+  MeshInterchange* mesh = new MeshInterchange();
   decoder->process(mesh);
 
   if(NULL != mesh)

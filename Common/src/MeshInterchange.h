@@ -48,6 +48,10 @@ public:
 
   int getPreferedFormat(void);
 
+  void setTexture(Texture* texture);
+  void setIplImage(IplImage* image);
+  void setMesh(AbstractMesh* mesh);
+
   Texture*	getTexture(void);
   IplImage* getIplImage(void);
   AbstractMesh* getMesh(void);

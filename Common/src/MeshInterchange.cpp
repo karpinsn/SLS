@@ -55,6 +55,22 @@ int MeshInterchange::getPreferedFormat(void)
   }
 }
 
+void MeshInterchange::setTexture(Texture* texture)
+{
+}
+
+void MeshInterchange::setIplImage(IplImage* image)
+{
+}
+
+void MeshInterchange::setMesh(AbstractMesh* mesh)
+{
+  // TODO - Comeback and fix this
+  m_image = NULL;
+  m_texture = NULL;
+  m_mesh = mesh;
+}
+
 Texture* MeshInterchange::getTexture(void)
 {
   return m_texture;

@@ -7,3 +7,6 @@
 [submodule "Libraries/Lens"]
 	path = Libraries/Lens
 	url = git@github.com:karpinsn/Lens.git
+[submodule "Libraries/Reactor"]
+	path = Libraries/Reactor
+	url = git@github.com:karpinsn/Reactor.git

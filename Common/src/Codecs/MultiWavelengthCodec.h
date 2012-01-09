@@ -13,18 +13,20 @@ using namespace std;
 class MultiWavelengthCodec : public Codec
 {
 private:
-  VideoIO m_io;
-  MultiWavelengthCapture m_coder;
-  bool m_calculateReference;
-  EncodingOpenGLWidget* m_glWidget;
+  VideoIO				  m_io;
+  MultiWavelengthCapture  m_coder;
+  bool					  m_calculateReference;
+  EncodingOpenGLWidget*	  m_glWidget;
+  string				  m_filename;
 
 public:
+  MultiWavelengthCodec(string& filename);
   void openEncodeStream(EncodingOpenGLWidget* glWidget);
   void encode(MeshInterchange& data);
   void previewEncode(MeshInterchange& data);
   void closeEncodeStream(void);
 
-  void openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename);
+  void openDecodeStream(EncodingOpenGLWidget* glWidget);
   MeshInterchange* decode();
   void closeDecodeStream(void);
   int getDecodeStreamWidth(void);

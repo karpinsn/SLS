@@ -54,7 +54,7 @@ void DepthCodec::closeEncodeStream(void)
   m_io.closeSaveStream();
 }
 
-void DepthCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename)
+void DepthCodec::openDecodeStream(EncodingOpenGLWidget* glWidget)
 {
 }
 

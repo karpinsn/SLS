@@ -67,7 +67,7 @@ void HolovideoCodec::closeEncodeStream(void)
   m_io.closeSaveStream();
 }
 
-void HolovideoCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename)
+void HolovideoCodec::openDecodeStream(EncodingOpenGLWidget* glWidget)
 {
   if(NULL == glWidget)
   {
@@ -75,7 +75,7 @@ void HolovideoCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, string& fi
 	return;
   }
 
-  m_io.openReadStream(filename);
+  m_io.openReadStream(m_filename);
   m_glWidget = glWidget;
 
   m_glWidget->setGLContext(&m_decoder);

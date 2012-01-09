@@ -67,35 +67,53 @@ void OpenGLWidget::paintGL()
 
 void OpenGLWidget::resizeGL(int width, int height)
 {
-  glViewport(0, 0, width, height);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  m_glContext->resize(width, height);
+  if(NULL != m_glContext)
+  {
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	m_glContext->resize(width, height);
 
-  glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);
+  }
 }
 
 void OpenGLWidget::cameraSelectMode(int mode)
 {
-  m_glContext->cameraSelectMode(mode);
+  if(NULL != m_glContext)
+  {
+	m_glContext->cameraSelectMode(mode);
+  }
 }
 
 void OpenGLWidget::mousePressEvent(QMouseEvent *event)
 {
   std::cout << "Mouse Pressed: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
-  m_glContext->mousePressEvent(event->pos().x(), event->pos().y());
-  updateGL();
+  
+  if(NULL != m_glContext)
+  {
+	m_glContext->mousePressEvent(event->pos().x(), event->pos().y());
+	updateGL();
+  }
 }
 
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *event)
 {
   std::cout << "Mouse Moved: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
-  m_glContext->mouseMoveEvent(event->pos().x(), event->pos().y());
-  updateGL();
+
+  if(NULL != m_glContext)
+  {
+	m_glContext->mouseMoveEvent(event->pos().x(), event->pos().y());
+	updateGL();
+  }
 }
 
 void OpenGLWidget::mouseReleaseEvent(QMouseEvent* event)
 {
   std::cout << "Mouse Released: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
-  updateGL();
+  
+  if(NULL != m_glContext)
+  {
+	updateGL();
+  }
 }

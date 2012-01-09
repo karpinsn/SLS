@@ -25,6 +25,8 @@ void EncodingOpenGLWidget::reinit(float width, float height)
   m_width = width;
   m_height = height;
   glInit();
+
+  resizeGL(width, height);
 }
 
 void EncodingOpenGLWidget::initializeGL()
@@ -140,6 +142,7 @@ void EncodingOpenGLWidget::resizeGL(int width, int height)
     m_glContext->resize(width, height);
   }
 
+  cout << "Width x Height: " << width << " x " << height << endl;
   glMatrixMode(GL_MODELVIEW);
 }
 

@@ -11,8 +11,10 @@ MultiWavelengthCodecOptionsController::~MultiWavelengthCodecOptionsController()
 
 Codec* MultiWavelengthCodecOptionsController::getCodec(void)
 {
-  MultiWavelengthCodec* codec = new MultiWavelengthCodec();
+  QString sourceFilename = sourceFileBox->text();
+  string str = sourceFilename.toLocal8Bit().constData();
 
+  MultiWavelengthCodec* codec = new MultiWavelengthCodec(str);
   codec->setGammaCutoff(gammaCutoffBox->value());
   codec->setScalingFactor(scalingBox->value());
 

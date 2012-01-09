@@ -125,11 +125,10 @@ Texture& Holoencoder::encodeOldWay()
 
 void Holoencoder::resize(int width, int height)
 {
-    m_width = 512;
-    m_height = 512;
+    m_width = width;
+    m_height = height;
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 }
-
 
 void Holoencoder::cameraSelectMode(int mode)
 {

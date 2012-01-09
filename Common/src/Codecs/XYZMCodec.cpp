@@ -26,7 +26,7 @@ void XYZMCodec::closeEncodeStream(void)
   //  Close the stream
 }
 
-void XYZMCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename)
+void XYZMCodec::openDecodeStream(EncodingOpenGLWidget* glWidget)
 {
   if(NULL == glWidget)
   {

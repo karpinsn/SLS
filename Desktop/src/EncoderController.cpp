@@ -146,8 +146,7 @@ void EncoderController::encode(void)
   }
 
   //  Setup decoder
-  string str = "TODO.fix";
-  decoder->openDecodeStream(decoderGLWidget, str);
+  decoder->openDecodeStream(decoderGLWidget);
   encoder->openEncodeStream(encoderGLWidget);
 
   //  As long as we have meshes decode and encode them
@@ -201,8 +200,7 @@ void EncoderController::_previewEncoding(void)
 	return;
   }
 
-  string str = "TODO fix";
-  decoder->openDecodeStream(decoderGLWidget, str);
+  decoder->openDecodeStream(decoderGLWidget);
   encoder->openEncodeStream(encoderGLWidget);
 
   MeshInterchange* mesh = decoder->decode();

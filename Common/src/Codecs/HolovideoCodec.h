@@ -32,7 +32,7 @@ public:
   void previewEncode(MeshInterchange& data);
   void closeEncodeStream(void);
 
-  void openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename);
+  void openDecodeStream(EncodingOpenGLWidget* glWidget);
   MeshInterchange* decode();
   void closeDecodeStream(void);
   int getDecodeStreamWidth(void);

@@ -1,13 +1,17 @@
 #include "MultiWavelengthCodec.h"
 
+MultiWavelengthCodec::MultiWavelengthCodec(string& filename)
+{
+  m_filename = filename;
+}
+
 void MultiWavelengthCodec::openEncodeStream(EncodingOpenGLWidget* glWidget)
 {
-  string filename = "";
   int width = 512;
   int height = 512;
 
   //  Open the stream to write to
-  m_io.openSaveStream(filename, width, height, 30);
+  m_io.openSaveStream(m_filename, width, height, 30);
 }
 
 void MultiWavelengthCodec::previewEncode(MeshInterchange& data)
@@ -27,7 +31,7 @@ void MultiWavelengthCodec::closeEncodeStream(void)
   m_io.closeSaveStream();
 }
 
-void MultiWavelengthCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, string& filename)
+void MultiWavelengthCodec::openDecodeStream(EncodingOpenGLWidget* glWidget)
 {
   if(NULL == glWidget)
   {
@@ -35,7 +39,7 @@ void MultiWavelengthCodec::openDecodeStream(EncodingOpenGLWidget* glWidget, stri
     return;
   }
 
-  m_io.openReadStream(filename);
+  m_io.openReadStream(m_filename);
   m_calculateReference = true;
   m_glWidget = glWidget;
 

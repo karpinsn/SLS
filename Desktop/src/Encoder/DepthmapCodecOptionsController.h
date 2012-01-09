@@ -10,14 +10,14 @@
 
 #include <QWidget>
 
-#include "Codecs/DepthCodec.h"
+#include "Codecs/DepthEncoder.h"
 
 class DepthmapCodecOptionsController : public QWidget, private Ui::DepthmapCodecOptions
 {
   Q_OBJECT
 
 private:
-  DepthCodec* m_codec;
+  DepthEncoder* m_codec;
 
 public:
   DepthmapCodecOptionsController(QWidget* parent = 0);

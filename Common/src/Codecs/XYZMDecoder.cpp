@@ -1,32 +1,12 @@
-#include "XYZMCodec.h"
+#include "XYZMDecoder.h"
 
-XYZMCodec::XYZMCodec(const QListWidget* xyzmList)
+XYZMDecoder::XYZMDecoder(const QListWidget* xyzmList)
 {
   m_listPosition = 0;
   m_xyzmList = xyzmList;
 }
 
-void XYZMCodec::openEncodeStream(EncodingOpenGLWidget* glWidget)
-{
-  //  Open the stream to write to
-}
-
-void XYZMCodec::previewEncode(MeshInterchange& data)
-{
-  return; // TODO comeback and fix this
-}
-
-void XYZMCodec::encode(MeshInterchange& data)
-{
-  //  Encode to the stream
-}
-
-void XYZMCodec::closeEncodeStream(void)
-{
-  //  Close the stream
-}
-
-void XYZMCodec::openDecodeStream(EncodingOpenGLWidget* glWidget)
+void XYZMDecoder::openCodec(EncodingOpenGLWidget* glWidget)
 {
   if(NULL == glWidget)
   {
@@ -37,12 +17,18 @@ void XYZMCodec::openDecodeStream(EncodingOpenGLWidget* glWidget)
   m_glWidget = glWidget;
 }
 
-MeshInterchange* XYZMCodec::decode()
+void XYZMDecoder::closeCodec(void)
+{
+  m_glWidget = NULL;
+}
+
+void XYZMDecoder::process(MeshInterchange* data)
 {
   if(NULL == m_glWidget)
   {
     //  No OpenGL encoding widget. Return a NULL MeshInterchange
-    return NULL;
+    data = NULL;
+    return;
   }
 
   AbstractMesh* mesh = NULL;
@@ -56,18 +42,20 @@ MeshInterchange* XYZMCodec::decode()
   if(NULL == mesh)
   {
 	//	At the end of the file
-	return NULL;
+    data = NULL;
+    return;
   }
 
-  return new MeshInterchange(mesh);
+  //  TODO Comeback and fix this
+  data = new MeshInterchange(mesh);
 }
 
-void XYZMCodec::closeDecodeStream(void)
+void XYZMDecoder::previewProcess(MeshInterchange* data)
 {
-  m_glWidget = NULL;
+
 }
 
-int XYZMCodec::getDecodeStreamWidth(void)
+int XYZMDecoder::getWidth(void)
 {
   if(NULL != m_xyzmList && m_listPosition < m_xyzmList->count())
   {
@@ -82,7 +70,7 @@ int XYZMCodec::getDecodeStreamWidth(void)
   return 0;
 }
 
-int XYZMCodec::getDecodeStreamHeight(void)
+int XYZMDecoder::getHeight(void)
 {
   if(NULL != m_xyzmList && m_listPosition < m_xyzmList->count())
   {
@@ -97,7 +85,7 @@ int XYZMCodec::getDecodeStreamHeight(void)
   return 0;
 }
 
-float XYZMCodec::getDecodeStreamProgress(void)
+float XYZMDecoder::getStreamLocation(void)
 {
   float progress = 0.0f;
   
@@ -109,7 +97,7 @@ float XYZMCodec::getDecodeStreamProgress(void)
   return progress;
 }
 
-string XYZMCodec::codecName(void)
+string XYZMDecoder::codecName(void)
 {
   return "XYZM Codec";
 }

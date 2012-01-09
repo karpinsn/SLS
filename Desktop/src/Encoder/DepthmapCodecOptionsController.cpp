@@ -35,7 +35,7 @@ Codec* DepthmapCodecOptionsController::getCodec(void)
   // Lazy init
   if(NULL == m_codec)
   {
-	m_codec = new DepthCodec();
+    m_codec = new DepthEncoder();
   }
    
   if(Qt::Checked == contrastStretchCheckBox->checkState())

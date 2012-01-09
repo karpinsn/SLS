@@ -8,7 +8,7 @@
 //	Qt auto generated headers
 #include "ui_XYZMCodecOptions.h"
 
-#include "Codecs/XYZMCodec.h"
+#include "Codecs/XYZMDecoder.h"
 #include <QWidget>
 
 class XYZMCodecOptionsController : public QWidget, private Ui::XYZMCodecOptions
@@ -16,7 +16,7 @@ class XYZMCodecOptionsController : public QWidget, private Ui::XYZMCodecOptions
   Q_OBJECT
 
 private:
-  XYZMCodec* m_codec;
+  XYZMDecoder* m_codec;
 
 public:
   XYZMCodecOptionsController(QWidget* parent = 0);

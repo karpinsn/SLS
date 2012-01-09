@@ -95,15 +95,15 @@ void EncoderController::_updateGL(void)
 
 void EncoderController::newDecoder(const QString& text)
 {
-  if(0 == QString(MultiWavelengthCodec::codecName().c_str()).compare(text))
+  if(0 == QString(MultiWavelengthDecoder::codecName().c_str()).compare(text))
   {
     decoderOptionsStackedWidget->setCurrentWidget(multiWavelengthOptions);
   }
-  else if(0 == QString(HolovideoCodec::codecName().c_str()).compare(text))
+  else if(0 == QString(HolovideoDecoder::codecName().c_str()).compare(text))
   {
 	decoderOptionsStackedWidget->setCurrentWidget(holovideoOptions);
   }
-  else if(0 == QString(XYZMCodec::codecName().c_str()).compare(text))
+  else if(0 == QString(XYZMDecoder::codecName().c_str()).compare(text))
   {
     decoderOptionsStackedWidget->setCurrentWidget(xyzmOptions);
   }
@@ -115,11 +115,11 @@ void EncoderController::newDecoder(const QString& text)
 
 void EncoderController::newEncoder(const QString& text)
 {
-  if(0 == QString(DepthCodec::codecName().c_str()).compare(text))
+  if(0 == QString(DepthEncoder::codecName().c_str()).compare(text))
   {
     encoderOptionsStackedWidget->setCurrentWidget(depthMapOptions);
   }
-  else if(0 == QString(HolovideoCodec::codecName().c_str()).compare(text))
+  else if(0 == QString(HolovideoEncoder::codecName().c_str()).compare(text))
   {
 	encoderOptionsStackedWidget->setCurrentWidget(holovideoEncodeOptions);
   }
@@ -146,24 +146,25 @@ void EncoderController::encode(void)
   }
 
   //  Setup decoder
-  decoder->openDecodeStream(decoderGLWidget);
-  encoder->openEncodeStream(encoderGLWidget);
+  decoder->openCodec(decoderGLWidget);
+  encoder->openCodec(encoderGLWidget);
 
   //  As long as we have meshes decode and encode them
-  MeshInterchange* mesh = decoder->decode();
+  MeshInterchange* mesh;
+  decoder->process(mesh);
   while(NULL != mesh)
   {
 	// Indicate to the user the current progress
-	encodingProgress->setValue(decoder->getDecodeStreamProgress() * 100);
+    encodingProgress->setValue(decoder->getStreamLocation() * 100);
 
-    encoder->encode(*mesh);
+    encoder->process(mesh);
     delete mesh;
-    mesh = decoder->decode();
+    decoder->process(mesh);
   }
 
   //  Close up
-  encoder->closeEncodeStream();
-  decoder->closeDecodeStream();
+  encoder->closeCodec();
+  decoder->closeCodec();
 
   //  Make sure our codec widgets are not pointing to anything
   encoderGLWidget->setGLContext(NULL);
@@ -180,13 +181,13 @@ void EncoderController::_connectSignalsWithController(void)
 void EncoderController::_addCodecs(void)
 {
   //  Add decoders
-  decoderComboBox->addItem(QString(MultiWavelengthCodec::codecName().c_str()));
-  decoderComboBox->addItem(QString(HolovideoCodec::codecName().c_str()));
-  decoderComboBox->addItem(QString(XYZMCodec::codecName().c_str()));
+  decoderComboBox->addItem(QString(MultiWavelengthDecoder::codecName().c_str()));
+  decoderComboBox->addItem(QString(HolovideoDecoder::codecName().c_str()));
+  decoderComboBox->addItem(QString(XYZMDecoder::codecName().c_str()));
 
   //  Add encoders
-  encoderComboBox->addItem(QString(DepthCodec::codecName().c_str()));
-  encoderComboBox->addItem(QString(HolovideoCodec::codecName().c_str()));
+  encoderComboBox->addItem(QString(DepthEncoder::codecName().c_str()));
+  encoderComboBox->addItem(QString(HolovideoEncoder::codecName().c_str()));
 }
 
 void EncoderController::_previewEncoding(void)
@@ -200,31 +201,32 @@ void EncoderController::_previewEncoding(void)
 	return;
   }
 
-  decoder->openDecodeStream(decoderGLWidget);
-  encoder->openEncodeStream(encoderGLWidget);
+  decoder->openCodec(decoderGLWidget);
+  encoder->openCodec(encoderGLWidget);
 
-  MeshInterchange* mesh = decoder->decode();
+  MeshInterchange* mesh;
+  decoder->process(mesh);
 
   if(NULL != mesh)
   {
-    encoder->previewEncode(*mesh);
+    encoder->previewProcess(mesh);
   }
 
   //  Close up
-  encoder->closeEncodeStream();
-  decoder->closeDecodeStream();
+  encoder->closeCodec();
+  decoder->closeCodec();
 }
 
 Codec* EncoderController::_getEncoder(void)
 {
   Codec* encoder = NULL;
 
-  if(0 == QString(DepthCodec::codecName().c_str()).compare(encoderComboBox->currentText()))
+  if(0 == QString(DepthEncoder::codecName().c_str()).compare(encoderComboBox->currentText()))
   {
 	//	Create and initalize a new depth codec
 	encoder = depthMapOptions->getCodec();
   }
-  else if(0 == QString(HolovideoCodec::codecName().c_str()).compare(encoderComboBox->currentText()))
+  else if(0 == QString(HolovideoEncoder::codecName().c_str()).compare(encoderComboBox->currentText()))
   {
 	encoder = holovideoEncodeOptions->getCodec();
   }
@@ -241,15 +243,15 @@ Codec* EncoderController::_getDecoder(void)
 {
   Codec* decoder = NULL;
 
-  if(0 == QString(MultiWavelengthCodec::codecName().c_str()).compare(decoderComboBox->currentText()))
+  if(0 == QString(MultiWavelengthDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
   {
 	decoder = multiWavelengthOptions->getCodec();
   }
-  else if(0 == QString(HolovideoCodec::codecName().c_str()).compare(decoderComboBox->currentText()))
+  else if(0 == QString(HolovideoDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
   {
 	decoder = holovideoOptions->getCodec();
   }
-  else if(0 == QString(XYZMCodec::codecName().c_str()).compare(decoderComboBox->currentText()))
+  else if(0 == QString(XYZMDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
   {
     //  Return the XYZMCodec
     decoder = xyzmOptions->getCodec();

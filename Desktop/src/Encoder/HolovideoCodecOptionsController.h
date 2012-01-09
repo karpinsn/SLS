@@ -10,14 +10,14 @@
 
 #include <QWidget>
 
-#include "Codecs/HolovideoCodec.h"
+#include "Codecs/HolovideoEncoder.h"
 
 class HolovideoCodecOptionsController : public QWidget, private Ui::HolovideoCodecOptions
 {
   Q_OBJECT
 
 private:
-  HolovideoCodec* m_codec;
+  HolovideoEncoder* m_codec;
 
 public:
   HolovideoCodecOptionsController(QWidget* parent = 0);

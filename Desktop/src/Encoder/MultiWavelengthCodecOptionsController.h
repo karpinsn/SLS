@@ -10,7 +10,7 @@
 
 #include <QWidget>
 
-#include "Codecs/MultiWavelengthCodec.h"
+#include "Codecs/MultiWavelengthDecoder.h"
 
 class MultiWavelengthCodecOptionsController : public QWidget, private Ui::MultiWavelengthCodecOptions
 {

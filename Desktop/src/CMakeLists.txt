@@ -161,11 +161,12 @@ SET(SOURCES_COMMON_HEADERS
 )	
 
 SET(SOURCES_COMMON_CODECS_HEADERS
-	../../Common/src/Codecs/HolovideoCodec.h
-	../../Common/src/Codecs/MultiWavelengthCodec.h
 	../../Common/src/Codecs/Codec.h
-	../../Common/src/Codecs/DepthCodec.h
-    ../../Common/src/Codecs/XYZMCodec.h
+    ../../Common/src/Codecs/HolovideoEncoder.h
+    ../../Common/src/Codecs/HolovideoDecoder.h
+	../../Common/src/Codecs/MultiWavelengthDecoder.h
+	../../Common/src/Codecs/DepthEncoder.h
+    ../../Common/src/Codecs/XYZMDecoder.h
 )
 
 SET(SOURCES_COMMON_SOURCES
@@ -178,10 +179,11 @@ SET(SOURCES_COMMON_SOURCES
 )
 
 SET(SOURCES_COMMON_CODECS_SOURCES
-	../../Common/src/Codecs/HolovideoCodec.cpp
-	../../Common/src/Codecs/MultiWavelengthCodec.cpp
-	../../Common/src/Codecs/DepthCodec.cpp
-    ../../Common/src/Codecs/XYZMCodec.cpp
+	../../Common/src/Codecs/HolovideoEncoder.cpp
+    ../../Common/src/Codecs/HolovideoDecoder.cpp
+	../../Common/src/Codecs/MultiWavelengthDecoder.cpp
+	../../Common/src/Codecs/DepthEncoder.cpp
+    ../../Common/src/Codecs/XYZMDecoder.cpp
 )
 	
 # QT Files

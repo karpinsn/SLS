@@ -1,5 +1,5 @@
-#ifndef _DEPTH_CODEC_H_
-#define _DEPTH_CODEC_H_
+#ifndef _DEPTH_ENCODER_H_
+#define _DEPTH_ENCODER_H_
 
 #include <cv.h>
 #include <highgui.h>
@@ -12,7 +12,7 @@
 
 using namespace std;
 
-class DepthCodec : public Codec
+class DepthEncoder : public Codec
 {
 private:
   VideoIO m_io;
@@ -26,17 +26,10 @@ private:
   float m_maxContrastValue;
 
 public:
-  void openEncodeStream(EncodingOpenGLWidget* glWidget);
-  void encode(MeshInterchange& data);
-  void previewEncode(MeshInterchange& data);
-  void closeEncodeStream(void);
-
-  void openDecodeStream(EncodingOpenGLWidget* glWidget);
-  MeshInterchange* decode();
-  void closeDecodeStream(void);
-  int getDecodeStreamWidth(void);
-  int getDecodeStreamHeight(void);
-  float getDecodeStreamProgress(void);
+  void openCodec(EncodingOpenGLWidget* glWidget);
+  void closeCodec(void);
+  void process(MeshInterchange* data);
+  void previewProcess(MeshInterchange* data);
 
   void enableContrastStretching(float min, float max);
   void disableContrastStretching();
@@ -44,4 +37,4 @@ public:
   static string codecName(void);
 };
 
-#endif  //_DEPTH_CODEC_H_
+#endif  //_DEPTH_ENCODER_H_

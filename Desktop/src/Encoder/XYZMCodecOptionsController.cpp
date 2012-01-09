@@ -22,7 +22,7 @@ Codec* XYZMCodecOptionsController::getCodec(void)
   // Lazy init
   if(NULL == m_codec)
   {
-	m_codec = new XYZMCodec(xyzmListWidget);
+    m_codec = new XYZMDecoder(xyzmListWidget);
   }
 
   return m_codec;

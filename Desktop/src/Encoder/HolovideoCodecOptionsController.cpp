@@ -31,7 +31,7 @@ Codec* HolovideoCodecOptionsController::getCodec(void)
   // Lazy init
   if(m_codec == NULL)
   {
-	m_codec = new HolovideoCodec();
+    m_codec = new HolovideoEncoder();
   }
 
   QString sourceFilename = sourceFileBox->text();

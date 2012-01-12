@@ -21,6 +21,9 @@
 
 #include "VideoIO.h"
 
+#include <reactor/VideoFileReader.h>
+#include <reactor/FormatConverter.h>
+
 class ViewController : public QWidget, private Ui::View
 {
   Q_OBJECT
@@ -29,6 +32,7 @@ private:
   Holodecoder m_decoder;
   QTime m_movieTimer;
   VideoIO m_aviIO;
+  reactor::VideoFileReader m_reader;
 
 public:
   ViewController(QWidget* parent = 0);

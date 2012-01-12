@@ -41,18 +41,53 @@ void ViewController::openHoloImage(void)
   }
 }
 
+#include <reactor/FormatConverter.h>
+#include <cv.h>
+#include <highgui.h>
+
+#define __STDC_CONSTANT_MACROS
+extern "C"
+{
+  #include <libavcodec/avcodec.h>
+  #include <libavformat/avformat.h>
+  #include <libswscale/swscale.h>
+}
+
+AVFrame* yuv444Frame;
+uint8_t* yuv444Buffer;
+
+IplImage* tempImage;
+reactor::FormatConverter m_converter;
+
 void ViewController::playMovie(string movieFile)
 {
   if(!m_aviIO.readStreamIsOpen())
   {
-    bool fileOpened = m_aviIO.openReadStream(movieFile.c_str());
+	bool fileOpened = m_reader.openFile(movieFile);
+    //bool fileOpened = m_aviIO.openReadStream(movieFile);
+
+	//	TODO comeback and fix this
+	tempImage = cvCreateImage(cvSize(512, 512), IPL_DEPTH_8U, 3);
+	yuv444Frame = avcodec_alloc_frame();
+	yuv444Frame->width = 512;
+	yuv444Frame->height = 512;
+
+	int numBytes = avpicture_get_size(PIX_FMT_YUV444P, 512, 512);
+	yuv444Buffer = (uint8_t*)av_malloc(numBytes * sizeof(uint8_t));
+	avpicture_fill((AVPicture*)yuv444Frame, yuv444Buffer, PIX_FMT_YUV444P, 512, 512);
+	m_converter.init(PIX_FMT_YUV444P, PIX_FMT_YUV422P); 
 
     if(fileOpened)
     {
-      IplImage *frame = m_aviIO.readStream();
-      if(frame)
+	  m_converter.convert(m_reader.readFrame(), reactor::VideoFrame(yuv444Frame, PIX_FMT_YUV444P));
+	  m_converter.avFrame2IplImage(yuv444Frame, tempImage);
+
+	  cvSaveImage("C:\Temp\image.png", tempImage);
+
+      //IplImage *frame = m_aviIO.readStream();
+      if(tempImage)
       {
-        m_decoder.setBackHoloBuffer(frame);
+        m_decoder.setBackHoloBuffer(tempImage);
         m_decoder.swapBuffers();
         m_movieTimer.start();
         startTimer(0);
@@ -76,14 +111,14 @@ void ViewController::timerEvent(QTimerEvent* event)
     m_movieTimer.restart();
     //	Need to fetch the next frame
 
-    IplImage* frame = m_aviIO.readStream();
+    //IplImage* frame = m_aviIO.readStream();
 	
 	float position = m_aviIO.readStreamPosition() * 100.0;
 	positionSlider->setValue(position);
 
     if(frame)
     {
-      m_decoder.setBackHoloBuffer(frame);
+      m_decoder.setBackHoloBuffer(tempImage);
       m_decoder.swapBuffers();
     }
     else

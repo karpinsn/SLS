@@ -45,7 +45,7 @@ void MainWindowController::playVideo(void)
 		
 	if(!file.isEmpty())
 	{
-      m_mainWindow->viewController->playMovie(file.toStdString());
+      m_mainWindow->viewController->playMovie(file.toLocal8Bit().constData());
 	}
 }
 

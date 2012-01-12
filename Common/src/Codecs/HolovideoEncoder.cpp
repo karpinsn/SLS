@@ -75,7 +75,7 @@ void HolovideoEncoder::process(MeshInterchange* data)
 
   MeshInterchange* mesh = m_glWidget->encode();
   mesh->getTexture()->transferFromTexture(m_image);
-  
+
   m_yuv444toyuv422.iplImage2AVFrame(m_image, yuv444Frame);
   m_yuv444toyuv422.convert(reactor::VideoFrame(yuv444Frame, PIX_FMT_YUV444P), reactor::VideoFrame(yuv422Frame, PIX_FMT_YUV422P));
 

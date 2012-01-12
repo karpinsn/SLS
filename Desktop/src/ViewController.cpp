@@ -82,8 +82,6 @@ void ViewController::playMovie(string movieFile)
 	  m_converter.convert(m_reader.readFrame(), reactor::VideoFrame(yuv444Frame, PIX_FMT_YUV444P));
 	  m_converter.avFrame2IplImage(yuv444Frame, tempImage);
 
-	  cvSaveImage("C:\Temp\image.png", tempImage);
-
       //IplImage *frame = m_aviIO.readStream();
       if(tempImage)
       {

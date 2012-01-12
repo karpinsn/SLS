@@ -75,7 +75,7 @@ void ViewController::playMovie(string movieFile)
 	int numBytes = avpicture_get_size(PIX_FMT_YUV444P, 512, 512);
 	yuv444Buffer = (uint8_t*)av_malloc(numBytes * sizeof(uint8_t));
 	avpicture_fill((AVPicture*)yuv444Frame, yuv444Buffer, PIX_FMT_YUV444P, 512, 512);
-	m_converter.init(PIX_FMT_YUV444P, PIX_FMT_YUV422P); 
+	m_converter.init(PIX_FMT_YUV422P, PIX_FMT_YUV444P); 
 
     if(fileOpened)
     {

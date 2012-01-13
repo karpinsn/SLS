@@ -12,7 +12,7 @@
 
 #include <reactor/VideoFileWriter.h>
 #include <Reactor/FormatConverter.h>
-#include <Reactor/VideoFrame.h>
+#include <Reactor/MediaFrame.h>
 
 //	FFmpeg Includes
 #define __STDC_CONSTANT_MACROS

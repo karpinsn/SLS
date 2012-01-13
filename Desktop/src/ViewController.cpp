@@ -79,7 +79,7 @@ void ViewController::playMovie(string movieFile)
 
     if(fileOpened)
     {
-	  m_converter.convert(m_reader.readFrame(), reactor::VideoFrame(yuv444Frame, PIX_FMT_YUV444P));
+	  m_converter.convert(m_reader.readFrame(), reactor::MediaFrame(yuv444Frame, PIX_FMT_YUV444P));
 	  m_converter.avFrame2IplImage(yuv444Frame, tempImage);
 
       //IplImage *frame = m_aviIO.readStream();

@@ -77,10 +77,10 @@ void HolovideoEncoder::process(MeshInterchange* data)
   mesh->getTexture()->transferFromTexture(m_image);
 
   m_yuv444toyuv422.iplImage2AVFrame(m_image, yuv444Frame);
-  m_yuv444toyuv422.convert(reactor::VideoFrame(yuv444Frame, PIX_FMT_YUV444P), reactor::VideoFrame(yuv422Frame, PIX_FMT_YUV422P));
+  m_yuv444toyuv422.convert(reactor::MediaFrame(yuv444Frame, PIX_FMT_YUV444P), reactor::MediaFrame(yuv422Frame, PIX_FMT_YUV422P));
 
   //  Encode to the stream
-  m_videoWriter.writeFrame(reactor::VideoFrame(yuv422Frame, PIX_FMT_YUV422P));
+  m_videoWriter.writeFrame(reactor::MediaFrame(yuv422Frame, PIX_FMT_YUV422P));
   //m_io.saveStream(*(mesh->getTexture()));
 }
 

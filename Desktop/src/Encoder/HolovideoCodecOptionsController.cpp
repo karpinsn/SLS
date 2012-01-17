@@ -26,6 +26,14 @@ void HolovideoCodecOptionsController::selectFile(void)
   }
 }
 
+void HolovideoCodecOptionsController::autoFitData(void)
+{
+  if(NULL != m_codec)
+  {
+	m_codec->autoFitData();
+  }
+}
+
 Codec* HolovideoCodecOptionsController::getCodec(void)
 {
   // Lazy init
@@ -45,4 +53,5 @@ Codec* HolovideoCodecOptionsController::getCodec(void)
 void HolovideoCodecOptionsController::_connectSignalsWithController(void)
 {
   connect(sourceFileChooseButton, SIGNAL(clicked()), this, SLOT(selectFile()));
+  connect(autoFitDataButton, SIGNAL(clicked()), this, SLOT(autoFitData()));
 }

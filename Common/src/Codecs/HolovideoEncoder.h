@@ -59,6 +59,7 @@ public:
   void process(MeshInterchange* data);
   void previewProcess(MeshInterchange* data);
 
+  void autoFitData(void);
   static string codecName(void);
 };
 

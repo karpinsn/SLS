@@ -53,6 +53,9 @@ private:
 	Arcball m_controller;
     glm::mat4 m_projectorModelView;
 	
+	glm::mat4 m_translate;
+	glm::mat4 m_scale;
+
 	AbstractMesh* m_currentMesh;
 	
 	Texture m_holoimage;
@@ -82,6 +85,7 @@ public:
 		void				  setCurrentMesh(MeshInterchange* current);
 		void				  encode(void);
 		MeshInterchange*	  getEncodedData(void);
+		void				  autoFitTransforms(void);
 
 private:
         void _initFBO(void);

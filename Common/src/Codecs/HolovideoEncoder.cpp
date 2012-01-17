@@ -92,6 +92,16 @@ void HolovideoEncoder::previewProcess(MeshInterchange* data)
   m_glWidget->updateScene();
 }
 
+void HolovideoEncoder::autoFitData(void)
+{
+  m_encoder.autoFitTransforms();
+
+  if(NULL != m_glWidget)
+  {
+	m_glWidget->updateScene();
+  }
+}
+
 string HolovideoEncoder::codecName(void)
 {
   return "Holovideo Encoder";

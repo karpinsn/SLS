@@ -72,3 +72,8 @@ int XYZMesh::getMeshSize(void)
 {
 	return m_meshWidth * m_meshHeight;
 }
+
+void XYZMesh::setBoundingBox(BoundingBox& boundingBox)
+{
+  m_boundingBox = boundingBox;
+}

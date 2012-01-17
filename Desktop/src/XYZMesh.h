@@ -30,6 +30,8 @@
 
 #include <QtOpenGL/QGLWidget>
 
+#include <wrench\gl\utils\BoundingBox.h>
+
 #include "AbstractMesh.h"
 #include "XYZPoint.h"
 
@@ -45,6 +47,8 @@ public:
 	int getMeshWidth(void);
 	int getMeshHeight(void);
 	int getMeshSize(void);
+
+	void setBoundingBox(BoundingBox& boundingBox);
 	
 private:
 	int m_meshWidth;

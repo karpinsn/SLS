@@ -27,6 +27,7 @@ public:
 
 public slots:
   void selectFile(void);
+  void autoFitData(void);
 
 private:
   void _connectSignalsWithController(void);

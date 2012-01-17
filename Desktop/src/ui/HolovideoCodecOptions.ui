@@ -35,37 +35,10 @@
          <property name="fieldGrowthPolicy">
           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
          </property>
-         <item row="1" column="0">
-          <widget class="QLabel" name="widthLabel">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
            <property name="text">
-            <string>Width:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="heightLabel">
-           <property name="text">
-            <string>Height:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QSpinBox" name="heightBox">
-           <property name="maximum">
-            <number>10000</number>
-           </property>
-           <property name="value">
-            <number>512</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSpinBox" name="widthBox">
-           <property name="maximum">
-            <number>10000</number>
-           </property>
-           <property name="value">
-            <number>512</number>
+            <string>File:</string>
            </property>
           </widget>
          </item>
@@ -94,10 +67,44 @@
            </layout>
           </widget>
          </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
+         <item row="1" column="0">
+          <widget class="QLabel" name="widthLabel">
            <property name="text">
-            <string>File:</string>
+            <string>Width:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="widthBox">
+           <property name="maximum">
+            <number>10000</number>
+           </property>
+           <property name="value">
+            <number>512</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="heightLabel">
+           <property name="text">
+            <string>Height:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="heightBox">
+           <property name="maximum">
+            <number>10000</number>
+           </property>
+           <property name="value">
+            <number>512</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QPushButton" name="autoFitDataButton">
+           <property name="text">
+            <string>Auto Fit Data</string>
            </property>
           </widget>
          </item>

@@ -60,11 +60,25 @@ AbstractMesh* XYZFileIO::newMeshFromFile(const string &fileName)
 			XYZPoint *points = new XYZPoint[meshSize];
 			
 			float scalingFactor = header.meshHeight > header.meshWidth ? header.meshHeight : header.meshWidth;
-			
+			BoundingBox boundingBox;
+
 			for(int point = 0; point < meshSize; point++)
 			{
 				vertices[point] /= scalingFactor;
 				
+				//	Only want to calculate on valid points
+				if(valid[point] != 0)
+				{
+				  //	Calculate the boundingbox - min
+				  boundingBox.min.x = min(boundingBox.min.x, vertices[point].x);
+				  boundingBox.min.y = min(boundingBox.min.y, vertices[point].y);
+				  boundingBox.min.z = min(boundingBox.min.z, vertices[point].z);
+				  //	Calculate the boundingbox - max
+				  boundingBox.max.x = max(boundingBox.max.x, vertices[point].x);
+				  boundingBox.max.y = max(boundingBox.max.y, vertices[point].y);
+				  boundingBox.max.z = max(boundingBox.max.z, vertices[point].z);
+				}
+
 				points[point].vertex = vertices[point];
 				points[point].textureVertex = textureVertices[point];
 				//	If the point is valid then store 255 otherwise store 0
@@ -76,7 +90,13 @@ AbstractMesh* XYZFileIO::newMeshFromFile(const string &fileName)
 			delete [] textureVertices;
 			delete [] valid;
 
+			//	Calculate the boundingbox - Center
+			boundingBox.center.x = (boundingBox.max.x + boundingBox.min.x) / 2.0f;
+			boundingBox.center.y = (boundingBox.max.y + boundingBox.min.y) / 2.0f;
+			boundingBox.center.z = (boundingBox.max.z + boundingBox.min.z) / 2.0f;
+
 			mesh = new XYZMesh(header.meshWidth, header.meshHeight, points);
+			mesh->setBoundingBox(boundingBox);
 		}
 		else
 		{

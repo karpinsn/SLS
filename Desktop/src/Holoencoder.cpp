@@ -87,15 +87,15 @@ void Holoencoder::draw(void)
 
       //	Draw the currentMesh
       glm::mat4 projectorModelView = m_projectorModelView;
-      glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f),
-                                         glm::vec3(4.8f));
-      glm::mat4 translate = glm::translate(glm::mat4(1.0), glm::vec3(-.1, -.2, .1));
-
+      
       m_controller.applyTransform();
-      projectorModelView = projectorModelView * m_controller.getTransform() * scaleMatrix * translate;
+      projectorModelView = projectorModelView * m_controller.getTransform() * m_scale * m_translate;
 
-      glScalef(4.8, 4.8, 4.8);
-      glTranslatef(-.1, -.2, .1);
+	  //  Fetch the modelview, set the transforms, then put it back
+	  glm::mat4 modelView;
+	  glGetFloatv(GL_MODELVIEW_MATRIX , glm::value_ptr(modelView));
+	  modelView = modelView * m_scale * m_translate;
+	  glLoadMatrixf(glm::value_ptr(modelView));
 
       m_encoderShader.bind();
       m_encoderShader.uniform("projectorModelView", projectorModelView);
@@ -173,4 +173,25 @@ void Holoencoder::encode(void)
 MeshInterchange* Holoencoder::getEncodedData()
 {
   return new MeshInterchange(m_holoimage);
+}
+
+void Holoencoder::autoFitTransforms(void)
+{
+  if(NULL != m_currentMesh)
+  {
+	m_translate = glm::translate(glm::mat4(1.0), -m_currentMesh->getBoundingBox().center);
+	
+	//	Calculate the scaling factor
+	glm::vec4 min = glm::vec4(m_currentMesh->getBoundingBox().min, 1.0);
+	glm::vec4 max = glm::vec4(m_currentMesh->getBoundingBox().max, 1.0);
+	//	Translate the min and max
+	min = m_translate * min;
+	max = m_translate * max;
+	//	Figure out what is the absolute maximum extent
+	float scaleFactor = glm::max(glm::abs(min.x), glm::abs(max.x));
+	scaleFactor = glm::max(glm::max(glm::abs(min.y), glm::abs(max.y)), scaleFactor);
+	scaleFactor = glm::max(glm::max(glm::abs(min.z), glm::abs(max.z)), scaleFactor);
+	//	Scale is just 1 / scaleFactor since we are in a -1 to 1 Ortho projection
+	m_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f/scaleFactor));
+  }
 }

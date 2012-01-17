@@ -267,7 +267,7 @@ void Holodecoder::_initLighting(void)
   GLfloat light_position[] = {-2.0f, 6.0f, 8.0f, 0.0f};
   GLfloat white_light[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
-  glClearColor(1.0, 1.0, 1.0, 0.0);
+  glClearColor(.1914, .3007, .4727, 0.0);
 
   glShadeModel(GL_SMOOTH);
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);

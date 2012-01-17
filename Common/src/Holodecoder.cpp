@@ -108,8 +108,8 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
   m_depthMapAttachPoint   = GL_COLOR_ATTACHMENT2_EXT;
   m_normalMapAttachPoint  = GL_COLOR_ATTACHMENT3_EXT;
 
-  m_holoImage0.init   (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-  m_holoImage1.init   (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+  m_holoImage0.init   (width, height, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE);
+  m_holoImage1.init   (width, height, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE);
   m_phaseMap0.init    (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_phaseMap1.init    (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_depthMap.init     (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
@@ -211,6 +211,15 @@ void Holodecoder::setBackHoloBuffer(IplImage* image)
 {
   int backBufferIndex = (m_frontBufferIndex + 1) % 2;
   m_holoImages[backBufferIndex]->transferToTexture(image);
+
+  //	Make sure we dont have any errors
+  OGLStatus::logOGLErrors("Holodecoder - setBackHoloBuffer()");
+}
+
+void Holodecoder::setBackHoloBuffer(reactor::MediaFrame& frame)
+{
+  int backBufferIndex = (m_frontBufferIndex + 1) % 2;
+  m_holoImages[backBufferIndex]->transferToTexture(frame);
 
   //	Make sure we dont have any errors
   OGLStatus::logOGLErrors("Holodecoder - setBackHoloBuffer()");

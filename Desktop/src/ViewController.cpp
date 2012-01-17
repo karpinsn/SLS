@@ -4,10 +4,16 @@ ViewController::ViewController(QWidget* parent) : QWidget(parent)
 {
   setupUi(this);
   _connectSignalsWithController();
+
+  m_reader = NULL;
 }
 
 ViewController::~ViewController()
 {
+  if(NULL != m_reader)
+  {
+	delete m_reader;
+  }
 }
 
 void ViewController::init(void)
@@ -41,55 +47,26 @@ void ViewController::openHoloImage(void)
   }
 }
 
-#include <reactor/FormatConverter.h>
-#include <cv.h>
-#include <highgui.h>
-
-#define __STDC_CONSTANT_MACROS
-extern "C"
-{
-  #include <libavcodec/avcodec.h>
-  #include <libavformat/avformat.h>
-  #include <libswscale/swscale.h>
-}
-
-AVFrame* yuv444Frame;
-uint8_t* yuv444Buffer;
-
-IplImage* tempImage;
-reactor::FormatConverter m_converter;
-
 void ViewController::playMovie(string movieFile)
 {
+  if(NULL != m_reader)
+  {
+	delete m_reader;
+  }
+
   if(!m_aviIO.readStreamIsOpen())
   {
-	bool fileOpened = m_reader.openFile(movieFile);
-    //bool fileOpened = m_aviIO.openReadStream(movieFile);
-
-	//	TODO comeback and fix this
-	tempImage = cvCreateImage(cvSize(512, 512), IPL_DEPTH_8U, 3);
-	yuv444Frame = avcodec_alloc_frame();
-	yuv444Frame->width = 512;
-	yuv444Frame->height = 512;
-
-	int numBytes = avpicture_get_size(PIX_FMT_YUV444P, 512, 512);
-	yuv444Buffer = (uint8_t*)av_malloc(numBytes * sizeof(uint8_t));
-	avpicture_fill((AVPicture*)yuv444Frame, yuv444Buffer, PIX_FMT_YUV444P, 512, 512);
-	m_converter.init(PIX_FMT_YUV422P, PIX_FMT_YUV444P); 
+	reactor::VideoFileReader* reader = new reactor::VideoFileReader();
+	bool fileOpened = reader->openFile(movieFile);
+	
+	m_reader = new reactor::DeplanarReaderFilter(new reactor::ColorSpaceReaderFilter(reader, PIX_FMT_YUV444P));
 
     if(fileOpened)
     {
-	  m_converter.convert(m_reader.readFrame(), reactor::MediaFrame(yuv444Frame, PIX_FMT_YUV444P));
-	  m_converter.avFrame2IplImage(yuv444Frame, tempImage);
-
-      //IplImage *frame = m_aviIO.readStream();
-      if(tempImage)
-      {
-        m_decoder.setBackHoloBuffer(tempImage);
-        m_decoder.swapBuffers();
-        m_movieTimer.start();
-        startTimer(0);
-      }
+      m_decoder.setBackHoloBuffer(m_reader->readFrame());
+      m_decoder.swapBuffers();
+      m_movieTimer.start();
+      startTimer(0);
     }
   }
 
@@ -111,19 +88,11 @@ void ViewController::timerEvent(QTimerEvent* event)
 
     //IplImage* frame = m_aviIO.readStream();
 	
-	float position = m_aviIO.readStreamPosition() * 100.0;
-	positionSlider->setValue(position);
+	//float position = m_aviIO.readStreamPosition() * 100.0;
+	//positionSlider->setValue(position);
 
-    if(frame)
-    {
-      m_decoder.setBackHoloBuffer(tempImage);
-      m_decoder.swapBuffers();
-    }
-    else
-    {
-      //killTimer(event->id);
-    }
-
+    m_decoder.setBackHoloBuffer(m_reader->readFrame());
+    m_decoder.swapBuffers();
   }
   _updateGL();
 }

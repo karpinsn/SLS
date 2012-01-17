@@ -58,6 +58,14 @@ add_subdirectory(../../Libraries/3rdParty/glm ${PROJECT_BINARY_DIR}/Libraries/3r
 set(LIBS ${LIBS} glm)
 
 #	-----------------------------------------
+#	Reactor
+#	-----------------------------------------
+add_subdirectory(../../Libraries/Reactor/src/reactor ${PROJECT_BINARY_DIR}/Libraries/Reactor)
+include_directories(../../Libraries/Reactor/src)
+include_directories(${REACTOR_INCLUDE_DIRS})
+set(LIBS ${LIBS} reactor "${REACTOR_LIBRARIES}")
+
+#	-----------------------------------------
 #	Wrench
 #	-----------------------------------------
 add_subdirectory(../../Libraries/Wrench/src/wrench ${PROJECT_BINARY_DIR}/Libraries/Wrench)
@@ -78,14 +86,6 @@ set(LIBS ${LIBS} lens "${LENS_LIBRARIES}")
 add_subdirectory(../../Libraries/Antenna/src/antenna ${PROJECT_BINARY_DIR}/Libraries/Antenna)
 include_directories(../../Libraries/Antenna/src)
 set(LIBS ${LIBS} antenna)
-
-#	-----------------------------------------
-#	Reactor
-#	-----------------------------------------
-add_subdirectory(../../Libraries/Reactor/src/reactor ${PROJECT_BINARY_DIR}/Libraries/Reactor)
-include_directories(../../Libraries/Reactor/src)
-include_directories(${REACTOR_INCLUDE_DIRS})
-set(LIBS ${LIBS} reactor "${REACTOR_LIBRARIES}")
 
 #	-----------------------------------------
 #	Common

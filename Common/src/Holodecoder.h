@@ -31,6 +31,8 @@
 #include "AbstractGLContext.h"
 #include "DecodingGLContext.h"
 
+#include <reactor/MediaFrame.h>
+
 #include <wrench/gl/Camera.h>
 #include <wrench/gl/ShaderProgram.h>
 #include <wrench/gl/Shader.h>
@@ -95,6 +97,7 @@ public:
 	virtual void mouseMoveEvent(int mouseX, int mouseY);
 	
 	void setBackHoloBuffer(IplImage* image);
+	void setBackHoloBuffer(reactor::MediaFrame& frame);
 	void swapBuffers(void);
 	
 	MeshInterchange* decode(void);

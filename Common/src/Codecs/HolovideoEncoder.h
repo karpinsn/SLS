@@ -13,6 +13,8 @@
 #include <reactor/VideoFileWriter.h>
 #include <Reactor/FormatConverter.h>
 #include <Reactor/MediaFrame.h>
+#include <reactor/MediaFrameWriter.h>
+#include <reactor/ColorSpaceWriterFilter.h>
 
 //	FFmpeg Includes
 #define __STDC_CONSTANT_MACROS
@@ -29,7 +31,9 @@ class HolovideoEncoder : public Codec
 {
 private:
   VideoIO m_io;
-  reactor::VideoFileWriter m_videoWriter;
+  reactor::MediaFrameWriter* m_videoWriter;
+  reactor::VideoFileWriter* m_video;
+
   reactor::FormatConverter m_yuv444toyuv422;
 
   AVFrame* yuv444Frame;

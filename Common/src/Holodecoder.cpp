@@ -125,6 +125,8 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
   OGLStatus::logOGLErrors("Holodecoder - initTextures()");
 }
 
+ImageIO io;
+
 void Holodecoder::draw(void)
 {
   m_background.draw();
@@ -159,6 +161,8 @@ void Holodecoder::draw(void)
 
 	glColor3f(0.8f, 0.8f, 0.8f);
 
+	static int frameNumber = 0;
+
 	m_finalRender.bind();
 	{
 	  m_normalMap.bind(GL_TEXTURE0);
@@ -167,7 +171,13 @@ void Holodecoder::draw(void)
 
 	  // Draw a plane of pixels
 	  m_controller.applyTransform();
+	  glTranslatef(-.5,.25,-1);
 	  m_mesh->draw();
+
+	  char filename[1000];
+	  sprintf(filename, "N:\\Data\\Images-422-Lossless\\%d.png",frameNumber++);
+
+	  io.saveRGBImage(filename, 512, 512);
 	}
 	m_finalRender.unbind();
 
@@ -265,7 +275,7 @@ void Holodecoder::_initLighting(void)
   GLfloat mat_specular[] = {.1f, .1f, .1f, .1f};
   GLfloat mat_shininess[] = {1.0f};
   GLfloat light_position[] = {-2.0f, 6.0f, 8.0f, 0.0f};
-  GLfloat white_light[] = {1.0f, 1.0f, 1.0f, 1.0f};
+  GLfloat white_light[] = {0.8f, 0.8f, 0.8f, 0.8f};
 
   glClearColor(.1914, .3007, .4727, 0.0);
 

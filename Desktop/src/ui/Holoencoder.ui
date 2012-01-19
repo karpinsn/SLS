@@ -20,7 +20,8 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#MainWindow {
+   <string notr="true">/* Specific Widgets*/
+#MainWindow {
 	background:rgb(41, 41, 41);
 	color:rgb(172,172,172);
 }
@@ -141,12 +142,17 @@ QComboBox {
  }
 
 /* QToolBar styles */
+QToolBar
+{
+	border:0px;
+}
+
  QToolButton { /* all types of tool button */
 	color:rgb(172,172,172);
      border-width: 1px;
      border-style: solid;
 	border-color: rgb(33, 33, 33);	
-     border-radius: 6px;
+	padding: 4px;
 	background:qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0, stop:0 rgba(63, 63, 63, 255), stop:1 rgba(108, 108, 108, 255));
  }
 
@@ -209,28 +215,112 @@ QListView {
  }
 
 /* QScrollBar */
-QScrollBar:vertical
+QScrollBar
 {
-	background:qlineargradient(spread:reflect, x1:1, y1:1, x2:1, y2:0, stop:0 rgba(63, 63, 63, 255), stop:1 rgba(108, 108, 108, 255));
+	background:rgb(41, 41, 41);
     border-width:1px;
 	border-style: solid;
 	border-color: rgb(33, 33, 33);	
 }
 
-  QScrollBar::handle {
-	border-width: 1px;
-      min-height: 20px;
+QScrollBar:horizontal
+{	
+	height: 15px;
+	margin: 0px 20px 0px 20px;
+}
+
+QScrollBar:vertical
+{
+	width: 15px;
+	margin: 20px 0px 20px 0px;
+}
+
+QScrollBar::handle
+{
+	border: 1px;
+	border-color: rgb(33, 33, 33);	
+	border-radius: 5px;
+}
+
+QScrollBar::handle:horizontal
+{
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(108, 108, 108, 255), stop:1 rgba(63, 63, 63, 255));
+	min-width: 20px;
+}
+
+QScrollBar::handle:vertical {
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(108, 108, 108, 255), stop:1 rgba(63, 63, 63, 255));
+    min-height: 20px;
+}
+
+QScrollBar::add-line:vertical {
+  	background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(108, 108, 108, 255), stop:1 rgba(63, 63, 63, 255));
+    height: 19px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+
+    border: 1px solid rgb(33, 33, 33);
+	border-style: solid; /* just a single line */
+    border-top-color: darkgray;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+QScrollBar::add-line:horizontal{
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(108, 108, 108, 255), stop:1 rgba(63, 63, 63, 255));
+    width: 19px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+
+    border: 1px solid rgb(33, 33, 33);
+	border-style: solid; /* just a single line */
+    border-left-color: darkgray;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 
-  QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
-      border-width: 1px;
-      width: 3px;
-      height: 3px;
+  QScrollBar::sub-line:vertical {
+      border: 1px solid rgb(33, 33, 33);
+	  background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(108, 108, 108, 255), stop:1 rgba(63, 63, 63, 255));
+      height: 19px;
+      subcontrol-position: top;
+      subcontrol-origin: margin;
+
+   	 border-bottom-width: 1px;
+     border-bottom-color: darkgray;
+     border-bottom-style: solid; /* just a single line */
+     border-top-right-radius: 5px;
+     border-top-left-radius: 5px;
+  }
+
+QScrollBar::sub-line:horizontal
+{
+	border: 1px solid rgb(33, 33, 33);
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(108, 108, 108, 255), stop:1 rgba(63, 63, 63, 255));
+    width: 19px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+
+    border-right-color: darkgray;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+ QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+	background:none;
   }
 
   QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-      border-width: 1px;
-  }</string>
+      background: none;
+  }
+
+QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+	background: none;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}</string>
   </property>
   <widget class="QWidget" name="MainWidget">
    <property name="sizePolicy">

@@ -57,8 +57,7 @@ public:
   void openCodec(EncodingOpenGLWidget* glWidget);
   void closeCodec(void);
   void process(MeshInterchange* data);
-  void previewProcess(MeshInterchange* data);
-
+  e
   void autoFitData(void);
   static string codecName(void);
 };

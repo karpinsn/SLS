@@ -37,12 +37,12 @@ void TriMesh::_generateIndices(void)
   //m_meshIndices = new unsigned int[m_elementCount];
 
   int index = 0;
-  for(int row = 0; row < m_height - 1; row++)
+  for(unsigned int row = 0; row < m_height - 1; row++)
   {
     //	Check if we are on an even row
     if(row % 2 == 0)
     {
-      int x;
+      unsigned int x;
       for(x = 0; x < m_width; x++)
       {
         indicies[index++] = x + (row * m_width) + m_width;
@@ -82,9 +82,9 @@ void TriMesh::_generateTexturedVertices(void)
   Vertex *verticies = new Vertex[m_height * m_width];
   TextureCoordinate *texCoord = new TextureCoordinate[m_height * m_width];
 
-  for(int row = 0; row < m_height; row++)
+  for(unsigned int row = 0; row < m_height; row++)
   {
-    for(int column = 0; column < m_width; column++)
+    for(unsigned int column = 0; column < m_width; column++)
     {
       //  - 1.0 on the width and height is so that the values range from (0, 1)
       verticies[row * m_width + column].x = (float)column / (float)(m_width - 1.0);

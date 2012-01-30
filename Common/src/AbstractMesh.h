@@ -11,7 +11,7 @@
 #ifndef _ABSTRACT_MESH_H_
 #define _ABSTRACT_MESH_H_
 
-#include <wrench\gl\utils\BoundingBox.h>
+#include <wrench/gl/utils/BoundingBox.h>
 #include "XYZPoint.h"
 
 using namespace std;

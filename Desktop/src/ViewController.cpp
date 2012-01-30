@@ -63,7 +63,8 @@ void ViewController::playMovie(string movieFile)
 
     if(fileOpened)
     {
-      m_decoder.setBackHoloBuffer(m_reader->readFrame());
+        reactor::MediaFrame frame = m_reader->readFrame();
+      m_decoder.setBackHoloBuffer(frame);
       m_decoder.swapBuffers();
       m_movieTimer.start();
       startTimer(0);
@@ -91,7 +92,9 @@ void ViewController::timerEvent(QTimerEvent* event)
 	//float position = m_aviIO.readStreamPosition() * 100.0;
 	//positionSlider->setValue(position);
 
-    m_decoder.setBackHoloBuffer(m_reader->readFrame());
+      reactor::MediaFrame frame = m_reader->readFrame();
+      
+    m_decoder.setBackHoloBuffer(frame);
     m_decoder.swapBuffers();
   }
   _updateGL();

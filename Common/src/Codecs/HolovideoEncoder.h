@@ -17,7 +17,9 @@
 #include <reactor/ColorSpaceWriterFilter.h>
 
 //	FFmpeg Includes
+#ifndef __STDC_CONSTANT_MACROS
 #define __STDC_CONSTANT_MACROS
+#endif
 extern "C"
 {
   #include <libavcodec/avcodec.h>
@@ -57,7 +59,7 @@ public:
   void openCodec(EncodingOpenGLWidget* glWidget);
   void closeCodec(void);
   void process(MeshInterchange* data);
-  e
+  void previewProcess(MeshInterchange* data);
   void autoFitData(void);
   static string codecName(void);
 };

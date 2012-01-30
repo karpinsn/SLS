@@ -30,7 +30,7 @@
 
 #include <QtOpenGL/QGLWidget>
 
-#include <wrench\gl\utils\BoundingBox.h>
+#include <wrench/gl/utils/BoundingBox.h>
 
 #include "AbstractMesh.h"
 #include "XYZPoint.h"

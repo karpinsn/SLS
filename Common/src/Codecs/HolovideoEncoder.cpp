@@ -74,7 +74,8 @@ void HolovideoEncoder::process(MeshInterchange* data)
   m_yuv444toyuv422.iplImage2AVFrame(m_image, yuv444Frame);
 
   //  Encode to the stream
-  m_videoWriter->writeFrame(reactor::MediaFrame(yuv444Frame, PIX_FMT_YUV444P));
+    reactor::MediaFrame frame = reactor::MediaFrame(yuv444Frame, PIX_FMT_YUV444P);
+    m_videoWriter->writeFrame(frame);
   //m_io.saveStream(*(mesh->getTexture()));
 }
 

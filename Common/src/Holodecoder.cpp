@@ -127,7 +127,7 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
 
 void Holodecoder::draw(void)
 {
-  m_background.draw();
+  //m_background.draw();
 
   if(haveHoloImage)
   {
@@ -147,18 +147,21 @@ void Holodecoder::draw(void)
 	  m_normalCalculator.bind();
 	  m_depthMap.bind(GL_TEXTURE0);
 	  m_imageProcessor.process();
+	  m_normalCalculator.unbind();
 	}
 	m_imageProcessor.unbind();
 
 	glMatrixMode(GL_MODELVIEW);
+	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	glPushMatrix();
 	glLoadIdentity();
-
 	m_camera.applyMatrix();
+	m_background.draw();
 
 	glColor3f(0.8f, 0.8f, 0.8f);
-
+	
 	m_finalRender.bind();
 	{
 	  m_normalMap.bind(GL_TEXTURE0);
@@ -170,7 +173,7 @@ void Holodecoder::draw(void)
 	  m_mesh->draw();
 	}
 	m_finalRender.unbind();
-
+	
 	glPopMatrix();
   }
   OGLStatus::logOGLErrors("Holodecoder - draw()");
@@ -267,7 +270,7 @@ void Holodecoder::_initLighting(void)
   GLfloat light_position[] = {-2.0f, 6.0f, 8.0f, 0.0f};
   GLfloat white_light[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
-  glClearColor(.1914, .3007, .4727, 0.0);
+  //glClearColor(.1914, .3007, .4727, 0.0);
 
   glShadeModel(GL_SMOOTH);
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);

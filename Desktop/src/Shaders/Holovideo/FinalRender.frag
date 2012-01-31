@@ -25,7 +25,7 @@ void main()
 	//	Total color
 	if(holoFrag.rgb == vec3(0.0))
 	{
-		gl_FragColor = vec4(0.0,0.0,0.0,0.0);
+		discard;
 	}
 	else
 	{

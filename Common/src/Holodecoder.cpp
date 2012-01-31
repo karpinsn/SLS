@@ -33,8 +33,8 @@ void Holodecoder::init(float width, float height)
 	m_holoImages[0] = &m_holoImage0;
 	m_holoImages[1] = &m_holoImage1;
 
-	GLfloat topColor[3] = {.8, .8, .8};
-	GLfloat bottomColor[3] = {.7, .7, .7};
+	GLfloat topColor[3] = {.1882, .2941, .4667};
+	GLfloat bottomColor[3] = {.1216, .2, .3373};
 	m_background.setColors(topColor, bottomColor);
   }
 }
@@ -159,8 +159,6 @@ void Holodecoder::draw(void)
 	glLoadIdentity();
 	m_camera.applyMatrix();
 	m_background.draw();
-
-	glColor3f(0.8f, 0.8f, 0.8f);
 	
 	m_finalRender.bind();
 	{
@@ -265,6 +263,8 @@ void Holodecoder::_drawCalculateDepthMap()
 
 void Holodecoder::_initLighting(void)
 {
+  GLfloat mat_ambient[] = {.2f, .2f, .2f, .2f};
+  GLfloat mat_diffuse[] = {.8f, .8f, .8f, .8f};
   GLfloat mat_specular[] = {.1f, .1f, .1f, .1f};
   GLfloat mat_shininess[] = {1.0f};
   GLfloat light_position[] = {-2.0f, 6.0f, 8.0f, 0.0f};
@@ -273,6 +273,8 @@ void Holodecoder::_initLighting(void)
   //glClearColor(.1914, .3007, .4727, 0.0);
 
   glShadeModel(GL_SMOOTH);
+  glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
   glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
@@ -285,7 +287,9 @@ void Holodecoder::_initLighting(void)
   //	Enable lighting
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
-  glEnable(GL_COLOR_MATERIAL);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
+
+  //  We specified materials, so we dont want to overide them
+  glDisable(GL_COLOR_MATERIAL);
 }

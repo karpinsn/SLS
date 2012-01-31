@@ -38,7 +38,8 @@ void MultiWavelengthCapture::init(float width, float height)
 
     m_axis.init();
 
-    m_controller.init(512, 512);
+    //m_controller.init(512, 512);
+	m_controller.init(0.0f, 0.0f, 0.0f, .5f);
     m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
     m_camera.setMode(1);
 

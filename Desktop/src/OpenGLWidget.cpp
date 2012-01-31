@@ -4,6 +4,8 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuf
 {
   m_clearColor = QColor::fromRgb(0, 0, 0, 0);
   m_glContext = NULL;
+  m_width = 0;
+  m_height = 0;
 }
 
 OpenGLWidget::OpenGLWidget(QWidget *parent, AbstractGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
@@ -67,6 +69,9 @@ void OpenGLWidget::paintGL()
 
 void OpenGLWidget::resizeGL(int width, int height)
 {
+  m_width = width;
+  m_height = height;
+
   if(NULL != m_glContext)
   {
 	glViewport(0, 0, width, height);
@@ -92,7 +97,10 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *event)
   
   if(NULL != m_glContext)
   {
-	m_glContext->mousePressEvent(event->pos().x(), event->pos().y());
+	//	Perform the Y flip
+	int mouseY = (m_height - 1) - event->pos().y();
+
+	m_glContext->mousePressEvent(event->pos().x(), mouseY);
 	updateGL();
   }
 }
@@ -103,7 +111,9 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *event)
 
   if(NULL != m_glContext)
   {
-	m_glContext->mouseMoveEvent(event->pos().x(), event->pos().y());
+	int mouseY = (m_height - 1) - event->pos().y();
+
+	m_glContext->mouseMoveEvent(event->pos().x(), mouseY);
 	updateGL();
   }
 }

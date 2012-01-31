@@ -21,7 +21,8 @@ void Holoencoder::init(float width, float height)
       m_currentMesh = NULL;
       _initFBO();
 
-      m_controller.init(m_width, m_height);
+      //m_controller.init(m_width, m_height);
+	  m_controller.init(0.0,0.0,0.0,.5);
       _initShaders();
 
       m_camera = new Camera();
@@ -142,7 +143,7 @@ void Holoencoder::mousePressEvent(int mouseX, int mouseY)
 
 void Holoencoder::mouseMoveEvent(int mouseX, int mouseY)
 {	
-	m_controller.mouseMoveEvent(mouseX, mouseY);
+	m_controller.mouseDragEvent(mouseX, mouseY);
 }
 
 void Holoencoder::setCurrentMesh(AbstractMesh* current)

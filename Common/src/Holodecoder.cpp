@@ -20,8 +20,8 @@ void Holodecoder::init(float width, float height)
 	_initTextures(width, height);
 	_initLighting();
 
-	m_controller.init(512, 512);
-	m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
+	m_controller.init(0.0, 0.0, -1.0, 0.2f);
+	m_camera.init(0.0f, 0.0f, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	m_camera.setMode(1);
 
 	m_mesh = new TriMesh(512, 512);
@@ -127,8 +127,6 @@ void Holodecoder::_initTextures(GLuint width, GLuint height)
 
 void Holodecoder::draw(void)
 {
-  //m_background.draw();
-
   if(haveHoloImage)
   {
 	m_imageProcessor.bind();
@@ -168,11 +166,21 @@ void Holodecoder::draw(void)
 
 	  // Draw a plane of pixels
 	  m_controller.applyTransform();
+	  glColor3f(.8f, .8f, .8f);
+	  m_controller.draw();
 	  m_mesh->draw();
 	}
 	m_finalRender.unbind();
 	
 	glPopMatrix();
+  }
+  else
+  {
+	glLoadIdentity();
+	m_background.draw();
+	//m_camera.applyMatrix();
+	m_controller.applyTransform();
+	m_controller.draw();
   }
   OGLStatus::logOGLErrors("Holodecoder - draw()");
 }
@@ -186,7 +194,7 @@ MeshInterchange* Holodecoder::decode(void)
 
 void Holodecoder::resize(int width, int height)
 {
-  gluPerspective(45.0, (float)width/(float)height, .00001, 10.0);
+  gluPerspective(45.0, (float)width/(float)height, .1, 100.0);
 
   m_camera.reshape(width, height);
 
@@ -200,12 +208,14 @@ void Holodecoder::cameraSelectMode(int mode)
 
 void Holodecoder::mousePressEvent(int mouseX, int mouseY)
 {
-  m_camera.mousePressed(mouseX, mouseY);
+  //m_camera.mousePressed(mouseX, mouseY);
+  m_controller.mousePressEvent(mouseX, mouseY);
 }
 
 void Holodecoder::mouseMoveEvent(int mouseX, int mouseY)
 {
-  m_camera.mouseMotion(mouseX, mouseY);
+  //m_camera.mouseMotion(mouseX, mouseY);
+  m_controller.mouseDragEvent(mouseX, mouseY);
 }
 
 void Holodecoder::setBackHoloBuffer(IplImage* image)

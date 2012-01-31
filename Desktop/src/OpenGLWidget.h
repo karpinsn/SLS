@@ -40,6 +40,8 @@ class OpenGLWidget : public QGLWidget
 
 private:
   QColor					m_clearColor;
+  int m_width;
+  int m_height;
 
 public:
   OpenGLWidget(QWidget *parent);

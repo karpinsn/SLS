@@ -93,7 +93,7 @@ void OpenGLWidget::cameraSelectMode(int mode)
 
 void OpenGLWidget::mousePressEvent(QMouseEvent *event)
 {
-  std::cout << "Mouse Pressed: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
+  //std::cout << "Mouse Pressed: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
   
   if(NULL != m_glContext)
   {
@@ -107,7 +107,7 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *event)
 
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-  std::cout << "Mouse Moved: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
+  //std::cout << "Mouse Moved: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
 
   if(NULL != m_glContext)
   {
@@ -120,7 +120,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *event)
 
 void OpenGLWidget::mouseReleaseEvent(QMouseEvent* event)
 {
-  std::cout << "Mouse Released: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
+  //std::cout << "Mouse Released: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
   
   if(NULL != m_glContext)
   {

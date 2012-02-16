@@ -12,6 +12,7 @@ set(SHADER_VERT_SOURCES
 	Phong.vert
 	AxisDisplay.vert
 	TextureDisplay.vert
+    RotationManipulator.vert
 )
 
 set(SHADER_FRAG_SOURCES
@@ -22,6 +23,7 @@ set(SHADER_FRAG_SOURCES
 	Phong.frag
 	AxisDisplay.frag
 	TextureDisplay.frag
+    RotationManipulator.frag
 )
 
 set(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})

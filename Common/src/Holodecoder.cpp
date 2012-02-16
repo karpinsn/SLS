@@ -21,8 +21,8 @@ void Holodecoder::init(float width, float height)
 	_initLighting();
 
 	m_controller.init(0.3, 0.2, -1.0, 0.4f);
-	m_camera.init(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
-	//m_camera.init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
+	//m_camera.init(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
+	m_camera.init(0.0f, 0.0f, 2.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	m_camera.setMode(1);
 
 	m_mesh = new TriMesh(512, 512);

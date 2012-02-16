@@ -20,8 +20,9 @@ void Holodecoder::init(float width, float height)
 	_initTextures(width, height);
 	_initLighting();
 
-	m_controller.init(0.0, 0.0, -1.0, 0.2f);
-	m_camera.init(1.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	m_controller.init(0.3, 0.2, -1.0, 0.4f);
+	m_camera.init(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
+	//m_camera.init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
 	m_camera.setMode(1);
 
 	m_mesh = new TriMesh(512, 512);
@@ -179,7 +180,7 @@ void Holodecoder::draw(void)
 	glLoadIdentity();
 	m_background.draw();
 	m_camera.applyMatrix();
-	m_controller.applyTransform();
+	//m_controller.applyTransform();
 	m_controller.draw();
   }
   OGLStatus::logOGLErrors("Holodecoder - draw()");
@@ -209,13 +210,13 @@ void Holodecoder::cameraSelectMode(int mode)
 void Holodecoder::mousePressEvent(int mouseX, int mouseY)
 {
   //m_camera.mousePressed(mouseX, mouseY);
-  m_controller.mousePressEvent(mouseX, mouseY);
+  m_controller.mousePressEvent(m_camera.getMatrix(), mouseX, mouseY);
 }
 
 void Holodecoder::mouseMoveEvent(int mouseX, int mouseY)
 {
   //m_camera.mouseMotion(mouseX, mouseY);
-  m_controller.mouseDragEvent(mouseX, mouseY);
+  m_controller.mouseDragEvent(m_camera.getMatrix(), mouseX, mouseY);
 }
 
 void Holodecoder::setBackHoloBuffer(IplImage* image)
@@ -279,8 +280,6 @@ void Holodecoder::_initLighting(void)
   GLfloat mat_shininess[] = {1.0f};
   GLfloat light_position[] = {-2.0f, 6.0f, 8.0f, 0.0f};
   GLfloat white_light[] = {1.0f, 1.0f, 1.0f, 1.0f};
-
-  //glClearColor(.1914, .3007, .4727, 0.0);
 
   glShadeModel(GL_SMOOTH);
   glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);

@@ -138,12 +138,12 @@ void Holoencoder::cameraSelectMode(int mode)
 
 void Holoencoder::mousePressEvent(int mouseX, int mouseY)
 {	
-	m_controller.mousePressEvent(mouseX, mouseY);
+	m_controller.mousePressEvent(m_camera->getMatrix(), mouseX, mouseY);
 }
 
 void Holoencoder::mouseMoveEvent(int mouseX, int mouseY)
 {	
-	m_controller.mouseDragEvent(mouseX, mouseY);
+	m_controller.mouseDragEvent(m_camera->getMatrix(), mouseX, mouseY);
 }
 
 void Holoencoder::setCurrentMesh(AbstractMesh* current)

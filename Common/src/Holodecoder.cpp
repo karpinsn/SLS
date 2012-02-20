@@ -20,9 +20,8 @@ void Holodecoder::init(float width, float height)
 	_initTextures(width, height);
 	_initLighting();
 
-	m_controller.init(0.0, 0.0, 0.0, 0.4f);
-	//m_camera.init(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
-	m_camera.init(0.0f, 0.0f, 2.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	m_controller.init(0.5, 0.5, 0.0, 0.4f);
+	m_camera.init(0.5f, 0.5f, 2.0f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f);
 	m_camera.setMode(1);
 
 	m_mesh = new TriMesh(512, 512);
@@ -156,9 +155,12 @@ void Holodecoder::draw(void)
 	
 	glPushMatrix();
 	glLoadIdentity();
-	m_camera.applyMatrix();
 	m_background.draw();
-	
+	m_camera.applyMatrix();
+	m_controller.applyTransform();  
+	m_controller.draw();
+
+	glColor3f(.8f, .8f, .8f);
 	m_finalRender.bind();
 	{
 	  m_normalMap.bind(GL_TEXTURE0);
@@ -166,9 +168,6 @@ void Holodecoder::draw(void)
 	  m_holoImages[m_frontBufferIndex]->bind(GL_TEXTURE2);
 
 	  // Draw a plane of pixels
-	  m_controller.applyTransform();
-	  glColor3f(.8f, .8f, .8f);
-	  m_controller.draw();
 	  m_mesh->draw();
 	}
 	m_finalRender.unbind();
@@ -180,7 +179,7 @@ void Holodecoder::draw(void)
 	glLoadIdentity();
 	m_background.draw();
 	m_camera.applyMatrix();
-	//m_controller.applyTransform();
+	m_controller.applyTransform();
 	m_controller.draw();
   }
   OGLStatus::logOGLErrors("Holodecoder - draw()");

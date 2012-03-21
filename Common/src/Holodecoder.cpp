@@ -178,9 +178,6 @@ void Holodecoder::draw(void)
   {
 	glLoadIdentity();
 	m_background.draw();
-	m_camera.applyMatrix();
-	m_controller.applyTransform();
-	m_controller.draw();
   }
   OGLStatus::logOGLErrors("Holodecoder - draw()");
 }

@@ -15,7 +15,7 @@ void Holodecoder::init(float width, float height)
 {
   if(!m_hasBeenInit)
   {
-	initShaders();
+	initShaders(width, height);
 
 	_initTextures(width, height);
 	_initLighting();
@@ -24,7 +24,8 @@ void Holodecoder::init(float width, float height)
 	m_camera.init(0.5f, 0.5f, 2.0f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f);
 	m_camera.setMode(1);
 
-	m_mesh = new TriMesh(512, 512);
+	//m_mesh = new TriMesh(512, 512);
+	m_mesh = new TriMesh(width, height);
 
 	m_mesh->initMesh();
 	haveHoloImage = false;
@@ -39,7 +40,7 @@ void Holodecoder::init(float width, float height)
   }
 }
 
-void Holodecoder::initShaders(void)
+void Holodecoder::initShaders(float width, float height)
 {
   //	Create the shaders
   m_phaseCalculator.init();
@@ -59,8 +60,8 @@ void Holodecoder::initShaders(void)
 
   m_phaseFilter.link();
   m_phaseFilter.uniform("image", 0);
-  m_phaseFilter.uniform("width", 512.0f);
-  m_phaseFilter.uniform("height", 512.0f);
+  m_phaseFilter.uniform("width", width);
+  m_phaseFilter.uniform("height", height);
 
   m_depthCalculator.init();
   m_depthCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holovideo/DepthCalculator.vert"));
@@ -70,7 +71,7 @@ void Holodecoder::initShaders(void)
 
   m_depthCalculator.link();
   m_depthCalculator.uniform("phaseMap", 0);
-  m_depthCalculator.uniform("width", 512.0f);
+  m_depthCalculator.uniform("width", width);
 
   m_normalCalculator.init();
   m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NormalCalculator.vert"));
@@ -80,8 +81,8 @@ void Holodecoder::initShaders(void)
 
   m_normalCalculator.link();
   m_normalCalculator.uniform("depthMap", 0);
-  m_normalCalculator.uniform("width", 512.0f);
-  m_normalCalculator.uniform("height", 512.0f);
+  m_normalCalculator.uniform("width", width);
+  m_normalCalculator.uniform("height", height);
 
   m_finalRender.init();
   m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holovideo/FinalRender.vert"));
@@ -93,7 +94,7 @@ void Holodecoder::initShaders(void)
   m_finalRender.uniform("normals", 0);
   m_finalRender.uniform("depthMap", 1);
   m_finalRender.uniform("holoImage", 2);
-  m_finalRender.uniform("width", 512.0f);
+  m_finalRender.uniform("width", width);
   m_finalRender.unbind();
 
   OGLStatus::logOGLErrors("Holodecoder - initShaders()");

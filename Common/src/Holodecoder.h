@@ -103,7 +103,7 @@ public:
 	MeshInterchange* decode(void);
 	
 private:
-	void initShaders(void);
+	void initShaders(float width, float height);
 	void _initTextures(GLuint width, GLuint height);
 	void _initLighting(void);
 	

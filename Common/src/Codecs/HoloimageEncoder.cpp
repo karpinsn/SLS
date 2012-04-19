@@ -2,19 +2,19 @@
 
 HoloimageEncoder::HoloimageEncoder()
 {
-  m_filename  = "";
+  m_filename = "";
+  m_frameNumber = 0;
 }
 
 HoloimageEncoder::~HoloimageEncoder()
 {
-  cvReleaseImage(&m_image);
 }
 
 void HoloimageEncoder::initCodec(string& filename, int width, int height)
 {
   setWidth(width);
   setHeight(height);
-  m_filename  = filename;
+  m_filename = filename;
 }
 
 void HoloimageEncoder::openCodec(EncodingOpenGLWidget* glWidget)
@@ -47,7 +47,10 @@ void HoloimageEncoder::process(MeshInterchange* data)
   m_encoder.setCurrentMesh(data);
 
   MeshInterchange* mesh = m_glWidget->encode();
-  mesh->getTexture()->transferFromTexture(m_image);
+
+  //  Format the filename and write the image out
+  sprintf(m_filenameBuffer, m_filename.c_str(), m_frameNumber++);
+  m_io.saveTexture(m_filenameBuffer, mesh->getTexture());
 }
 
 void HoloimageEncoder::previewProcess(MeshInterchange* data)

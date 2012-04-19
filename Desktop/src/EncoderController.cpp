@@ -61,6 +61,10 @@ void EncoderController::newEncoder(const QString& text)
   {
 	encoderOptionsStackedWidget->setCurrentWidget(holovideoEncodeOptions);
   }
+  else if(0 == QString(HoloimageEncoder::codecName().c_str()).compare(text))
+  {
+	encoderOptionsStackedWidget->setCurrentWidget(holoimageEncodeOptions);
+  }
   else
   {
     decoderOptionsStackedWidget->setCurrentWidget(defaultEncoderOptions);
@@ -132,6 +136,7 @@ void EncoderController::_addCodecs(void)
   //  Add encoders
   encoderComboBox->addItem(QString(DepthEncoder::codecName().c_str()));
   encoderComboBox->addItem(QString(HolovideoEncoder::codecName().c_str()));
+  encoderComboBox->addItem(QString(HoloimageEncoder::codecName().c_str()));
 }
 
 void EncoderController::_previewEncoding(void)
@@ -176,6 +181,10 @@ Codec* EncoderController::_getEncoder(void)
   else if(0 == QString(HolovideoEncoder::codecName().c_str()).compare(encoderComboBox->currentText()))
   {
 	encoder = holovideoEncodeOptions->getCodec();
+  }
+  else if(0 == QString(HoloimageEncoder::codecName().c_str()).compare(encoderComboBox->currentText()))
+  {
+	encoder = holoimageEncodeOptions->getCodec();
   }
   else
   {

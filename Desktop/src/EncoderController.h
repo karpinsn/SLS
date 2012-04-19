@@ -22,6 +22,7 @@
 
 #include "Codecs/DepthEncoder.h"
 #include "Codecs/MultiWavelengthDecoder.h"
+#include "Codecs/HoloimageEncoder.h"
 #include "Codecs/HolovideoEncoder.h"
 #include "Codecs/HolovideoDecoder.h"
 #include "Codecs/XYZMDecoder.h"

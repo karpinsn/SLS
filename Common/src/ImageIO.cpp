@@ -58,14 +58,31 @@ bool ImageIO::saveImage(const string &filename, const IplImage* image, bool need
 
 bool ImageIO::saveTexture(const string &filename, Texture &texture)
 {
-	ensureImageSize(texture.getWidth(), texture.getHeight(), texture.getChannelCount());
+	//ensureImageSize(texture.getWidth(), texture.getHeight(), texture.getChannelCount());
+	//
+	//bool saved = false;
+	//if(GL_UNSIGNED_BYTE == texture.getDataType())
+	//{
+	//	texture.transferFromTexture(m_imageHandle);
+	//	
+	//	bool reorderChannels = texture.getFormat() == GL_RGBA || texture.getFormat() == GL_RGB;
+	//	saved = saveImage(filename, m_imageHandle, reorderChannels);
+	//}
+	//
+	//return saved;
+  return saveTexture(filename, &texture);
+}
+
+bool ImageIO::saveTexture(const string &filename, Texture *texture)
+{
+	ensureImageSize(texture->getWidth(), texture->getHeight(), texture->getChannelCount());
 	
 	bool saved = false;
-	if(GL_UNSIGNED_BYTE == texture.getDataType())
+	if(GL_UNSIGNED_BYTE == texture->getDataType())
 	{
-		texture.transferFromTexture(m_imageHandle);
+		texture->transferFromTexture(m_imageHandle);
 		
-		bool reorderChannels = texture.getFormat() == GL_RGBA || texture.getFormat() == GL_RGB;
+		bool reorderChannels = texture->getFormat() == GL_RGBA || texture->getFormat() == GL_RGB;
 		saved = saveImage(filename, m_imageHandle, reorderChannels);
 	}
 	

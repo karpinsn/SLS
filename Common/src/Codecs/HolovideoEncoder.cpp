@@ -58,6 +58,8 @@ void HolovideoEncoder::closeCodec(void)
   m_video->closeFile();
 }
 
+#include "ImageIO.h"
+
 void HolovideoEncoder::process(MeshInterchange* data)
 {
   if(NULL == m_glWidget)
@@ -70,6 +72,15 @@ void HolovideoEncoder::process(MeshInterchange* data)
 
   MeshInterchange* mesh = m_glWidget->encode();
   mesh->getTexture()->transferFromTexture(m_image);
+
+  static int frameCount = 0;
+  
+  char filename[1000];
+  sprintf(filename, "N:/Data/Frames/%04d.png", frameCount++);
+  
+  ImageIO io;
+  io.saveImage(filename, m_image, true);
+  //cvSaveImage(filename, m_image);
 
   m_yuv444toyuv422.iplImage2AVFrame(m_image, yuv444Frame);
 

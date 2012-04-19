@@ -157,8 +157,8 @@ void EncoderController::_previewEncoding(void)
   }
 
   //  Close up
-  encoder->closeCodec();
-  decoder->closeCodec();
+  //encoder->closeCodec();
+  //decoder->closeCodec();
 }
 
 Codec* EncoderController::_getEncoder(void)

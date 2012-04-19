@@ -34,7 +34,8 @@ void ViewController::openHoloImage(void)
   if(!file.isEmpty())
   {
     ImageIO io;
-    IplImage* image = io.readImage(file.toStdString().c_str());
+	string filename = file.toLocal8Bit().constData();
+    IplImage* image = io.readImage(filename.c_str());
 
     if(NULL != image)
     {

@@ -19,11 +19,11 @@ void EncoderController::_updateGL(void)
 {
   Logger::logDebug("EncoderController - _updateGL: Enter");
 
-  OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("encoderGLWidget"));
+  //OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("encoderGLWidget"));
 
-  if(NULL != glContext)
+  if(NULL != encoderGLWidget)
   {
-    glContext->updateScene();
+    encoderGLWidget->updateScene();
   }
   else
   {
@@ -147,6 +147,9 @@ void EncoderController::_previewEncoding(void)
 
   decoder->openCodec(decoderGLWidget);
   encoder->openCodec(encoderGLWidget);
+
+  //  Set the size back to whatever the preview window is
+  encoderGLWidget->reinit(encoderGLWidget->size().width(), encoderGLWidget->size().height());
 
   MeshInterchange* mesh = new MeshInterchange();
   decoder->process(mesh);

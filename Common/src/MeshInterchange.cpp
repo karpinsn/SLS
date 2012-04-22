@@ -112,7 +112,7 @@ bool MeshInterchange::isEmpty()
   return NULL == m_texture && NULL == m_image && NULL == m_mesh;
 }
 
-void Meshinterchange::_deleteAssets(void)
+void MeshInterchange::_deleteAssets(void)
 {
   if(NULL != m_texture)
   {

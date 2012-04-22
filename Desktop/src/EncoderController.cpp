@@ -102,8 +102,8 @@ void EncoderController::encode(void)
     encoder->process(mesh);
 	
 	//	TODO Comeback and fix this
-	delete mesh->getMesh();
-	mesh->setMesh(NULL);
+	//delete mesh->getMesh();
+	//mesh->setMesh(NULL);
 
     decoder->process(mesh);
   }

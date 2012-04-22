@@ -39,18 +39,20 @@ private:
   glm::vec3*  m_data;
   AbstractMesh* m_mesh;
 
+  bool m_deleteAssets;
+
 public:
   MeshInterchange();
-  MeshInterchange(IplImage* image);
-  MeshInterchange(Texture* texture);
+  MeshInterchange(IplImage* image, bool deleteAssets = true);
+  MeshInterchange(Texture* texture, bool deleteAssets = true);
   MeshInterchange(Texture& texture);
-  MeshInterchange(AbstractMesh* mesh);
+  MeshInterchange(AbstractMesh* mesh, bool deleteAssets = true);
 
   int getPreferedFormat(void);
 
-  void setTexture(Texture* texture);
-  void setIplImage(IplImage* image);
-  void setMesh(AbstractMesh* mesh);
+  void setTexture(Texture* texture, bool deleteAssets = true);
+  void setIplImage(IplImage* image, bool deleteAssets = true);
+  void setMesh(AbstractMesh* mesh, bool deleteAssets = true);
 
   Texture*	getTexture(void);
   IplImage* getIplImage(void);
@@ -59,6 +61,9 @@ public:
   int getWidth();
   int getHeight();
   bool isEmpty();
+
+private:
+  void _deleteAssets(void);
 };
 
 #endif // _MESH_INTERCHANGE_H_

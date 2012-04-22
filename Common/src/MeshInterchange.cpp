@@ -2,20 +2,24 @@
 
 MeshInterchange::MeshInterchange()
 {
+  m_deleteAssets = false;
   m_image = NULL;
   m_texture = NULL;
   m_mesh = NULL;
 }
 
-MeshInterchange::MeshInterchange(IplImage* image)
+MeshInterchange::MeshInterchange(IplImage* image, bool deleteAssets)
 {
+  m_deleteAssets = deleteAssets;
   m_texture = NULL;
   m_image = image;
   m_mesh = NULL;
 }
 
-MeshInterchange::MeshInterchange(Texture* texture)
+MeshInterchange::MeshInterchange(Texture* texture, bool deleteAssets)
 {
+  m_deleteAssets = deleteAssets;
+  m_texture = NULL;
   m_image = NULL;
   m_texture = texture;
   m_mesh = NULL;
@@ -23,13 +27,16 @@ MeshInterchange::MeshInterchange(Texture* texture)
 
 MeshInterchange::MeshInterchange(Texture& texture)
 {
-  m_image = NULL;
+  m_deleteAssets = false;
+  m_image = NULL; 
+  m_texture = NULL;
   m_texture = &texture;
   m_mesh = NULL;
 }
 
-MeshInterchange::MeshInterchange(AbstractMesh* mesh)
+MeshInterchange::MeshInterchange(AbstractMesh* mesh, bool deleteAssets)
 {
+  m_deleteAssets = deleteAssets;
   m_image = NULL;
   m_texture = NULL;
   m_mesh = mesh;
@@ -55,19 +62,22 @@ int MeshInterchange::getPreferedFormat(void)
   }
 }
 
-void MeshInterchange::setTexture(Texture* texture)
+void MeshInterchange::setTexture(Texture* texture, bool deleteAssets)
 {
 }
 
-void MeshInterchange::setIplImage(IplImage* image)
+void MeshInterchange::setIplImage(IplImage* image, bool deleteAssets)
 {
 }
 
-void MeshInterchange::setMesh(AbstractMesh* mesh)
+void MeshInterchange::setMesh(AbstractMesh* mesh, bool deleteAssets)
 {
-  // TODO - Comeback and fix this
-  m_image = NULL;
-  m_texture = NULL;
+  if(m_deleteAssets)
+  {
+      _deleteAssets();
+  }
+
+  m_deleteAssets = deleteAssets; 
   m_mesh = mesh;
 }
 
@@ -100,4 +110,26 @@ bool MeshInterchange::isEmpty()
 {
   //  If the texture and image are both NULL then its empty
   return NULL == m_texture && NULL == m_image && NULL == m_mesh;
+}
+
+void Meshinterchange::_deleteAssets(void)
+{
+  if(NULL != m_texture)
+  {
+      delete m_texture;
+  }
+
+  if(NULL != m_mesh)
+  {
+      delete m_mesh;
+  }
+
+  if(NULL != m_image)
+  {
+      cvReleaseImage(&m_image);
+  }
+
+  m_image   = NULL;
+  m_texture = NULL;
+  m_mesh    = NULL; 
 }

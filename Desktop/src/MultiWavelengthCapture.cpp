@@ -29,7 +29,7 @@ void MultiWavelengthCapture::init()
 
 void MultiWavelengthCapture::init(float width, float height)
 {
-  if(!m_hasBeenInit)
+  if(!m_hasBeenInit && width > 0 && height > 0)
   {
     _initShaders(width, height);
     _initTextures(width, height);

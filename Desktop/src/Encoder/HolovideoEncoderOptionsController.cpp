@@ -18,7 +18,7 @@ HolovideoEncoderOptionsController::~HolovideoEncoderOptionsController()
 
 void HolovideoEncoderOptionsController::selectFile(void)
 {
-  QString file = QFileDialog::getSaveFileName(this, "Select source file to Open", "/", "Video (*.avi)");
+  QString file = QFileDialog::getSaveFileName(this, "Save File As", "/", "Video (*.avi)");
 
   if(!file.isEmpty())
   {

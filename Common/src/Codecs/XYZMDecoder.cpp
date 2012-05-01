@@ -39,13 +39,6 @@ void XYZMDecoder::process(MeshInterchange* data)
 	m_listPosition++; // Dont forget to increment the position
   }
 
-  if(NULL == mesh)
-  {
-	//	At the end of the file
-    data = NULL;
-    return;
-  }
-
   //  TODO Comeback and fix this
   data->setMesh(mesh);
 }

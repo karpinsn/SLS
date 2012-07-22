@@ -114,14 +114,10 @@ set(SOURCES
     Holoencoder.cpp
     XYZFileIO.cpp
 	XYZMesh.cpp
-	CaptureController.cpp
-    CameraCapture.cpp
     ViewController.cpp
     EncoderController.cpp
     ImageBuffer.cpp
-    FrameCapture.cpp
-    CameraConnectDialog.cpp
-
+    
 	MainWindowView.h
 	MainWindowController.h
 	OpenGLWidget.h
@@ -129,14 +125,9 @@ set(SOURCES
 	Holoencoder.h
 	XYZFileIO.h
 	XYZMesh.h
-	CaptureController.h
-    CameraCapture.h
     ViewController.h
     EncoderController.h
     ImageBuffer.h
-    FrameCapture.h
-    CameraConnectDialog.h
-    
 	)	
 
 SET(SOURCES_ENCODER
@@ -156,7 +147,16 @@ SET(SOURCES_ENCODER
 )
 
 SET(SOURCES_CAPTURE
+	Capture/CameraCapture.cpp
+	Capture/CaptureController.cpp
+	Capture/CameraConnectDialog.cpp
+	Capture/FrameCapture.cpp
+	
 	Capture/ICapture.h
+	Capture/CameraCapture.h
+	Capture/CaptureController.h
+	Capture/CameraConnectDialog.h
+	Capture/FrameCapture.h
 )
 
 SET(SOURCES_NINEFRINGE
@@ -208,7 +208,7 @@ SET(SOURCES_COMMON_CODECS_SOURCES
 	
 # QT Files
 set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui ui/DepthmapCodecOptions.ui ui/MultiWavelengthCodecOptions.ui ui/HolovideoCodecOptions.ui ui/HoloimageEncoderOptions.ui ui/XYZMCodecOptions.ui ui/HolovideoEncoderOptions.ui)
-set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h EncodingOpenGLWidget.h CaptureController.h ViewController.h EncoderController.h CaptureController.h FrameCapture.h CameraConnectDialog.h Encoder/DepthmapCodecOptionsController.h Encoder/MultiWavelengthCodecOptionsController.h Encoder/HolovideoCodecOptionsController.h Encoder/HoloimageEncoderOptionsController.h Encoder/XYZMCodecOptionsController.h Encoder/HolovideoEncoderOptionsController.h)
+set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h EncodingOpenGLWidget.h Capture/CaptureController.h ViewController.h EncoderController.h Capture/FrameCapture.h Capture/CameraConnectDialog.h Encoder/DepthmapCodecOptionsController.h Encoder/MultiWavelengthCodecOptionsController.h Encoder/HolovideoCodecOptionsController.h Encoder/HoloimageEncoderOptionsController.h Encoder/XYZMCodecOptionsController.h Encoder/HolovideoEncoderOptionsController.h)
 set(RESOURCES ui/Holoencoder.qrc)
 
 #	---------------------------------------------------------------------------------------

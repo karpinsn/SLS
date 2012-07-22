@@ -348,7 +348,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="ViewController" name="viewController">
        <property name="sizePolicy">
@@ -639,7 +639,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
   <customwidget>
    <class>CaptureController</class>
    <extends>QWidget</extends>
-   <header>CaptureController.h</header>
+   <header location="global">Capture/CaptureController.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

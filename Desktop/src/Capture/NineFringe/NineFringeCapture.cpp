@@ -1,6 +1,6 @@
-#include "MultiWavelengthCapture.h"
+#include "NineFringeCapture.h"
 
-MultiWavelengthCapture::MultiWavelengthCapture(void)
+NineFringeCapture::NineFringeCapture(void)
 {
   m_hasBeenInit = false;
   m_haveReferencePhase = false;
@@ -13,7 +13,7 @@ MultiWavelengthCapture::MultiWavelengthCapture(void)
   m_displayMode = Geometry;
 }
 
-MultiWavelengthCapture::~MultiWavelengthCapture()
+NineFringeCapture::~NineFringeCapture()
 {
   if(m_hasBeenInit)
   {
@@ -22,12 +22,12 @@ MultiWavelengthCapture::~MultiWavelengthCapture()
   }
 }
 
-void MultiWavelengthCapture::init()
+void NineFringeCapture::init()
 {
   init(256,256);
 }
 
-void MultiWavelengthCapture::init(float width, float height)
+void NineFringeCapture::init(float width, float height)
 {
   if(!m_hasBeenInit && width > 0 && height > 0)
   {
@@ -52,7 +52,7 @@ void MultiWavelengthCapture::init(float width, float height)
   }
 }
 
-void MultiWavelengthCapture::resizeInput(float width, float height)
+void NineFringeCapture::resizeInput(float width, float height)
 {
   //  Make sure that it has been initalized first.
   if(m_hasBeenInit)
@@ -96,10 +96,10 @@ void MultiWavelengthCapture::resizeInput(float width, float height)
     m_fringeLoadingImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3);
   }
 
-  OGLStatus::logOGLErrors("MultiWavelengthCapture - resizeInput()");
+  OGLStatus::logOGLErrors("NineFringeCapture - resizeInput()");
 }
 
-void MultiWavelengthCapture::_initShaders(float width, float height)
+void NineFringeCapture::_initShaders(float width, float height)
 {
   // Create the shaders
   m_phaseCalculator.init();
@@ -158,12 +158,12 @@ void MultiWavelengthCapture::_initShaders(float width, float height)
   m_finalRender.uniform("depthMap", 1);
   m_finalRender.uniform("phaseMap", 2);
 
-  OGLStatus::logOGLErrors("MultiWavelengthCapture - initShaders()");
+  OGLStatus::logOGLErrors("NineFringeCapture - initShaders()");
 }
 
-void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
+void NineFringeCapture::_initTextures(GLuint width, GLuint height)
 {
-  Logger::logDebug("MultiWavelengthCapture - initTextures(): Creating textures for phase map and normal map");
+  Logger::logDebug("NineFringeCapture - initTextures(): Creating textures for phase map and normal map");
 
   m_phaseMap0AttachPoint      = GL_COLOR_ATTACHMENT0_EXT;
   m_phaseMap1AttachPoint      = GL_COLOR_ATTACHMENT1_EXT;
@@ -199,10 +199,10 @@ void MultiWavelengthCapture::_initTextures(GLuint width, GLuint height)
   m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
   m_imageProcessor.unbind();
 
-  OGLStatus::logOGLErrors("MultiWavelengthCapture - initTextures()");
+  OGLStatus::logOGLErrors("NineFringeCapture - initTextures()");
 }
 
-void MultiWavelengthCapture::_initLighting(void)
+void NineFringeCapture::_initLighting(void)
 {
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
@@ -213,23 +213,23 @@ void MultiWavelengthCapture::_initLighting(void)
   m_finalRender.uniform("specularColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
 }
 
-void MultiWavelengthCapture::setGammaCutoff(float gamma)
+void NineFringeCapture::setGammaCutoff(float gamma)
 {
   m_gammaCutoff = gamma;
 }
 
-void MultiWavelengthCapture::setScalingFactor(float scalingFactor)
+void NineFringeCapture::setScalingFactor(float scalingFactor)
 {
   m_scalingFactor = scalingFactor;
 }
 
-MeshInterchange* MultiWavelengthCapture::decode(void)
+MeshInterchange* NineFringeCapture::decode(void)
 {
-  OGLStatus::logOGLErrors("MultiWavelengthCapture - decode()");
+  OGLStatus::logOGLErrors("NineFringeCapture - decode()");
   return new MeshInterchange(m_depthMap);
 }
 
-void MultiWavelengthCapture::draw(void)
+void NineFringeCapture::draw(void)
 {
   if(m_captureReferencePhase)
   {
@@ -310,10 +310,10 @@ void MultiWavelengthCapture::draw(void)
   }
 
   m_fpsCalculator.frameUpdate();
-  OGLStatus::logOGLErrors("MultiWavelengthCapture - draw()");
+  OGLStatus::logOGLErrors("NineFringeCapture - draw()");
 }
 
-void MultiWavelengthCapture::resize(int width, int height)
+void NineFringeCapture::resize(int width, int height)
 {
   m_camera.reshape(width, height);
   m_textureDisplay.resize(width, height);
@@ -325,22 +325,22 @@ void MultiWavelengthCapture::resize(int width, int height)
   glMatrixMode(GL_MODELVIEW);
 }
 
-void MultiWavelengthCapture::cameraSelectMode(int mode)
+void NineFringeCapture::cameraSelectMode(int mode)
 {
   m_camera.setMode(mode);
 }
 
-void MultiWavelengthCapture::mousePressEvent(int mouseX, int mouseY)
+void NineFringeCapture::mousePressEvent(int mouseX, int mouseY)
 {
   m_camera.mousePressed(mouseX, mouseY);
 }
 
-void MultiWavelengthCapture::mouseMoveEvent(int mouseX, int mouseY)
+void NineFringeCapture::mouseMoveEvent(int mouseX, int mouseY)
 {
   m_camera.mouseMotion(mouseX, mouseY);
 }
 
-bool MultiWavelengthCapture::newImage(IplImage* image)
+bool NineFringeCapture::newImage(IplImage* image)
 {
   bool needRedraw = false;
 
@@ -370,45 +370,45 @@ bool MultiWavelengthCapture::newImage(IplImage* image)
   }
 
   //	Make sure we dont have any errors
-  OGLStatus::logOGLErrors("MultiWavelengthCapture - setBackHoloBuffer()");
+  OGLStatus::logOGLErrors("NineFringeCapture - setBackHoloBuffer()");
   return needRedraw;
 }
 
-void MultiWavelengthCapture::swapBuffers(void)
+void NineFringeCapture::swapBuffers(void)
 {
   //	Switch the front and back buffer
   m_frontBufferIndex = (m_frontBufferIndex + 1) % 2;
 
   //	Make sure we dont have any errors
-  OGLStatus::logOGLErrors("MultiWavelengthCapture - swapBuffers()");
+  OGLStatus::logOGLErrors("NineFringeCapture - swapBuffers()");
 }
 
-void MultiWavelengthCapture::captureReferencePlane(void)
+void NineFringeCapture::captureReferencePlane(void)
 {
   m_captureReferencePhase = true;
 }
 
-void MultiWavelengthCapture::show3D(void)
+void NineFringeCapture::show3D(void)
 {
   m_displayMode = Geometry;
 }
 
-void MultiWavelengthCapture::showPhase(void)
+void NineFringeCapture::showPhase(void)
 {
   m_displayMode = Phase;
 }
 
-double MultiWavelengthCapture::getFrameRate(void)
+double NineFringeCapture::getFrameRate(void)
 {
   return m_fpsCalculator.getFrameRate();
 }
 
-double MultiWavelengthCapture::get3DRate(void)
+double NineFringeCapture::get3DRate(void)
 {
   return m_3dpsCalculator.getFrameRate();
 }
 
-void MultiWavelengthCapture::_drawCalculatePhase()
+void NineFringeCapture::_drawCalculatePhase()
 {
   m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
   m_phaseCalculator.bind();
@@ -419,7 +419,7 @@ void MultiWavelengthCapture::_drawCalculatePhase()
   m_imageProcessor.process();
 }
 
-void MultiWavelengthCapture::_drawFilterPhase()
+void NineFringeCapture::_drawFilterPhase()
 {
   m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
   m_phaseFilter.bind();
@@ -433,7 +433,7 @@ void MultiWavelengthCapture::_drawFilterPhase()
   m_imageProcessor.process();
 }
 
-void MultiWavelengthCapture::_drawCalculateDepthMap()
+void NineFringeCapture::_drawCalculateDepthMap()
 {
   m_imageProcessor.bindDrawBuffer(m_depthMapAttachPoint);
   m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
@@ -443,7 +443,7 @@ void MultiWavelengthCapture::_drawCalculateDepthMap()
   m_imageProcessor.process();
 }
 
-void MultiWavelengthCapture::_drawCalculateNormalMap()
+void NineFringeCapture::_drawCalculateNormalMap()
 {
   m_imageProcessor.bindDrawBuffer(m_normalMapAttachPoint);
   m_normalCalculator.bind();

@@ -2,12 +2,12 @@
 
 CameraCapture::CameraCapture()
 {	
-  m_camera = NULL;
+  m_camera = nullptr;
 }
 
 CameraCapture::~CameraCapture()
 {
-  if(NULL != m_camera)
+  if(nullptr != m_camera)
   {
     delete m_camera;
   }
@@ -20,7 +20,7 @@ void CameraCapture::init(ImageBuffer *buffer)
 
 void CameraCapture::start()
 {
-  if(NULL != m_camera)
+  if(nullptr != m_camera)
   {
     m_camera->open();
   }
@@ -28,7 +28,7 @@ void CameraCapture::start()
 
 void CameraCapture::stop()
 {
-  if(NULL != m_camera)
+  if(nullptr != m_camera)
   {
     m_camera->close();
   }
@@ -41,10 +41,10 @@ void CameraCapture::newFrame(IplImage* frame)
 
 void CameraCapture::setCamera(lens::Camera* camera)
 {
-  if(NULL != camera)
+  if(nullptr != camera)
   {
     //  Delete the old camera if we have one
-    if(NULL != m_camera)
+    if(nullptr != m_camera)
     {
       delete m_camera;
     }

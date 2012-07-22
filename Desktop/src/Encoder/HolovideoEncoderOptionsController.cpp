@@ -2,7 +2,7 @@
 
 HolovideoEncoderOptionsController::HolovideoEncoderOptionsController(QWidget* parent) : QWidget(parent)
 {
-  m_codec = NULL;
+  m_codec = nullptr;
   setupUi(this);
 
   _connectSignalsWithController();
@@ -10,7 +10,7 @@ HolovideoEncoderOptionsController::HolovideoEncoderOptionsController(QWidget* pa
 
 HolovideoEncoderOptionsController::~HolovideoEncoderOptionsController()
 {
-  if(NULL != m_codec)
+  if(nullptr != m_codec)
   {
 	delete m_codec;
   }
@@ -28,7 +28,7 @@ void HolovideoEncoderOptionsController::selectFile(void)
 
 void HolovideoEncoderOptionsController::autoFitData(void)
 {
-  if(NULL != m_codec)
+  if(nullptr != m_codec)
   {
 	m_codec->autoFitData();
   }
@@ -37,7 +37,7 @@ void HolovideoEncoderOptionsController::autoFitData(void)
 Codec* HolovideoEncoderOptionsController::getCodec(void)
 {
   // Lazy init
-  if(m_codec == NULL)
+  if(m_codec == nullptr)
   {
     m_codec = new HolovideoEncoder();
   }

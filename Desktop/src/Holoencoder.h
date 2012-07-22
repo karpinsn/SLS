@@ -35,14 +35,14 @@
 #include <wrench/gl/Texture.h>
 
 #include "AbstractMesh.h"
-#include "AbstractGLContext.h"
+#include "IGLContext.h"
 #include "MeshInterchange.h"
 #include "EncodingGLContext.h"
 
 using namespace std;
 using namespace wrench::gl;
 
-class Holoencoder : public AbstractGLContext, public EncodingGLContext
+class Holoencoder : public IGLContext, public EncodingGLContext
 {
 private:
         ShaderProgram m_encoderShader;

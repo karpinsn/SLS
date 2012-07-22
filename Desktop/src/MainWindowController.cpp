@@ -30,7 +30,7 @@ void MainWindowController::onOpenXYZM()
 	}
 	
 	//	If we dont have a currently selected item then selected the first in the list
-	if (NULL == m_mainWindow->fileList->currentItem())
+	if (nullptr == m_mainWindow->fileList->currentItem())
 	{
 		if(m_mainWindow->fileList->count() > 0)
 		{

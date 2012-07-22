@@ -6,7 +6,7 @@
 #include "../MeshInterchange.h"
 
 #include "../VideoIO.h"
-#include "MultiWavelengthCapture.h"
+#include "Capture\NineFringe\NineFringeCapture.h"
 
 using namespace std;
 
@@ -14,7 +14,7 @@ class MultiWavelengthDecoder : public Codec
 {
 private:
   VideoIO				  m_io;
-  MultiWavelengthCapture  m_coder;
+  NineFringeCapture  m_coder;
   bool					  m_calculateReference;
   EncodingOpenGLWidget*	  m_glWidget;
   string				  m_filename;

@@ -3,12 +3,12 @@
 OpenGLWidget::OpenGLWidget(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
   m_clearColor = QColor::fromRgb(0, 0, 0, 0);
-  m_glContext = NULL;
+  m_glContext = nullptr;
   m_width = 0;
   m_height = 0;
 }
 
-OpenGLWidget::OpenGLWidget(QWidget *parent, AbstractGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+OpenGLWidget::OpenGLWidget(QWidget *parent, IGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
   m_glContext = glContext;
   m_clearColor = clearColor;
@@ -37,7 +37,7 @@ void OpenGLWidget::initializeGL()
   glShadeModel(GL_SMOOTH);
 }
 
-void OpenGLWidget::setGLContext(AbstractGLContext* glContext)
+void OpenGLWidget::setGLContext(IGLContext* glContext)
 {
   m_glContext = glContext;
   makeCurrent();
@@ -72,7 +72,7 @@ void OpenGLWidget::resizeGL(int width, int height)
   m_width = width;
   m_height = height;
 
-  if(NULL != m_glContext)
+  if(nullptr != m_glContext)
   {
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
@@ -85,7 +85,7 @@ void OpenGLWidget::resizeGL(int width, int height)
 
 void OpenGLWidget::cameraSelectMode(int mode)
 {
-  if(NULL != m_glContext)
+  if(nullptr != m_glContext)
   {
 	m_glContext->cameraSelectMode(mode);
   }
@@ -95,7 +95,7 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *event)
 {
   //std::cout << "Mouse Pressed: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
   
-  if(NULL != m_glContext)
+  if(nullptr != m_glContext)
   {
 	//	Perform the Y flip
 	int mouseY = (m_height - 1) - event->pos().y();
@@ -109,7 +109,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *event)
 {
   //std::cout << "Mouse Moved: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
 
-  if(NULL != m_glContext)
+  if(nullptr != m_glContext)
   {
 	int mouseY = (m_height - 1) - event->pos().y();
 
@@ -122,7 +122,7 @@ void OpenGLWidget::mouseReleaseEvent(QMouseEvent* event)
 {
   //std::cout << "Mouse Released: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl;
   
-  if(NULL != m_glContext)
+  if(nullptr != m_glContext)
   {
 	updateGL();
   }

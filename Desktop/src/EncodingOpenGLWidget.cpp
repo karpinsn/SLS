@@ -3,14 +3,14 @@
 EncodingOpenGLWidget::EncodingOpenGLWidget(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
   m_clearColor = QColor::fromRgb(0, 0, 0, 0);
-  m_glContext = NULL;
+  m_glContext = nullptr;
   m_width = 512;
   m_height = 512;
   m_encode = false;
   m_decode = false;
 }
 
-EncodingOpenGLWidget::EncodingOpenGLWidget(QWidget *parent, AbstractGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+EncodingOpenGLWidget::EncodingOpenGLWidget(QWidget *parent, IGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
   m_glContext = glContext;
   m_clearColor = clearColor;
@@ -38,7 +38,7 @@ void EncodingOpenGLWidget::initializeGL()
   }
   std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << endl;
 
-  if(NULL != m_glContext)
+  if(nullptr != m_glContext)
   {
     m_glContext->init(m_width, m_height);
   }
@@ -51,7 +51,7 @@ void EncodingOpenGLWidget::initializeGL()
   glShadeModel(GL_SMOOTH);
 }
 
-void EncodingOpenGLWidget::setGLContext(AbstractGLContext* glContext)
+void EncodingOpenGLWidget::setGLContext(IGLContext* glContext)
 {
   m_glContext = glContext;
   makeCurrent();
@@ -103,7 +103,7 @@ void EncodingOpenGLWidget::paintGL()
 
   glPushMatrix();
 
-  if(NULL != m_glContext)
+  if(nullptr != m_glContext)
   {
 	if(m_encode)
 	{
@@ -137,7 +137,7 @@ void EncodingOpenGLWidget::resizeGL(int width, int height)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  if(NULL != m_glContext)
+  if(nullptr != m_glContext)
   {
     m_glContext->resize(width, height);
   }

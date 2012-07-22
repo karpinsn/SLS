@@ -19,7 +19,8 @@
 #include "OpenGLWidget.h"
 #include "CameraConnectDialog.h"
 
-#include "MultiWavelengthCapture.h"
+#include "Capture\ICapture.h"
+#include "Capture\NineFringe\NineFringeCapture.h"
 #include "CameraCapture.h"
 #include "ImageBuffer.h"
 #include "FrameCapture.h"
@@ -32,10 +33,10 @@ class CaptureController : public QWidget, private Ui::Capture
   Q_OBJECT
 
 private:
-  MultiWavelengthCapture  m_gl3DContext;
-  CameraCapture           m_camera;
-  FrameCapture            m_frameCapture;
-  ImageBuffer             m_buffer;
+  shared_ptr<ICapture>		m_gl3DContext;
+  shared_ptr<CameraCapture> m_camera;
+  shared_ptr<FrameCapture>  m_frameCapture;
+  shared_ptr<ImageBuffer>   m_buffer;
 
   bool                    m_dropFrame;
   QStatusBar*             m_infoBar;

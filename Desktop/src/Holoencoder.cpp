@@ -3,7 +3,7 @@
 Holoencoder::Holoencoder(void)
 {
 	m_hasBeenInit = false;
-        m_currentMesh = NULL;
+        m_currentMesh = nullptr;
 }
 
 void Holoencoder::init()
@@ -18,7 +18,7 @@ void Holoencoder::init(float width, float height)
       m_width = width;
       m_height = height;
 
-      m_currentMesh = NULL;
+      m_currentMesh = nullptr;
       _initFBO();
 
       //m_controller.init(m_width, m_height);
@@ -32,7 +32,6 @@ void Holoencoder::init(float width, float height)
       //	Define the projector projection matrix
       m_projectorModelView = glm::mat4();
       m_projectorModelView = m_projectorModelView * glm::gtx::transform::rotate(30.0f, 0.0f, 1.0f, 0.0f);
-
 
       m_hasBeenInit = true;
   }
@@ -103,7 +102,7 @@ void Holoencoder::draw(void)
 
       glColor3f(.8, .8, .8);
 
-      if(NULL != m_currentMesh)
+      if(nullptr != m_currentMesh)
       {
           m_currentMesh->draw();
       }
@@ -148,7 +147,7 @@ void Holoencoder::mouseMoveEvent(int mouseX, int mouseY)
 
 void Holoencoder::setCurrentMesh(AbstractMesh* current)
 {
-	if(NULL != m_currentMesh)
+	if(nullptr != m_currentMesh)
 	{
 		//	Make sure to delete the current mesh if its not null
 		delete m_currentMesh;
@@ -164,7 +163,7 @@ void Holoencoder::setCurrentMesh(MeshInterchange* current)
 
 void Holoencoder::encode(void)
 {
-  OGLStatus::logOGLErrors("MultiWavelengthCapture - decode()");
+  OGLStatus::logOGLErrors("Holoencoder - encoder()");
   
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
   draw();
@@ -178,7 +177,7 @@ MeshInterchange* Holoencoder::getEncodedData()
 
 void Holoencoder::autoFitTransforms(void)
 {
-  if(NULL != m_currentMesh)
+  if(nullptr != m_currentMesh)
   {
 	m_translate = glm::translate(glm::mat4(1.0), -m_currentMesh->getBoundingBox().center);
 	

@@ -3,56 +3,56 @@
 MeshInterchange::MeshInterchange()
 {
   m_deleteAssets = false;
-  m_image = NULL;
-  m_texture = NULL;
-  m_mesh = NULL;
+  m_image = nullptr;
+  m_texture = nullptr;
+  m_mesh = nullptr;
 }
 
 MeshInterchange::MeshInterchange(IplImage* image, bool deleteAssets)
 {
   m_deleteAssets = deleteAssets;
-  m_texture = NULL;
+  m_texture = nullptr;
   m_image = image;
-  m_mesh = NULL;
+  m_mesh = nullptr;
 }
 
 MeshInterchange::MeshInterchange(Texture* texture, bool deleteAssets)
 {
   m_deleteAssets = deleteAssets;
-  m_texture = NULL;
-  m_image = NULL;
+  m_texture = nullptr;
+  m_image = nullptr;
   m_texture = texture;
-  m_mesh = NULL;
+  m_mesh = nullptr;
 }
 
 MeshInterchange::MeshInterchange(Texture& texture)
 {
   m_deleteAssets = false;
-  m_image = NULL; 
-  m_texture = NULL;
+  m_image = nullptr; 
+  m_texture = nullptr;
   m_texture = &texture;
-  m_mesh = NULL;
+  m_mesh = nullptr;
 }
 
 MeshInterchange::MeshInterchange(AbstractMesh* mesh, bool deleteAssets)
 {
   m_deleteAssets = deleteAssets;
-  m_image = NULL;
-  m_texture = NULL;
+  m_image = nullptr;
+  m_texture = nullptr;
   m_mesh = mesh;
 }
 
 int MeshInterchange::getPreferedFormat(void)
 {
-  if(NULL != m_texture)
+  if(nullptr != m_texture)
   {
 	return TEXTURE_FORMAT;
   }
-  else if(NULL != m_image)
+  else if(nullptr != m_image)
   {
 	return IMAGE_FORMAT;
   }
-  else if(NULL != m_data)
+  else if(nullptr != m_data)
   {
 	return VERTEX_FORMAT;
   }
@@ -108,28 +108,28 @@ int MeshInterchange::getWidth()
 
 bool MeshInterchange::isEmpty()
 {
-  //  If the texture and image are both NULL then its empty
-  return NULL == m_texture && NULL == m_image && NULL == m_mesh;
+  //  If the texture and image are both nullptr then its empty
+  return nullptr == m_texture && nullptr == m_image && nullptr == m_mesh;
 }
 
 void MeshInterchange::_deleteAssets(void)
 {
-  if(NULL != m_texture)
+  if(nullptr != m_texture)
   {
       delete m_texture;
   }
 
-  if(NULL != m_mesh)
+  if(nullptr != m_mesh)
   {
       delete m_mesh;
   }
 
-  if(NULL != m_image)
+  if(nullptr != m_image)
   {
       cvReleaseImage(&m_image);
   }
 
-  m_image   = NULL;
-  m_texture = NULL;
-  m_mesh    = NULL; 
+  m_image   = nullptr;
+  m_texture = nullptr;
+  m_mesh    = nullptr; 
 }

@@ -43,7 +43,7 @@ void PointCloudMesh::draw()
 	glPolygonMode(GL_FRONT, GL_POINT);
 	glBindBuffer(GL_ARRAY_BUFFER, m_meshVBOID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshIBOID);
-	glDrawElements(GL_TRIANGLE_STRIP, elementCount, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLE_STRIP, elementCount, GL_UNSIGNED_INT, nullptr);
 }
 
 void PointCloudMesh::_generateIndices(void)

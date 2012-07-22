@@ -32,7 +32,7 @@
 
 #include "Holoencoder.h"
 #include "Holodecoder.h"
-#include "MultiWavelengthCapture.h"
+#include "Capture\NineFringe\NineFringeCapture.h"
 
 class MainWindowView;
 

@@ -30,7 +30,7 @@
 #include "Holoencoder.h"
 #include "Holodecoder.h"
 #include <wrench/gl/Camera.h>
-#include "AbstractGLContext.h"
+#include "IGLContext.h"
 
 class Holodecoder;
 
@@ -45,15 +45,15 @@ private:
 
 public:
   OpenGLWidget(QWidget *parent);
-  OpenGLWidget(QWidget* parent, AbstractGLContext* glContext, QColor clearColor);
+  OpenGLWidget(QWidget* parent, IGLContext* glContext, QColor clearColor);
   virtual ~OpenGLWidget();
 
   void initializeGL();
   void updateScene();
-  void setGLContext(AbstractGLContext* glContext);
+  void setGLContext(IGLContext* glContext);
   void cameraSelectMode(int mode);
 
-  AbstractGLContext*    m_glContext;
+  IGLContext*    m_glContext;
   Holodecoder*          m_holoDecoder;
 
 protected:

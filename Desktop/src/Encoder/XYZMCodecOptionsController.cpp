@@ -2,7 +2,7 @@
 
 XYZMCodecOptionsController::XYZMCodecOptionsController(QWidget* parent) : QWidget(parent)
 {
-  m_codec = NULL;
+  m_codec = nullptr;
 
   setupUi(this);
 
@@ -11,7 +11,7 @@ XYZMCodecOptionsController::XYZMCodecOptionsController(QWidget* parent) : QWidge
 
 XYZMCodecOptionsController::~XYZMCodecOptionsController()
 {
-  if(NULL != m_codec)
+  if(nullptr != m_codec)
   {
 	delete m_codec;
   }
@@ -20,7 +20,7 @@ XYZMCodecOptionsController::~XYZMCodecOptionsController()
 Codec* XYZMCodecOptionsController::getCodec(void)
 {
   // Lazy init
-  if(NULL == m_codec)
+  if(nullptr == m_codec)
   {
     m_codec = new XYZMDecoder(xyzmListWidget);
   }
@@ -42,7 +42,7 @@ void XYZMCodecOptionsController::addFiles(void)
 	}
 	
 	//	If we dont have a currently selected item then selected the first in the list
-	if (NULL == xyzmListWidget->currentItem())
+	if (nullptr == xyzmListWidget->currentItem())
 	{
 		if(xyzmListWidget->count() > 0)
 		{

@@ -12,7 +12,7 @@ void HolovideoDecoder::initCodec(string& filename)
 
 void HolovideoDecoder::openCodec(EncodingOpenGLWidget* glWidget)
 {
-  if(NULL == glWidget)
+  if(nullptr == glWidget)
   {
 	//  No OpenGL encoding widget. Cant open decode stream
 	return;
@@ -29,23 +29,23 @@ void HolovideoDecoder::openCodec(EncodingOpenGLWidget* glWidget)
 void HolovideoDecoder::closeCodec(void)
 {
   m_io.closeReadStream();
-  m_glWidget = NULL;
+  m_glWidget = nullptr;
 }
 
 void HolovideoDecoder::process(MeshInterchange* data)
 {
-  if(NULL == m_glWidget)
+  if(nullptr == m_glWidget)
   {
-    //  No OpenGL encoding widget. Return a NULL MeshInterchange
-    data = NULL;
+    //  No OpenGL encoding widget. Return a nullptr MeshInterchange
+    data = nullptr;
     return;
   }
 
   IplImage* frame = m_io.readStream();
-  if(NULL == frame)
+  if(nullptr == frame)
   {
 	//	At the end of the file
-    data = NULL;
+    data = nullptr;
     return;
   }
 

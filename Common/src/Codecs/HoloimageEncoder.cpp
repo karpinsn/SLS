@@ -20,7 +20,7 @@ void HoloimageEncoder::initCodec(string& filename, int width, int height)
 void HoloimageEncoder::openCodec(EncodingOpenGLWidget* glWidget)
 {
   //  Open the stream to write to
-  if(NULL == glWidget)
+  if(nullptr == glWidget)
   {
 	//	No OpenGL encoding widget. Cant open encoding stream
 	return;
@@ -38,7 +38,7 @@ void HoloimageEncoder::closeCodec(void)
 
 void HoloimageEncoder::process(MeshInterchange* data)
 {
-  if(NULL == m_glWidget)
+  if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return. Should error
     return;
@@ -55,7 +55,7 @@ void HoloimageEncoder::process(MeshInterchange* data)
 
 void HoloimageEncoder::previewProcess(MeshInterchange* data)
 {
-  if(NULL == m_glWidget)
+  if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return. Should error
     return;
@@ -71,7 +71,7 @@ void HoloimageEncoder::autoFitData(void)
 {
   m_encoder.autoFitTransforms();
 
-  if(NULL != m_glWidget)
+  if(nullptr != m_glWidget)
   {
 	m_glWidget->updateScene();
   }

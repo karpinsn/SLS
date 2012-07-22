@@ -11,7 +11,7 @@ CameraConnectDialog::CameraConnectDialog(QWidget *parent) : QDialog(parent)
 
 lens::Camera* CameraConnectDialog::getCamera(void)
 {
-  lens::Camera *m_camera = NULL;
+  lens::Camera *m_camera = nullptr;
 
   if(this->exec() == QDialog::Accepted)
   {

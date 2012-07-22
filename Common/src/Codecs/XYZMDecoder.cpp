@@ -8,7 +8,7 @@ XYZMDecoder::XYZMDecoder(const QListWidget* xyzmList)
 
 void XYZMDecoder::openCodec(EncodingOpenGLWidget* glWidget)
 {
-  if(NULL == glWidget)
+  if(nullptr == glWidget)
   {
 	//  No OpenGL encoding widget. Cant open decode stream
 	return;
@@ -19,20 +19,20 @@ void XYZMDecoder::openCodec(EncodingOpenGLWidget* glWidget)
 
 void XYZMDecoder::closeCodec(void)
 {
-  m_glWidget = NULL;
+  m_glWidget = nullptr;
 }
 
 void XYZMDecoder::process(MeshInterchange* data)
 {
-  if(NULL == m_glWidget)
+  if(nullptr == m_glWidget)
   {
-    //  No OpenGL encoding widget. Return a NULL MeshInterchange
-    data = NULL;
+    //  No OpenGL encoding widget. Return a nullptr MeshInterchange
+    data = nullptr;
     return;
   }
 
-  AbstractMesh* mesh = NULL;
-  if(NULL != m_xyzmList && m_listPosition < m_xyzmList->count())
+  AbstractMesh* mesh = nullptr;
+  if(nullptr != m_xyzmList && m_listPosition < m_xyzmList->count())
   {
 	QListWidgetItem *item = m_xyzmList->item(m_listPosition);
 	mesh = m_io.newMeshFromFile(item->text().toAscii().constData());
@@ -50,7 +50,7 @@ void XYZMDecoder::previewProcess(MeshInterchange* data)
 
 int XYZMDecoder::getWidth(void)
 {
-  if(NULL != m_xyzmList && m_listPosition < m_xyzmList->count())
+  if(nullptr != m_xyzmList && m_listPosition < m_xyzmList->count())
   {
 	QListWidgetItem *item = m_xyzmList->item(m_listPosition);
 	AbstractMesh* mesh = m_io.newMeshFromFile(item->text().toAscii().constData());
@@ -65,7 +65,7 @@ int XYZMDecoder::getWidth(void)
 
 int XYZMDecoder::getHeight(void)
 {
-  if(NULL != m_xyzmList && m_listPosition < m_xyzmList->count())
+  if(nullptr != m_xyzmList && m_listPosition < m_xyzmList->count())
   {
 	QListWidgetItem *item = m_xyzmList->item(m_listPosition);
 	AbstractMesh* mesh = m_io.newMeshFromFile(item->text().toAscii().constData());
@@ -82,7 +82,7 @@ float XYZMDecoder::getStreamLocation(void)
 {
   float progress = 0.0f;
   
-  if(NULL != m_xyzmList)
+  if(nullptr != m_xyzmList)
   {
 	progress = (float)m_xyzmList->count()/(float)m_listPosition;
   }

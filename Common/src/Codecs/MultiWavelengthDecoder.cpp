@@ -7,7 +7,7 @@ MultiWavelengthDecoder::MultiWavelengthDecoder(string& filename)
 
 void MultiWavelengthDecoder::openCodec(EncodingOpenGLWidget* glWidget)
 {
-  if(NULL == glWidget)
+  if(nullptr == glWidget)
   {
     //  No OpenGL encoding widget. Cant open decode stream
     return;
@@ -25,22 +25,22 @@ void MultiWavelengthDecoder::openCodec(EncodingOpenGLWidget* glWidget)
 void MultiWavelengthDecoder::closeCodec(void)
 {
   m_io.closeReadStream();
-  m_glWidget = NULL;
+  m_glWidget = nullptr;
 }
 
 void MultiWavelengthDecoder::process(MeshInterchange* data)
 {
-  if(NULL == m_glWidget)
+  if(nullptr == m_glWidget)
   {
-    //  No OpenGL encoding widget. Return a NULL MeshInterchange
-    data = NULL;
+    //  No OpenGL encoding widget. Return a nullptr MeshInterchange
+    data = nullptr;
     return;
   }
 
   if(_streamUntilNewFrame())
   {
-    //  End of the file. Return a NULL mesh
-    data = NULL;
+    //  End of the file. Return a nullptr mesh
+    data = nullptr;
     return;
   }
 
@@ -68,12 +68,12 @@ bool MultiWavelengthDecoder::_streamUntilNewFrame(void)
 
   //  While the frame is not null
   //  and we dont have a new 3D frame
-  while(NULL != frame && !m_coder.newImage(frame))
+  while(nullptr != frame && !m_coder.newImage(frame))
   {
     frame = m_io.readStream();
   }
 
-  return frame == NULL;
+  return frame == nullptr;
 }
 
 int MultiWavelengthDecoder::getWidth(void)

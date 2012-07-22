@@ -2,6 +2,11 @@
 
 CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
 {
+  m_gl3DContext	  = make_shared<NineFringeCapture>();
+  m_camera		  = make_shared<CameraCapture>();
+  m_frameCapture  = make_shared<FrameCapture>();
+  m_buffer		  = make_shared<ImageBuffer>();
+
   setupUi(this);                    //  Creates the UI objects
   _connectSignalsWithController();  //  Connects the UI objects to the slots in the controller
   _readSettings();                  //  Reads the persisted settings
@@ -9,7 +14,7 @@ CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
   m_dropFrame = false;
   m_fpsLabel.setText(QString(""));
   m_3dpsLabel.setText(QString(""));
-  m_infoBar = NULL;
+  m_infoBar = nullptr;
 }
 
 CaptureController::~CaptureController()
@@ -19,7 +24,7 @@ CaptureController::~CaptureController()
 void CaptureController::showEvent(QShowEvent *event)
 {  
   //  Connect to camera
-  m_frameCapture.start();
+  m_frameCapture->start();
   m_frameRateTimer.start(1000);
 
   //  Display the current FPS
@@ -32,7 +37,7 @@ void CaptureController::showEvent(QShowEvent *event)
 void CaptureController::hideEvent(QHideEvent *)
 {
   //  Remove the FPS counter
-  if(NULL != m_infoBar)
+  if(nullptr != m_infoBar)
   {
     m_infoBar->removeWidget(&m_fpsLabel);
     m_infoBar->removeWidget(&m_3dpsLabel);
@@ -41,10 +46,10 @@ void CaptureController::hideEvent(QHideEvent *)
 
 void CaptureController::init(void)
 {
-  captureGLWidget->setGLContext(&m_gl3DContext);
+  captureGLWidget->setGLContext(m_gl3DContext.get());
 
-  m_camera.init(&m_buffer);
-  m_frameCapture.init(&m_buffer);
+  m_camera->init(m_buffer.get());
+  m_frameCapture->init(m_buffer.get());
 }
 
 void CaptureController::setInfoBar(QStatusBar* infoBar)
@@ -54,12 +59,12 @@ void CaptureController::setInfoBar(QStatusBar* infoBar)
 
 void CaptureController::captureReference(void)
 {
-  m_gl3DContext.captureReferencePlane();
+  m_gl3DContext->captureReferencePlane();
 }
 
 void CaptureController::cameraSelectMode(int mode)
 {
-  m_gl3DContext.cameraSelectMode(mode);
+  m_gl3DContext->cameraSelectMode(mode);
 }
 
 void CaptureController::connectCamera(void)
@@ -70,14 +75,14 @@ void CaptureController::connectCamera(void)
   lens::Camera *camera = dialog.getCamera();
 
   //  Make sure that we have a new camera
-  if(NULL != camera)
+  if(nullptr != camera)
   {
-    m_camera.setCamera(camera);
+    m_camera->setCamera(camera);
 
     //  Reinitalize OpenGL stuff
-    m_gl3DContext.resizeInput(camera->getWidth(), camera->getHeight());
+    m_gl3DContext->resizeInput(camera->getWidth(), camera->getHeight());
 
-    m_camera.start();
+    m_camera->start();
     m_infoBar->showMessage("Connected to the camera");
   }
   else
@@ -88,7 +93,7 @@ void CaptureController::connectCamera(void)
 
 void CaptureController::disconnectCamera(void)
 {
-  m_camera.stop();
+  m_camera->stop();
   m_infoBar->showMessage("Camera stopped");
 }
 
@@ -100,7 +105,7 @@ void CaptureController::dropFrame(void)
 void CaptureController::newGammaValue(double gammaValue)
 {
   //  Set the new gamma value
-  m_gl3DContext.setGammaCutoff(gammaValue);
+  m_gl3DContext->setGammaCutoff(gammaValue);
 
   //  Persist the new gamma value
   m_settings.setValue(SettingsGammaValue, gammaValue);
@@ -108,7 +113,7 @@ void CaptureController::newGammaValue(double gammaValue)
 
 void CaptureController::newScalingFactor(double scalingFactor)
 {
-  m_gl3DContext.setScalingFactor(scalingFactor);
+  m_gl3DContext->setScalingFactor(scalingFactor);
 
   //  Persist the new scaling factor
   m_settings.setValue(SettingsScalingFactor, scalingFactor);
@@ -118,22 +123,24 @@ void CaptureController::newViewMode(QString viewMode)
 {
   if(0 == viewMode.compare(QString("3D")))
   {
-    m_gl3DContext.show3D();
+	//	TODO - Comeback and fix this
+    //m_gl3DContext->show3D();
   }
   else if(0 == viewMode.compare(QString("Phase")))
   {
-    m_gl3DContext.showPhase();
+	//	TODO - Comeback and fix this
+    //m_gl3DContext->showPhase();
   }
 }
 
 void CaptureController::updateFPS(void)
 {
-  double frameRate = m_gl3DContext.getFrameRate();
+  double frameRate = m_gl3DContext->getFrameRate();
   QString frameRateMessage = QString("FPS: ");
   frameRateMessage.append(QString("%1").arg(frameRate, 0, 'f', 3));
   m_fpsLabel.setText(frameRateMessage);
 
-  double threeDRate = m_gl3DContext.get3DRate();
+  double threeDRate = m_gl3DContext->get3DRate();
   QString threeDRateMessage = QString("3DPS: ");
   threeDRateMessage.append(QString("%1").arg(threeDRate, 0, 'f', 3));
   m_3dpsLabel.setText(threeDRateMessage);
@@ -153,7 +160,7 @@ void CaptureController::newFrame(IplImage *frame)
       releaseGray = true;
     }
 
-    if(m_gl3DContext.newImage(im_gray))
+    if(m_gl3DContext->newImage(im_gray))
     {
       captureGLWidget->updateScene();
     }
@@ -173,7 +180,7 @@ void CaptureController::newFrame(IplImage *frame)
 
 void CaptureController::_connectSignalsWithController(void)
 {
-  connect(&m_frameCapture,    SIGNAL(newFrame(IplImage*)),          this, SLOT(newFrame(IplImage*)));
+  connect(m_frameCapture.get(),    SIGNAL(newFrame(IplImage*)),          this, SLOT(newFrame(IplImage*)));
   connect(openCameraButton,   SIGNAL(clicked()),                    this, SLOT(connectCamera()));
   connect(closeCameraButton,  SIGNAL(clicked()),                    this, SLOT(disconnectCamera()));
   connect(calibrateButton,    SIGNAL(clicked()),                    this, SLOT(captureReference()));

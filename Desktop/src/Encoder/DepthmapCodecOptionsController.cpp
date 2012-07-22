@@ -2,7 +2,7 @@
 
 DepthmapCodecOptionsController::DepthmapCodecOptionsController(QWidget* parent) : QWidget(parent)
 {
-  m_codec = NULL;
+  m_codec = nullptr;
 
   setupUi(this);
   _connectSignalsWithController();
@@ -10,7 +10,7 @@ DepthmapCodecOptionsController::DepthmapCodecOptionsController(QWidget* parent) 
 
 DepthmapCodecOptionsController::~DepthmapCodecOptionsController()
 {
-  if(NULL != m_codec)
+  if(nullptr != m_codec)
   {
 	delete m_codec;
   }
@@ -33,7 +33,7 @@ void DepthmapCodecOptionsController::contrastStretchValueChange(int checkState)
 Codec* DepthmapCodecOptionsController::getCodec(void)
 {
   // Lazy init
-  if(NULL == m_codec)
+  if(nullptr == m_codec)
   {
     m_codec = new DepthEncoder();
   }

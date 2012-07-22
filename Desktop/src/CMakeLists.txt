@@ -114,7 +114,6 @@ set(SOURCES
     Holoencoder.cpp
     XYZFileIO.cpp
 	XYZMesh.cpp
-	MultiWavelengthCapture.cpp
 	CaptureController.cpp
     CameraCapture.cpp
     ViewController.cpp
@@ -130,7 +129,6 @@ set(SOURCES
 	Holoencoder.h
 	XYZFileIO.h
 	XYZMesh.h
-	MultiWavelengthCapture.h
 	CaptureController.h
     CameraCapture.h
     ViewController.h
@@ -157,6 +155,15 @@ SET(SOURCES_ENCODER
     Encoder/HolovideoEncoderOptionsController.h
 )
 
+SET(SOURCES_CAPTURE
+	Capture/ICapture.h
+)
+
+SET(SOURCES_NINEFRINGE
+	Capture/NineFringe/NineFringeCapture.cpp
+	Capture/NineFringe/NineFringeCapture.h
+)
+
 SET(SOURCES_COMMON_HEADERS
 	../../Common/src/ImageIO.h
     ../../Common/src/VideoIO.h
@@ -164,7 +171,7 @@ SET(SOURCES_COMMON_HEADERS
 	../../Common/src/AbstractMesh.h
 	../../Common/src/PointCloudMesh.h
 	../../Common/src/TriMesh.h
-	../../Common/src/AbstractGLContext.h
+	../../Common/src/IGLContext.h
 	../../Common/src/EncodingGLContext.h
     ../../Common/src/DecodingGLContext.h
 	../../Common/src/Holodecoder.h
@@ -229,6 +236,8 @@ add_executable(${PROJECT_NAME}
 	MACOSX_BUNDLE
 	${SOURCES}
 	${SOURCES_ENCODER}
+	${SOURCES_CAPTURE}
+	${SOURCES_NINEFRINGE}
 	${SOURCES_COMMON_SOURCES}
 	${SOURCES_COMMON_HEADERS}
 	${SOURCES_COMMON_CODECS_SOURCES}

@@ -1,5 +1,5 @@
 /*
- Filename:	MultiWavelengthCapture.h
+ Filename:	NineFringeCapture.h
  Author:	Nikolaus Karpinsky
  Date Created:	01/30/11
  Last Edited:	01/30/11
@@ -8,8 +8,8 @@
  01/30/11 - Nik Karpinsky - Original creation.
  */
 
-#ifndef _MULTI_WAVELENGTH_CAPTURE_H_
-#define _MULTI_WAVELENGTH_CAPTURE_H_
+#ifndef _NINE_FRINGE_CAPTURE_H_
+#define _NINE_FRINGE_CAPTURE_H_
 
 #ifdef __APPLE__
 #include <glew.h>
@@ -26,10 +26,12 @@
 #include <QMutex>
 #include <cv.h>
 
+#include "Capture\ICapture.h"
+
 #include "TriMesh.h"
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
-#include "AbstractGLContext.h"
+#include "IGLContext.h"
 #include "DecodingGLContext.h"
 
 #include <wrench/gl/Camera.h>
@@ -54,9 +56,9 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class MultiWavelengthCapture : public AbstractGLContext, public DecodingGLContext
+class NineFringeCapture : public DecodingGLContext, public ICapture
 {
-public: //  TODO FIx this
+private: //  TODO FIx this
   AxisDisplay m_axis;
 
   ShaderProgram m_phaseCalculator;
@@ -119,8 +121,8 @@ public: //  TODO FIx this
   DisplayMode m_displayMode;
 
 public:
-  MultiWavelengthCapture(void);
-  ~MultiWavelengthCapture();
+  NineFringeCapture(void);
+  ~NineFringeCapture();
 
   virtual void init(void);
   virtual void draw(void);
@@ -153,4 +155,4 @@ private:
   void _drawCalculateNormalMap();
 };
 
-#endif	// _MULTI_WAVELENGTH_CAPTURE_H_
+#endif	// _NINE_FRINGE_CAPTURE_H_

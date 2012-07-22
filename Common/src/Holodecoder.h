@@ -28,7 +28,7 @@
 #include "TriMesh.h"
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
-#include "AbstractGLContext.h"
+#include "IGLContext.h"
 #include "DecodingGLContext.h"
 
 #include <reactor/MediaFrame.h>
@@ -48,7 +48,7 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class Holodecoder : public AbstractGLContext, public DecodingGLContext
+class Holodecoder : public IGLContext, public DecodingGLContext
 {
 public:	//	TODO Comeback and FIX this
     ShaderProgram m_phaseCalculator;

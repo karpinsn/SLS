@@ -151,12 +151,12 @@ bool VideoIO::openReadStream(const string &filename)
 
 IplImage* VideoIO::readStream()
 {
-  IplImage *frame = NULL;
+  IplImage *frame = nullptr;
 
   if(m_videoReaderInUse)
   {
     frame = cvQueryFrame(m_videoReaderHandle);
-    if(NULL != frame)
+    if(nullptr != frame)
     {
       cvCvtColor(frame, frame, CV_BGR2RGB);
     }

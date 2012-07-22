@@ -21,7 +21,7 @@ void EncoderController::_updateGL(void)
 
   //OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("encoderGLWidget"));
 
-  if(NULL != encoderGLWidget)
+  if(nullptr != encoderGLWidget)
   {
     encoderGLWidget->updateScene();
   }
@@ -81,7 +81,7 @@ void EncoderController::encode(void)
   Codec* decoder = _getDecoder();
   Codec* encoder = _getEncoder();
 
-  if(NULL == decoder || NULL == encoder)
+  if(nullptr == decoder || nullptr == encoder)
   {
 	//	Invalid codec
 	return;
@@ -94,17 +94,12 @@ void EncoderController::encode(void)
   //  As long as we have meshes decode and encode them
   MeshInterchange* mesh = new MeshInterchange();
   decoder->process(mesh);
-  while(NULL != mesh && !mesh->isEmpty())
+  while(nullptr != mesh && !mesh->isEmpty())
   {
 	// Indicate to the user the current progress
     encodingProgress->setValue(decoder->getStreamLocation() * 100);
 
     encoder->process(mesh);
-	
-	//	TODO Comeback and fix this
-	//delete mesh->getMesh();
-	//mesh->setMesh(NULL);
-
     decoder->process(mesh);
   }
 
@@ -115,8 +110,8 @@ void EncoderController::encode(void)
   decoder->closeCodec();
 
   //  Make sure our codec widgets are not pointing to anything
-  encoderGLWidget->setGLContext(NULL);
-  decoderGLWidget->setGLContext(NULL);
+  encoderGLWidget->setGLContext(nullptr);
+  decoderGLWidget->setGLContext(nullptr);
 }
 
 void EncoderController::_connectSignalsWithController(void)
@@ -144,7 +139,7 @@ void EncoderController::_previewEncoding(void)
   Codec* decoder = _getDecoder();
   Codec* encoder = _getEncoder();
 
-  if(NULL == decoder || NULL == encoder)
+  if(nullptr == decoder || nullptr == encoder)
   {
 	//	Invalid codec
 	return;
@@ -159,7 +154,7 @@ void EncoderController::_previewEncoding(void)
   MeshInterchange* mesh = new MeshInterchange();
   decoder->process(mesh);
 
-  if(NULL != mesh)
+  if(nullptr != mesh)
   {
     encoder->previewProcess(mesh);
   }
@@ -171,7 +166,7 @@ void EncoderController::_previewEncoding(void)
 
 Codec* EncoderController::_getEncoder(void)
 {
-  Codec* encoder = NULL;
+  Codec* encoder = nullptr;
 
   if(0 == QString(DepthEncoder::codecName().c_str()).compare(encoderComboBox->currentText()))
   {
@@ -197,7 +192,7 @@ Codec* EncoderController::_getEncoder(void)
 
 Codec* EncoderController::_getDecoder(void)
 {
-  Codec* decoder = NULL;
+  Codec* decoder = nullptr;
 
   if(0 == QString(MultiWavelengthDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
   {

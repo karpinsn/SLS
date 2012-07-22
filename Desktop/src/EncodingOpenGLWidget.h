@@ -28,7 +28,7 @@
 #include <QtGui>
 #include <iostream>
 
-#include "AbstractGLContext.h"
+#include "IGLContext.h"
 #include "EncodingGLContext.h"
 #include "DecodingGLContext.h"
 
@@ -51,20 +51,20 @@ private:
 
 public:
   EncodingOpenGLWidget(QWidget *parent);
-  EncodingOpenGLWidget(QWidget* parent, AbstractGLContext* glContext, QColor clearColor);
+  EncodingOpenGLWidget(QWidget* parent, IGLContext* glContext, QColor clearColor);
   virtual ~EncodingOpenGLWidget();
 
   void reinit(float width, float height);
   void initializeGL();
   void updateScene();
-  void setGLContext(AbstractGLContext* glContext);
+  void setGLContext(IGLContext* glContext);
   void setEncodingContext(EncodingGLContext* encodingContext);
   void setDecodingContext(DecodingGLContext* decodingContext);
   void cameraSelectMode(int mode);
   MeshInterchange* decode();
   MeshInterchange* encode();
 
-  AbstractGLContext*    m_glContext;
+  IGLContext*    m_glContext;
 
 protected:
   void paintGL();

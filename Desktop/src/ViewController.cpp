@@ -5,12 +5,12 @@ ViewController::ViewController(QWidget* parent) : QWidget(parent)
   setupUi(this);
   _connectSignalsWithController();
 
-  m_reader = NULL;
+  m_reader = nullptr;
 }
 
 ViewController::~ViewController()
 {
-  if(NULL != m_reader)
+  if(nullptr != m_reader)
   {
 	delete m_reader;
   }
@@ -37,7 +37,7 @@ void ViewController::openHoloImage(void)
 	string filename = file.toLocal8Bit().constData();
     IplImage* image = io.readImage(filename.c_str());
 
-    if(NULL != image)
+    if(nullptr != image)
     {
 
       m_decoder.setBackHoloBuffer(image);
@@ -50,7 +50,7 @@ void ViewController::openHoloImage(void)
 
 void ViewController::playMovie(string movieFile)
 {
-  if(NULL != m_reader)
+  if(nullptr != m_reader)
   {
 	delete m_reader;
   }
@@ -110,7 +110,7 @@ void ViewController::_updateGL(void)
 {
   OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("viewGLWidget"));
 
-  if(NULL != glContext)
+  if(nullptr != glContext)
   {
     glContext->updateScene();
   }

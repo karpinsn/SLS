@@ -159,6 +159,20 @@ SET(SOURCES_CAPTURE
 	Capture/FrameCapture.h
 )
 
+SET(SOURCES_THREEFRINGE
+	Capture/ThreeFringe/ThreeFringeCapture.cpp
+	Capture/ThreeFringe/ComputePhase.cpp
+	Capture/ThreeFringe/FastConnectComponent.cpp
+	Capture/ThreeFringe/ThresholdedPhaseUnwrap.cpp
+	Capture/ThreeFringe/TrapezoidalLUTPhaseWrap.cpp
+	
+	Capture/ThreeFringe/ThreeFringeCapture.h
+	Capture/ThreeFringe/ComputePhase.h
+	Capture/ThreeFringe/FastConnectComponent.h
+	Capture/ThreeFringe/ThresholdedPhaseUnwrap.h
+	Capture/ThreeFringe/TrapezoidalLUTPhaseWrap.h
+)
+
 SET(SOURCES_NINEFRINGE
 	Capture/NineFringe/NineFringeCapture.cpp
 	Capture/NineFringe/NineFringeCapture.h
@@ -237,6 +251,7 @@ add_executable(${PROJECT_NAME}
 	${SOURCES}
 	${SOURCES_ENCODER}
 	${SOURCES_CAPTURE}
+	${SOURCES_THREEFRINGE}
 	${SOURCES_NINEFRINGE}
 	${SOURCES_COMMON_SOURCES}
 	${SOURCES_COMMON_HEADERS}

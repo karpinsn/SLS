@@ -1,15 +1,15 @@
 /*
- Filename:	NineFringeCapture.h
+ Filename:	ThreeFringeCapture.h
  Author:	Nikolaus Karpinsky
- Date Created:	01/30/11
- Last Edited:	01/30/11
+ Date Created:	07/22/12
+ Last Edited:	07/22/12
  
  Revision Log:
  01/30/11 - Nik Karpinsky - Original creation.
  */
 
-#ifndef _NINE_FRINGE_CAPTURE_H_
-#define _NINE_FRINGE_CAPTURE_H_
+#ifndef _THREE_FRINGE_CAPTURE_H_
+#define _THREE_FRINGE_CAPTURE_H_
 
 #ifdef __APPLE__
 #include <glew.h>
@@ -56,7 +56,7 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class NineFringeCapture : public DecodingGLContext, public ICapture
+class ThreeFringeCapture : public DecodingGLContext, public ICapture
 {
 private:
   AxisDisplay m_axis;
@@ -74,15 +74,10 @@ private:
   GLenum m_referencePhaseAttachPoint;
 
   IplImage *m_fringeLoadingImage;
-  Texture* m_fringeImages[2][3];  // Buffer and Images
-  Texture m_fringeImage1; //  Fringe images for the front buffer
-  Texture m_fringeImage2;
-  Texture m_fringeImage3;
-
-  Texture m_fringeImage4; //  Fringe images for the back buffer
-  Texture m_fringeImage5;
-  Texture m_fringeImage6;
-
+  Texture* m_fringeImages[2];  // Buffer and Images
+  Texture m_fringeImage1; //  Fringe image for the front buffer
+  Texture m_fringeImage2; //  Fringe image for the back buffer
+  
   Texture m_referencePhase;
   Texture m_phaseMap0;
   Texture m_phaseMap1;
@@ -121,8 +116,8 @@ private:
   DisplayMode m_displayMode;
 
 public:
-  NineFringeCapture(void);
-  ~NineFringeCapture();
+  ThreeFringeCapture(void);
+  ~ThreeFringeCapture();
 
   virtual void init(void);
   virtual void draw(void);
@@ -155,4 +150,4 @@ private:
   void _drawCalculateNormalMap();
 };
 
-#endif	// _NINE_FRINGE_CAPTURE_H_
+#endif	// _THREE_FRINGE_CAPTURE_H_

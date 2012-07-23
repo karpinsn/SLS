@@ -412,45 +412,6 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>874</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <widget class="QMenu" name="menuExport">
-     <property name="title">
-      <string>Export</string>
-     </property>
-     <addaction name="actionExportSingleFrame"/>
-     <addaction name="actionExportEntireVideo"/>
-    </widget>
-    <addaction name="actionOpenXYZM"/>
-    <addaction name="actionOpen_Holovideo"/>
-    <addaction name="actionOpen_Holoimage"/>
-    <addaction name="separator"/>
-    <addaction name="menuExport"/>
-   </widget>
-   <widget class="QMenu" name="menuCapture">
-    <property name="title">
-     <string>Capture</string>
-    </property>
-    <addaction name="separator"/>
-    <addaction name="actionConnectCamera"/>
-    <addaction name="actionDisconnectCamera"/>
-    <addaction name="separator"/>
-    <addaction name="actionCalibrateRefrence"/>
-   </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuCapture"/>
-  </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>

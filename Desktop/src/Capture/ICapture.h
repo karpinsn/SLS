@@ -11,6 +11,8 @@
 #ifndef _ICAPTURE_H_
 #define _ICAPTURE_H_
 
+#include <cv.h>
+
 #include "IGLContext.h"
 
 class ICapture : public IGLContext

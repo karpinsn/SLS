@@ -57,12 +57,12 @@ void EncodingOpenGLWidget::setGLContext(IGLContext* glContext)
   makeCurrent();
 }
 
-void EncodingOpenGLWidget::setEncodingContext(EncodingGLContext* encodingContext)
+void EncodingOpenGLWidget::setEncodingContext(IEncodingGLContext* encodingContext)
 {
   m_encodingContext = encodingContext;
 }
 
-void EncodingOpenGLWidget::setDecodingContext(DecodingGLContext* decodingContext)
+void EncodingOpenGLWidget::setDecodingContext(IDecodingGLContext* decodingContext)
 {
   m_decodingContext = decodingContext;
 }

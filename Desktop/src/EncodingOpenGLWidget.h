@@ -29,8 +29,8 @@
 #include <iostream>
 
 #include "IGLContext.h"
-#include "EncodingGLContext.h"
-#include "DecodingGLContext.h"
+#include "IEncodingGLContext.h"
+#include "IDecodingGLContext.h"
 
 class EncodingOpenGLWidget : public QGLWidget
 {
@@ -46,8 +46,8 @@ private:
   float m_width;
   float m_height;
 
-  EncodingGLContext* m_encodingContext;
-  DecodingGLContext* m_decodingContext;
+  IEncodingGLContext* m_encodingContext;
+  IDecodingGLContext* m_decodingContext;
 
 public:
   EncodingOpenGLWidget(QWidget *parent);
@@ -58,8 +58,8 @@ public:
   void initializeGL();
   void updateScene();
   void setGLContext(IGLContext* glContext);
-  void setEncodingContext(EncodingGLContext* encodingContext);
-  void setDecodingContext(DecodingGLContext* decodingContext);
+  void setEncodingContext(IEncodingGLContext* encodingContext);
+  void setDecodingContext(IDecodingGLContext* decodingContext);
   void cameraSelectMode(int mode);
   MeshInterchange* decode();
   MeshInterchange* encode();

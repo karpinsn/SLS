@@ -23,6 +23,16 @@ CaptureController::~CaptureController()
 
 void CaptureController::showEvent(QShowEvent *event)
 {  
+  CaptureTypeSelectDialog dialog;
+  m_gl3DContext = dialog.getCaptureType();
+  if(nullptr == m_gl3DContext)
+  {
+	throw new exception("No capture type selected");
+  }
+
+  captureGLWidget->setGLContext(m_gl3DContext.get());
+  m_gl3DContext->init();
+
   //  Connect to camera
   m_frameCapture->start();
   m_frameRateTimer.start(1000);
@@ -46,10 +56,9 @@ void CaptureController::hideEvent(QHideEvent *)
 
 void CaptureController::init(void)
 {
-  captureGLWidget->setGLContext(m_gl3DContext.get());
-
   m_camera->init(m_buffer.get());
   m_frameCapture->init(m_buffer.get());
+  captureGLWidget->setGLContext(m_gl3DContext.get());
 }
 
 void CaptureController::setInfoBar(QStatusBar* infoBar)

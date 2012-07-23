@@ -37,12 +37,12 @@
 #include "AbstractMesh.h"
 #include "IGLContext.h"
 #include "MeshInterchange.h"
-#include "EncodingGLContext.h"
+#include "IEncodingGLContext.h"
 
 using namespace std;
 using namespace wrench::gl;
 
-class Holoencoder : public IGLContext, public EncodingGLContext
+class Holoencoder : public IGLContext, public IEncodingGLContext
 {
 private:
         ShaderProgram m_encoderShader;

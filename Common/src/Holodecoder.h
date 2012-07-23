@@ -29,7 +29,7 @@
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
 #include "IGLContext.h"
-#include "DecodingGLContext.h"
+#include "IDecodingGLContext.h"
 
 #include <reactor/MediaFrame.h>
 
@@ -48,9 +48,9 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class Holodecoder : public IGLContext, public DecodingGLContext
+class Holodecoder : public IGLContext, public IDecodingGLContext
 {
-public:	//	TODO Comeback and FIX this
+private:
     ShaderProgram m_phaseCalculator;
     ShaderProgram m_phaseFilter;
     ShaderProgram m_depthCalculator;

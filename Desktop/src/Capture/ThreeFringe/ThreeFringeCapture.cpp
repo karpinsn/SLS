@@ -387,6 +387,11 @@ double ThreeFringeCapture::get3DRate(void)
   return m_3dpsCalculator.getFrameRate();
 }
 
+string ThreeFringeCapture::getCaptureName(void)
+{
+  return "Three Fringe Capture";
+}
+
 void ThreeFringeCapture::_drawCalculatePhase()
 {
   m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);

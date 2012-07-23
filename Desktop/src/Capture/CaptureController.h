@@ -19,6 +19,7 @@
 #include "OpenGLWidget.h"
 #include "CameraConnectDialog.h"
 
+#include "Capture\CaptureTypeSelectDialog.h"
 #include "Capture\ICapture.h"
 #include "Capture\NineFringe\NineFringeCapture.h"
 #include "CameraCapture.h"

@@ -408,6 +408,11 @@ double NineFringeCapture::get3DRate(void)
   return m_3dpsCalculator.getFrameRate();
 }
 
+string NineFringeCapture::getCaptureName(void)
+{
+  return "Nine Fringe Capture";
+}
+
 void NineFringeCapture::_drawCalculatePhase()
 {
   m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);

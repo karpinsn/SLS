@@ -150,12 +150,14 @@ SET(SOURCES_CAPTURE
 	Capture/CameraCapture.cpp
 	Capture/CaptureController.cpp
 	Capture/CameraConnectDialog.cpp
+	Capture/CaptureTypeSelectDialog.cpp
 	Capture/FrameCapture.cpp
 	
 	Capture/ICapture.h
 	Capture/CameraCapture.h
 	Capture/CaptureController.h
 	Capture/CameraConnectDialog.h
+	Capture/CaptureTypeSelectDialog.h
 	Capture/FrameCapture.h
 )
 
@@ -186,8 +188,8 @@ SET(SOURCES_COMMON_HEADERS
 	../../Common/src/PointCloudMesh.h
 	../../Common/src/TriMesh.h
 	../../Common/src/IGLContext.h
-	../../Common/src/EncodingGLContext.h
-    ../../Common/src/DecodingGLContext.h
+	../../Common/src/IEncodingGLContext.h
+	../../Common/src/IDecodingGLContext.h
 	../../Common/src/Holodecoder.h
 	../../Common/src/MeshInterchange.h
 )	
@@ -221,8 +223,37 @@ SET(SOURCES_COMMON_CODECS_SOURCES
 )
 	
 # QT Files
-set(UIS ui/Holoencoder.ui ui/CameraConnectDialog.ui ui/View.ui ui/Encode.ui ui/Capture.ui ui/DepthmapCodecOptions.ui ui/MultiWavelengthCodecOptions.ui ui/HolovideoCodecOptions.ui ui/HoloimageEncoderOptions.ui ui/XYZMCodecOptions.ui ui/HolovideoEncoderOptions.ui)
-set(MOCS MainWindowView.h MainWindowController.h OpenGLWidget.h EncodingOpenGLWidget.h Capture/CaptureController.h ViewController.h EncoderController.h Capture/FrameCapture.h Capture/CameraConnectDialog.h Encoder/DepthmapCodecOptionsController.h Encoder/MultiWavelengthCodecOptionsController.h Encoder/HolovideoCodecOptionsController.h Encoder/HoloimageEncoderOptionsController.h Encoder/XYZMCodecOptionsController.h Encoder/HolovideoEncoderOptionsController.h)
+set(UIS 
+	ui/Holoencoder.ui 
+	ui/CameraConnectDialog.ui 
+	ui/CaptureTypeSelectDialog.ui 
+	ui/View.ui 
+	ui/Encode.ui 
+	ui/Capture.ui 
+	ui/DepthmapCodecOptions.ui 
+	ui/MultiWavelengthCodecOptions.ui 
+	ui/HolovideoCodecOptions.ui 
+	ui/HoloimageEncoderOptions.ui 
+	ui/XYZMCodecOptions.ui 
+	ui/HolovideoEncoderOptions.ui)
+
+set(MOCS 
+	MainWindowView.h 
+	MainWindowController.h 
+	OpenGLWidget.h 
+	EncodingOpenGLWidget.h 
+	Capture/CaptureController.h 
+	ViewController.h 
+	EncoderController.h 
+	Capture/FrameCapture.h 
+	Capture/CameraConnectDialog.h 
+	Capture/CaptureTypeSelectDialog.h 
+	Encoder/DepthmapCodecOptionsController.h 
+	Encoder/MultiWavelengthCodecOptionsController.h 
+	Encoder/HolovideoCodecOptionsController.h 
+	Encoder/HoloimageEncoderOptionsController.h 
+	Encoder/XYZMCodecOptionsController.h 
+	Encoder/HolovideoEncoderOptionsController.h)
 set(RESOURCES ui/Holoencoder.qrc)
 
 #	---------------------------------------------------------------------------------------
@@ -291,6 +322,12 @@ foreach(shader ${SHADER_SOURCES})
 endforeach()
 
 source_group("Shaders" FILES ${SHADERS_QUALIFIED})
+
+source_group("UI" FILES ${UISUIS})
+
+source_group("Capture" FILES ${SOURCES_CAPTURE})
+source_group("Capture/ThreeFringe" FILES ${SOURCES_THREEFRINGE})
+source_group("Capture/NineFringe" FILES ${SOURCES_NINEFRINGE})
 
 source_group("Common/Source Files" FILES ${SOURCES_COMMON_SOURCES})
 source_group("Common/Header Files" FILES ${SOURCES_COMMON_HEADERS})

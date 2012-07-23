@@ -32,7 +32,7 @@
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
 #include "IGLContext.h"
-#include "DecodingGLContext.h"
+#include "IDecodingGLContext.h"
 
 #include <wrench/gl/Camera.h>
 #include <wrench/gl/ShaderProgram.h>
@@ -56,7 +56,7 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class NineFringeCapture : public DecodingGLContext, public ICapture
+class NineFringeCapture : public IDecodingGLContext, public ICapture
 {
 private:
   AxisDisplay m_axis;
@@ -143,6 +143,8 @@ public:
   double  getFrameRate(void);
   double  get3DRate(void);
   MeshInterchange* decode(void);
+
+  static string getCaptureName(void);
 
 private:
   void _initShaders(float width, float height);

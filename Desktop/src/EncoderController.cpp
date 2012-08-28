@@ -152,7 +152,7 @@ void EncoderController::_previewEncoding(void)
   encoderGLWidget->reinit(encoderGLWidget->size().width(), encoderGLWidget->size().height());
 
   MeshInterchange* mesh = new MeshInterchange();
-  decoder->process(mesh);
+  decoder->previewProcess(mesh);
 
   if(nullptr != mesh)
   {

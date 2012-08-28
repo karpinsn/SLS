@@ -13,6 +13,7 @@ void Holoencoder::init()
 
 void Holoencoder::init(float width, float height)
 {
+  //	TODO - Comeback and fix this. Need to be able to reinit
   if(!m_hasBeenInit)
   {
       m_width = width;
@@ -75,6 +76,22 @@ void Holoencoder::_initShaders(void)
     m_encoderShader.link();
 
     m_encoderShader.uniform("fringeFrequency", 6.0f);
+
+	float thresholdMap[64] = {0, 32, 8, 40, 2, 34, 10, 42,
+							  48, 16, 56, 24, 50, 18, 58, 26,
+							  12, 44, 4, 36, 14, 46, 6, 38,
+							  60, 28, 52, 20, 62, 30, 54, 22,
+							  3, 35, 11, 43, 1, 33, 9, 41,
+							  51, 19, 59, 27, 49, 17, 57, 25,
+							  15, 47, 7, 39, 13, 45, 5, 37,
+							  63, 31, 55, 23, 61, 29, 53, 21};
+
+	for(int i = 0; i < 64; ++i)
+	{
+		thresholdMap[i] *= 1.0/256.0;
+	}
+
+	m_encoderShader.uniform("thresholdMap", thresholdMap, 64);
 }
 
 void Holoencoder::draw(void)

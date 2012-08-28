@@ -17,6 +17,7 @@ set(SHADER_VERT_SOURCES
 
 set(SHADER_FRAG_SOURCES
 
+    HoloencoderDither.frag
 	Holoencoder.frag
 	MedianFilter3x3.frag
 	NormalCalculator.frag

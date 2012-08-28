@@ -45,7 +45,23 @@ void XYZMDecoder::process(MeshInterchange* data)
 
 void XYZMDecoder::previewProcess(MeshInterchange* data)
 {
+  if(nullptr == m_glWidget)
+  {
+    //  No OpenGL encoding widget. Return a nullptr MeshInterchange
+    data = nullptr;
+    return;
+  }
 
+  AbstractMesh* mesh = nullptr;
+  if(nullptr != m_xyzmList && m_listPosition < m_xyzmList->count())
+  {
+	QListWidgetItem *item = m_xyzmList->item(m_listPosition);
+	mesh = m_io.newMeshFromFile(item->text().toAscii().constData());
+	//	We dont increment since we are just previewing
+  }
+
+  //  TODO Comeback and fix this
+  data->setMesh(mesh);
 }
 
 int XYZMDecoder::getWidth(void)

@@ -27,15 +27,15 @@ void main()
     float width = 512.0;
     float height = 512.0;
 
-    float x = projectorPos.x * width;
-    float y = projectorPos.y * height;
+    float x = (projectorPos.x + 1.0) / 2.0 * width;
+    float y = (1.0 - (projectorPos.y + 1.0) / 2.0) * height;
 
     int tx = int(mod(x, 8.0));
     int ty = int(mod(y, 8.0));
 
-    int i = (8 * tx) + ty;
-    color.x = color.x + thresholdMap[i] >= .5 ? 1.0 : 0.0;
-    color.y = color.y + thresholdMap[i] >= .5 ? 1.0 : 0.0; 
+    int i = (8 * ty) + tx;
+    color.x = color.x >= thresholdMap[i] ? 1.0 : 0.0;
+    color.y = color.y >= thresholdMap[i] ? 1.0 : 0.0; 
 
     gl_FragColor = color;
 }

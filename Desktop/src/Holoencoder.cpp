@@ -16,13 +16,15 @@ void Holoencoder::init(float width, float height)
   //	TODO - Comeback and fix this. Need to be able to reinit
   if(!m_hasBeenInit)
   {
-      m_width = width;
-      m_height = height;
+      //m_width = width;
+      //m_height = height;
+
+	  m_width = 512.0;
+      m_height = 512.0;
 
       m_currentMesh = nullptr;
       _initFBO();
 
-      //m_controller.init(m_width, m_height);
 	  m_controller.init(0.0,0.0,0.0,.5);
       _initShaders();
 
@@ -35,6 +37,18 @@ void Holoencoder::init(float width, float height)
       m_projectorModelView = m_projectorModelView * glm::gtx::transform::rotate(30.0f, 0.0f, 1.0f, 0.0f);
 
       m_hasBeenInit = true;
+  }
+  else
+  {
+	  // We are doing a reinit
+	  m_width = width;
+      //m_height = height;
+
+      //m_currentMesh = nullptr;
+	  //m_holoimage.reinit(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+	  
+	  //	Need to reinit the FBO 
+     
   }
 }
 
@@ -72,7 +86,7 @@ void Holoencoder::_initShaders(void)
 {
     m_encoderShader.init();
     m_encoderShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holoencoder.vert"));
-    m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holoencoder.frag"));
+    m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/HoloencoderDither.frag"));
     m_encoderShader.link();
 
     m_encoderShader.uniform("fringeFrequency", 6.0f);
@@ -88,7 +102,7 @@ void Holoencoder::_initShaders(void)
 
 	for(int i = 0; i < 64; ++i)
 	{
-		thresholdMap[i] *= 1.0/256.0;
+		thresholdMap[i] *= 4.0/256.0;
 	}
 
 	m_encoderShader.uniform("thresholdMap", thresholdMap, 64);
@@ -118,6 +132,15 @@ void Holoencoder::draw(void)
       m_encoderShader.uniform("projectorModelView", projectorModelView);
 
       glColor3f(.8, .8, .8);
+
+	  /*glBegin(GL_QUADS);
+	  
+		glTexCoord2f(1.0, 0.0); glVertex3f(1.0, -1.0, 0.0);
+		glTexCoord2f(1.0, 1.0); glVertex3f(1.0,  1.0, 0.0);
+		glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, 1.0, 0.0);
+		glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, 0.0);
+
+	  glEnd();*/
 
       if(nullptr != m_currentMesh)
       {

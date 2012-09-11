@@ -17,6 +17,10 @@
   #include "lens/PhantomCamera.h"
 #endif
 
+#ifdef USE_POINT_GREY_CAMERA
+  #include "lens/PointGreyCamera.h"
+#endif
+
 //	Qt auto generated headers
 #include "ui_CameraConnectDialog.h"
 

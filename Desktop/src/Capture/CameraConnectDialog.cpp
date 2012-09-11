@@ -38,6 +38,13 @@ lens::Camera* CameraConnectDialog::getCamera(void)
     }
 #endif
 
+#ifdef USE_POINT_GREY_CAMERA
+	if(0 == QString(lens::PointGreyCamera::cameraName().c_str()).compare(cameraDriverComboBox->currentText()))
+	{
+	  m_camera = new lens::PointGreyCamera();
+	}
+#endif
+
 #ifdef USE_PHANTOM_CAMERA
 	if(0 == QString(lens::PhantomCamera::cameraName().c_str()).compare(cameraDriverComboBox->currentText()))
     {
@@ -61,6 +68,10 @@ void CameraConnectDialog::_initCameraDriverList(void)
 
 #ifdef USE_JAI_CAMERA
   cameraDriverComboBox->addItem(QString(lens::JAICamera::cameraName().c_str()));
+#endif
+
+#ifdef USE_POINT_GREY_CAMERA
+	cameraDriverComboBox->addItem(QString(lens::PointGreyCamera::cameraName().c_str()));
 #endif
 
 #ifdef USE_PHANTOM_CAMERA

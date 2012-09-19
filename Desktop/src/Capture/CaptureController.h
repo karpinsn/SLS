@@ -22,6 +22,7 @@
 #include "Capture\CaptureTypeSelectDialog.h"
 #include "Capture\ICapture.h"
 #include "Capture\NineFringe\NineFringeCapture.h"
+#include "Capture\SixFringe\SixFringeCapture.h"
 #include "CameraCapture.h"
 #include "ImageBuffer.h"
 #include "FrameCapture.h"

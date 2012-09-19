@@ -3,6 +3,7 @@
 
 #include "ICapture.h"
 #include "ThreeFringe\ThreeFringeCapture.h"
+#include "SixFringe\SixFringeCapture.h"
 #include "NineFringe\NineFringeCapture.h"
 
 //	Qt auto generated headers

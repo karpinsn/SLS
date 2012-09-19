@@ -19,6 +19,10 @@ shared_ptr<ICapture> CaptureTypeSelectDialog::getCaptureType(void)
 	{
 	  captureType = make_shared<ThreeFringeCapture>();
 	}
+	else if(0 == QString(SixFringeCapture::getCaptureName().c_str()).compare(captureTypeComboBox->currentText()))
+	{
+	  captureType = make_shared<SixFringeCapture>();
+	}
 	else if(0 == QString(NineFringeCapture::getCaptureName().c_str()).compare(captureTypeComboBox->currentText()))
 	{
 	  captureType = make_shared<NineFringeCapture>();
@@ -31,5 +35,6 @@ shared_ptr<ICapture> CaptureTypeSelectDialog::getCaptureType(void)
 void CaptureTypeSelectDialog::_initCaptureTypeList(void)
 {
   captureTypeComboBox->addItem(QString(ThreeFringeCapture::getCaptureName().c_str()));
+  captureTypeComboBox->addItem(QString(SixFringeCapture::getCaptureName().c_str()));
   captureTypeComboBox->addItem(QString(NineFringeCapture::getCaptureName().c_str()));
 }

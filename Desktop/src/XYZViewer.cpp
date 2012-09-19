@@ -28,7 +28,7 @@ void XYZViewer::initShaders(void)
 	//	Create the shaders
 	m_shader.init("Shaders/Phong.vert", "Shaders/Phong.frag");
 	
-	OGLStatus::logOGLErrors("Holodecoder - initShaders()");
+	OGLStatus::logOGLErrors("XYZMViewer - initShaders()");
 }
 
 void XYZViewer::draw(void)
@@ -74,7 +74,7 @@ void XYZViewer::draw(void)
 	
 	glPopMatrix();
 	
-	OGLStatus::logOGLErrors("Holodecoder - draw()");
+	OGLStatus::logOGLErrors("XYZMViewer - draw()");
 }
 
 void XYZViewer::resize(int width, int height)

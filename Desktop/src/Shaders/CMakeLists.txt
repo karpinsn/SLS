@@ -44,3 +44,4 @@ add_dependencies(${PROJECT_NAME} MainShaders)
 #	---------------------------------------------------------------------------------------
 add_subdirectory(Holovideo)
 add_subdirectory(MultiWavelength)
+add_subdirectory(SixFringe)

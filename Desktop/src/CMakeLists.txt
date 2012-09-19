@@ -175,6 +175,11 @@ SET(SOURCES_THREEFRINGE
 	Capture/ThreeFringe/TrapezoidalLUTPhaseWrap.h
 )
 
+SET(SOURCES_SIXFRINGE
+	Capture/SixFringe/SixFringeCapture.cpp
+	Capture/SixFringe/SixFringeCapture.h
+)
+
 SET(SOURCES_NINEFRINGE
 	Capture/NineFringe/NineFringeCapture.cpp
 	Capture/NineFringe/NineFringeCapture.h
@@ -283,6 +288,7 @@ add_executable(${PROJECT_NAME}
 	${SOURCES_ENCODER}
 	${SOURCES_CAPTURE}
 	${SOURCES_THREEFRINGE}
+	${SOURCES_SIXFRINGE}
 	${SOURCES_NINEFRINGE}
 	${SOURCES_COMMON_SOURCES}
 	${SOURCES_COMMON_HEADERS}
@@ -327,6 +333,7 @@ source_group("UI" FILES ${UISUIS})
 
 source_group("Capture" FILES ${SOURCES_CAPTURE})
 source_group("Capture/ThreeFringe" FILES ${SOURCES_THREEFRINGE})
+source_group("Capture/SixFringe" FILES ${SOURCES_SIXFRINGE})
 source_group("Capture/NineFringe" FILES ${SOURCES_NINEFRINGE})
 
 source_group("Common/Source Files" FILES ${SOURCES_COMMON_SOURCES})

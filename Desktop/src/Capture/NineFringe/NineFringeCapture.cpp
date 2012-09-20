@@ -15,11 +15,6 @@ NineFringeCapture::NineFringeCapture(void)
 
 NineFringeCapture::~NineFringeCapture()
 {
-  if(m_hasBeenInit)
-  {
-    delete m_mesh;
-    cvReleaseImage(&m_fringeLoadingImage);
-  }
 }
 
 void NineFringeCapture::init()
@@ -43,10 +38,10 @@ void NineFringeCapture::init(float width, float height)
     m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
     m_camera.setMode(1);
 
-    m_mesh = new TriMesh(width, height);
+    m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
     m_mesh->initMesh();
 
-    m_fringeLoadingImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3);
+	m_fringeLoadingImage = shared_ptr<IplImage>(cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3), [](IplImage* ptr) { cvReleaseImage(&ptr); });
 
     m_hasBeenInit = true;
   }
@@ -87,13 +82,11 @@ void NineFringeCapture::resizeInput(float width, float height)
     m_normalCalculator.uniform("height", height);
 
     //  Resize the display mesh
-    delete m_mesh;
-    m_mesh = new TriMesh(width, height);
+    m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
     m_mesh->initMesh();
 
     //  Resize the fringe loader
-    cvReleaseImage(&m_fringeLoadingImage);
-    m_fringeLoadingImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3);
+	m_fringeLoadingImage = shared_ptr<IplImage>(cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3), [](IplImage* ptr) { cvReleaseImage(&ptr); });
   }
 
   OGLStatus::logOGLErrors("NineFringeCapture - resizeInput()");
@@ -345,9 +338,9 @@ bool NineFringeCapture::newImage(IplImage* image)
   bool needRedraw = false;
 
   cvSetImageCOI(image, 1);
-  cvSetImageCOI(m_fringeLoadingImage, (m_currentChannelLoad + 1));
-  cvCopy(image, m_fringeLoadingImage);
-  cvSetImageCOI(m_fringeLoadingImage, 0);
+  cvSetImageCOI(m_fringeLoadingImage.get(), (m_currentChannelLoad + 1));
+  cvCopy(image, m_fringeLoadingImage.get());
+  cvSetImageCOI(m_fringeLoadingImage.get(), 0);
   cvSetImageCOI(image, 0);
 
   m_currentChannelLoad++;
@@ -355,7 +348,7 @@ bool NineFringeCapture::newImage(IplImage* image)
   if(m_currentChannelLoad == 3)
   {
     int backBufferIndex = (m_frontBufferIndex + 1) % 2;
-    m_fringeImages[backBufferIndex][m_currentFringeLoad]->transferToTexture(m_fringeLoadingImage);
+    m_fringeImages[backBufferIndex][m_currentFringeLoad]->transferToTexture(m_fringeLoadingImage.get());
     m_currentChannelLoad = 0;
     m_currentFringeLoad++;
   }

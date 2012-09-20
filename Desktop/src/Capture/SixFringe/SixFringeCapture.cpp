@@ -15,11 +15,6 @@ SixFringeCapture::SixFringeCapture(void)
 
 SixFringeCapture::~SixFringeCapture()
 {
-  if(m_hasBeenInit)
-  {
-    delete m_mesh;
-    cvReleaseImage(&m_fringeLoadingImage);
-  }
 }
 
 void SixFringeCapture::init()
@@ -43,10 +38,10 @@ void SixFringeCapture::init(float width, float height)
     m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
     m_camera.setMode(1);
 
-    m_mesh = new TriMesh(width, height);
+    m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
     m_mesh->initMesh();
 
-    m_fringeLoadingImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3);
+	m_fringeLoadingImage = shared_ptr<IplImage>(cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3), [](IplImage* ptr) { cvReleaseImage(&ptr); });
 
     m_hasBeenInit = true;
   }
@@ -62,8 +57,6 @@ void SixFringeCapture::resizeInput(float width, float height)
     m_fringeImage2.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
     m_fringeImage3.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
     m_fringeImage4.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-    m_fringeImage5.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-    m_fringeImage6.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 
     m_phaseMap0.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
     m_phaseMap1.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
@@ -87,13 +80,11 @@ void SixFringeCapture::resizeInput(float width, float height)
     m_normalCalculator.uniform("height", height);
 
     //  Resize the display mesh
-    delete m_mesh;
-    m_mesh = new TriMesh(width, height);
+	m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
     m_mesh->initMesh();
 
     //  Resize the fringe loader
-    cvReleaseImage(&m_fringeLoadingImage);
-    m_fringeLoadingImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3);
+    m_fringeLoadingImage = shared_ptr<IplImage>(cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3), [](IplImage* ptr) { cvReleaseImage(&ptr); });
   }
 
   OGLStatus::logOGLErrors("SixFringeCapture - resizeInput()");
@@ -103,8 +94,8 @@ void SixFringeCapture::_initShaders(float width, float height)
 {
   // Create the shaders
   m_phaseCalculator.init();
-  m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/PhaseCalculator.vert"));
-  m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/PhaseCalculator.frag"));
+  m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PhaseCalculator.vert"));
+  m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseCalculator.frag"));
   m_phaseCalculator.bindAttributeLocation("vert", 0);
   m_phaseCalculator.bindAttributeLocation("vertTexCoord", 1);
 
@@ -114,8 +105,8 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_phaseCalculator.uniform("gammaCutoff", m_gammaCutoff);
 
   m_depthCalculator.init();
-  m_depthCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/DepthCalculator.vert"));
-  m_depthCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/DepthCalculator.frag"));
+  m_depthCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/DepthCalculator.vert"));
+  m_depthCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/DepthCalculator.frag"));
   m_depthCalculator.bindAttributeLocation("vert", 0);
   m_depthCalculator.bindAttributeLocation("vertTexCoord", 1);
 
@@ -125,8 +116,8 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
 
   m_phaseFilter.init();
-  m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/PhaseFilter.vert"));
-  m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/PhaseFilter.frag"));
+  m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PhaseFilter.vert"));
+  m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseFilter.frag"));
   m_phaseFilter.bindAttributeLocation("vert", 0);
   m_phaseFilter.bindAttributeLocation("vertTexCoord", 1);
 
@@ -136,8 +127,8 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_phaseFilter.uniform("height", height);
 
   m_normalCalculator.init();
-  m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/NormalCalculator.vert"));
-  m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/NormalCalculator.frag"));
+  m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/NormalCalculator.vert"));
+  m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/NormalCalculator.frag"));
   m_normalCalculator.bindAttributeLocation("vert", 0);
   m_normalCalculator.bindAttributeLocation("vertTexCoord", 1);
 
@@ -147,8 +138,8 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_normalCalculator.uniform("height", height);
 
   m_finalRender.init();
-  m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/FinalRender.vert"));
-  m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/FinalRender.frag"));
+  m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/FinalRender.vert"));
+  m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/FinalRender.frag"));
   m_finalRender.bindAttributeLocation("vert", 0);
   m_finalRender.bindAttributeLocation("vertTexCoord", 1);
 
@@ -265,7 +256,6 @@ void SixFringeCapture::draw(void)
 	glPushMatrix();
 	glLoadIdentity();
 
-    //glRotatef(180, 0.0, 0.0, 1.0);
     m_camera.applyMatrix();
     m_controller.applyTransform();
 
@@ -339,17 +329,17 @@ bool SixFringeCapture::newImage(IplImage* image)
   bool needRedraw = false;
 
   cvSetImageCOI(image, 1);
-  cvSetImageCOI(m_fringeLoadingImage, (m_currentChannelLoad + 1));
-  cvCopy(image, m_fringeLoadingImage);
-  cvSetImageCOI(m_fringeLoadingImage, 0);
+  cvSetImageCOI(m_fringeLoadingImage.get(), (m_currentChannelLoad + 1));
+  cvCopy(image, m_fringeLoadingImage.get());
+  cvSetImageCOI(m_fringeLoadingImage.get(), 0);
   cvSetImageCOI(image, 0);
 
   m_currentChannelLoad++;
 
-  if(m_currentChannelLoad == 2)
+  if(m_currentChannelLoad == 3)
   {
     int backBufferIndex = (m_frontBufferIndex + 1) % 2;
-    m_fringeImages[backBufferIndex][m_currentFringeLoad]->transferToTexture(m_fringeLoadingImage);
+    m_fringeImages[backBufferIndex][m_currentFringeLoad]->transferToTexture(m_fringeLoadingImage.get());
     m_currentChannelLoad = 0;
     m_currentFringeLoad++;
   }

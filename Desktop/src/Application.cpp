@@ -7,6 +7,13 @@ int main(int argc, char **argv)
 	// Create the Qt application
 	QApplication app(argc, argv);
 
+	//	Set the stylesheet for the application
+	QFile File(":/../../resources/images/resources/SLS.qss");
+	File.open(QFile::ReadOnly);
+	QString stylesheet = QLatin1String(File.readAll());
+	app.setStyleSheet(stylesheet);
+
+	//	Set the application specific info
     QCoreApplication::setOrganizationName("SL Studios");
     QCoreApplication::setOrganizationDomain("SLStudios.org");
     QCoreApplication::setApplicationName("SLS-Desktop");

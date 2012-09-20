@@ -14,7 +14,7 @@ void main(void)
 	float twoPi = 2.0 * pi;
 	
 	float pitch1 = 30;
-    float pitch2 = 684;
+    float pitch2 = 768;
 
 	vec3 fringe1 = texture2D(fringeImage1, fragTexCoord).rgb;
 	vec3 fringe2 = texture2D(fringeImage2, fragTexCoord).rgb;
@@ -26,7 +26,8 @@ void main(void)
     float cosine2 = (fringe2.g + fringe2.g) - (fringe2.r + fringe2.b);
 
     float phase1 = atan(-sine1, -cosine1);
-    float phaseShift = 3.0 * twoPi / 4.0;
+    //float phaseShift = 3.0 * twoPi / 4.0;
+	float phaseShift = 0.0;
     float phase2 = atan(-sine2 * cos(phaseShift) + cosine2 * sin(phaseShift), -cosine2 * cos(phaseShift) - sine2 * sin(phaseShift));
 
 	float magicNumber = .36;
@@ -38,9 +39,9 @@ void main(void)
     else
         k = round(temp - .5);	
 
-	phase = phase1 + twoPi * k;
-
-	if(isnan(phi1))
+	phase = vec4(phase1 + twoPi * k);
+	
+	if(isnan(phase1))
 	{
 		phase = vec4(0.0);
 	}

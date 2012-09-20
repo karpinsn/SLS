@@ -59,11 +59,8 @@ private:
 	AbstractMesh* m_currentMesh;
 	
 	Texture m_holoimage;
-	
-	//	Render to texture items
-	GLuint m_holoimageFBO;
-	GLuint m_holoimageRBO;
-	
+	FBO m_holoimageProcessor;
+
 	bool m_hasBeenInit;
 	
 	glm::mat4 m_transform;

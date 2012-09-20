@@ -3,7 +3,7 @@
 Holoencoder::Holoencoder(void)
 {
 	m_hasBeenInit = false;
-        m_currentMesh = nullptr;
+    m_currentMesh = nullptr;
 }
 
 void Holoencoder::init()
@@ -13,17 +13,17 @@ void Holoencoder::init()
 
 void Holoencoder::init(float width, float height)
 {
-  //	TODO - Comeback and fix this. Need to be able to reinit
   if(!m_hasBeenInit)
   {
-      //m_width = width;
-      //m_height = height;
+      m_width = width;
+      m_height = height;
 
-	  m_width = 512.0;
-      m_height = 512.0;
+	  m_holoimage.init(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 
       m_currentMesh = nullptr;
-      _initFBO();
+	  m_holoimageProcessor.init(m_width, m_height);
+	  m_holoimageProcessor.setTextureAttachPoint(m_holoimage, GL_COLOR_ATTACHMENT0_EXT);
+	  m_holoimageProcessor.unbind();
 
 	  m_controller.init(0.0,0.0,0.0,.5);
       _initShaders();
@@ -42,70 +42,25 @@ void Holoencoder::init(float width, float height)
   {
 	  // We are doing a reinit
 	  m_width = width;
-      //m_height = height;
+      m_height = height;
 
-      //m_currentMesh = nullptr;
-	  //m_holoimage.reinit(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-	  
-	  //	Need to reinit the FBO 
-     
+	  m_holoimage.reinit(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+
+      m_currentMesh = nullptr;
+	  m_holoimageProcessor.reinit(m_width, m_height);
+	  m_holoimageProcessor.setTextureAttachPoint(m_holoimage, GL_COLOR_ATTACHMENT0_EXT);
+	  m_holoimageProcessor.unbind();
   }
-}
-
-void Holoencoder::_initFBO()
-{
-    m_holoimage.init(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-
-	//	Need to create a render buffer object for the depth buffer
-	glGenRenderbuffersEXT(1, &m_holoimageRBO);
-	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, m_holoimageRBO);
-	glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, m_width, m_height);
-	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0);
-	
-	//	Create a framebuffer object
-	glGenFramebuffersEXT(1, &m_holoimageFBO);
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
-	
-	//	Attach the texture to the FBO color attachment point
-    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_holoimage.getTextureId(), 0);
-	
-	//	Attach the renderbuffer to the depth attachment point
-	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, m_holoimageRBO);
-	
-	//	Check the FBO Status and make sure that it is complete
-	GLenum status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-	if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
-	{
-		clog << "Holoimage FBO not correctly created" << endl;
-	}
-	
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 }
 
 void Holoencoder::_initShaders(void)
 {
     m_encoderShader.init();
     m_encoderShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holoencoder.vert"));
-    m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/HoloencoderDither.frag"));
+    m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holoencoder.frag"));
     m_encoderShader.link();
 
     m_encoderShader.uniform("fringeFrequency", 6.0f);
-
-	float thresholdMap[64] = {0, 32, 8, 40, 2, 34, 10, 42,
-							  48, 16, 56, 24, 50, 18, 58, 26,
-							  12, 44, 4, 36, 14, 46, 6, 38,
-							  60, 28, 52, 20, 62, 30, 54, 22,
-							  3, 35, 11, 43, 1, 33, 9, 41,
-							  51, 19, 59, 27, 49, 17, 57, 25,
-							  15, 47, 7, 39, 13, 45, 5, 37,
-							  63, 31, 55, 23, 61, 29, 53, 21};
-
-	for(int i = 0; i < 64; ++i)
-	{
-		thresholdMap[i] *= 4.0/256.0;
-	}
-
-	m_encoderShader.uniform("thresholdMap", thresholdMap, 64);
 }
 
 void Holoencoder::draw(void)
@@ -133,15 +88,6 @@ void Holoencoder::draw(void)
 
       glColor3f(.8, .8, .8);
 
-	  /*glBegin(GL_QUADS);
-	  
-		glTexCoord2f(1.0, 0.0); glVertex3f(1.0, -1.0, 0.0);
-		glTexCoord2f(1.0, 1.0); glVertex3f(1.0,  1.0, 0.0);
-		glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, 1.0, 0.0);
-		glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, 0.0);
-
-	  glEnd();*/
-
       if(nullptr != m_currentMesh)
       {
           m_currentMesh->draw();
@@ -154,11 +100,9 @@ void Holoencoder::draw(void)
 
 Texture& Holoencoder::encodeOldWay()
 {	
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
-	
+	m_holoimageProcessor.bind();
 	draw();
-	
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+	m_holoimageProcessor.unbind();
 	
 	return m_holoimage;
 }
@@ -205,9 +149,9 @@ void Holoencoder::encode(void)
 {
   OGLStatus::logOGLErrors("Holoencoder - encoder()");
   
-  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_holoimageFBO);
+  m_holoimageProcessor.bind();
   draw();
-  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+  m_holoimageProcessor.unbind();
 }
 
 MeshInterchange* Holoencoder::getEncodedData()

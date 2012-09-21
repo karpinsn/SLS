@@ -5,6 +5,8 @@ precision highp float;
 uniform sampler2D fringeImage1;
 uniform sampler2D fringeImage2;
 
+uniform float gammaCutoff;
+
 in vec2 fragTexCoord;
 out vec4 phase;
 
@@ -20,30 +22,30 @@ void main(void)
 	vec3 fringe2 = texture2D(fringeImage2, fragTexCoord).rgb;
 
     float sine1 = sqrt(3.0) * (fringe1.r - fringe1.b);
-    float cosine1 = (fringe1.g + fringe1.g) - (fringe1.r + fringe1.b);	
-	
-    float sine2 = sqrt(3.0) * (fringe2.r - fringe2.b);
-    float cosine2 = (fringe2.g + fringe2.g) - (fringe2.r + fringe2.b);
+    float cosine1 = 2.0 * fringe1.g - fringe1.r - fringe1.b;	
 
-    float phase1 = atan(-sine1, -cosine1);
-    //float phaseShift = 3.0 * twoPi / 4.0;
-	float phaseShift = 0.0;
-    float phase2 = atan(-sine2 * cos(phaseShift) + cosine2 * sin(phaseShift), -cosine2 * cos(phaseShift) - sine2 * sin(phaseShift));
+	float phaseShift = pi / 3.0;	
+    float sine2 = sqrt(3.0) * (fringe2.r - fringe2.b);
+    float cosine2 = 2.0 * fringe2.g - fringe2.r - fringe2.b;
+
+    float phase1 = atan(sine1, cosine1);
+    float phi2 = atan(sine2, cosine2);
+	float cosine22 = cos(phi2 - phaseShift);
+	float sine22 = sin(phi2 - phaseShift);
+	float phase2 = atan(sine22, cosine22);
 
 	float magicNumber = .36;
-    float temp = (phase2 * pitch2 / pitch1 - phase1) / twoPi - magicNumber;
-    float k = 0;
-    
-    if(temp > 0)
-        k = round(temp + .5);
-    else
-        k = round(temp - .5);	
+    float k = round((phase2 * pitch2 / pitch1 - phase1) / twoPi - magicNumber);
 
-	phase = vec4(phase1 + twoPi * k);
-	
-	if(isnan(phase1))
-	{
-		phase = vec4(0.0);
+    float gamma = sqrt(pow((2 * fringe1.g - fringe1.r - fringe1.b), 2) + 3 * pow((fringe1.r - fringe1.b), 2)) / (fringe1.r + fringe1.g + fringe1.b);
+    		
+    if(gamma >= gammaCutoff && !isnan(phase1))
+    {
+	    phase = vec4(phase1 + twoPi * k);
 	}
+    else
+    {
+        phase = vec4(0.0);
+    }
 }
 

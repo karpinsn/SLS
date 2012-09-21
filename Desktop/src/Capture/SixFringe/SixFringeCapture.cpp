@@ -336,6 +336,12 @@ bool SixFringeCapture::newImage(IplImage* image)
 
   m_currentChannelLoad++;
 
+  if(m_currentChannelLoad == 3 && m_currentFringeLoad == 2)
+  {
+	  //cvSmooth(m_fringeLoadingImage.get(), m_fringeLoadingImage.get(), CV_GAUSSIAN, 11, 11, 11.0/3.0);
+	  //cvSmooth(m_fringeLoadingImage.get(), m_fringeLoadingImage.get(), CV_GAUSSIAN, 11, 11, 11.0/3.0);
+  }
+
   if(m_currentChannelLoad == 3)
   {
     int backBufferIndex = (m_frontBufferIndex + 1) % 2;

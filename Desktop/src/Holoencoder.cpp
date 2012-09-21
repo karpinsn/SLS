@@ -175,6 +175,7 @@ void Holoencoder::autoFitTransforms(void)
 	float scaleFactor = glm::max(glm::abs(min.x), glm::abs(max.x));
 	scaleFactor = glm::max(glm::max(glm::abs(min.y), glm::abs(max.y)), scaleFactor);
 	scaleFactor = glm::max(glm::max(glm::abs(min.z), glm::abs(max.z)), scaleFactor);
+
 	//	Scale is just 1 / scaleFactor since we are in a -1 to 1 Ortho projection
 	m_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f/scaleFactor));
   }

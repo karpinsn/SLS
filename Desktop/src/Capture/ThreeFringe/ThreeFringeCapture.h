@@ -73,7 +73,7 @@ private:
   GLenum m_normalMapAttachPoint;
   GLenum m_referencePhaseAttachPoint;
 
-  IplImage *m_fringeLoadingImage;
+  shared_ptr<IplImage> m_fringeLoadingImage;
   Texture* m_fringeImages[2];  // Buffer and Images
   Texture m_fringeImage1; //  Fringe image for the front buffer
   Texture m_fringeImage2; //  Fringe image for the back buffer
@@ -89,7 +89,7 @@ private:
 
   Camera m_camera;
   Arcball m_controller;
-  TriMesh* m_mesh;
+  shared_ptr<TriMesh> m_mesh;
 
   FPSCalculator m_fpsCalculator;
   FPSCalculator m_3dpsCalculator; // 3D frames per second

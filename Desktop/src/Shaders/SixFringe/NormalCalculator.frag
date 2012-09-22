@@ -14,7 +14,7 @@ void main(void)
 {
   vec2 offset[9];
   offset[3] = vec2(-step_w, step_h); 	offset[2] = vec2(0.0, step_h); 	offset[1] = vec2(step_w, step_h);
-  offset[4] = vec2(-step_w, 0.0);   					offset[0] = vec2(step_w, 0.0);		offset[8] = vec2(step_w, 0.0);
+  offset[4] = vec2(-step_w, 0.0);   	offset[0] = vec2(step_w, 0.0);	offset[8] = vec2(step_w, 0.0);
   offset[5] = vec2(-step_w, -step_h);  	offset[6] = vec2(0.0, -step_h);	offset[7] = vec2(step_w, -step_h); 
 
   vec3 newVertex = vec3(fragTexCoord.s-.5, fragTexCoord.t-.5, 0.0);

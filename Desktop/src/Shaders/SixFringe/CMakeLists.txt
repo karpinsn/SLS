@@ -6,6 +6,8 @@ include(FileCopyTargets)
 
 set(SHADER_VERT_SOURCES
 
+	Gaussian11x11Horizontal.vert
+	Gaussian11x11Vertical.vert
 	PhaseCalculator.vert
     DepthCalculator.vert
 	FinalRender.vert
@@ -15,6 +17,7 @@ set(SHADER_VERT_SOURCES
 
 set(SHADER_FRAG_SOURCES
 	
+	Gaussian11x11.frag
 	PhaseCalculator.frag
     DepthCalculator.frag
 	FinalRender.frag

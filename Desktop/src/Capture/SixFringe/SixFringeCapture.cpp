@@ -8,7 +8,7 @@ SixFringeCapture::SixFringeCapture(void)
   m_currentFringeLoad = 0;
   m_currentChannelLoad = 0;
   m_frontBufferIndex = 0;
-  m_gammaCutoff = 0.3f;
+  m_gammaCutoff = 0.1f;
   m_scalingFactor = 0.04f;
   m_displayMode = Geometry;
 }
@@ -74,6 +74,11 @@ void SixFringeCapture::resizeInput(float width, float height)
     m_imageProcessor.unbind();
 
     //  Send the new size to all of the shaders
+	m_gaussianFilterVertical.uniform("width", width);
+	m_gaussianFilterVertical.uniform("height", height);
+	m_gaussianFilterHorizontal.uniform("width", width);
+	m_gaussianFilterHorizontal.uniform("height", height);
+
     m_phaseFilter.uniform("width", width);
     m_phaseFilter.uniform("height", height);
     m_normalCalculator.uniform("width", width);
@@ -92,7 +97,32 @@ void SixFringeCapture::resizeInput(float width, float height)
 
 void SixFringeCapture::_initShaders(float width, float height)
 {
+  //  Kernel used by gaussian filter
+  float kernel[11] = {.0495, .0692, .0897, .1081, .1208, .01254, .1208, .1081, .0897, .0692, .0495};
+
   // Create the shaders
+  m_gaussianFilterVertical.init();
+  m_gaussianFilterVertical.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/Gaussian11x11Vertical.vert"));
+  m_gaussianFilterVertical.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/Gaussian11x11.frag"));
+  m_gaussianFilterVertical.bindAttributeLocation("vert", 0);
+  m_gaussianFilterVertical.bindAttributeLocation("vertTexCoord", 1);
+  m_gaussianFilterVertical.link();
+  m_gaussianFilterVertical.uniform("image", 0);
+  m_gaussianFilterVertical.uniform("width", width);
+  m_gaussianFilterVertical.uniform("height", height);
+  m_gaussianFilterVertical.uniform("kernel", kernel, 11); 
+
+  m_gaussianFilterHorizontal.init();
+  m_gaussianFilterHorizontal.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/Gaussian11x11Horizontal.vert"));
+  m_gaussianFilterHorizontal.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/Gaussian11x11.frag"));
+  m_gaussianFilterHorizontal.bindAttributeLocation("vert", 0);
+  m_gaussianFilterHorizontal.bindAttributeLocation("vertTexCoord", 1);
+  m_gaussianFilterHorizontal.link();
+  m_gaussianFilterHorizontal.uniform("image", 0);
+  m_gaussianFilterHorizontal.uniform("width", width);
+  m_gaussianFilterHorizontal.uniform("height", height);
+  m_gaussianFilterHorizontal.uniform("kernel", kernel, 11); 
+
   m_phaseCalculator.init();
   m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PhaseCalculator.vert"));
   m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseCalculator.frag"));
@@ -222,11 +252,21 @@ void SixFringeCapture::draw(void)
     //  If we dont have the reference phase then we are calculating it and we redraw
     m_imageProcessor.bind();
     {
-      m_imageProcessor.bindDrawBuffer(m_referencePhaseAttachPoint);
+      m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
       m_phaseCalculator.bind();
       m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
       m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1); 
       m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
+	  m_gaussianFilterVertical.bind();
+	  m_phaseMap0.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_referencePhaseAttachPoint);
+	  m_gaussianFilterHorizontal.bind();
+	  m_phaseMap1.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
     }
     m_imageProcessor.unbind();
 
@@ -336,12 +376,6 @@ bool SixFringeCapture::newImage(IplImage* image)
 
   m_currentChannelLoad++;
 
-  if(m_currentChannelLoad == 3 && m_currentFringeLoad == 2)
-  {
-	  //cvSmooth(m_fringeLoadingImage.get(), m_fringeLoadingImage.get(), CV_GAUSSIAN, 11, 11, 11.0/3.0);
-	  //cvSmooth(m_fringeLoadingImage.get(), m_fringeLoadingImage.get(), CV_GAUSSIAN, 11, 11, 11.0/3.0);
-  }
-
   if(m_currentChannelLoad == 3)
   {
     int backBufferIndex = (m_frontBufferIndex + 1) % 2;
@@ -352,6 +386,12 @@ bool SixFringeCapture::newImage(IplImage* image)
 
   if(m_currentFringeLoad == 2)
   {
+	  //  Capture first 6 images as reference plane
+	if(!m_haveReferencePhase)
+	{
+	  m_captureReferencePhase = true;
+	}
+
     m_currentChannelLoad = 0;
     m_currentFringeLoad = 0;
     swapBuffers();

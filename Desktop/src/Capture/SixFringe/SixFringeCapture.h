@@ -61,6 +61,9 @@ class SixFringeCapture : public IDecodingGLContext, public ICapture
 private:
   AxisDisplay m_axis;
 
+  ShaderProgram m_gaussianFilterVertical;
+  ShaderProgram m_gaussianFilterHorizontal;
+
   ShaderProgram m_phaseCalculator;
   ShaderProgram m_phaseFilter;
   ShaderProgram m_depthCalculator;
@@ -77,13 +80,14 @@ private:
   Texture* m_fringeImages[2][2];  // Buffer and Images
   Texture m_fringeImage1; //  Fringe images for the front buffer
   Texture m_fringeImage2;
-
   Texture m_fringeImage3; //  Fringe images for the back buffer
   Texture m_fringeImage4;
 
   Texture m_referencePhase;
   Texture m_phaseMap0;
   Texture m_phaseMap1;
+  Texture m_phaseMap2;
+  Texture m_phaseMap3;
   Texture m_depthMap;
   Texture m_normalMap;
 

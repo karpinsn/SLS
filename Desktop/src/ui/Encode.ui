@@ -93,6 +93,7 @@
            <widget class="XYZMCodecOptionsController" name="xyzmOptions"/>
            <widget class="HolovideoEncoderOptionsController" name="holovideoOptions"/>
            <widget class="NineFringeCodecOptionsController" name="nineFringeOptions"/>
+		   <widget class="SixFringeCodecOptionsController" name="sixFringeOptions"/>
           </widget>
          </item>
         </layout>
@@ -238,6 +239,12 @@
    <class>NineFringeCodecOptionsController</class>
    <extends>QWidget</extends>
    <header>Encoder/NineFringeCodecOptionsController.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SixFringeCodecOptionsController</class>
+   <extends>QWidget</extends>
+   <header>Encoder/SixFringeCodecOptionsController.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -21,6 +21,12 @@ public:
   ~NineFringeCodecOptionsController();
 
   Codec* getCodec(void);
+
+public slots:
+  void selectFile(void);
+
+private:
+  void _connectSignalsWithController(void);
 };
 
-#endif	// _MULTI_WAVELENGTH_CODEC_OPTIONS_CONTROLLER_H_
+#endif	// _NINE_FRINGE_CODEC_OPTIONS_CONTROLLER_H_

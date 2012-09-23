@@ -52,7 +52,7 @@ Codec* DepthmapCodecOptionsController::getCodec(void)
 
 void DepthmapCodecOptionsController::selectFile(void)
 {
-  QString file = QFileDialog::getOpenFileName(this, "Select source file to Open", "/", "Video (*.avi)");
+  QString file = QFileDialog::getSaveFileName(this, "Save File as", "/", "Video (*.avi)");
 
   if(!file.isEmpty())
   {

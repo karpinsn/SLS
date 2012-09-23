@@ -3,7 +3,7 @@
 void DepthEncoder::openCodec(EncodingOpenGLWidget* glWidget)
 {
   //  TODO comeback and fix this
-  string filename = "";
+  string filename = "N:/Data/Blah.avi";
 
   //  Open the stream to write to
   m_io.openSaveStream(filename, m_width, m_height, 30);

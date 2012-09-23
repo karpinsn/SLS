@@ -37,6 +37,10 @@ void EncoderController::newDecoder(const QString& text)
   {
     decoderOptionsStackedWidget->setCurrentWidget(nineFringeOptions);
   }
+  else if(0 == QString(SixFringeDecoder::codecName().c_str()).compare(text))
+  {
+    decoderOptionsStackedWidget->setCurrentWidget(sixFringeOptions);
+  }
   else if(0 == QString(HolovideoDecoder::codecName().c_str()).compare(text))
   {
 	decoderOptionsStackedWidget->setCurrentWidget(holovideoOptions);
@@ -89,6 +93,10 @@ void EncoderController::encode(void)
 
   //  Setup decoder
   decoder->openCodec(decoderGLWidget);
+
+  //  Setup encoder
+  encoder->setWidth(decoder->getWidth());
+  encoder->setHeight(decoder->getHeight());
   encoder->openCodec(encoderGLWidget);
 
   //  As long as we have meshes decode and encode them
@@ -125,6 +133,7 @@ void EncoderController::_addCodecs(void)
 {
   //  Add decoders
   decoderComboBox->addItem(QString(NineFringeDecoder::codecName().c_str()));
+  decoderComboBox->addItem(QString(SixFringeDecoder::codecName().c_str()));
   decoderComboBox->addItem(QString(HolovideoDecoder::codecName().c_str()));
   decoderComboBox->addItem(QString(XYZMDecoder::codecName().c_str()));
 
@@ -136,6 +145,8 @@ void EncoderController::_addCodecs(void)
 
 void EncoderController::_previewEncoding(void)
 {
+  return;
+
   Codec* decoder = _getDecoder();
   Codec* encoder = _getEncoder();
 
@@ -197,6 +208,10 @@ Codec* EncoderController::_getDecoder(void)
   if(0 == QString(NineFringeDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
   {
 	decoder = nineFringeOptions->getCodec();
+  }
+  else if(0 == QString(SixFringeDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
+  {
+    decoder = sixFringeOptions->getCodec();
   }
   else if(0 == QString(HolovideoDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
   {

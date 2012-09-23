@@ -3,6 +3,8 @@
 NineFringeCodecOptionsController::NineFringeCodecOptionsController(QWidget* parent) : QWidget(parent)
 {
   setupUi(this);
+
+  _connectSignalsWithController();
 }
 
 NineFringeCodecOptionsController::~NineFringeCodecOptionsController()
@@ -19,4 +21,19 @@ Codec* NineFringeCodecOptionsController::getCodec(void)
   codec->setScalingFactor(scalingBox->value());
 
   return codec;
+}
+
+void NineFringeCodecOptionsController::selectFile(void)
+{
+  QString file = QFileDialog::getSaveFileName(this, "Select file to open", "/", "Video (*.avi)");
+
+  if(!file.isEmpty())
+  {
+	sourceFileBox->setText(file);
+  }
+}
+
+void NineFringeCodecOptionsController::_connectSignalsWithController(void)
+{
+  connect(sourceFileChooseButton, SIGNAL(clicked()), this, SLOT(selectFile()));
 }

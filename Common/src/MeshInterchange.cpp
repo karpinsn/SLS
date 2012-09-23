@@ -64,10 +64,24 @@ int MeshInterchange::getPreferedFormat(void)
 
 void MeshInterchange::setTexture(Texture* texture, bool deleteAssets)
 {
+  if(m_deleteAssets)
+  {
+      _deleteAssets();
+  }
+
+  m_deleteAssets = deleteAssets;
+  m_texture = texture;
 }
 
 void MeshInterchange::setIplImage(IplImage* image, bool deleteAssets)
 {
+  if(m_deleteAssets)
+  {
+      _deleteAssets();
+  }
+
+  m_deleteAssets = deleteAssets;
+  m_image = image;
 }
 
 void MeshInterchange::setMesh(AbstractMesh* mesh, bool deleteAssets)

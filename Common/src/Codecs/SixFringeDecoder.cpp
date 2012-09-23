@@ -1,11 +1,11 @@
-#include "NineFringeDecoder.h"
+#include "SixFringeDecoder.h"
 
-NineFringeDecoder::NineFringeDecoder(string& filename)
+SixFringeDecoder::SixFringeDecoder(string& filename)
 {
   m_filename = filename;
 }
 
-void NineFringeDecoder::openCodec(EncodingOpenGLWidget* glWidget)
+void SixFringeDecoder::openCodec(EncodingOpenGLWidget* glWidget)
 {
   if(nullptr == glWidget)
   {
@@ -22,25 +22,25 @@ void NineFringeDecoder::openCodec(EncodingOpenGLWidget* glWidget)
   m_glWidget->reinit(getWidth(), getHeight());
 }
 
-void NineFringeDecoder::closeCodec(void)
+void SixFringeDecoder::closeCodec(void)
 {
   m_io.closeReadStream();
   m_glWidget = nullptr;
 }
 
-void NineFringeDecoder::process(MeshInterchange* data)
+void SixFringeDecoder::process(MeshInterchange* data)
 {
   if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return a nullptr MeshInterchange
-    data->setTexture(nullptr, false);
+    data = nullptr;
     return;
   }
 
   if(_streamUntilNewFrame())
   {
     //  End of the file. Return a nullptr mesh
-    data = nullptr;
+    data->setTexture(nullptr, false);
     return;
   }
 
@@ -64,11 +64,11 @@ void NineFringeDecoder::process(MeshInterchange* data)
   }
 }
 
-void NineFringeDecoder::previewProcess(MeshInterchange* data)
+void SixFringeDecoder::previewProcess(MeshInterchange* data)
 {
 }
 
-bool NineFringeDecoder::_streamUntilNewFrame(void)
+bool SixFringeDecoder::_streamUntilNewFrame(void)
 {
   IplImage* frame = m_io.readStream();
 
@@ -82,32 +82,32 @@ bool NineFringeDecoder::_streamUntilNewFrame(void)
   return frame == nullptr;
 }
 
-int NineFringeDecoder::getWidth(void)
+int SixFringeDecoder::getWidth(void)
 {
   return m_io.readStreamWidth();
 }
 
-int NineFringeDecoder::getHeight(void)
+int SixFringeDecoder::getHeight(void)
 {
   return m_io.readStreamHeight();
 }
 
-float NineFringeDecoder::getStreamLocation(void)
+float SixFringeDecoder::getStreamLocation(void)
 {
   return m_io.readStreamPosition();
 }
 
-void NineFringeDecoder::setGammaCutoff(float gammaValue)
+void SixFringeDecoder::setGammaCutoff(float gammaValue)
 {
   m_coder.setGammaCutoff(gammaValue);
 }
 
-void NineFringeDecoder::setScalingFactor(float scaling)
+void SixFringeDecoder::setScalingFactor(float scaling)
 {
   m_coder.setScalingFactor(scaling);
 }
 
-string NineFringeDecoder::codecName(void)
+string SixFringeDecoder::codecName(void)
 {
-  return "Nine Fringe Decoder";
+  return "Six Fringe Decoder";
 }

@@ -34,7 +34,7 @@ void SixFringeCapture::init(float width, float height)
     m_axis.init();
 
 	m_controller.init(0.5f, 0.5f, 0.0f, .5f);
-    m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
+    m_camera.init(0.5f, 0.5f, 2.0f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f);
     m_camera.setMode(1);
 
     m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));

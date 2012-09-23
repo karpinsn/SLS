@@ -21,6 +21,8 @@ private:
   IplImage* m_floatImageHandleSingleChannel;
   IplImage* m_byteImageHandle;
 
+  string m_filename;
+
   bool m_stretchContrast;
   float m_minContrastValue;
   float m_maxContrastValue;
@@ -32,6 +34,7 @@ public:
   void previewProcess(MeshInterchange* data);
 
   void enableContrastStretching(float min, float max);
+  void setFilename(string filename);
   void disableContrastStretching();
 
   static string codecName(void);

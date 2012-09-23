@@ -47,6 +47,8 @@ Codec* DepthmapCodecOptionsController::getCodec(void)
     m_codec->disableContrastStretching();
   }
 
+  m_codec->setFilename(sourceFileBox->text().toAscii().constData());
+
   return m_codec;
 }
 

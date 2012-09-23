@@ -2,11 +2,8 @@
 
 void DepthEncoder::openCodec(EncodingOpenGLWidget* glWidget)
 {
-  //  TODO comeback and fix this
-  string filename = "N:/Data/Blah.avi";
-
   //  Open the stream to write to
-  m_io.openSaveStream(filename, m_width, m_height, 30);
+  m_io.openSaveStream(m_filename, m_width, m_height, 30);
 
   m_floatImageHandleThreeChannel = cvCreateImage(cvSize(getWidth(), getHeight()), IPL_DEPTH_32F, 3);
   m_floatImageHandleSingleChannel = cvCreateImage(cvSize(getWidth(), getHeight()), IPL_DEPTH_32F, 1);
@@ -50,6 +47,11 @@ void DepthEncoder::process(MeshInterchange* data)
 void DepthEncoder::previewProcess(MeshInterchange* data)
 {
   return; //  TODO comeback and fix this
+}
+
+void DepthEncoder::setFilename(string filename)
+{
+  m_filename = filename;
 }
 
 void DepthEncoder::enableContrastStretching(float min, float max)

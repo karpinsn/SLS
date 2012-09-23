@@ -64,6 +64,9 @@ private:
   ShaderProgram m_gaussianFilterVertical;
   ShaderProgram m_gaussianFilterHorizontal;
 
+  ShaderProgram m_phaseWrapper;
+  ShaderProgram m_phaseUnwrapper;
+
   ShaderProgram m_phaseCalculator;
   ShaderProgram m_phaseFilter;
   ShaderProgram m_depthCalculator;
@@ -72,6 +75,7 @@ private:
 
   GLenum m_phaseMap0AttachPoint;
   GLenum m_phaseMap1AttachPoint;
+  GLenum m_phaseMap2AttachPoint;
   GLenum m_depthMapAttachPoint;
   GLenum m_normalMapAttachPoint;
   GLenum m_referencePhaseAttachPoint;
@@ -87,7 +91,6 @@ private:
   Texture m_phaseMap0;
   Texture m_phaseMap1;
   Texture m_phaseMap2;
-  Texture m_phaseMap3;
   Texture m_depthMap;
   Texture m_normalMap;
 

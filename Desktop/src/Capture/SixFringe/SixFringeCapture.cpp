@@ -58,8 +58,9 @@ void SixFringeCapture::resizeInput(float width, float height)
     m_fringeImage3.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
     m_fringeImage4.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 
-    m_phaseMap0.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
-    m_phaseMap1.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+    m_phaseMap0.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+    m_phaseMap1.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+	m_phaseMap2.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
     m_depthMap.reinit         (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
     m_normalMap.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
     m_referencePhase.reinit   (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
@@ -68,6 +69,7 @@ void SixFringeCapture::resizeInput(float width, float height)
     m_imageProcessor.reinit(width, height);
     m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_phaseMap1, m_phaseMap1AttachPoint);
+	m_imageProcessor.setTextureAttachPoint(m_phaseMap2, m_phaseMap2AttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_depthMap, m_depthMapAttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
@@ -98,7 +100,7 @@ void SixFringeCapture::resizeInput(float width, float height)
 void SixFringeCapture::_initShaders(float width, float height)
 {
   //  Kernel used by gaussian filter
-  float kernel[11] = {.0495, .0692, .0897, .1081, .1208, .01254, .1208, .1081, .0897, .0692, .0495};
+  float kernel[11] = {.0495, .0692, .0897, .1081, .1208, .1254, .1208, .1081, .0897, .0692, .0495};
 
   // Create the shaders
   m_gaussianFilterVertical.init();
@@ -122,6 +124,25 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_gaussianFilterHorizontal.uniform("width", width);
   m_gaussianFilterHorizontal.uniform("height", height);
   m_gaussianFilterHorizontal.uniform("kernel", kernel, 11); 
+
+  m_phaseWrapper.init();
+  m_phaseWrapper.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PhaseWrap.vert"));
+  m_phaseWrapper.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseWrap.frag"));
+  m_phaseWrapper.bindAttributeLocation("vert", 0);
+  m_phaseWrapper.bindAttributeLocation("vertTexCoord", 1);
+  m_phaseWrapper.link();
+  m_phaseWrapper.uniform("fringeImage1", 0);
+  m_phaseWrapper.uniform("fringeImage2", 1); 
+
+  m_phaseUnwrapper.init();
+  m_phaseUnwrapper.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PhaseUnwrap.vert"));
+  m_phaseUnwrapper.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseUnwrap.frag"));
+  m_phaseUnwrapper.bindAttributeLocation("vert", 0);
+  m_phaseUnwrapper.bindAttributeLocation("vertTexCoord", 1);
+  m_phaseUnwrapper.link();
+  m_phaseUnwrapper.uniform("unfilteredWrappedPhase", 0);
+  m_phaseUnwrapper.uniform("filteredWrappedPhase", 1); 
+  //m_phaseUnwrapper.uniform("gammaCutoff", m_gammaCutoff);
 
   m_phaseCalculator.init();
   m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PhaseCalculator.vert"));
@@ -187,9 +208,10 @@ void SixFringeCapture::_initTextures(GLuint width, GLuint height)
 
   m_phaseMap0AttachPoint      = GL_COLOR_ATTACHMENT0_EXT;
   m_phaseMap1AttachPoint      = GL_COLOR_ATTACHMENT1_EXT;
-  m_depthMapAttachPoint       = GL_COLOR_ATTACHMENT2_EXT;
-  m_normalMapAttachPoint      = GL_COLOR_ATTACHMENT3_EXT;
-  m_referencePhaseAttachPoint = GL_COLOR_ATTACHMENT4_EXT;
+  m_phaseMap2AttachPoint	  = GL_COLOR_ATTACHMENT2_EXT;
+  m_depthMapAttachPoint       = GL_COLOR_ATTACHMENT3_EXT;
+  m_normalMapAttachPoint      = GL_COLOR_ATTACHMENT4_EXT;
+  m_referencePhaseAttachPoint = GL_COLOR_ATTACHMENT5_EXT;
 
   m_fringeImage1.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
   m_fringeImage2.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
@@ -201,8 +223,9 @@ void SixFringeCapture::_initTextures(GLuint width, GLuint height)
   m_fringeImages[1][0] = &m_fringeImage3;
   m_fringeImages[1][1] = &m_fringeImage4;
 
-  m_phaseMap0.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
-  m_phaseMap1.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+  m_phaseMap0.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+  m_phaseMap1.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+  m_phaseMap2.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
   m_depthMap.init         (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_normalMap.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_referencePhase.init   (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
@@ -210,6 +233,7 @@ void SixFringeCapture::_initTextures(GLuint width, GLuint height)
   m_imageProcessor.init(width, height);
   m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_phaseMap1, m_phaseMap1AttachPoint);
+  m_imageProcessor.setTextureAttachPoint(m_phaseMap2, m_phaseMap2AttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_depthMap, m_depthMapAttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
@@ -252,19 +276,36 @@ void SixFringeCapture::draw(void)
     //  If we dont have the reference phase then we are calculating it and we redraw
     m_imageProcessor.bind();
     {
-      m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
-      m_phaseCalculator.bind();
-      m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
-      m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1); 
-      m_imageProcessor.process();
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
+	  m_phaseWrapper.bind();
+	  m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
+	  m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1); 
+	  m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
+	  m_gaussianFilterVertical.bind();
+	  m_phaseMap1.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap2AttachPoint);
+	  m_gaussianFilterHorizontal.bind();
+	  m_phaseMap0.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
+	  m_phaseUnwrapper.bind();
+	  m_phaseUnwrapper.uniform("gammaCutoff", m_gammaCutoff);
+	  m_phaseMap1.bind(GL_TEXTURE0);
+	  m_phaseMap2.bind(GL_TEXTURE1);
+	  m_imageProcessor.process();
 
 	  m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
-	  m_gaussianFilterVertical.bind();
+	  m_phaseFilter.bind();
 	  m_phaseMap0.bind(GL_TEXTURE0);
 	  m_imageProcessor.process();
 
 	  m_imageProcessor.bindDrawBuffer(m_referencePhaseAttachPoint);
-	  m_gaussianFilterHorizontal.bind();
+	  m_phaseFilter.bind();
 	  m_phaseMap1.bind(GL_TEXTURE0);
 	  m_imageProcessor.process();
     }
@@ -445,11 +486,27 @@ string SixFringeCapture::getCaptureName(void)
 
 void SixFringeCapture::_drawCalculatePhase()
 {
-  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
-  m_phaseCalculator.bind();
-  m_phaseCalculator.uniform("gammaCutoff", m_gammaCutoff);
+  m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
+  m_phaseWrapper.bind();
   m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
   m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1); 
+  m_imageProcessor.process();
+
+  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
+  m_gaussianFilterVertical.bind();
+  m_phaseMap1.bind(GL_TEXTURE0);
+  m_imageProcessor.process();
+
+  m_imageProcessor.bindDrawBuffer(m_phaseMap2AttachPoint);
+  m_gaussianFilterHorizontal.bind();
+  m_phaseMap0.bind(GL_TEXTURE0);
+  m_imageProcessor.process();
+
+  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
+  m_phaseUnwrapper.bind();
+  m_phaseUnwrapper.uniform("gammaCutoff", m_gammaCutoff);
+  m_phaseMap1.bind(GL_TEXTURE0);
+  m_phaseMap2.bind(GL_TEXTURE1);
   m_imageProcessor.process();
 }
 

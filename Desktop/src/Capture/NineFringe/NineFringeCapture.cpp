@@ -8,7 +8,7 @@ NineFringeCapture::NineFringeCapture(void)
   m_currentFringeLoad = 0;
   m_currentChannelLoad = 0;
   m_frontBufferIndex = 0;
-  m_gammaCutoff = 0.3f;
+  m_gammaCutoff = 0.1f;
   m_scalingFactor = 0.04f;
   m_displayMode = Geometry;
 }

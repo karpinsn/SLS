@@ -33,8 +33,7 @@ void SixFringeCapture::init(float width, float height)
 
     m_axis.init();
 
-    //m_controller.init(512, 512);
-	m_controller.init(0.0f, 0.0f, 0.0f, .5f);
+	m_controller.init(0.5f, 0.5f, 0.0f, .5f);
     m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
     m_camera.setMode(1);
 
@@ -142,7 +141,7 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_phaseUnwrapper.link();
   m_phaseUnwrapper.uniform("unfilteredWrappedPhase", 0);
   m_phaseUnwrapper.uniform("filteredWrappedPhase", 1); 
-  //m_phaseUnwrapper.uniform("gammaCutoff", m_gammaCutoff);
+  m_phaseUnwrapper.uniform("gammaCutoff", m_gammaCutoff);
 
   m_phaseCalculator.init();
   m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PhaseCalculator.vert"));
@@ -294,7 +293,9 @@ void SixFringeCapture::draw(void)
 
 	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
 	  m_phaseUnwrapper.bind();
-	  m_phaseUnwrapper.uniform("gammaCutoff", m_gammaCutoff);
+	  //  Since we are calculating the reference plane we dont want
+	  //  to filter off any pixels
+	  m_phaseUnwrapper.uniform("gammaCutoff", 0.0f);
 	  m_phaseMap1.bind(GL_TEXTURE0);
 	  m_phaseMap2.bind(GL_TEXTURE1);
 	  m_imageProcessor.process();
@@ -339,8 +340,6 @@ void SixFringeCapture::draw(void)
 
     m_camera.applyMatrix();
     m_controller.applyTransform();
-
-	glColor3f(0.0f, 1.0f, 0.0f);
 
     glm::mat4 modelViewMatrix;
     glm::mat4 projectionMatrix;

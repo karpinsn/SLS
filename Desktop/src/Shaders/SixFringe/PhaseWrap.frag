@@ -31,6 +31,9 @@ void main(void)
 	float sine2 = sin(phi2 - phaseShift);
 	float cosine2 = cos(phi2 - phaseShift);
 	
-    wrappedPhase = vec4(sine1, cosine1, sine2, cosine2);		
+    float gamma = sqrt(pow((2 * fringe1.g - fringe1.r - fringe1.b), 2) + 3 * pow((fringe1.r - fringe1.b), 2)) / (fringe1.r + fringe1.g + fringe1.b);
+	float phi1 = atan(sine1, cosine1);
+	
+    wrappedPhase = vec4(phi1, gamma, sine2, cosine2);		
 }
 

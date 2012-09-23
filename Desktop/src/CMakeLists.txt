@@ -132,14 +132,14 @@ set(SOURCES
 
 SET(SOURCES_ENCODER
     Encoder/DepthmapCodecOptionsController.cpp
-    Encoder/MultiWavelengthCodecOptionsController.cpp
+    Encoder/NineFringeCodecOptionsController.cpp
     Encoder/HolovideoCodecOptionsController.cpp
 	Encoder/HoloimageEncoderOptionsController.cpp
     Encoder/XYZMCodecOptionsController.cpp
     Encoder/HolovideoEncoderOptionsController.cpp
 
     Encoder/DepthmapCodecOptionsController.h
-    Encoder/MultiWavelengthCodecOptionsController.h
+    Encoder/NineFringeCodecOptionsController.h
     Encoder/HolovideoCodecOptionsController.h
 	Encoder/HoloimageEncoderOptionsController.h
     Encoder/XYZMCodecOptionsController.h
@@ -204,7 +204,7 @@ SET(SOURCES_COMMON_CODECS_HEADERS
     ../../Common/src/Codecs/HolovideoEncoder.h
     ../../Common/src/Codecs/HoloimageEncoder.h
 	../../Common/src/Codecs/HolovideoDecoder.h
-	../../Common/src/Codecs/MultiWavelengthDecoder.h
+	../../Common/src/Codecs/NineFringeDecoder.h
 	../../Common/src/Codecs/DepthEncoder.h
     ../../Common/src/Codecs/XYZMDecoder.h
 )
@@ -222,7 +222,7 @@ SET(SOURCES_COMMON_CODECS_SOURCES
 	../../Common/src/Codecs/HolovideoEncoder.cpp
 	../../Common/src/Codecs/HoloimageEncoder.cpp
     ../../Common/src/Codecs/HolovideoDecoder.cpp
-	../../Common/src/Codecs/MultiWavelengthDecoder.cpp
+	../../Common/src/Codecs/NineFringeDecoder.cpp
 	../../Common/src/Codecs/DepthEncoder.cpp
     ../../Common/src/Codecs/XYZMDecoder.cpp
 )
@@ -236,7 +236,7 @@ set(UIS
 	ui/Encode.ui 
 	ui/Capture.ui 
 	ui/DepthmapCodecOptions.ui 
-	ui/MultiWavelengthCodecOptions.ui 
+	ui/NineFringeCodecOptions.ui 
 	ui/HolovideoCodecOptions.ui 
 	ui/HoloimageEncoderOptions.ui 
 	ui/XYZMCodecOptions.ui 
@@ -254,7 +254,7 @@ set(MOCS
 	Capture/CameraConnectDialog.h 
 	Capture/CaptureTypeSelectDialog.h 
 	Encoder/DepthmapCodecOptionsController.h 
-	Encoder/MultiWavelengthCodecOptionsController.h 
+	Encoder/NineFringeCodecOptionsController.h 
 	Encoder/HolovideoCodecOptionsController.h 
 	Encoder/HoloimageEncoderOptionsController.h 
 	Encoder/XYZMCodecOptionsController.h 

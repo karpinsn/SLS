@@ -40,4 +40,3 @@ add_dependencies(${PROJECT_NAME} MainShaders)
 #	Add More Shaders
 #	---------------------------------------------------------------------------------------
 add_subdirectory(Holovideo)
-add_subdirectory(MultiWavelength)

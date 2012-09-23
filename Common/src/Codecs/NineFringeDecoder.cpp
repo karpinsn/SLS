@@ -1,11 +1,11 @@
-#include "MultiWavelengthDecoder.h"
+#include "NineFringeDecoder.h"
 
-MultiWavelengthDecoder::MultiWavelengthDecoder(string& filename)
+NineFringeDecoder::NineFringeDecoder(string& filename)
 {
   m_filename = filename;
 }
 
-void MultiWavelengthDecoder::openCodec(EncodingOpenGLWidget* glWidget)
+void NineFringeDecoder::openCodec(EncodingOpenGLWidget* glWidget)
 {
   if(nullptr == glWidget)
   {
@@ -22,13 +22,13 @@ void MultiWavelengthDecoder::openCodec(EncodingOpenGLWidget* glWidget)
   m_glWidget->reinit(getWidth(), getHeight());
 }
 
-void MultiWavelengthDecoder::closeCodec(void)
+void NineFringeDecoder::closeCodec(void)
 {
   m_io.closeReadStream();
   m_glWidget = nullptr;
 }
 
-void MultiWavelengthDecoder::process(MeshInterchange* data)
+void NineFringeDecoder::process(MeshInterchange* data)
 {
   if(nullptr == m_glWidget)
   {
@@ -58,11 +58,11 @@ void MultiWavelengthDecoder::process(MeshInterchange* data)
   data = m_glWidget->decode();
 }
 
-void MultiWavelengthDecoder::previewProcess(MeshInterchange* data)
+void NineFringeDecoder::previewProcess(MeshInterchange* data)
 {
 }
 
-bool MultiWavelengthDecoder::_streamUntilNewFrame(void)
+bool NineFringeDecoder::_streamUntilNewFrame(void)
 {
   IplImage* frame = m_io.readStream();
 
@@ -76,32 +76,32 @@ bool MultiWavelengthDecoder::_streamUntilNewFrame(void)
   return frame == nullptr;
 }
 
-int MultiWavelengthDecoder::getWidth(void)
+int NineFringeDecoder::getWidth(void)
 {
   return m_io.readStreamWidth();
 }
 
-int MultiWavelengthDecoder::getHeight(void)
+int NineFringeDecoder::getHeight(void)
 {
   return m_io.readStreamHeight();
 }
 
-float MultiWavelengthDecoder::getStreamLocation(void)
+float NineFringeDecoder::getStreamLocation(void)
 {
   return m_io.readStreamPosition();
 }
 
-void MultiWavelengthDecoder::setGammaCutoff(float gammaValue)
+void NineFringeDecoder::setGammaCutoff(float gammaValue)
 {
   m_coder.setGammaCutoff(gammaValue);
 }
 
-void MultiWavelengthDecoder::setScalingFactor(float scaling)
+void NineFringeDecoder::setScalingFactor(float scaling)
 {
   m_coder.setScalingFactor(scaling);
 }
 
-string MultiWavelengthDecoder::codecName(void)
+string NineFringeDecoder::codecName(void)
 {
   return "Multi Wavelength Decoder";
 }

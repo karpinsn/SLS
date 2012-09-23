@@ -33,9 +33,9 @@ void EncoderController::_updateGL(void)
 
 void EncoderController::newDecoder(const QString& text)
 {
-  if(0 == QString(MultiWavelengthDecoder::codecName().c_str()).compare(text))
+  if(0 == QString(NineFringeDecoder::codecName().c_str()).compare(text))
   {
-    decoderOptionsStackedWidget->setCurrentWidget(multiWavelengthOptions);
+    decoderOptionsStackedWidget->setCurrentWidget(nineFringeOptions);
   }
   else if(0 == QString(HolovideoDecoder::codecName().c_str()).compare(text))
   {
@@ -124,7 +124,7 @@ void EncoderController::_connectSignalsWithController(void)
 void EncoderController::_addCodecs(void)
 {
   //  Add decoders
-  decoderComboBox->addItem(QString(MultiWavelengthDecoder::codecName().c_str()));
+  decoderComboBox->addItem(QString(NineFringeDecoder::codecName().c_str()));
   decoderComboBox->addItem(QString(HolovideoDecoder::codecName().c_str()));
   decoderComboBox->addItem(QString(XYZMDecoder::codecName().c_str()));
 
@@ -194,9 +194,9 @@ Codec* EncoderController::_getDecoder(void)
 {
   Codec* decoder = nullptr;
 
-  if(0 == QString(MultiWavelengthDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
+  if(0 == QString(NineFringeDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
   {
-	decoder = multiWavelengthOptions->getCodec();
+	decoder = nineFringeOptions->getCodec();
   }
   else if(0 == QString(HolovideoDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
   {

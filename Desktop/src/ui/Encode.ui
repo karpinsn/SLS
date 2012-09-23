@@ -92,7 +92,7 @@
            <widget class="QWidget" name="defaultDecoderOptions"/>
            <widget class="XYZMCodecOptionsController" name="xyzmOptions"/>
            <widget class="HolovideoEncoderOptionsController" name="holovideoOptions"/>
-           <widget class="MultiWavelengthCodecOptionsController" name="multiWavelengthOptions"/>
+           <widget class="NineFringeCodecOptionsController" name="nineFringeOptions"/>
           </widget>
          </item>
         </layout>
@@ -235,9 +235,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>MultiWavelengthCodecOptionsController</class>
+   <class>NineFringeCodecOptionsController</class>
    <extends>QWidget</extends>
-   <header>Encoder/MultiWavelengthCodecOptionsController.h</header>
+   <header>Encoder/NineFringeCodecOptionsController.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

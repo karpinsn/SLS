@@ -96,8 +96,8 @@ void NineFringeCapture::_initShaders(float width, float height)
 {
   // Create the shaders
   m_phaseCalculator.init();
-  m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/PhaseCalculator.vert"));
-  m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/PhaseCalculator.frag"));
+  m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/PhaseCalculator.vert"));
+  m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/PhaseCalculator.frag"));
   m_phaseCalculator.bindAttributeLocation("vert", 0);
   m_phaseCalculator.bindAttributeLocation("vertTexCoord", 1);
 
@@ -108,8 +108,8 @@ void NineFringeCapture::_initShaders(float width, float height)
   m_phaseCalculator.uniform("gammaCutoff", m_gammaCutoff);
 
   m_depthCalculator.init();
-  m_depthCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/DepthCalculator.vert"));
-  m_depthCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/DepthCalculator.frag"));
+  m_depthCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/DepthCalculator.vert"));
+  m_depthCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/DepthCalculator.frag"));
   m_depthCalculator.bindAttributeLocation("vert", 0);
   m_depthCalculator.bindAttributeLocation("vertTexCoord", 1);
 
@@ -119,8 +119,8 @@ void NineFringeCapture::_initShaders(float width, float height)
   m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
 
   m_phaseFilter.init();
-  m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/PhaseFilter.vert"));
-  m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/PhaseFilter.frag"));
+  m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/PhaseFilter.vert"));
+  m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/PhaseFilter.frag"));
   m_phaseFilter.bindAttributeLocation("vert", 0);
   m_phaseFilter.bindAttributeLocation("vertTexCoord", 1);
 
@@ -130,8 +130,8 @@ void NineFringeCapture::_initShaders(float width, float height)
   m_phaseFilter.uniform("height", height);
 
   m_normalCalculator.init();
-  m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/NormalCalculator.vert"));
-  m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/NormalCalculator.frag"));
+  m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/NormalCalculator.vert"));
+  m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/NormalCalculator.frag"));
   m_normalCalculator.bindAttributeLocation("vert", 0);
   m_normalCalculator.bindAttributeLocation("vertTexCoord", 1);
 
@@ -141,8 +141,8 @@ void NineFringeCapture::_initShaders(float width, float height)
   m_normalCalculator.uniform("height", height);
 
   m_finalRender.init();
-  m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/MultiWavelength/FinalRender.vert"));
-  m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/MultiWavelength/FinalRender.frag"));
+  m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/FinalRender.vert"));
+  m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/FinalRender.frag"));
   m_finalRender.bindAttributeLocation("vert", 0);
   m_finalRender.bindAttributeLocation("vertTexCoord", 1);
 

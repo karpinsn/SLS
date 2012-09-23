@@ -1,5 +1,5 @@
-#ifndef _MULTI_WAVELENGTH_DECODER_H_
-#define _MULTI_WAVELENGTH_DECODER_H_
+#ifndef _NINE_FRINGE_DECODER_H_
+#define _NINE_FRINGE_DECODER_H_
 
 #include <string>
 #include "Codec.h"
@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class MultiWavelengthDecoder : public Codec
+class NineFringeDecoder : public Codec
 {
 private:
   VideoIO				  m_io;
@@ -20,7 +20,7 @@ private:
   string				  m_filename;
 
 public:
-  MultiWavelengthDecoder(string& filename);
+  NineFringeDecoder(string& filename);
 
   void openCodec(EncodingOpenGLWidget* glWidget);
   void closeCodec(void);
@@ -40,4 +40,4 @@ private:
   bool _streamUntilNewFrame(void);
 };
 
-#endif  //_MULTI_WAVELENGTH_DECODER_H_
+#endif  //_NINE_FRINGE_DECODER_H_

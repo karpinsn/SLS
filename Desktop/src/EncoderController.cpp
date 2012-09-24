@@ -15,22 +15,6 @@ void EncoderController::init(void)
 {
 }
 
-void EncoderController::_updateGL(void)
-{
-  Logger::logDebug("EncoderController - _updateGL: Enter");
-
-  //OpenGLWidget* glContext = findChild<OpenGLWidget*>(QString::fromUtf8("encoderGLWidget"));
-
-  if(nullptr != encoderGLWidget)
-  {
-    encoderGLWidget->updateScene();
-  }
-  else
-  {
-    Logger::logError("EncoderController - _updateGL: Unable to find OpenGL Widget");
-  }
-}
-
 void EncoderController::newDecoder(const QString& text)
 {
   if(0 == QString(NineFringeDecoder::codecName().c_str()).compare(text))

@@ -48,7 +48,6 @@ public slots:
   void newDecoder(const QString& text);
 
 private:
-  void _updateGL(void);
   void _connectSignalsWithController(void);
   void _addCodecs(void);
   void _previewEncoding(void);

@@ -42,6 +42,9 @@ void SixFringeCapture::init(float width, float height)
 
 	m_fringeLoadingImage = shared_ptr<IplImage>(cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3), [](IplImage* ptr) { cvReleaseImage(&ptr); });
 
+	m_width = width;
+	m_height = height;
+
     m_hasBeenInit = true;
   }
 }
@@ -49,7 +52,7 @@ void SixFringeCapture::init(float width, float height)
 void SixFringeCapture::resizeInput(float width, float height)
 {
   //  Make sure that it has been initalized first.
-  if(m_hasBeenInit)
+  if(m_hasBeenInit && width > 0 && height > 0 && (m_width != width || m_height != height))
   {
     //  Resize all of the textures
     m_fringeImage1.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
@@ -88,6 +91,9 @@ void SixFringeCapture::resizeInput(float width, float height)
     //  Resize the display mesh
 	m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
     m_mesh->initMesh();
+
+	m_width = width;
+	m_height = height;
 
     //  Resize the fringe loader
     m_fringeLoadingImage = shared_ptr<IplImage>(cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3), [](IplImage* ptr) { cvReleaseImage(&ptr); });
@@ -456,6 +462,30 @@ void SixFringeCapture::swapBuffers(void)
 void SixFringeCapture::captureReferencePlane(void)
 {
   m_captureReferencePhase = true;
+}
+
+void SixFringeCapture::loadReferencePlane(shared_ptr<IplImage> (*imageLoaderFunction)(void))
+{
+  shared_ptr<IplImage> fringe1 = imageLoaderFunction();
+  shared_ptr<IplImage> fringe2 = imageLoaderFunction();
+
+  //  If we didn't get our fringes just abort
+  if(nullptr == fringe1 || nullptr == fringe2)
+  {
+	return;
+  }
+
+  //  Resize our input to match the loaded reference plane
+  resizeInput(fringe1->width, fringe1->height);
+
+  //  Signify that we want to capture the reference plane
+  captureReferencePlane();
+
+  int backBufferIndex = (m_frontBufferIndex + 1) % 2;
+  m_fringeImages[backBufferIndex][0]->transferToTexture(fringe1.get());
+  m_fringeImages[backBufferIndex][1]->transferToTexture(fringe2.get());
+
+  swapBuffers();
 }
 
 void SixFringeCapture::show3D(void)

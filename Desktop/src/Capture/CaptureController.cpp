@@ -52,6 +52,12 @@ void CaptureController::hideEvent(QHideEvent *)
     m_infoBar->removeWidget(&m_fpsLabel);
     m_infoBar->removeWidget(&m_3dpsLabel);
   }
+
+  //  Stop our camera capture
+  if(nullptr != m_camera)
+  {
+	m_camera->stop();
+  }
 }
 
 void CaptureController::init(void)
@@ -66,9 +72,31 @@ void CaptureController::setInfoBar(QStatusBar* infoBar)
   m_infoBar = infoBar;
 }
 
+shared_ptr<IplImage> CaptureController::_newFrameFromFile(void)
+{
+  QString file = QFileDialog::getOpenFileName(nullptr, "Select image to Open", "/", "Images (*.png *.jpg)");
+
+  if(!file.isEmpty())
+  {
+	ImageIO io;
+	return shared_ptr<IplImage>(io.readImage(file.toAscii().constData()), [](IplImage* ptr) { cvReleaseImage(&ptr); });
+  }
+
+  return nullptr;
+}
+
 void CaptureController::captureReference(void)
 {
-  m_gl3DContext->captureReferencePlane();
+  if(m_camera->hasCamera())
+  {
+	//	Capture the reference plane from the camera
+	m_gl3DContext->captureReferencePlane();
+  }
+  else
+  {
+	//	We dont have a camera so user wants to load a reference plane from a file
+	m_gl3DContext->loadReferencePlane(&CaptureController::_newFrameFromFile);
+  }
 }
 
 void CaptureController::cameraSelectMode(int mode)
@@ -81,16 +109,19 @@ void CaptureController::connectCamera(void)
   m_infoBar->showMessage("Connecting to camera...");
 
   CameraConnectDialog dialog;
-  lens::Camera *camera = dialog.getCamera();
+  unique_ptr<lens::Camera> camera(dialog.getCamera());
 
   //  Make sure that we have a new camera
   if(nullptr != camera)
   {
-    m_camera->setCamera(camera);
+	//	Initialize our camera
+	camera->init();
 
     //  Reinitalize OpenGL stuff
     m_gl3DContext->resizeInput(camera->getWidth(), camera->getHeight());
-
+    
+	//	Transfer ownership and start up
+	m_camera->setCamera(::move(camera));
     m_camera->start();
     m_infoBar->showMessage("Connected to the camera");
   }
@@ -187,22 +218,23 @@ void CaptureController::newFrame(IplImage *frame)
   }
 }
 
+
 void CaptureController::_connectSignalsWithController(void)
 {
-  connect(m_frameCapture.get(),    SIGNAL(newFrame(IplImage*)),          this, SLOT(newFrame(IplImage*)));
-  connect(openCameraButton,   SIGNAL(clicked()),                    this, SLOT(connectCamera()));
-  connect(closeCameraButton,  SIGNAL(clicked()),                    this, SLOT(disconnectCamera()));
-  connect(calibrateButton,    SIGNAL(clicked()),                    this, SLOT(captureReference()));
-  connect(dropFrameButton,    SIGNAL(clicked()),                    this, SLOT(dropFrame()));
-  connect(gammaBox,           SIGNAL(valueChanged(double)),         this, SLOT(newGammaValue(double)));
-  connect(scalingFactorBox,   SIGNAL(valueChanged(double)),         this, SLOT(newScalingFactor(double)));
-  connect(viewModeBox,        SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
-  connect(&m_frameRateTimer,  SIGNAL(timeout()),                    this, SLOT(updateFPS()));
+  connect(m_frameCapture.get(), SIGNAL(newFrame(IplImage*)),		  this, SLOT(newFrame(IplImage*)));
+  connect(openCameraButton,		SIGNAL(clicked()),                    this, SLOT(connectCamera()));
+  connect(closeCameraButton,	SIGNAL(clicked()),                    this, SLOT(disconnectCamera()));
+  connect(calibrateButton,		SIGNAL(clicked()),                    this, SLOT(captureReference()));
+  connect(dropFrameButton,		SIGNAL(clicked()),                    this, SLOT(dropFrame()));
+  connect(gammaBox,				SIGNAL(valueChanged(double)),         this, SLOT(newGammaValue(double)));
+  connect(scalingFactorBox,		SIGNAL(valueChanged(double)),         this, SLOT(newScalingFactor(double)));
+  connect(viewModeBox,			SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
+  connect(&m_frameRateTimer,	SIGNAL(timeout()),                    this, SLOT(updateFPS()));
 }
 
 void CaptureController::_readSettings(void)
 {
   //  Read in the settings file and set the settings
-  gammaBox->setValue(         m_settings.value(QString("CaptureGammaValue"),    .30).toDouble());
-  scalingFactorBox->setValue( m_settings.value(QString("CaptureScalingFactor"), .04).toDouble());
+  gammaBox->setValue(         m_settings.value(QString("CaptureGammaValue"),    .10).toDouble());
+  scalingFactorBox->setValue( m_settings.value(QString("CaptureScalingFactor"), .05).toDouble());
 }

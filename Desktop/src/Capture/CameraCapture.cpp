@@ -6,12 +6,7 @@ CameraCapture::CameraCapture()
 }
 
 CameraCapture::~CameraCapture()
-{
-  if(nullptr != m_camera)
-  {
-    delete m_camera;
-  }
-}
+{ }
 
 void CameraCapture::init(ImageBuffer *buffer)
 {
@@ -32,25 +27,33 @@ void CameraCapture::stop()
   {
     m_camera->close();
   }
+
+  m_camera = nullptr;
 }
 
 void CameraCapture::newFrame(IplImage* frame)
 {
-  m_buffer->pushFrame(frame);
+  if(nullptr != m_camera)
+  {
+	m_buffer->pushFrame(frame);
+  }
+  else
+  {
+	//	Log an error and drop the frame
+	Logger::logError("CameraCapture - newFrame: Receiving new frames but dont have an image buffer. Just dropping them :(");
+  }
 }
 
-void CameraCapture::setCamera(lens::Camera* camera)
+void CameraCapture::setCamera(unique_ptr<lens::Camera> camera)
 {
   if(nullptr != camera)
   {
-    //  Delete the old camera if we have one
-    if(nullptr != m_camera)
-    {
-      delete m_camera;
-    }
-
-    m_camera = camera;
-    m_camera->init();
+    m_camera = ::move(camera);
     m_camera->addObserver(this);
   }
+}
+
+bool CameraCapture::hasCamera(void)
+{
+  return nullptr != m_camera;
 }

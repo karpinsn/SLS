@@ -72,6 +72,7 @@ protected:
     virtual void hideEvent(QHideEvent *);
 
 private:
+    static shared_ptr<IplImage> _newFrameFromFile(void);
     void _connectSignalsWithController(void);
     void _readSettings(void);
 };

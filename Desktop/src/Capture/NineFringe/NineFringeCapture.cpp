@@ -376,6 +376,29 @@ void NineFringeCapture::swapBuffers(void)
   OGLStatus::logOGLErrors("NineFringeCapture - swapBuffers()");
 }
 
+void NineFringeCapture::loadReferencePlane(shared_ptr<IplImage> (*imageLoaderFunction)(void))
+{
+  shared_ptr<IplImage> fringe1 = imageLoaderFunction();
+  shared_ptr<IplImage> fringe2 = imageLoaderFunction();
+  shared_ptr<IplImage> fringe3 = imageLoaderFunction();
+
+  //  If we didn't get our fringes just abort
+  if(nullptr == fringe1 || nullptr == fringe2 || nullptr == fringe3)
+  {
+	return;
+  }
+
+  //  Signify that we want to capture the reference plane
+  captureReferencePlane();
+
+  int backBufferIndex = (m_frontBufferIndex + 1) % 2;
+  m_fringeImages[backBufferIndex][0]->transferToTexture(fringe1.get());
+  m_fringeImages[backBufferIndex][1]->transferToTexture(fringe2.get());
+  m_fringeImages[backBufferIndex][1]->transferToTexture(fringe3.get());
+
+  swapBuffers();
+}
+
 void NineFringeCapture::captureReferencePlane(void)
 {
   m_captureReferencePhase = true;

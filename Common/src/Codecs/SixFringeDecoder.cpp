@@ -3,6 +3,7 @@
 SixFringeDecoder::SixFringeDecoder(string& filename)
 {
   m_filename = filename;
+  m_returnImage = -1;
 }
 
 void SixFringeDecoder::openCodec(EncodingOpenGLWidget* glWidget)
@@ -46,13 +47,21 @@ void SixFringeDecoder::process(MeshInterchange* data)
 
   if(m_calculateReference)
   {
-	//	Capture the reference plane
-    m_calculateReference = false;
-    m_coder.captureReferencePlane();
-	m_glWidget->decode();
+	if(nullptr != m_shortReference && nullptr != m_longReference)
+	{
+	  m_coder.loadReferencePlane(this, &SixFringeDecoder::_referenceFrameCallback);
+	  m_glWidget->decode();
+	}
+	else
+	{
+	  //	Capture the reference plane
+	  m_coder.captureReferencePlane();
+	  m_glWidget->decode();
 
-	//	Stream again until we get an actual frame
-	_streamUntilNewFrame();
+	  //	Stream again until we get an actual frame
+	  _streamUntilNewFrame();
+	}
+	m_calculateReference = false;
   }
 
   //  TODO - Come and fix
@@ -97,6 +106,12 @@ float SixFringeDecoder::getStreamLocation(void)
   return m_io.readStreamPosition();
 }
 
+void SixFringeDecoder::setReferencePlane(shared_ptr<IplImage> shortWavelength, shared_ptr<IplImage> longWavelength)
+{
+  m_shortReference = shortWavelength;
+  m_longReference = longWavelength;
+}
+
 void SixFringeDecoder::setGammaCutoff(float gammaValue)
 {
   m_coder.setGammaCutoff(gammaValue);
@@ -105,6 +120,18 @@ void SixFringeDecoder::setGammaCutoff(float gammaValue)
 void SixFringeDecoder::setScalingFactor(float scaling)
 {
   m_coder.setScalingFactor(scaling);
+}
+
+shared_ptr<IplImage> SixFringeDecoder::_referenceFrameCallback(void* callbackInstance)
+{
+  SixFringeDecoder* decoder = (SixFringeDecoder*)callbackInstance;
+  decoder->m_returnImage = (decoder->m_returnImage + 1) % 2;
+  return decoder->_referenceFrame(decoder->m_returnImage);
+}
+
+shared_ptr<IplImage> SixFringeDecoder::_referenceFrame(int returnImage)
+{
+	return 0 == returnImage ? m_shortReference : m_longReference;
 }
 
 string SixFringeDecoder::codecName(void)

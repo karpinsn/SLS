@@ -19,7 +19,11 @@ private:
   EncodingOpenGLWidget*	  m_glWidget;
   string				  m_filename;
 
-public:
+  shared_ptr<IplImage>	  m_shortReference;
+  shared_ptr<IplImage>	  m_longReference;
+  int					  m_returnImage;
+
+public:  
   SixFringeDecoder(string& filename);
 
   void openCodec(EncodingOpenGLWidget* glWidget);
@@ -31,6 +35,7 @@ public:
   int getHeight(void);
   float getStreamLocation(void);
 
+  void setReferencePlane(shared_ptr<IplImage> shortWavelength, shared_ptr<IplImage> longWavelength);
   void setGammaCutoff(float gammaValue);
   void setScalingFactor(float scaling);
 
@@ -38,6 +43,8 @@ public:
 
 private:
   bool _streamUntilNewFrame(void);
+  static shared_ptr<IplImage> _referenceFrameCallback(void* callbackInstance);
+  shared_ptr<IplImage> _referenceFrame(int returnImage);
 };
 
 #endif  //_SIX_FRINGE_DECODER_H_

@@ -310,6 +310,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="decimals">
+        <number>3</number>
+       </property>
        <property name="maximum">
         <double>1.000000000000000</double>
        </property>

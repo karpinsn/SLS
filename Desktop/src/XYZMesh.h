@@ -43,6 +43,7 @@ public:
 	XYZMesh(int meshWidth, int meshHeight, XYZPoint *meshPoints);
 	~XYZMesh(void);
 
+	virtual void initMesh(void);
 	virtual void draw(void);
 	int getMeshWidth(void);
 	int getMeshHeight(void);

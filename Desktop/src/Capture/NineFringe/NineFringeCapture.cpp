@@ -376,11 +376,11 @@ void NineFringeCapture::swapBuffers(void)
   OGLStatus::logOGLErrors("NineFringeCapture - swapBuffers()");
 }
 
-void NineFringeCapture::loadReferencePlane(shared_ptr<IplImage> (*imageLoaderFunction)(void))
+void NineFringeCapture::loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance))
 {
-  shared_ptr<IplImage> fringe1 = imageLoaderFunction();
-  shared_ptr<IplImage> fringe2 = imageLoaderFunction();
-  shared_ptr<IplImage> fringe3 = imageLoaderFunction();
+  shared_ptr<IplImage> fringe1 = imageLoaderFunction(callbackInstance);
+  shared_ptr<IplImage> fringe2 = imageLoaderFunction(callbackInstance);
+  shared_ptr<IplImage> fringe3 = imageLoaderFunction(callbackInstance);
 
   //  If we didn't get our fringes just abort
   if(nullptr == fringe1 || nullptr == fringe2 || nullptr == fringe3)

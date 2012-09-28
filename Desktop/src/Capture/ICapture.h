@@ -21,7 +21,7 @@ public:
   virtual ~ICapture(void) { };
 
   virtual void resizeInput(float width, float height) = 0;
-  virtual void loadReferencePlane(shared_ptr<IplImage> (*imageLoaderFunction)(void)) = 0;
+  virtual void loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance)) = 0;
   virtual void captureReferencePlane(void)			  = 0;
   virtual void setGammaCutoff(float gammaValue)		  = 0;
   virtual void setScalingFactor(float scalingFactor)  = 0;

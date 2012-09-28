@@ -149,17 +149,6 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_phaseUnwrapper.uniform("filteredWrappedPhase", 1); 
   m_phaseUnwrapper.uniform("gammaCutoff", m_gammaCutoff);
 
-  m_phaseCalculator.init();
-  m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PhaseCalculator.vert"));
-  m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseCalculator.frag"));
-  m_phaseCalculator.bindAttributeLocation("vert", 0);
-  m_phaseCalculator.bindAttributeLocation("vertTexCoord", 1);
-
-  m_phaseCalculator.link();
-  m_phaseCalculator.uniform("fringeImage1", 0);
-  m_phaseCalculator.uniform("fringeImage2", 1); 
-  m_phaseCalculator.uniform("gammaCutoff", m_gammaCutoff);
-
   m_depthCalculator.init();
   m_depthCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/DepthCalculator.vert"));
   m_depthCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/DepthCalculator.frag"));
@@ -298,9 +287,18 @@ void SixFringeCapture::draw(void)
 	  m_imageProcessor.process();
 
 	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
+	  m_gaussianFilterVertical.bind();
+	  m_phaseMap1.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap2AttachPoint);
+	  m_gaussianFilterHorizontal.bind();
+	  m_phaseMap0.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
 	  m_phaseUnwrapper.bind();
-	  //  Since we are calculating the reference plane we dont want
-	  //  to filter off any pixels
+	  //  Set gammaCutoff to 0 so that we dont cut off any of the reference plane
 	  m_phaseUnwrapper.uniform("gammaCutoff", 0.0f);
 	  m_phaseMap1.bind(GL_TEXTURE0);
 	  m_phaseMap2.bind(GL_TEXTURE1);
@@ -464,10 +462,10 @@ void SixFringeCapture::captureReferencePlane(void)
   m_captureReferencePhase = true;
 }
 
-void SixFringeCapture::loadReferencePlane(shared_ptr<IplImage> (*imageLoaderFunction)(void))
+void SixFringeCapture::loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance))
 {
-  shared_ptr<IplImage> fringe1 = imageLoaderFunction();
-  shared_ptr<IplImage> fringe2 = imageLoaderFunction();
+  shared_ptr<IplImage> fringe1 = imageLoaderFunction(callbackInstance);
+  shared_ptr<IplImage> fringe2 = imageLoaderFunction(callbackInstance);
 
   //  If we didn't get our fringes just abort
   if(nullptr == fringe1 || nullptr == fringe2)
@@ -519,6 +517,16 @@ void SixFringeCapture::_drawCalculatePhase()
   m_phaseWrapper.bind();
   m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
   m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1); 
+  m_imageProcessor.process();
+
+  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
+  m_gaussianFilterVertical.bind();
+  m_phaseMap1.bind(GL_TEXTURE0);
+  m_imageProcessor.process();
+
+  m_imageProcessor.bindDrawBuffer(m_phaseMap2AttachPoint);
+  m_gaussianFilterHorizontal.bind();
+  m_phaseMap0.bind(GL_TEXTURE0);
   m_imageProcessor.process();
 
   m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);

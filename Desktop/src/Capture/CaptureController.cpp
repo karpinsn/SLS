@@ -72,19 +72,6 @@ void CaptureController::setInfoBar(QStatusBar* infoBar)
   m_infoBar = infoBar;
 }
 
-shared_ptr<IplImage> CaptureController::_newFrameFromFile(void)
-{
-  QString file = QFileDialog::getOpenFileName(nullptr, "Select image to Open", "/", "Images (*.png *.jpg)");
-
-  if(!file.isEmpty())
-  {
-	ImageIO io;
-	return shared_ptr<IplImage>(io.readImage(file.toAscii().constData()), [](IplImage* ptr) { cvReleaseImage(&ptr); });
-  }
-
-  return nullptr;
-}
-
 void CaptureController::captureReference(void)
 {
   if(m_camera->hasCamera())
@@ -95,7 +82,7 @@ void CaptureController::captureReference(void)
   else
   {
 	//	We dont have a camera so user wants to load a reference plane from a file
-	m_gl3DContext->loadReferencePlane(&CaptureController::_newFrameFromFile);
+	m_gl3DContext->loadReferencePlane(this, &CaptureController::_newFrameFromFileCallback);
   }
 }
 
@@ -218,6 +205,24 @@ void CaptureController::newFrame(IplImage *frame)
   }
 }
 
+shared_ptr<IplImage> CaptureController::_newFrameFromFileCallback(void* callbackInstance)
+{
+  CaptureController* controller = (CaptureController*) callbackInstance;
+  return controller->_newFrameFromFile();
+}
+
+shared_ptr<IplImage> CaptureController::_newFrameFromFile(void)
+{
+  QString file = QFileDialog::getOpenFileName(nullptr, "Select image to Open", "/", "Images (*.png *.jpg)");
+
+  if(!file.isEmpty())
+  {
+	ImageIO io;
+	return shared_ptr<IplImage>(io.readImage(file.toAscii().constData()), [](IplImage* ptr) { cvReleaseImage(&ptr); });
+  }
+
+  return nullptr;
+}
 
 void CaptureController::_connectSignalsWithController(void)
 {

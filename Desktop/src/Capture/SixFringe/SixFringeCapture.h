@@ -66,8 +66,6 @@ private:
 
   ShaderProgram m_phaseWrapper;
   ShaderProgram m_phaseUnwrapper;
-
-  ShaderProgram m_phaseCalculator;
   ShaderProgram m_phaseFilter;
   ShaderProgram m_depthCalculator;
   ShaderProgram m_normalCalculator;
@@ -99,7 +97,7 @@ private:
 
   Camera m_camera;
   Arcball m_controller;
-  shared_ptr<TriMesh> m_mesh;
+  shared_ptr<AbstractMesh> m_mesh;
 
   FPSCalculator m_fpsCalculator;
   FPSCalculator m_3dpsCalculator; // 3D frames per second
@@ -142,7 +140,7 @@ public:
   void    resizeInput(float width, float height);
   bool    newImage(IplImage* image);
   void    swapBuffers(void);
-  void	  loadReferencePlane(shared_ptr<IplImage> (*imageLoaderFunction)(void));
+  void	  loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance));
   void    captureReferencePlane(void);
   void    setGammaCutoff(float gamma);
   void    setScalingFactor(float scalingFactor);

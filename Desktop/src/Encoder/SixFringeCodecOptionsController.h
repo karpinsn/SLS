@@ -23,6 +23,9 @@ public:
   Codec* getCodec(void);
 
 public slots:
+  void loadReferenceValueChange(int checkState);
+  void selectShortWavelengthFile(void);
+  void selectLongWavelengthFile(void);
   void selectFile(void);
 
 private:

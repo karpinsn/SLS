@@ -24,6 +24,7 @@ protected:
 
 public:
 	virtual ~AbstractMesh(void) {};
+	virtual void initMesh(void) = 0;
 	virtual void draw(void) = 0;
 
 	virtual BoundingBox& getBoundingBox()

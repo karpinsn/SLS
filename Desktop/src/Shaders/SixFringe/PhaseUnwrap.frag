@@ -26,16 +26,13 @@ void main(void)
 
 	float magicNumber = .36;
     float k = round((phase2 * pitch2 / pitch1 - phase1) / twoPi - magicNumber);
-
-	float gamma = phaseGamma.y;
     		
-    if(gamma >= gammaCutoff && !isnan(phase1))
-    {
-	    phase = vec4(phase1 + twoPi * k);
+	if(gammaCutoff > phaseGamma.g)
+	{
+		//	Just setting phase to be an invalid number
+		phase1 = 0/0;
 	}
-    else
-    {
-        phase = vec4(0.0);
-    }
+			
+	phase = vec4(phase1 + twoPi * k, 0.0, 0.0, 0.0);
 }
 

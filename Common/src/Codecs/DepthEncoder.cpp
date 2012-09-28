@@ -24,14 +24,15 @@ void DepthEncoder::process(MeshInterchange* data)
     data->getTexture()->transferFromTexture(m_floatImageHandleThreeChannel);
 	cvSetImageCOI(m_floatImageHandleThreeChannel, 1);
 	cvCopy(m_floatImageHandleThreeChannel, m_floatImageHandleSingleChannel);
-
+	
 	if(m_stretchContrast)
 	{
-	  cvConvertScale(m_floatImageHandleSingleChannel, m_byteImageHandle, 256.0/(m_maxContrastValue - m_minContrastValue), -m_minContrastValue);
+	  float scale = 255.0/(m_maxContrastValue - m_minContrastValue);
+	  cvConvertScale(m_floatImageHandleSingleChannel, m_byteImageHandle, scale, -m_minContrastValue * scale);
 	}
 	else
 	{
-	  cvConvertScale(m_floatImageHandleSingleChannel, m_byteImageHandle, 256.0);
+	  cvConvertScale(m_floatImageHandleSingleChannel, m_byteImageHandle, 255.0);
 	}
 
 	MeshInterchange mesh(m_byteImageHandle);

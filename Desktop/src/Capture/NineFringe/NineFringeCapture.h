@@ -135,7 +135,7 @@ public:
   void    resizeInput(float width, float height);
   bool    newImage(IplImage* image);
   void    swapBuffers(void);
-  void	  loadReferencePlane(shared_ptr<IplImage> (*imageLoaderFunction)(void));
+  void	  loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance));
   void    captureReferencePlane(void);
   void    setGammaCutoff(float gamma);
   void    setScalingFactor(float scalingFactor);

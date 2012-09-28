@@ -13,6 +13,10 @@ XYZMesh::~XYZMesh(void)
 	delete [] m_meshPoints;
 }
 
+void XYZMesh::initMesh(void)
+{
+}
+
 void XYZMesh::draw(void)
 {
 	int intvl = 1;//sampleInterval;

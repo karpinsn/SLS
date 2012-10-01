@@ -22,6 +22,9 @@ int main(int argc, char **argv)
 	MainWindowController* mainWindowController = new MainWindowController();
 	mainWindowController->showWidget();
 	
+	//	Set the logger level
+	wrench::Logger::setLogLevel(wrench::LogLevel::Error);
+
 	// Start up the application run loop
 	return app.exec();
 }

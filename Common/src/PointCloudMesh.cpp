@@ -5,63 +5,54 @@ PointCloudMesh::PointCloudMesh(int width, int height, int pixelsPerPoint)
 	m_meshWidth = width;
 	m_meshHeight = height;
 	m_pixelsPerPoint = pixelsPerPoint;
-	_generateTexturedVertices();
-	_generateIndices();
 }
 
 PointCloudMesh::~PointCloudMesh()
 {
-	glDeleteBuffers(1, &m_meshVBOID);
-	glDeleteBuffers(1, &m_meshIBOID);
 }
 
 void PointCloudMesh::initMesh(void)
 {
+  	_generateTexturedVertices();
+	_generateIndices();
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	
 	_cacheMesh();
 }
 
 void PointCloudMesh::draw()
 {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glDisable(GL_CULL_FACE);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_meshVBOID);			//	Bind the vertex coordinates
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshIBOID);	//	Bind the indices
-
-	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), 0);
-	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
-
-	glDrawElements(GL_POINTS, elementCount, GL_UNSIGNED_INT, 0);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);			//	Unbind the vertex coordinates
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);	//	Unbind the indices
-	
-	/*
-	glPolygonMode(GL_FRONT, GL_POINT);
-	glBindBuffer(GL_ARRAY_BUFFER, m_meshVBOID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshIBOID);
-	glDrawElements(GL_TRIANGLE_STRIP, elementCount, GL_UNSIGNED_INT, nullptr);*/
+  m_meshIndices.bind();
+  m_mesh.draw();
 }
 
 void PointCloudMesh::_generateIndices(void)
 {	
-	elementCount = (m_meshHeight / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint);
-	meshIndices = new unsigned int[elementCount];
+	unsigned int elementCount = (m_meshHeight / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint);
+	GLuint* meshIndices = new GLuint[elementCount];
 	
 	for(unsigned int point = 0; point < elementCount; point++)
 	{
 		meshIndices[point] = point;
 	}
 	
+	m_meshIndices.init(1, GL_UNSIGNED_INT);
+	m_meshIndices.bufferData(elementCount, meshIndices, GL_STATIC_DRAW);
+
+	delete [] meshIndices;
 }
 
 void PointCloudMesh::_generateTexturedVertices(void)
 {
-	meshVertices = new Vertex[(m_meshHeight / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint)];
+	unsigned int elementCount = (m_meshHeight / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint);
+	glm::vec3* meshVertices = new glm::vec3[elementCount];
+	glm::vec2* texCoord = new glm::vec2[elementCount];
+
 	for(int row = 0; row < m_meshHeight; row += m_pixelsPerPoint)
 	{
 		for(int column = 0; column < m_meshWidth; column += m_pixelsPerPoint)
@@ -70,24 +61,28 @@ void PointCloudMesh::_generateTexturedVertices(void)
 			meshVertices[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].y = (float)row / (float)(m_meshHeight - 1.0);
 			meshVertices[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].z = 0.0f;
 			
-			meshVertices[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].v = (float)column / (float)m_meshWidth;
-			meshVertices[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].u = (float)row / (float)m_meshHeight;
+			texCoord[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].x = (float)column / (float)m_meshWidth;
+			texCoord[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].y = (float)row / (float)m_meshHeight;
 		}
 	}
+
+	m_meshVertices.init(3, GL_FLOAT, GL_ARRAY_BUFFER);
+	m_meshVertices.bufferData(m_meshHeight * m_meshWidth, glm::value_ptr(meshVertices[0]), GL_STATIC_DRAW);
+
+	m_meshTextureCoords.init(2, GL_FLOAT, GL_ARRAY_BUFFER);
+	m_meshTextureCoords.bufferData(m_meshHeight * m_meshWidth, glm::value_ptr(texCoord[0]), GL_STATIC_DRAW);
+
+	delete [] meshVertices;
+	delete [] texCoord;
 }
 
 
 
 void PointCloudMesh::_cacheMesh(void)
 {
-	glGenBuffers(1, &m_meshVBOID);
-	glBindBuffer(GL_ARRAY_BUFFER, m_meshVBOID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_meshWidth * m_meshHeight, meshVertices, GL_STATIC_DRAW);
-	
-	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), 0);
-	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
-	
-	glGenBuffers(1, &m_meshIBOID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshIBOID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * elementCount, meshIndices, GL_STATIC_DRAW);
+  unsigned int elementCount = (m_meshHeight / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint);
+  m_mesh.init(GL_POINTS, elementCount);
+
+  m_mesh.addVBO(m_meshVertices, "vert");
+  m_mesh.addVBO(m_meshTextureCoords, "vertTexCoord");
 }

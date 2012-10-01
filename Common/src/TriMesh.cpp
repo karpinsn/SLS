@@ -34,8 +34,6 @@ void TriMesh::_generateIndices(void)
   m_elementCount = (m_width * 2) * (m_height - 1) + (m_height - 2);
   GLuint *indicies = new GLuint[m_elementCount];
 
-  //m_meshIndices = new unsigned int[m_elementCount];
-
   int index = 0;
   for(unsigned int row = 0; row < m_height - 1; row++)
   {

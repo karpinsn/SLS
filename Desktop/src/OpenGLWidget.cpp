@@ -59,12 +59,8 @@ void OpenGLWidget::paintGL()
 
   glPopMatrix();
 
-  //	Print any errors if we have them
-  GLenum error = glGetError();
-  if (error != GL_NO_ERROR)
-  {
-    cout << "OpenGL Error: " << gluErrorString(error) << endl;
-  }
+  //	Make sure we dont have any errors
+  OGLStatus::logOGLErrors("OpenGLWidget - paintGL()");
 }
 
 void OpenGLWidget::resizeGL(int width, int height)

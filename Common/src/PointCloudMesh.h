@@ -27,37 +27,28 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtx/type_ptr.hpp>
+
+#include <wrench/gl/IBO.h>
+#include <wrench/gl/VBO.h>
+#include <wrench/gl/VAO.h>
+
 #ifdef USE_VRJ
 #include <vrj/Draw/OpenGL/ContextData.h>
 #endif
 
+using namespace wrench::gl;
+
 class PointCloudMesh : public AbstractMesh
 {
 private:
-	struct Vertex 
-	{
-		float x;
-		float y;
-		float z;
-		float u;
-		float v;
-	};
-	
-	#ifdef USE_VRJ
-        vrj::opengl::ContextData<GLuint> vrjVBOHandle;
-        vrj::opengl::ContextData<GLuint> vrjIBOHandle;
-		#define m_meshVBOID		(*vrjVBOHandle)
-		#define m_meshIBOID		(*vrjIBOHandle)
-	#else
-		GLuint m_meshVBOID;
-		GLuint m_meshIBOID;
-	#endif
+    VAO m_mesh;
+    IBO m_meshIndices;
+    VBO m_meshVertices;
+    VBO m_meshTextureCoords;
 
-	Vertex *meshVertices;
-	unsigned int *meshIndices;
-	unsigned int elementCount;
 	int m_pixelsPerPoint;
-	
 	int m_meshWidth;
 	int m_meshHeight;
 	

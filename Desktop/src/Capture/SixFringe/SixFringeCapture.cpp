@@ -357,7 +357,7 @@ void SixFringeCapture::draw(void)
 
 	m_finalRender.bind();
 	{
-      m_finalRender.uniform("modelViewMatrix", modelViewMatrix);
+	  m_finalRender.uniform("modelViewMatrix", modelViewMatrix);
       m_finalRender.uniform("projectionMatrix", projectionMatrix);
       m_finalRender.uniform("normalMatrix", normalMatrix);
 

@@ -149,12 +149,15 @@ SET(SOURCES_ENCODER
 )
 
 SET(SOURCES_CAPTURE
+	Capture/SaveStream.cpp
 	Capture/CameraCapture.cpp
 	Capture/CaptureController.cpp
 	Capture/CameraConnectDialog.cpp
 	Capture/CaptureTypeSelectDialog.cpp
 	Capture/FrameCapture.cpp
 	
+	Capture/IOutputStream.h
+	Capture/SaveStream.h
 	Capture/ICapture.h
 	Capture/CameraCapture.h
 	Capture/CaptureController.h

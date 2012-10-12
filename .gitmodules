@@ -10,3 +10,6 @@
 [submodule "Libraries/Reactor"]
 	path = Libraries/Reactor
 	url = git@github.com:karpinsn/Reactor.git
+[submodule "Libraries/3rdParty/glm"]
+	path = Libraries/3rdParty/glm
+	url = https://github.com/karpinsn/glm.git

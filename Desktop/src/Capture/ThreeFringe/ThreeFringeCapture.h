@@ -136,6 +136,7 @@ public:
   void    setScalingFactor(float scalingFactor);
   void    show3D(void);
   void    showPhase(void);
+  void	  setSaveStream(shared_ptr<SaveStream> saveStream);
   double  getFrameRate(void);
   double  get3DRate(void);
   MeshInterchange* decode(void);

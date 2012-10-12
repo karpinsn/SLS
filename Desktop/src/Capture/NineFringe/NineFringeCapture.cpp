@@ -414,6 +414,11 @@ void NineFringeCapture::showPhase(void)
   m_displayMode = Phase;
 }
 
+void NineFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)
+{
+
+}
+
 double NineFringeCapture::getFrameRate(void)
 {
   return m_fpsCalculator.getFrameRate();

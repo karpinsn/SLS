@@ -14,6 +14,7 @@
 #include <cv.h>
 
 #include "IGLContext.h"
+#include "SaveStream.h"
 
 class ICapture : public IGLContext
 {
@@ -25,6 +26,7 @@ public:
   virtual void captureReferencePlane(void)			  = 0;
   virtual void setGammaCutoff(float gammaValue)		  = 0;
   virtual void setScalingFactor(float scalingFactor)  = 0;
+  virtual void setSaveStream(shared_ptr<SaveStream> saveStream) = 0;
   virtual double getFrameRate(void)					  = 0;
   virtual double get3DRate(void)					  = 0;
   virtual bool newImage(IplImage *frame)			  = 0;

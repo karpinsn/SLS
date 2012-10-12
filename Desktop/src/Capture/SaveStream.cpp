@@ -11,9 +11,8 @@ void SaveStream::open(shared_ptr<Codec> encoder, shared_ptr<IOutputStream> outSt
     m_outStream = outStream;
 }
 
-void SaveStream::encodeAndStream(MeshInterchange* mesh)
+void SaveStream::encodeAndStream(shared_ptr<MeshInterchange> mesh)
 {
-
 }
 
 void SaveStream::close()

@@ -49,7 +49,7 @@ public:
      *
      * @param mesh Mesh to encode and write out to the output stream
      */
-    void encodeAndStream(MeshInterchange* mesh);
+    void encodeAndStream(shared_ptr<MeshInterchange> mesh);
 
     /**
      * Closes this SaveStream.

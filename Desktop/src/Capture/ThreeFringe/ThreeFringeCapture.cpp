@@ -389,6 +389,11 @@ void ThreeFringeCapture::showPhase(void)
   m_displayMode = Phase;
 }
 
+void ThreeFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)
+{
+
+}
+
 double ThreeFringeCapture::getFrameRate(void)
 {
   return m_fpsCalculator.getFrameRate();

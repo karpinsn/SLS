@@ -370,6 +370,11 @@ void SixFringeCapture::draw(void)
 	}
 	m_finalRender.unbind();
 
+	if(m_saveStream)
+	{
+		m_saveStream->encodeAndStream(shared_ptr<MeshInterchange>(new MeshInterchange(&m_depthMap, false)));
+	}
+
     glPopMatrix();
   }
   else if(m_haveReferencePhase && Phase == m_displayMode)
@@ -494,6 +499,11 @@ void SixFringeCapture::show3D(void)
 void SixFringeCapture::showPhase(void)
 {
   m_displayMode = Phase;
+}
+
+void SixFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)
+{
+	m_saveStream = saveStream;
 }
 
 double SixFringeCapture::getFrameRate(void)

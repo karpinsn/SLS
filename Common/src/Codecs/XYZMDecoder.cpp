@@ -22,13 +22,13 @@ void XYZMDecoder::closeCodec(void)
   m_glWidget = nullptr;
 }
 
-void XYZMDecoder::process(MeshInterchange* data)
+shared_ptr<MeshInterchange> XYZMDecoder::process(shared_ptr<MeshInterchange> data)
 {
   if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return a nullptr MeshInterchange
     data = nullptr;
-    return;
+    return shared_ptr<MeshInterchange>();
   }
 
   AbstractMesh* mesh = nullptr;
@@ -43,7 +43,7 @@ void XYZMDecoder::process(MeshInterchange* data)
   data->setMesh(mesh);
 }
 
-void XYZMDecoder::previewProcess(MeshInterchange* data)
+shared_ptr<MeshInterchange> XYZMDecoder::previewProcess(shared_ptr<MeshInterchange> data)
 {
   if(nullptr == m_glWidget)
   {

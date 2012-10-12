@@ -24,8 +24,8 @@ public:
 
   void openCodec(EncodingOpenGLWidget* glWidget);
   void closeCodec(void);
-  void process(MeshInterchange* data);
-  void previewProcess(MeshInterchange* data);
+  shared_ptr<MeshInterchange> process(shared_ptr<MeshInterchange> data);
+  shared_ptr<MeshInterchange> previewProcess(shared_ptr<MeshInterchange> data);
 
   int getWidth(void);
   int getHeight(void);

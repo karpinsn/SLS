@@ -32,13 +32,12 @@ void HolovideoDecoder::closeCodec(void)
   m_glWidget = nullptr;
 }
 
-void HolovideoDecoder::process(MeshInterchange* data)
+shared_ptr<MeshInterchange> HolovideoDeocder::process(shared_ptr<MeshInterchange> data)
 {
   if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return a nullptr MeshInterchange
-    data = nullptr;
-    return;
+    return nullptr;
   }
 
   IplImage* frame = m_io.readStream();
@@ -55,7 +54,7 @@ void HolovideoDecoder::process(MeshInterchange* data)
   data = m_glWidget->decode();
 }
 
-void HolovideoDecoder::previewProcess(MeshInterchange* data)
+shared_ptr<MeshInterchange> HolovideoDecoder::previewProcess(shared_ptr<MeshInterchange> data)
 {
 }
 

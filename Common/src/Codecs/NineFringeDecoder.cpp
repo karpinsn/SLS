@@ -28,7 +28,7 @@ void NineFringeDecoder::closeCodec(void)
   m_glWidget = nullptr;
 }
 
-void NineFringeDecoder::process(MeshInterchange* data)
+shared_ptr<MeshInterchange> NineFringeDecoder::process(shared_ptr<MeshInterchange> data)
 {
   if(nullptr == m_glWidget)
   {
@@ -64,7 +64,7 @@ void NineFringeDecoder::process(MeshInterchange* data)
   }
 }
 
-void NineFringeDecoder::previewProcess(MeshInterchange* data)
+shared_ptr<MeshInterchange> NineFringeDecoder::previewProcess(shared_ptr<MeshInterchange> data)
 {
 }
 

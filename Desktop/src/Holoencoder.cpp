@@ -156,7 +156,7 @@ void Holoencoder::encode(void)
 
 MeshInterchange* Holoencoder::getEncodedData()
 {
-  return new MeshInterchange(m_holoimage);
+  return new MeshInterchange(&m_holoimage, false);
 }
 
 void Holoencoder::autoFitTransforms(void)

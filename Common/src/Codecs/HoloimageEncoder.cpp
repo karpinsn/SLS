@@ -36,15 +36,15 @@ void HoloimageEncoder::closeCodec(void)
 {
 }
 
-void HoloimageEncoder::process(MeshInterchange* data)
+shared_ptr<MeshInterchange> HoloimageEncoder::process(shared_ptr<MeshInterchange> data)
 {
   if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return. Should error
-    return;
+    return nullptr;
   }
 
-  m_encoder.setCurrentMesh(data);
+  m_encoder.setCurrentMesh(data->getMesh());
 
   MeshInterchange* mesh = m_glWidget->encode();
 
@@ -53,15 +53,15 @@ void HoloimageEncoder::process(MeshInterchange* data)
   m_io.saveTexture(m_filenameBuffer, mesh->getTexture());
 }
 
-void HoloimageEncoder::previewProcess(MeshInterchange* data)
+shared_ptr<MeshInterchange> HoloimageEncoder::previewProcess(shared_ptr<MeshInterchange> data)
 {
   if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return. Should error
-    return;
+    return nullptr;
   }
 
-  m_encoder.setCurrentMesh(data);
+  m_encoder.setCurrentMesh(data->getMesh());
 
   //  Dont want to encode, only draw
   m_glWidget->updateScene();

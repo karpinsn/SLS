@@ -29,7 +29,7 @@ void SixFringeDecoder::closeCodec(void)
   m_glWidget = nullptr;
 }
 
-void SixFringeDecoder::process(MeshInterchange* data)
+shared_ptr<MeshInterchange> SixFringeDecoder::process(shared_ptr<MeshInterchange> data)
 {
   if(nullptr == m_glWidget)
   {
@@ -73,7 +73,7 @@ void SixFringeDecoder::process(MeshInterchange* data)
   }
 }
 
-void SixFringeDecoder::previewProcess(MeshInterchange* data)
+shared_ptr<MeshInterchange> SixFringeDecoder::previewProcess(shared_ptr<MeshInterchange> data)
 {
 }
 

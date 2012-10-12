@@ -9,18 +9,15 @@
 #ifndef _MESH_INTERCHANGE_H_
 #define _MESH_INTERCHANGE_H_
 
-//  GLM Includes
-#include <glm/glm.hpp>
+#include <memory>
 
-//  OpenCV Includes
+//  Includes for the data types that we support.
 #include <cv.h>
 #include <highgui.h>
-
-//  Wrench Includes
 #include <wrench/gl/Texture.h>
-
 #include "AbstractMesh.h"
 
+using namespace std;
 using namespace wrench::gl;
 
 class MeshInterchange
@@ -34,10 +31,9 @@ private:
   int         m_width;
   int         m_height;
 
-  Texture*    m_texture;
-  IplImage*   m_image;
-  glm::vec3*  m_data;
-  AbstractMesh* m_mesh;
+  shared_ptr<Texture>		m_texture;
+  shared_ptr<IplImage>		m_image;
+  shared_ptr<AbstractMesh>	m_mesh;
 
   bool m_deleteAssets;
 
@@ -45,14 +41,9 @@ public:
   MeshInterchange();
   MeshInterchange(IplImage* image, bool deleteAssets = true);
   MeshInterchange(Texture* texture, bool deleteAssets = true);
-  MeshInterchange(Texture& texture);
   MeshInterchange(AbstractMesh* mesh, bool deleteAssets = true);
 
   int getPreferedFormat(void);
-
-  void setTexture(Texture* texture, bool deleteAssets = true);
-  void setIplImage(IplImage* image, bool deleteAssets = true);
-  void setMesh(AbstractMesh* mesh, bool deleteAssets = true);
 
   Texture*	getTexture(void);
   IplImage* getIplImage(void);
@@ -61,9 +52,6 @@ public:
   int getWidth();
   int getHeight();
   bool isEmpty();
-
-private:
-  void _deleteAssets(void);
 };
 
 #endif // _MESH_INTERCHANGE_H_

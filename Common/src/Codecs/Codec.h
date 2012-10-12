@@ -15,8 +15,8 @@ public:
 
   virtual void openCodec(EncodingOpenGLWidget* glWidget) = 0;
   virtual void closeCodec(void) = 0;
-  virtual void process(MeshInterchange* data) = 0;
-  virtual void previewProcess(MeshInterchange* data) = 0;
+  virtual shared_ptr<MeshInterchange> process(shared_ptr<MeshInterchange> data) = 0;
+  virtual shared_ptr<MeshInterchange> previewProcess(shared_ptr<MeshInterchange> data) = 0;
 
   //virtual void openEncodeStream(EncodingOpenGLWidget* glWidget) = 0;
   //virtual void encode(MeshInterchange& data) = 0;

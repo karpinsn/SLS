@@ -2,57 +2,58 @@
 
 MeshInterchange::MeshInterchange()
 {
-  m_deleteAssets = false;
-  m_image = nullptr;
-  m_texture = nullptr;
-  m_mesh = nullptr;
 }
 
 MeshInterchange::MeshInterchange(IplImage* image, bool deleteAssets)
 {
-  m_deleteAssets = deleteAssets;
-  m_texture = nullptr;
-  m_image = image;
-  m_mesh = nullptr;
+	if(deleteAssets)
+	{
+		m_image = shared_ptr<IplImage>(image, [](IplImage* ptr) { cvReleaseImage(&ptr); });
+	}
+	else
+	{
+		//	Blank destructor means we dont delete the assets
+		m_image = shared_ptr<IplImage>(image, [](IplImage* ptr) {});
+	}
 }
 
 MeshInterchange::MeshInterchange(Texture* texture, bool deleteAssets)
 {
-  m_deleteAssets = deleteAssets;
-  m_texture = nullptr;
-  m_image = nullptr;
-  m_texture = texture;
-  m_mesh = nullptr;
-}
-
-MeshInterchange::MeshInterchange(Texture& texture)
-{
-  m_deleteAssets = false;
-  m_image = nullptr; 
-  m_texture = nullptr;
-  m_texture = &texture;
-  m_mesh = nullptr;
+	if(deleteAssets)
+	{
+		m_texture = shared_ptr<Texture>(texture);
+	}
+	else
+	{
+		//	Blank destructor means we dont delete the assets
+		m_texture = shared_ptr<Texture>(texture, [](Texture* ptr) {});
+	}
 }
 
 MeshInterchange::MeshInterchange(AbstractMesh* mesh, bool deleteAssets)
 {
-  m_deleteAssets = deleteAssets;
-  m_image = nullptr;
-  m_texture = nullptr;
-  m_mesh = mesh;
+	if(deleteAssets)
+	{
+		m_mesh = shared_ptr<AbstractMesh>(mesh);
+	}
+	else
+	{
+		//	Blank destructor means we dont delete the assets
+		m_mesh = shared_ptr<AbstractMesh>(mesh, [](AbstractMesh* ptr) {});
+	}
 }
 
 int MeshInterchange::getPreferedFormat(void)
 {
-  if(nullptr != m_texture)
+  if(m_texture)
   {
 	return TEXTURE_FORMAT;
   }
-  else if(nullptr != m_image)
+  else if(m_image)
   {
 	return IMAGE_FORMAT;
   }
-  else if(nullptr != m_data)
+  else if(m_mesh)
   {
 	return VERTEX_FORMAT;
   }
@@ -62,52 +63,19 @@ int MeshInterchange::getPreferedFormat(void)
   }
 }
 
-void MeshInterchange::setTexture(Texture* texture, bool deleteAssets)
-{
-  if(m_deleteAssets)
-  {
-      _deleteAssets();
-  }
-
-  m_deleteAssets = deleteAssets;
-  m_texture = texture;
-}
-
-void MeshInterchange::setIplImage(IplImage* image, bool deleteAssets)
-{
-  if(m_deleteAssets)
-  {
-      _deleteAssets();
-  }
-
-  m_deleteAssets = deleteAssets;
-  m_image = image;
-}
-
-void MeshInterchange::setMesh(AbstractMesh* mesh, bool deleteAssets)
-{
-  if(m_deleteAssets)
-  {
-      _deleteAssets();
-  }
-
-  m_deleteAssets = deleteAssets; 
-  m_mesh = mesh;
-}
-
 Texture* MeshInterchange::getTexture(void)
 {
-  return m_texture;
+  return m_texture.get();
 }
 
 IplImage* MeshInterchange::getIplImage(void)
 {
-  return m_image;
+  return m_image.get();
 }
 
 AbstractMesh* MeshInterchange::getMesh(void)
 {
-  return m_mesh;
+  return m_mesh.get();
 }
 
 int MeshInterchange::getHeight()
@@ -123,27 +91,5 @@ int MeshInterchange::getWidth()
 bool MeshInterchange::isEmpty()
 {
   //  If the texture and image are both nullptr then its empty
-  return nullptr == m_texture && nullptr == m_image && nullptr == m_mesh;
-}
-
-void MeshInterchange::_deleteAssets(void)
-{
-  if(nullptr != m_texture)
-  {
-      delete m_texture;
-  }
-
-  if(nullptr != m_mesh)
-  {
-      delete m_mesh;
-  }
-
-  if(nullptr != m_image)
-  {
-      cvReleaseImage(&m_image);
-  }
-
-  m_image   = nullptr;
-  m_texture = nullptr;
-  m_mesh    = nullptr; 
+  return !m_texture && !m_image && !m_mesh;
 }

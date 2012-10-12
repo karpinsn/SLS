@@ -16,7 +16,7 @@ void DepthEncoder::closeCodec(void)
   m_io.closeSaveStream();
 }
 
-void DepthEncoder::process(MeshInterchange* data)
+shared_ptr<MeshInterchange> DepthEncoder::process(shared_ptr<MeshInterchange> data)
 {
   if(GL_FLOAT == data->getTexture()->getDataType()) // TODO comeback and fix this
   {
@@ -45,9 +45,9 @@ void DepthEncoder::process(MeshInterchange* data)
   }
 }
 
-void DepthEncoder::previewProcess(MeshInterchange* data)
+shared_ptr<MeshInterchange> DepthEncoder::previewProcess(shared_ptr<MeshInterchange> data)
 {
-  return; //  TODO comeback and fix this
+  return nullptr; //  TODO comeback and fix this
 }
 
 void DepthEncoder::setFilename(string filename)

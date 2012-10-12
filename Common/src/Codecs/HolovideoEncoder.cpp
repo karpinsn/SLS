@@ -63,7 +63,7 @@ void HolovideoEncoder::closeCodec(void)
 
 #include "ImageIO.h"
 
-void HolovideoEncoder::process(MeshInterchange* data)
+shared_ptr<MeshInterchange> HolovideoEncoder::process(shared_ptr<MeshInterchange> data)
 {
   if(nullptr == m_glWidget)
   {
@@ -94,7 +94,7 @@ void HolovideoEncoder::process(MeshInterchange* data)
   m_io.saveStream(*(mesh->getTexture()));
 }
 
-void HolovideoEncoder::previewProcess(MeshInterchange* data)
+shared_ptr<MeshInterchange> HolovideoEncoder::previewProcess(shared_ptr<MeshInterchange> data)
 {
   if(nullptr == m_glWidget)
   {

@@ -84,18 +84,15 @@ void EncoderController::encode(void)
   encoder->openCodec(encoderGLWidget);
 
   //  As long as we have meshes decode and encode them
-  MeshInterchange* mesh = new MeshInterchange();
-  decoder->process(mesh);
-  while(nullptr != mesh && !mesh->isEmpty())
+  shared_ptr<MeshInterchange> mesh = decoder->process(nullptr);
+  while(mesh && !mesh->isEmpty())
   {
 	// Indicate to the user the current progress
     encodingProgress->setValue(decoder->getStreamLocation() * 100);
 
     encoder->process(mesh);
-    decoder->process(mesh);
+    mesh = decoder->process(nullptr);
   }
-
-  delete mesh;
 
   //  Close up
   encoder->closeCodec();
@@ -145,7 +142,7 @@ void EncoderController::_previewEncoding(void)
   encoderGLWidget->reinit(encoderGLWidget->size().width(), encoderGLWidget->size().height());
 
   MeshInterchange* mesh = new MeshInterchange();
-  decoder->previewProcess(mesh);
+  shared_ptr<MeshInterchange> mesh = decoder->previewProcess(nullptr);
 
   if(nullptr != mesh)
   {

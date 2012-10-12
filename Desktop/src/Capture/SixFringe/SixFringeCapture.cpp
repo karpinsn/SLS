@@ -260,7 +260,7 @@ void SixFringeCapture::setScalingFactor(float scalingFactor)
 MeshInterchange* SixFringeCapture::decode(void)
 {
   OGLStatus::logOGLErrors("SixFringeCapture - decode()");
-  return new MeshInterchange(m_depthMap);
+  return new MeshInterchange(&m_depthMap, false);
 }
 
 void SixFringeCapture::draw(void)

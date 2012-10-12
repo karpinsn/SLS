@@ -129,8 +129,6 @@ void EncoderController::_addCodecs(void)
 
 void EncoderController::_previewEncoding(void)
 {
-  return;
-
   Codec* decoder = _getDecoder();
   Codec* encoder = _getEncoder();
 
@@ -155,8 +153,8 @@ void EncoderController::_previewEncoding(void)
   }
 
   //  Close up
-  //encoder->closeCodec();
-  //decoder->closeCodec();
+  encoder->closeCodec();
+  decoder->closeCodec();
 }
 
 Codec* EncoderController::_getEncoder(void)

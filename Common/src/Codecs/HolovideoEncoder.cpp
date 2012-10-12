@@ -44,9 +44,11 @@ void HolovideoEncoder::openCodec(EncodingOpenGLWidget* glWidget)
   m_glWidget->setGLContext(&m_encoder);
   m_glWidget->reinit(getWidth(), getHeight());
 
+  m_io.openSaveStream(m_filename, getWidth(), getHeight(), 30);
+
   if(!m_filename.empty())
   {
-	m_video->openFile(m_filename);
+	//m_video->openFile(m_filename);
   }
 
   m_videoWriter = new reactor::ColorSpaceWriterFilter(m_video, PIX_FMT_YUV444P);
@@ -55,7 +57,8 @@ void HolovideoEncoder::openCodec(EncodingOpenGLWidget* glWidget)
 void HolovideoEncoder::closeCodec(void)
 {
   //  Close the stream
-  m_video->closeFile();
+  //m_video->closeFile();
+	m_io.closeSaveStream();
 }
 
 #include "ImageIO.h"
@@ -71,23 +74,24 @@ void HolovideoEncoder::process(MeshInterchange* data)
   m_encoder.setCurrentMesh(data);
 
   MeshInterchange* mesh = m_glWidget->encode();
-  mesh->getTexture()->transferFromTexture(m_image);
+  //mesh->getTexture()->transferFromTexture(m_image);
 
-  static int frameCount = 0;
+  //static int frameCount = 0;
   
-  char filename[1000];
-  sprintf(filename, "N:/Data/Frames/%04d.png", frameCount++);
+  //char filename[1000];
+  //sprintf(filename, "N:/Data/Frames/%04d.png", frameCount++);
   
-  ImageIO io;
-  io.saveImage(filename, m_image, true);
+  //ImageIO io;
+  //io.saveImage(filename, m_image, true);
   //cvSaveImage(filename, m_image);
+
 
   m_yuv444toyuv422.iplImage2AVFrame(m_image, yuv444Frame);
 
   //  Encode to the stream
-    reactor::MediaFrame frame = reactor::MediaFrame(yuv444Frame, PIX_FMT_YUV444P);
-    m_videoWriter->writeFrame(frame);
-  //m_io.saveStream(*(mesh->getTexture()));
+    //reactor::MediaFrame frame = reactor::MediaFrame(yuv444Frame, PIX_FMT_YUV444P);
+    //m_videoWriter->writeFrame(frame);
+  m_io.saveStream(*(mesh->getTexture()));
 }
 
 void HolovideoEncoder::previewProcess(MeshInterchange* data)

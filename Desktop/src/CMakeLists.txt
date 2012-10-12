@@ -54,7 +54,8 @@ include_directories(../../Libraries/3rdParty)
 #	-----------------------------------------
 #	GLM
 #	-----------------------------------------
-add_subdirectory(../../Libraries/3rdParty/glm ${PROJECT_BINARY_DIR}/Libraries/3rdParty/glm)
+add_subdirectory(../../Libraries/3rdParty/glm/glm ${PROJECT_BINARY_DIR}/Libraries/3rdParty/glm/glm)
+include_directories(../../Libraries/3rdParty/glm)
 set(LIBS ${LIBS} glm)
 
 #	-----------------------------------------

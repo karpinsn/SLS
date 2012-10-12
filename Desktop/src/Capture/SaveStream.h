@@ -10,11 +10,19 @@
 #ifndef _SAVE_STREAM_H_
 #define _SAVE_STREAM_H_
 
+#include <memory>
+
+#include "Codecs/Codec.h"
+
+#include "IOutputStream.h"
+
+using namespace std;
+
 class SaveStream
 {
 private:
     // Encoder that we are using to encode our data
-    shared_ptr<IEncoder> m_encoder;
+    shared_ptr<Codec> m_encoder;
     //  Output stream that we are using to output our data
     shared_ptr<IOutputStream> m_outStream;
 
@@ -31,7 +39,7 @@ public:
      * @param encoder Encoder to use to encode the data specified in encodeAndStream()
      * @param outStream Output stream to write the encoded data to
      */
-    void open(shared_ptr<IEncoder> encoder, shared_ptr<IOutputStream> outStream);
+    void open(shared_ptr<Codec> encoder, shared_ptr<IOutputStream> outStream);
 
     /**
      * Encodes the specified mesh and streams it out to the save stream.

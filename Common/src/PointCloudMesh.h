@@ -28,7 +28,7 @@
 #include <string.h>
 
 #include <glm/glm.hpp>
-#include <glm/gtx/type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <wrench/gl/IBO.h>
 #include <wrench/gl/VBO.h>

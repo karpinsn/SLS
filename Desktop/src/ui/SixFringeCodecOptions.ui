@@ -211,6 +211,17 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>sourceFileBox</tabstop>
+  <tabstop>sourceFileChooseButton</tabstop>
+  <tabstop>gammaCutoffBox</tabstop>
+  <tabstop>scalingBox</tabstop>
+  <tabstop>loadReferenceCheckbox</tabstop>
+  <tabstop>shortReferenceFileBox</tabstop>
+  <tabstop>shortReferenceFileChooseButton</tabstop>
+  <tabstop>longReferenceFileBox</tabstop>
+  <tabstop>longReferenceFileChooseButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

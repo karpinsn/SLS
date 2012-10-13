@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Structured Light Suite</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -177,7 +177,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="Holoencoder.qrc">
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/../../resources/images/Orbit Tool</normaloff>:/../../resources/images/Orbit Tool</iconset>
    </property>
    <property name="text">
@@ -192,7 +192,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="Holoencoder.qrc">
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/../../resources/images/Zoom Tool</normaloff>:/../../resources/images/Zoom Tool</iconset>
    </property>
    <property name="text">
@@ -207,7 +207,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="Holoencoder.qrc">
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/../../resources/images/Pan Tool</normaloff>:/../../resources/images/Pan Tool</iconset>
    </property>
    <property name="text">
@@ -305,7 +305,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="Holoencoder.qrc"/>
+  <include location="MainWindow.qrc"/>
  </resources>
  <connections/>
 </ui>

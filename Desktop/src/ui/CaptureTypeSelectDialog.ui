@@ -75,6 +75,7 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>captureTypeComboBox</tabstop>
   <tabstop>okCancelBox</tabstop>
  </tabstops>
  <resources/>

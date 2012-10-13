@@ -93,7 +93,7 @@
            <widget class="XYZMCodecOptionsController" name="xyzmOptions"/>
            <widget class="HolovideoEncoderOptionsController" name="holovideoOptions"/>
            <widget class="NineFringeCodecOptionsController" name="nineFringeOptions"/>
-		   <widget class="SixFringeCodecOptionsController" name="sixFringeOptions"/>
+           <widget class="SixFringeCodecOptionsController" name="sixFringeOptions"/>
           </widget>
          </item>
         </layout>
@@ -266,6 +266,11 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>decoderComboBox</tabstop>
+  <tabstop>encoderComboBox</tabstop>
+  <tabstop>encodeButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

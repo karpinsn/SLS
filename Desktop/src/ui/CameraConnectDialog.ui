@@ -78,6 +78,7 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>cameraDriverComboBox</tabstop>
   <tabstop>okCancelBox</tabstop>
  </tabstops>
  <resources/>

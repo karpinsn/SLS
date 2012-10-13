@@ -57,7 +57,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="Holoencoder.qrc">
+        <iconset resource="MainWindow.qrc">
          <normaloff>:/../../resources/images/resources/images/CameraOpen.png</normaloff>:/../../resources/images/resources/images/CameraOpen.png</iconset>
        </property>
        <property name="iconSize">
@@ -92,7 +92,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="Holoencoder.qrc">
+        <iconset resource="MainWindow.qrc">
          <normaloff>:/../../resources/images/resources/images/CameraClose.png</normaloff>:/../../resources/images/resources/images/CameraClose.png</iconset>
        </property>
        <property name="iconSize">
@@ -124,7 +124,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="Holoencoder.qrc">
+        <iconset resource="MainWindow.qrc">
          <normaloff>:/../../resources/images/resources/images/DropFrame.png</normaloff>:/../../resources/images/resources/images/DropFrame.png</iconset>
        </property>
        <property name="iconSize">
@@ -159,7 +159,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="Holoencoder.qrc">
+        <iconset resource="MainWindow.qrc">
          <normaloff>:/../../resources/images/resources/images/Calibration.png</normaloff>:/../../resources/images/resources/images/Calibration.png</iconset>
        </property>
        <property name="iconSize">
@@ -337,7 +337,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="Holoencoder.qrc"/>
+  <include location="MainWindow.qrc"/>
  </resources>
  <connections/>
 </ui>

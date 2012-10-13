@@ -237,7 +237,7 @@ SET(SOURCES_COMMON_CODECS_SOURCES
 	
 # QT Files
 set(UIS 
-	ui/Holoencoder.ui 
+	ui/MainWindow.ui 
 	ui/CameraConnectDialog.ui 
 	ui/CaptureTypeSelectDialog.ui 
 	ui/View.ui 
@@ -269,7 +269,7 @@ set(MOCS
 	Encoder/HoloimageEncoderOptionsController.h 
 	Encoder/XYZMCodecOptionsController.h 
 	Encoder/HolovideoEncoderOptionsController.h)
-set(RESOURCES ui/Holoencoder.qrc)
+set(RESOURCES ui/MainWindow.qrc)
 
 #	---------------------------------------------------------------------------------------
 #							Qt generation

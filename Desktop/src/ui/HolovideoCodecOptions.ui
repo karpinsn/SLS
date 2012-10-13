@@ -116,6 +116,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>sourceFileBox</tabstop>
+  <tabstop>sourceFileChooseButton</tabstop>
+  <tabstop>widthBox</tabstop>
+  <tabstop>heightBox</tabstop>
+  <tabstop>autoFitDataButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

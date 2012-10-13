@@ -138,6 +138,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>sourceFileBox</tabstop>
+  <tabstop>sourceFileChooseButton</tabstop>
+  <tabstop>contrastStretchCheckBox</tabstop>
+  <tabstop>minValueBox</tabstop>
+  <tabstop>maxValueBox</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -148,14 +148,20 @@ void EncodingOpenGLWidget::resizeGL(int width, int height)
 
 void EncodingOpenGLWidget::mousePressEvent(QMouseEvent *event)
 {
-  m_glContext->mousePressEvent(event->pos().x(), event->pos().y());
-  updateGL();
+  if(nullptr != m_glContext)
+  {
+	m_glContext->mousePressEvent(event->pos().x(), event->pos().y());
+	updateGL();
+  }
 }
 
 void EncodingOpenGLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-  m_glContext->mouseMoveEvent(event->pos().x(), event->pos().y());
-  updateGL();
+  if(nullptr != m_glContext)
+  {
+	m_glContext->mouseMoveEvent(event->pos().x(), event->pos().y());
+	updateGL();
+  }
 }
 
 void EncodingOpenGLWidget::mouseReleaseEvent(QMouseEvent* event)

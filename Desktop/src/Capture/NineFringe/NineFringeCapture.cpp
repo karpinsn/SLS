@@ -219,7 +219,7 @@ void NineFringeCapture::setScalingFactor(float scalingFactor)
 MeshInterchange* NineFringeCapture::decode(void)
 {
   OGLStatus::logOGLErrors("NineFringeCapture - decode()");
-  return new MeshInterchange(m_depthMap);
+  return new MeshInterchange(&m_depthMap, false);
 }
 
 void NineFringeCapture::draw(void)

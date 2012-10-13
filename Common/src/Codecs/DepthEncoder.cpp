@@ -35,7 +35,7 @@ shared_ptr<MeshInterchange> DepthEncoder::process(shared_ptr<MeshInterchange> da
 	  cvConvertScale(m_floatImageHandleSingleChannel, m_byteImageHandle, 255.0);
 	}
 
-	MeshInterchange mesh(m_byteImageHandle);
+	MeshInterchange mesh(m_byteImageHandle, false);
 	m_io.saveStream(mesh);
   }
   else
@@ -43,6 +43,8 @@ shared_ptr<MeshInterchange> DepthEncoder::process(shared_ptr<MeshInterchange> da
 	//  Encode to the stream
     m_io.saveStream(*data);
   }
+
+  return nullptr;
 }
 
 shared_ptr<MeshInterchange> DepthEncoder::previewProcess(shared_ptr<MeshInterchange> data)

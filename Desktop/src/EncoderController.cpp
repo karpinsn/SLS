@@ -141,10 +141,9 @@ void EncoderController::_previewEncoding(void)
   //  Set the size back to whatever the preview window is
   encoderGLWidget->reinit(encoderGLWidget->size().width(), encoderGLWidget->size().height());
 
-  MeshInterchange* mesh = new MeshInterchange();
   shared_ptr<MeshInterchange> mesh = decoder->previewProcess(nullptr);
 
-  if(nullptr != mesh)
+  if(mesh)
   {
     encoder->previewProcess(mesh);
   }

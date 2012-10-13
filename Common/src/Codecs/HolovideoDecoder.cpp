@@ -32,7 +32,7 @@ void HolovideoDecoder::closeCodec(void)
   m_glWidget = nullptr;
 }
 
-shared_ptr<MeshInterchange> HolovideoDeocder::process(shared_ptr<MeshInterchange> data)
+shared_ptr<MeshInterchange> HolovideoDecoder::process(shared_ptr<MeshInterchange> data)
 {
   if(nullptr == m_glWidget)
   {
@@ -44,18 +44,18 @@ shared_ptr<MeshInterchange> HolovideoDeocder::process(shared_ptr<MeshInterchange
   if(nullptr == frame)
   {
 	//	At the end of the file
-    data = nullptr;
-    return;
+    return nullptr;
   }
 
   m_decoder.setBackHoloBuffer(frame);
   m_decoder.swapBuffers();
 
-  data = m_glWidget->decode();
+  return shared_ptr<MeshInterchange>(m_glWidget->decode());
 }
 
 shared_ptr<MeshInterchange> HolovideoDecoder::previewProcess(shared_ptr<MeshInterchange> data)
 {
+  return nullptr;
 }
 
 int HolovideoDecoder::getWidth(void)

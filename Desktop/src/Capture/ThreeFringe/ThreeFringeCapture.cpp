@@ -207,7 +207,7 @@ void ThreeFringeCapture::setScalingFactor(float scalingFactor)
 MeshInterchange* ThreeFringeCapture::decode(void)
 {
   OGLStatus::logOGLErrors("ThreeFringeCapture - decode()");
-  return new MeshInterchange(m_depthMap);
+  return new MeshInterchange(&m_depthMap, false);
 }
 
 void ThreeFringeCapture::draw(void)

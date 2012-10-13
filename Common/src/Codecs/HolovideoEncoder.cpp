@@ -68,10 +68,10 @@ shared_ptr<MeshInterchange> HolovideoEncoder::process(shared_ptr<MeshInterchange
   if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return. Should error
-    return;
+    return nullptr;
   }
 
-  m_encoder.setCurrentMesh(data);
+  m_encoder.setCurrentMesh(data->getMesh());
 
   MeshInterchange* mesh = m_glWidget->encode();
   //mesh->getTexture()->transferFromTexture(m_image);
@@ -99,10 +99,10 @@ shared_ptr<MeshInterchange> HolovideoEncoder::previewProcess(shared_ptr<MeshInte
   if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return. Should error
-    return;
+    return nullptr;
   }
 
-  m_encoder.setCurrentMesh(data);
+  m_encoder.setCurrentMesh(data->getMesh());
 
   //  Dont want to encode, only draw
   m_glWidget->updateScene();

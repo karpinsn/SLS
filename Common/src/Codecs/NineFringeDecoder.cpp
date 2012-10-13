@@ -33,15 +33,13 @@ shared_ptr<MeshInterchange> NineFringeDecoder::process(shared_ptr<MeshInterchang
   if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return a nullptr MeshInterchange
-    data->setTexture(nullptr, false);
-    return;
+    return nullptr;
   }
 
   if(_streamUntilNewFrame())
   {
     //  End of the file. Return a nullptr mesh
-    data = nullptr;
-    return;
+    return nullptr;
   }
 
   if(m_calculateReference)
@@ -55,17 +53,12 @@ shared_ptr<MeshInterchange> NineFringeDecoder::process(shared_ptr<MeshInterchang
 	_streamUntilNewFrame();
   }
 
-  //  TODO - Come and fix
-  MeshInterchange* change = m_glWidget->decode();
-
-  if(nullptr != change && !change->isEmpty())
-  {
-	data->setTexture(change->getTexture(), false);
-  }
+  return shared_ptr<MeshInterchange>(m_glWidget->decode());
 }
 
 shared_ptr<MeshInterchange> NineFringeDecoder::previewProcess(shared_ptr<MeshInterchange> data)
 {
+  return nullptr;
 }
 
 bool NineFringeDecoder::_streamUntilNewFrame(void)

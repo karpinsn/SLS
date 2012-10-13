@@ -39,8 +39,7 @@ shared_ptr<MeshInterchange> XYZMDecoder::process(shared_ptr<MeshInterchange> dat
 	m_listPosition++; // Dont forget to increment the position
   }
 
-  //  TODO Comeback and fix this
-  data->setMesh(mesh);
+  return shared_ptr<MeshInterchange>(new MeshInterchange(mesh));
 }
 
 shared_ptr<MeshInterchange> XYZMDecoder::previewProcess(shared_ptr<MeshInterchange> data)
@@ -48,8 +47,7 @@ shared_ptr<MeshInterchange> XYZMDecoder::previewProcess(shared_ptr<MeshInterchan
   if(nullptr == m_glWidget)
   {
     //  No OpenGL encoding widget. Return a nullptr MeshInterchange
-    data = nullptr;
-    return;
+    return nullptr;
   }
 
   AbstractMesh* mesh = nullptr;
@@ -60,8 +58,7 @@ shared_ptr<MeshInterchange> XYZMDecoder::previewProcess(shared_ptr<MeshInterchan
 	//	We dont increment since we are just previewing
   }
 
-  //  TODO Comeback and fix this
-  data->setMesh(mesh);
+  return shared_ptr<MeshInterchange>(new MeshInterchange(mesh));
 }
 
 int XYZMDecoder::getWidth(void)

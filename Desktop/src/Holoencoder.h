@@ -46,6 +46,10 @@ class Holoencoder : public IGLContext, public IEncodingGLContext
 {
 private:
         ShaderProgram m_encoderShader;
+		ShaderProgram m_depthShader;
+
+		bool m_draw2Holoimage;
+
 	int m_width;
 	int m_height;
 	
@@ -58,8 +62,12 @@ private:
 
 	shared_ptr<MeshInterchange> m_currentData;
 	
+	GLenum m_depthAttachPoint;
+	GLenum m_holoimageAttachPoint;
+	Texture m_depthMap;
 	Texture m_holoimage;
-	FBO m_holoimageProcessor;
+	
+	FBO m_offscreenFBO;
 
 	bool m_hasBeenInit;
 	
@@ -73,7 +81,6 @@ public:
         virtual void          init();
         virtual void          init(float width, float height);
         virtual void          draw(void);
-        wrench::gl::Texture&  encodeOldWay();
         virtual void          resize(int width, int height);
         virtual void          cameraSelectMode(int mode);
         virtual void          mousePressEvent(int mouseX, int mouseY);

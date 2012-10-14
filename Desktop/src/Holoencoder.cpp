@@ -2,8 +2,11 @@
 
 Holoencoder::Holoencoder(void)
 {
+	m_draw2Holoimage = false;
 	m_hasBeenInit = false;
     m_currentData = nullptr;
+	m_depthAttachPoint = GL_COLOR_ATTACHMENT0;
+	m_holoimageAttachPoint = GL_COLOR_ATTACHMENT1;
 }
 
 void Holoencoder::init()
@@ -19,11 +22,13 @@ void Holoencoder::init(float width, float height)
       m_height = height;
 
 	  m_holoimage.init(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+	  m_depthMap.init(m_width, m_height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
       m_currentData = nullptr;
-	  m_holoimageProcessor.init(m_width, m_height);
-	  m_holoimageProcessor.setTextureAttachPoint(m_holoimage, GL_COLOR_ATTACHMENT0_EXT);
-	  m_holoimageProcessor.unbind();
+	  m_offscreenFBO.init(m_width, m_height);
+	  m_offscreenFBO.setTextureAttachPoint(m_depthMap, m_depthAttachPoint);
+	  m_offscreenFBO.setTextureAttachPoint(m_holoimage, m_holoimageAttachPoint);
+	  m_offscreenFBO.unbind();
 
 	  m_controller.init(0.0,0.0,0.0,.5);
       _initShaders();
@@ -45,21 +50,27 @@ void Holoencoder::init(float width, float height)
       m_height = height;
 
 	  m_holoimage.reinit(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+	  m_depthMap.reinit(m_width, m_height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
       m_currentData = nullptr;
-	  m_holoimageProcessor.reinit(m_width, m_height);
-	  m_holoimageProcessor.setTextureAttachPoint(m_holoimage, GL_COLOR_ATTACHMENT0_EXT);
-	  m_holoimageProcessor.unbind();
+	  m_offscreenFBO.reinit(m_width, m_height);
+	  m_offscreenFBO.setTextureAttachPoint(m_depthMap, m_depthAttachPoint);
+	  m_offscreenFBO.setTextureAttachPoint(m_holoimage, m_holoimageAttachPoint);
+	  m_offscreenFBO.unbind();
   }
 }
 
 void Holoencoder::_initShaders(void)
 {
+	m_depthShader.init();
+	m_depthShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Mesh2Depth.vert"));
+	m_depthShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Mesh2Depth.frag"));
+	m_depthShader.link();
+
     m_encoderShader.init();
     m_encoderShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holoencoder.vert"));
     m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holoencoder.frag"));
     m_encoderShader.link();
-
     m_encoderShader.uniform("fringeFrequency", 6.0f);
 }
 
@@ -83,28 +94,40 @@ void Holoencoder::draw(void)
 	  modelView = modelView * m_scale * m_translate;
 	  glLoadMatrixf(glm::value_ptr(modelView));
 
+	  //	DepthMap
+	  m_offscreenFBO.bind();
+	  m_offscreenFBO.bindDrawBuffer(m_depthAttachPoint);
+	  m_depthShader.bind();
+	  if(nullptr != m_currentData)
+      {
+		m_currentData->getMesh()->draw();
+      }
+	  m_offscreenFBO.unbind();
+
       m_encoderShader.bind();
       m_encoderShader.uniform("projectorModelView", projectorModelView);
 
       glColor3f(.8, .8, .8);
+
+	  if(m_draw2Holoimage)
+	  {
+		m_offscreenFBO.bind();
+		m_offscreenFBO.bindDrawBuffer(m_holoimageAttachPoint);
+	  }
 
       if(nullptr != m_currentData)
       {
 		m_currentData->getMesh()->draw();
       }
 
+	  if(m_draw2Holoimage)
+	  {
+		  m_offscreenFBO.unbind();
+	  }
+
       m_encoderShader.unbind();
     }
 	glPopMatrix();
-}
-
-Texture& Holoencoder::encodeOldWay()
-{	
-	m_holoimageProcessor.bind();
-	draw();
-	m_holoimageProcessor.unbind();
-	
-	return m_holoimage;
 }
 
 void Holoencoder::resize(int width, int height)
@@ -138,9 +161,9 @@ void Holoencoder::encode(void)
 {
   OGLStatus::logOGLErrors("Holoencoder - encoder()");
   
-  m_holoimageProcessor.bind();
+  m_draw2Holoimage = true;
   draw();
-  m_holoimageProcessor.unbind();
+  m_draw2Holoimage = false;
 }
 
 MeshInterchange* Holoencoder::getEncodedData()

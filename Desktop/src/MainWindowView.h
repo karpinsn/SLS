@@ -19,7 +19,7 @@
 #include <QProgressDialog>
 
 //	Qt auto generated headers
-#include "ui_Holoencoder.h"
+#include "ui_MainWindow.h"
 
 #include <wrench/gl/Camera.h>
 #include "OpenGLWidget.h"

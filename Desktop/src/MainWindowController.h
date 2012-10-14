@@ -20,7 +20,7 @@
 #include <QPropertyAnimation>
 
 //	Qt auto generated headers
-#include "ui_Holoencoder.h"
+#include "ui_MainWindow.h"
 
 #include "MainWindowView.h"
 #include <wrench/gl/Camera.h>

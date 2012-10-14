@@ -11,18 +11,14 @@ XYZMCodecOptionsController::XYZMCodecOptionsController(QWidget* parent) : QWidge
 
 XYZMCodecOptionsController::~XYZMCodecOptionsController()
 {
-  if(nullptr != m_codec)
-  {
-	delete m_codec;
-  }
 }
 
-Codec* XYZMCodecOptionsController::getCodec(void)
+shared_ptr<Codec> XYZMCodecOptionsController::getCodec(void)
 {
   // Lazy init
   if(nullptr == m_codec)
   {
-    m_codec = new XYZMDecoder(xyzmListWidget);
+    m_codec = shared_ptr<XYZMDecoder>(new XYZMDecoder(xyzmListWidget));
   }
 
   return m_codec;

@@ -1,6 +1,6 @@
 #include "XYZMesh.h"
 
-XYZMesh::XYZMesh(int meshWidth, int meshHeight, XYZPoint *meshPoints)
+XYZMesh::XYZMesh(int meshWidth, int meshHeight, shared_ptr<XYZPoint> meshPoints)
 {
 	m_meshHeight = meshHeight;
 	m_meshWidth = meshWidth;
@@ -9,8 +9,6 @@ XYZMesh::XYZMesh(int meshWidth, int meshHeight, XYZPoint *meshPoints)
 
 XYZMesh::~XYZMesh(void)
 {
-	//	Delete all the points that we have
-	delete [] m_meshPoints;
 }
 
 void XYZMesh::initMesh(void)
@@ -33,10 +31,10 @@ void XYZMesh::draw(void)
 			int id1 = id0 + m_meshWidth * intvl;
 			int id2 = id1 + intvl;
 			int id3 = id0 + intvl;
-			XYZPoint f0 = m_meshPoints[id0];
-			XYZPoint f1 = m_meshPoints[id1];
-			XYZPoint f2 = m_meshPoints[id2];
-			XYZPoint f3 = m_meshPoints[id3];
+			XYZPoint f0 = m_meshPoints.get()[id0];
+			XYZPoint f1 = m_meshPoints.get()[id1];
+			XYZPoint f2 = m_meshPoints.get()[id2];
+			XYZPoint f3 = m_meshPoints.get()[id3];
 
 			if (f0.valid && f1.valid && f2.valid)
 			{

@@ -52,8 +52,8 @@ private:
   void _addCodecs(void);
   void _previewEncoding(void);
 
-  Codec* _getEncoder(void);
-  Codec* _getDecoder(void);
+  shared_ptr<Codec> _getEncoder(void);
+  shared_ptr<Codec> _getDecoder(void);
 };
 
 #endif	// _ENCODER_CONTROLLER_H_

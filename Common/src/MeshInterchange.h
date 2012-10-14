@@ -35,10 +35,16 @@ private:
   shared_ptr<IplImage>		m_image;
   shared_ptr<AbstractMesh>	m_mesh;
 
-  bool m_deleteAssets;
-
 public:
   MeshInterchange();
+
+  // Copy constructors
+  MeshInterchange(const MeshInterchange& rhs);
+  MeshInterchange& operator=(const MeshInterchange& rhs);
+
+  MeshInterchange::MeshInterchange(MeshInterchange&& other);
+  MeshInterchange& operator=(MeshInterchange&& rhs);
+
   MeshInterchange(IplImage* image, bool deleteAssets = true);
   MeshInterchange(Texture* texture, bool deleteAssets = true);
   MeshInterchange(AbstractMesh* mesh, bool deleteAssets = true);

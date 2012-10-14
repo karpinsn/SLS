@@ -44,13 +44,15 @@ shared_ptr<MeshInterchange> HoloimageEncoder::process(shared_ptr<MeshInterchange
     return nullptr;
   }
 
-  m_encoder.setCurrentMesh(data->getMesh());
+  m_encoder.setCurrentMesh(data);
 
   MeshInterchange* mesh = m_glWidget->encode();
 
   //  Format the filename and write the image out
   sprintf(m_filenameBuffer, m_filename.c_str(), m_frameNumber++);
   m_io.saveTexture(m_filenameBuffer, mesh->getTexture());
+
+  return nullptr;
 }
 
 shared_ptr<MeshInterchange> HoloimageEncoder::previewProcess(shared_ptr<MeshInterchange> data)
@@ -61,10 +63,12 @@ shared_ptr<MeshInterchange> HoloimageEncoder::previewProcess(shared_ptr<MeshInte
     return nullptr;
   }
 
-  m_encoder.setCurrentMesh(data->getMesh());
+  m_encoder.setCurrentMesh(data);
 
   //  Dont want to encode, only draw
   m_glWidget->updateScene();
+
+  return nullptr;
 }
 
 void HoloimageEncoder::autoFitData(void)

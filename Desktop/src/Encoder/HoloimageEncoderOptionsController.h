@@ -17,13 +17,13 @@ class HoloimageEncoderOptionsController : public QWidget, private Ui::HoloimageE
   Q_OBJECT
 
 private:
-  HoloimageEncoder* m_codec;
+  shared_ptr<HoloimageEncoder> m_codec;
 
 public:
   HoloimageEncoderOptionsController(QWidget* parent = 0);
   ~HoloimageEncoderOptionsController();
 
-  Codec* getCodec(void);
+  shared_ptr<Codec> getCodec(void);
 
 public slots:
   void selectFile(void);

@@ -66,8 +66,8 @@ void EncoderController::newEncoder(const QString& text)
 
 void EncoderController::encode(void)
 {
-  Codec* decoder = _getDecoder();
-  Codec* encoder = _getEncoder();
+  shared_ptr<Codec> decoder = _getDecoder();
+  shared_ptr<Codec> encoder = _getEncoder();
 
   if(nullptr == decoder || nullptr == encoder)
   {
@@ -126,8 +126,8 @@ void EncoderController::_addCodecs(void)
 
 void EncoderController::_previewEncoding(void)
 {
-  Codec* decoder = _getDecoder();
-  Codec* encoder = _getEncoder();
+  shared_ptr<Codec> decoder = _getDecoder();
+  shared_ptr<Codec> encoder = _getEncoder();
 
   if(nullptr == decoder || nullptr == encoder)
   {
@@ -153,9 +153,9 @@ void EncoderController::_previewEncoding(void)
   decoder->closeCodec();
 }
 
-Codec* EncoderController::_getEncoder(void)
+shared_ptr<Codec> EncoderController::_getEncoder(void)
 {
-  Codec* encoder = nullptr;
+  shared_ptr<Codec> encoder = nullptr;
 
   if(0 == QString(DepthEncoder::codecName().c_str()).compare(encoderComboBox->currentText()))
   {
@@ -179,9 +179,9 @@ Codec* EncoderController::_getEncoder(void)
   return encoder;
 }
 
-Codec* EncoderController::_getDecoder(void)
+shared_ptr<Codec> EncoderController::_getDecoder(void)
 {
-  Codec* decoder = nullptr;
+  shared_ptr<Codec> decoder = nullptr;
 
   if(0 == QString(NineFringeDecoder::codecName().c_str()).compare(decoderComboBox->currentText()))
   {

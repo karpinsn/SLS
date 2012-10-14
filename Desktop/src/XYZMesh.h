@@ -39,8 +39,14 @@ using namespace std;
 
 class XYZMesh : public AbstractMesh
 {
+private:
+  int m_meshWidth;
+  int m_meshHeight;
+  shared_ptr<XYZPoint> m_meshPoints;
+  glm::vec4 m_normalVectors;
+
 public:
-	XYZMesh(int meshWidth, int meshHeight, XYZPoint *meshPoints);
+	XYZMesh(int meshWidth, int meshHeight, shared_ptr<XYZPoint> meshPoints);
 	~XYZMesh(void);
 
 	virtual void initMesh(void);
@@ -50,12 +56,6 @@ public:
 	int getMeshSize(void);
 
 	void setBoundingBox(BoundingBox& boundingBox);
-	
-private:
-	int m_meshWidth;
-	int m_meshHeight;
-	XYZPoint *m_meshPoints;
-	glm::vec4 m_normalVectors;
 };
 
 #endif	// _XYZ_MESH_H_

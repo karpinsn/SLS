@@ -3,7 +3,7 @@
 Holoencoder::Holoencoder(void)
 {
 	m_hasBeenInit = false;
-    m_currentMesh = nullptr;
+    m_currentData = nullptr;
 }
 
 void Holoencoder::init()
@@ -20,7 +20,7 @@ void Holoencoder::init(float width, float height)
 
 	  m_holoimage.init(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 
-      m_currentMesh = nullptr;
+      m_currentData = nullptr;
 	  m_holoimageProcessor.init(m_width, m_height);
 	  m_holoimageProcessor.setTextureAttachPoint(m_holoimage, GL_COLOR_ATTACHMENT0_EXT);
 	  m_holoimageProcessor.unbind();
@@ -46,7 +46,7 @@ void Holoencoder::init(float width, float height)
 
 	  m_holoimage.reinit(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 
-      m_currentMesh = nullptr;
+      m_currentData = nullptr;
 	  m_holoimageProcessor.reinit(m_width, m_height);
 	  m_holoimageProcessor.setTextureAttachPoint(m_holoimage, GL_COLOR_ATTACHMENT0_EXT);
 	  m_holoimageProcessor.unbind();
@@ -67,7 +67,7 @@ void Holoencoder::draw(void)
 {	
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glPushMatrix();
+	glPushMatrix(); 
     {
       m_camera->applyMatrix();
 
@@ -88,9 +88,9 @@ void Holoencoder::draw(void)
 
       glColor3f(.8, .8, .8);
 
-      if(nullptr != m_currentMesh)
+      if(nullptr != m_currentData)
       {
-          m_currentMesh->draw();
+		m_currentData->getMesh()->draw();
       }
 
       m_encoderShader.unbind();
@@ -129,20 +129,9 @@ void Holoencoder::mouseMoveEvent(int mouseX, int mouseY)
 	m_controller.mouseDragEvent(m_camera->getMatrix(), mouseX, mouseY);
 }
 
-void Holoencoder::setCurrentMesh(AbstractMesh* current)
+void Holoencoder::setCurrentMesh(shared_ptr<MeshInterchange> current)
 {
-	if(nullptr != m_currentMesh)
-	{
-		//	Make sure to delete the current mesh if its not null
-		delete m_currentMesh;
-	}
-	
-	m_currentMesh = current;
-}
-
-void Holoencoder::setCurrentMesh(MeshInterchange* current)
-{
-  m_currentMesh = current->getMesh();
+  m_currentData = current;
 }
 
 void Holoencoder::encode(void)
@@ -161,13 +150,13 @@ MeshInterchange* Holoencoder::getEncodedData()
 
 void Holoencoder::autoFitTransforms(void)
 {
-  if(nullptr != m_currentMesh)
+  if(nullptr != m_currentData && m_currentData->getPreferedFormat() == MeshInterchange::VERTEX_FORMAT)
   {
-	m_translate = glm::translate(glm::mat4(1.0), -m_currentMesh->getBoundingBox().center);
+	m_translate = glm::translate(glm::mat4(1.0), -m_currentData->getMesh()->getBoundingBox().center);
 	
 	//	Calculate the scaling factor
-	glm::vec4 min = glm::vec4(m_currentMesh->getBoundingBox().min, 1.0);
-	glm::vec4 max = glm::vec4(m_currentMesh->getBoundingBox().max, 1.0);
+	glm::vec4 min = glm::vec4(m_currentData->getMesh()->getBoundingBox().min, 1.0);
+	glm::vec4 max = glm::vec4(m_currentData->getMesh()->getBoundingBox().max, 1.0);
 	//	Translate the min and max
 	min = m_translate * min;
 	max = m_translate * max;

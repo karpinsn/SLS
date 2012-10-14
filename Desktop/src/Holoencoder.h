@@ -56,7 +56,7 @@ private:
 	glm::mat4 m_translate;
 	glm::mat4 m_scale;
 
-	AbstractMesh* m_currentMesh;
+	shared_ptr<MeshInterchange> m_currentData;
 	
 	Texture m_holoimage;
 	FBO m_holoimageProcessor;
@@ -78,8 +78,7 @@ public:
         virtual void          cameraSelectMode(int mode);
         virtual void          mousePressEvent(int mouseX, int mouseY);
         virtual void          mouseMoveEvent(int mouseX, int mouseY);
-        void                  setCurrentMesh(AbstractMesh* current);
-		void				  setCurrentMesh(MeshInterchange* current);
+		void				  setCurrentMesh(shared_ptr<MeshInterchange> current);
 		void				  encode(void);
 		MeshInterchange*	  getEncodedData(void);
 		void				  autoFitTransforms(void);

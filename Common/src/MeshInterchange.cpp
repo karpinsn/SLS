@@ -4,6 +4,66 @@ MeshInterchange::MeshInterchange()
 {
 }
 
+// Copy constructor.
+MeshInterchange::MeshInterchange(const MeshInterchange& rhs)
+{
+  // Copy the data pointer and its length from the 
+  // source object.
+  m_image	  = rhs.m_image;
+  m_texture	  = rhs.m_texture;
+  m_mesh	  = rhs.m_mesh;
+}
+
+// Copy assignment operator.
+MeshInterchange& MeshInterchange::operator=(const MeshInterchange& rhs)
+{
+  if (this != &rhs)
+  {
+	// Copy the data pointer and its length from the 
+	// source object.
+	m_image	  = rhs.m_image;
+	m_texture  = rhs.m_texture;
+	m_mesh	  = rhs.m_mesh;
+  }
+  return *this;
+}
+
+// Move constructor.
+MeshInterchange::MeshInterchange(MeshInterchange&& rhs)
+{
+   // Copy the data pointer and its length from the 
+   // source object.
+   m_image	  = rhs.m_image;
+   m_texture  = rhs.m_texture;
+   m_mesh	  = rhs.m_mesh;
+
+   // Release the data pointer from the source object so that
+   // the memory is not freed.
+   rhs.m_image		= nullptr;
+   rhs.m_texture	= nullptr;
+   rhs.m_mesh		= nullptr;
+}
+
+// Move assignment operator.
+MeshInterchange& MeshInterchange::operator=(MeshInterchange&& rhs)
+{
+   if (this != &rhs)
+   {
+      // Copy the data pointer and its length from the 
+      // source object.
+      m_image = rhs.m_image;
+      m_texture = rhs.m_texture;
+	  m_mesh = rhs.m_mesh;
+
+      // Release the data pointer from the source object so that
+	  // the memory is not freed.
+      rhs.m_image = nullptr;
+      rhs.m_texture = nullptr;
+	  rhs.m_mesh;
+   }
+   return *this;
+}
+
 MeshInterchange::MeshInterchange(IplImage* image, bool deleteAssets)
 {
 	if(deleteAssets)

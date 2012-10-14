@@ -16,13 +16,13 @@ class XYZMCodecOptionsController : public QWidget, private Ui::XYZMCodecOptions
   Q_OBJECT
 
 private:
-  XYZMDecoder* m_codec;
+  shared_ptr<XYZMDecoder> m_codec;
 
 public:
   XYZMCodecOptionsController(QWidget* parent = 0);
   ~XYZMCodecOptionsController();
 
-  Codec* getCodec(void);
+  shared_ptr<Codec> getCodec(void);
 
   public slots:
 	void addFiles(void);

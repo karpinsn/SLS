@@ -71,7 +71,7 @@ shared_ptr<MeshInterchange> HolovideoEncoder::process(shared_ptr<MeshInterchange
     return nullptr;
   }
 
-  m_encoder.setCurrentMesh(data->getMesh());
+  m_encoder.setCurrentMesh(data);
 
   MeshInterchange* mesh = m_glWidget->encode();
   //mesh->getTexture()->transferFromTexture(m_image);
@@ -92,6 +92,8 @@ shared_ptr<MeshInterchange> HolovideoEncoder::process(shared_ptr<MeshInterchange
     //reactor::MediaFrame frame = reactor::MediaFrame(yuv444Frame, PIX_FMT_YUV444P);
     //m_videoWriter->writeFrame(frame);
   m_io.saveStream(*(mesh->getTexture()));
+
+  return nullptr;
 }
 
 shared_ptr<MeshInterchange> HolovideoEncoder::previewProcess(shared_ptr<MeshInterchange> data)
@@ -102,10 +104,12 @@ shared_ptr<MeshInterchange> HolovideoEncoder::previewProcess(shared_ptr<MeshInte
     return nullptr;
   }
 
-  m_encoder.setCurrentMesh(data->getMesh());
+  m_encoder.setCurrentMesh(data);
 
   //  Dont want to encode, only draw
   m_glWidget->updateScene();
+
+  return nullptr;
 }
 
 void HolovideoEncoder::autoFitData(void)

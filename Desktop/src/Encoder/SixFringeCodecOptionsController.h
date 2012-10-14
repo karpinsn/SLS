@@ -20,7 +20,7 @@ public:
   SixFringeCodecOptionsController(QWidget* parent = 0);
   ~SixFringeCodecOptionsController();
 
-  Codec* getCodec(void);
+  shared_ptr<Codec> getCodec(void);
 
 public slots:
   void loadReferenceValueChange(int checkState);

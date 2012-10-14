@@ -11,12 +11,12 @@ SixFringeCodecOptionsController::~SixFringeCodecOptionsController()
 {
 }
 
-Codec* SixFringeCodecOptionsController::getCodec(void)
+shared_ptr<Codec> SixFringeCodecOptionsController::getCodec(void)
 {
   QString sourceFilename = sourceFileBox->text();
   string str = sourceFilename.toLocal8Bit().constData();
 
-  SixFringeDecoder* codec = new SixFringeDecoder(str);
+  shared_ptr<SixFringeDecoder> codec = shared_ptr<SixFringeDecoder>(new SixFringeDecoder(str));
   codec->setGammaCutoff(gammaCutoffBox->value());
   codec->setScalingFactor(scalingBox->value());
 

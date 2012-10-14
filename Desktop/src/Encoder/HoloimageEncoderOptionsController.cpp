@@ -10,10 +10,6 @@ HoloimageEncoderOptionsController::HoloimageEncoderOptionsController(QWidget* pa
 
 HoloimageEncoderOptionsController::~HoloimageEncoderOptionsController()
 {
-  if(nullptr != m_codec)
-  {
-	delete m_codec;
-  }
 }
 
 void HoloimageEncoderOptionsController::selectFile(void)
@@ -34,12 +30,12 @@ void HoloimageEncoderOptionsController::autoFitData(void)
   }
 }
 
-Codec* HoloimageEncoderOptionsController::getCodec(void)
+shared_ptr<Codec> HoloimageEncoderOptionsController::getCodec(void)
 {
   // Lazy init
   if(m_codec == nullptr)
   {
-    m_codec = new HoloimageEncoder();
+    m_codec = shared_ptr<HoloimageEncoder>(new HoloimageEncoder());
   }
 
   QString sourceFilename = sourceFileBox->text();

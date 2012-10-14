@@ -44,33 +44,24 @@ shared_ptr<MeshInterchange> XYZMDecoder::process(shared_ptr<MeshInterchange> dat
 
 shared_ptr<MeshInterchange> XYZMDecoder::previewProcess(shared_ptr<MeshInterchange> data)
 {
-  if(nullptr == m_glWidget)
-  {
-    //  No OpenGL encoding widget. Return a nullptr MeshInterchange
-    return nullptr;
-  }
-
-  AbstractMesh* mesh = nullptr;
   if(nullptr != m_xyzmList && m_listPosition < m_xyzmList->count())
   {
 	QListWidgetItem *item = m_xyzmList->item(m_listPosition);
-	mesh = m_io.newMeshFromFile(item->text().toAscii().constData());
 	//	We dont increment since we are just previewing
+	return shared_ptr<MeshInterchange>(new MeshInterchange(m_io.newMeshFromFile(item->text().toAscii().constData()), false));
   }
 
-  return shared_ptr<MeshInterchange>(new MeshInterchange(mesh));
+  return nullptr; 
 }
 
 int XYZMDecoder::getWidth(void)
 {
   if(nullptr != m_xyzmList && m_listPosition < m_xyzmList->count())
   {
+	//	Read the current mesh and return its width
 	QListWidgetItem *item = m_xyzmList->item(m_listPosition);
-	AbstractMesh* mesh = m_io.newMeshFromFile(item->text().toAscii().constData());
-	int width = ((XYZMesh*)mesh)->getMeshWidth();
-	delete mesh;
-
-	return width;
+	unique_ptr<AbstractMesh> mesh(m_io.newMeshFromFile(item->text().toAscii().constData()));
+	return ((XYZMesh*)mesh.get())->getMeshWidth();
   }
   
   return 0;
@@ -81,11 +72,8 @@ int XYZMDecoder::getHeight(void)
   if(nullptr != m_xyzmList && m_listPosition < m_xyzmList->count())
   {
 	QListWidgetItem *item = m_xyzmList->item(m_listPosition);
-	AbstractMesh* mesh = m_io.newMeshFromFile(item->text().toAscii().constData());
-	int height = ((XYZMesh*)mesh)->getMeshHeight();
-	delete mesh;
-
-	return height;
+	unique_ptr<AbstractMesh> mesh(m_io.newMeshFromFile(item->text().toAscii().constData()));
+	return ((XYZMesh*)mesh.get())->getMeshHeight();
   }
   
   return 0;

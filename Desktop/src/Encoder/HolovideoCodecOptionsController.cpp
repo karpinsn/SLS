@@ -10,10 +10,6 @@ HolovideoCodecOptionsController::HolovideoCodecOptionsController(QWidget* parent
 
 HolovideoCodecOptionsController::~HolovideoCodecOptionsController()
 {
-  if(nullptr != m_codec)
-  {
-	delete m_codec;
-  }
 }
 
 void HolovideoCodecOptionsController::selectFile(void)
@@ -34,12 +30,12 @@ void HolovideoCodecOptionsController::autoFitData(void)
   }
 }
 
-Codec* HolovideoCodecOptionsController::getCodec(void)
+shared_ptr<Codec> HolovideoCodecOptionsController::getCodec(void)
 {
   // Lazy init
   if(m_codec == nullptr)
   {
-    m_codec = new HolovideoEncoder();
+    m_codec = shared_ptr<HolovideoEncoder>(new HolovideoEncoder());
   }
 
   QString sourceFilename = sourceFileBox->text();

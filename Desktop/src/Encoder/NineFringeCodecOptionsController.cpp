@@ -11,12 +11,12 @@ NineFringeCodecOptionsController::~NineFringeCodecOptionsController()
 {
 }
 
-Codec* NineFringeCodecOptionsController::getCodec(void)
+shared_ptr<Codec> NineFringeCodecOptionsController::getCodec(void)
 {
   QString sourceFilename = sourceFileBox->text();
   string str = sourceFilename.toLocal8Bit().constData();
 
-  NineFringeDecoder* codec = new NineFringeDecoder(str);
+  shared_ptr<NineFringeDecoder> codec = shared_ptr<NineFringeDecoder>(new NineFringeDecoder(str));
   codec->setGammaCutoff(gammaCutoffBox->value());
   codec->setScalingFactor(scalingBox->value());
 

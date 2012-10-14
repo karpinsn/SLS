@@ -20,7 +20,7 @@ public:
   NineFringeCodecOptionsController(QWidget* parent = 0);
   ~NineFringeCodecOptionsController();
 
-  Codec* getCodec(void);
+  shared_ptr<Codec> getCodec(void);
 
 public slots:
   void selectFile(void);

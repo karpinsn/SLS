@@ -17,14 +17,13 @@ class DepthmapCodecOptionsController : public QWidget, private Ui::DepthmapCodec
   Q_OBJECT
 
 private:
-  DepthEncoder* m_codec;
+  shared_ptr<DepthEncoder> m_codec;
 
 public:
   DepthmapCodecOptionsController(QWidget* parent = 0);
   ~DepthmapCodecOptionsController();
 
-  Codec* getCodec(void);
-
+  shared_ptr<Codec> getCodec(void);
 
 public slots:
   void contrastStretchValueChange(int checkState);

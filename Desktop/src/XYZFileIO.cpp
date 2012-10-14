@@ -57,7 +57,7 @@ AbstractMesh* XYZFileIO::newMeshFromFile(const string &fileName)
 			inFile.read(reinterpret_cast<char *>(textureVertices), sizeof(TextureVertex) * meshSize);
 			inFile.read(reinterpret_cast<char *>(valid), sizeof(unsigned char) *meshSize);
 
-			XYZPoint *points = new XYZPoint[meshSize];
+			shared_ptr<XYZPoint> points = shared_ptr<XYZPoint>(new XYZPoint[meshSize]);
 			
 			float scalingFactor = header.meshHeight > header.meshWidth ? header.meshHeight : header.meshWidth;
 			BoundingBox boundingBox;
@@ -79,10 +79,10 @@ AbstractMesh* XYZFileIO::newMeshFromFile(const string &fileName)
 				  boundingBox.max.z = max(boundingBox.max.z, vertices[point].z);
 				}
 
-				points[point].vertex = vertices[point];
-				points[point].textureVertex = textureVertices[point];
+				points.get()[point].vertex = vertices[point];
+				points.get()[point].textureVertex = textureVertices[point];
 				//	If the point is valid then store 255 otherwise store 0
-				points[point].valid = valid[point] != 0 ? 255 : 0;
+				points.get()[point].valid = valid[point] != 0 ? 255 : 0;
 			}
 
 			//	Clean up our arrays now that we are done with them

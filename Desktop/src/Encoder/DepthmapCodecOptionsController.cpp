@@ -10,10 +10,6 @@ DepthmapCodecOptionsController::DepthmapCodecOptionsController(QWidget* parent) 
 
 DepthmapCodecOptionsController::~DepthmapCodecOptionsController()
 {
-  if(nullptr != m_codec)
-  {
-	delete m_codec;
-  }
 }
 
 void DepthmapCodecOptionsController::contrastStretchValueChange(int checkState)
@@ -30,12 +26,12 @@ void DepthmapCodecOptionsController::contrastStretchValueChange(int checkState)
   }
 }
 
-Codec* DepthmapCodecOptionsController::getCodec(void)
+shared_ptr<Codec> DepthmapCodecOptionsController::getCodec(void)
 {
   // Lazy init
   if(nullptr == m_codec)
   {
-    m_codec = new DepthEncoder();
+    m_codec = shared_ptr<DepthEncoder>(new DepthEncoder());
   }
    
   if(Qt::Checked == contrastStretchCheckBox->checkState())

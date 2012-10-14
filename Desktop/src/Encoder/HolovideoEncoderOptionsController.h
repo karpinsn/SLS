@@ -17,13 +17,13 @@ class HolovideoEncoderOptionsController : public QWidget, private Ui::HolovideoC
   Q_OBJECT
 
 private:
-  HolovideoEncoder* m_codec;
+  shared_ptr<HolovideoEncoder> m_codec;
 
 public:
   HolovideoEncoderOptionsController(QWidget* parent = 0);
   ~HolovideoEncoderOptionsController();
 
-  Codec* getCodec(void);
+  shared_ptr<Codec> getCodec(void);
 
 public slots:
   void selectFile(void);

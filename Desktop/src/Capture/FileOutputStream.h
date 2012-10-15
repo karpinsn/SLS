@@ -3,28 +3,31 @@
     @author		Nikolaus Karpinsky
 
     @section DESCRIPTION
-    IOutputStream is the interface for an output stream class such as a file 
-    output stream or network output stream. This allows meshes to be output 
-    to various mediums.
+    FileOutputStream is an IOutputStream that streams its data to a video file
 */
 
-#ifndef _I_OUTPUT_STREAM_H_
-#define _I_OUTPUT_STREAM_H_
+#ifndef _FILE_OUTPUT_STREAM_H_
+#define _FILE_OUTPUT_STREAM_H_
 
+#include "IOutputStream.h"
 #include "MeshInterchange.h"
 
-class IOutputStream
-{
-public:
-    virtual ~IOutputStream(void) { }; 
+#include "VideoIO.h"
 
+class FileOutputStream : public IOutputStream
+{
+private:
+	VideoIO m_io;
+
+public:
+    
     /**
      * Opens the output stream for writing.
      *
      * Opens the output stream for writing. Once opened, meshs may be outputted
      * using the WriteStream(...) method.
      */
-    virtual void Open(void) = 0;
+    void Open(void);
 
     /**
      * Writes the specified mesh out to the output stream.
@@ -33,7 +36,7 @@ public:
      * method, the output stream must be opened with a call to Open(). This
      * method should never be called after the stream is closed with Close()
      */
-    virtual void WriteStream(shared_ptr<MeshInterchange> mesh) = 0;
+    void WriteStream(shared_ptr<MeshInterchange> mesh);
 
     /*
      * Closes the output stream.
@@ -41,7 +44,7 @@ public:
      * Closes the output stream. Once closed an output stream cannot be written
      * to anymore.
      */
-    virtual void Close(void) = 0;
+    void Close(void);
 };
 
-#endif	// _I_OUTPUT_STREAM_H_
+#endif	// _FILE_OUTPUT_STREAM_H_

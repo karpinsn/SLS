@@ -19,6 +19,9 @@
 #include "OpenGLWidget.h"
 #include "CameraConnectDialog.h"
 
+#include "FileOutputStream.h"
+#include "Codecs\HolovideoEncoder.h"
+
 #include "Capture\CaptureTypeSelectDialog.h"
 #include "Capture\ICapture.h"
 #include "Capture\NineFringe\NineFringeCapture.h"
@@ -39,6 +42,8 @@ private:
   shared_ptr<CameraCapture> m_camera;
   shared_ptr<FrameCapture>  m_frameCapture;
   shared_ptr<ImageBuffer>   m_buffer;
+  shared_ptr<EncodingOpenGLWidget> m_offscreenEncoder;
+  shared_ptr<SaveStream> m_outputStream;
 
   bool                    m_dropFrame;
   QStatusBar*             m_infoBar;

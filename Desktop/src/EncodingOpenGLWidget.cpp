@@ -8,6 +8,7 @@ EncodingOpenGLWidget::EncodingOpenGLWidget(QWidget *parent) : QGLWidget(QGLForma
   m_height = 512;
   m_encode = false;
   m_decode = false;
+  m_codecLock = shared_ptr<QSemaphore>(new QSemaphore(1));
 }
 
 EncodingOpenGLWidget::EncodingOpenGLWidget(QWidget *parent, IGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
@@ -74,12 +75,13 @@ void EncodingOpenGLWidget::updateScene()
 
 MeshInterchange* EncodingOpenGLWidget::encode()
 {
+	cout << m_codecLock->available() << endl;
   //  Lock the mutex
-  m_codecLock.acquire();
+  m_codecLock->acquire();
   m_encode = true;
   updateGL(); //  Once this is finished it will unlock the mutex
-  m_codecLock.acquire();
-  m_codecLock.release();
+  m_codecLock->acquire();
+  m_codecLock->release();
 
   return m_encodingContext->getEncodedData();
 }
@@ -87,11 +89,11 @@ MeshInterchange* EncodingOpenGLWidget::encode()
 MeshInterchange* EncodingOpenGLWidget::decode()
 {
   //  Lock the mutex
-  m_codecLock.acquire();
+  m_codecLock->acquire();
   m_decode = true;
   updateGL(); //  Once this is finished it will unlock the mutex
-  m_codecLock.acquire();
-  m_codecLock.release();
+  m_codecLock->acquire();
+  m_codecLock->release();
 
   return m_decodingContext->decode();
 }
@@ -128,7 +130,7 @@ void EncodingOpenGLWidget::paintGL()
   {
     cout << "OpenGL Error: " << gluErrorString(error) << endl;
   }
-  m_codecLock.release();
+  m_codecLock->release();
 }
 
 void EncodingOpenGLWidget::resizeGL(int width, int height)

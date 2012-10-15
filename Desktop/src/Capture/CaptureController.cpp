@@ -207,7 +207,27 @@ void CaptureController::newFrame(IplImage *frame)
 
 void CaptureController::save(void)
 {
+	if(nullptr == m_outputStream)
+	{
+		//	Create a codec and outputStream
+		shared_ptr<Holoencoder> codec(new Holoencoder());
+		codec->init(576, 576);
+		shared_ptr<IOutputStream> outStream(new FileOutputStream());
 
+		//	Create the save stream and open it
+		m_outputStream = shared_ptr<SaveStream>(new SaveStream());
+		m_outputStream->open(codec, outStream);
+
+		//	Send the save stream to our current context
+		m_gl3DContext->setSaveStream(m_outputStream);
+	}
+	else
+	{
+		//	Clear out the save stream and close it down
+		m_gl3DContext->setSaveStream(nullptr);
+		m_outputStream->close();
+		m_outputStream = nullptr;
+	}
 }
 
 shared_ptr<IplImage> CaptureController::_newFrameFromFileCallback(void* callbackInstance)

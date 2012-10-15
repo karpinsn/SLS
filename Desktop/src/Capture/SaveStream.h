@@ -12,6 +12,7 @@
 
 #include <memory>
 
+#include "Holoencoder.h"
 #include "Codecs/Codec.h"
 
 #include "IOutputStream.h"
@@ -22,7 +23,7 @@ class SaveStream
 {
 private:
     // Encoder that we are using to encode our data
-    shared_ptr<Codec> m_encoder;
+    shared_ptr<Holoencoder> m_encoder;
     //  Output stream that we are using to output our data
     shared_ptr<IOutputStream> m_outStream;
 
@@ -39,7 +40,7 @@ public:
      * @param encoder Encoder to use to encode the data specified in encodeAndStream()
      * @param outStream Output stream to write the encoded data to
      */
-    void open(shared_ptr<Codec> encoder, shared_ptr<IOutputStream> outStream);
+    void open(shared_ptr<Holoencoder> encoder, shared_ptr<IOutputStream> outStream);
 
     /**
      * Encodes the specified mesh and streams it out to the save stream.

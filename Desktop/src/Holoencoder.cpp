@@ -83,67 +83,66 @@ void Holoencoder::_initShaders(void)
 
 void Holoencoder::draw(void)
 {	
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	if(nullptr != m_currentData)
 	{
-	glPushMatrix(); 
-    {
-      m_camera->applyMatrix();
-	  m_controller.applyTransform();
+		glPushMatrix(); 
+		{
+		  m_camera->applyMatrix();
+		  m_controller.applyTransform();
 
-	  //  Fetch the modelview, set the transforms, then put it back
-	  glm::mat4 modelView;
-	  glGetFloatv(GL_MODELVIEW_MATRIX , glm::value_ptr(modelView));
-	  modelView = modelView * m_scale * m_translate;
-	  glLoadMatrixf(glm::value_ptr(modelView));
+		  //  Fetch the modelview, set the transforms, then put it back
+		  glm::mat4 modelView;
+		  glGetFloatv(GL_MODELVIEW_MATRIX , glm::value_ptr(modelView));
+		  modelView = modelView * m_scale * m_translate;
+		  glLoadMatrixf(glm::value_ptr(modelView));
 
-	  //	Need to get our data into a depth format
-	  if(m_currentData->getPreferedFormat() == MeshInterchange::VERTEX_FORMAT)
-	  {
-		  //	DepthMap
-		  m_offscreenFBO.bind();
-		  m_offscreenFBO.bindDrawBuffer(m_depthAttachPoint);
-		  m_depthShader.bind();
-		  if(nullptr != m_currentData)
+		  //	Need to get our data into a depth format
+		  if(m_currentData->getPreferedFormat() == MeshInterchange::VERTEX_FORMAT)
 		  {
-			m_currentData->getMesh()->draw();
+			  //	DepthMap
+			  m_offscreenFBO.bind();
+			  m_offscreenFBO.bindDrawBuffer(m_depthAttachPoint);
+			  m_depthShader.bind();
+			  if(nullptr != m_currentData)
+			  {
+				m_currentData->getMesh()->draw();
+			  }
+			  m_offscreenFBO.unbind();
+
+			  m_depth2HoloShader.bind();
+			  m_depthMap.bind(GL_TEXTURE0);
 		  }
-		  m_offscreenFBO.unbind();
+		  else if(m_currentData->getPreferedFormat() == MeshInterchange::IMAGE_FORMAT)
+		  {
+			  m_depthMap.transferToTexture(m_currentData->getIplImage());
+			  m_depth2HoloShader.bind();
+			  m_depthMap.bind(GL_TEXTURE0);
+		  }
+		  //else if(m_currentData->getPreferedFormat() == MeshInterchange::TEXTURE_FORMAT)
+		  else
+		  {
+			  m_depth2HoloShader.bind();
+			  //	We have a depth map, just bind and use it
+			  m_currentData->getTexture()->bind(GL_TEXTURE0);
+		  }
 
-		  m_depth2HoloShader.bind();
-		  m_depthMap.bind(GL_TEXTURE0);
-	  }
-	  else if(m_currentData->getPreferedFormat() == MeshInterchange::IMAGE_FORMAT)
-	  {
-		  m_depthMap.transferToTexture(m_currentData->getIplImage());
-		  m_depth2HoloShader.bind();
-		  m_depthMap.bind(GL_TEXTURE0);
-	  }
-	  else if(m_currentData->getPreferedFormat() == MeshInterchange::TEXTURE_FORMAT)
-	  {
-		  m_depth2HoloShader.bind();
-		  //	We have a depth map, just bind and use it
-		  m_currentData->getTexture()->bind(GL_TEXTURE0);
-	  }
+		  //	Now do the actual encoding
+		  if(m_draw2Holoimage)
+		  {
+			m_offscreenFBO.bind();
+			m_offscreenFBO.bindDrawBuffer(m_holoimageAttachPoint);
+		  }
 
-	  //	Now do the actual encoding
-	  if(m_draw2Holoimage)
-	  {
-		m_offscreenFBO.bind();
-		m_offscreenFBO.bindDrawBuffer(m_holoimageAttachPoint);
-	  }
+		  m_offscreenFBO.process();
 
-	  m_offscreenFBO.process();
+		  if(m_draw2Holoimage)
+		  {
+			  m_offscreenFBO.unbind();
+		  }
 
-	  if(m_draw2Holoimage)
-	  {
-		  m_offscreenFBO.unbind();
-	  }
-
-      m_depth2HoloShader.unbind();
-    }
-	glPopMatrix();
+		  m_depth2HoloShader.unbind();
+		}
+		glPopMatrix();
 	}
 }
 

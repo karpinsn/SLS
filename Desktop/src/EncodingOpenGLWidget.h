@@ -38,7 +38,7 @@ class EncodingOpenGLWidget : public QGLWidget
 
 private:
   QColor		m_clearColor;
-  QSemaphore	m_codecLock;
+  shared_ptr<QSemaphore>	m_codecLock;
 
   bool m_encode;
   bool m_decode;

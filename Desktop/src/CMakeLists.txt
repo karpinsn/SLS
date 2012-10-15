@@ -156,7 +156,9 @@ SET(SOURCES_CAPTURE
 	Capture/CameraConnectDialog.cpp
 	Capture/CaptureTypeSelectDialog.cpp
 	Capture/FrameCapture.cpp
+	Capture/FileOutputStream.cpp
 	
+	Capture/FileOutputStream.h
 	Capture/IOutputStream.h
 	Capture/SaveStream.h
 	Capture/ICapture.h

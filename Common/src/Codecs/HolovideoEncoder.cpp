@@ -86,7 +86,7 @@ shared_ptr<MeshInterchange> HolovideoEncoder::process(shared_ptr<MeshInterchange
   //cvSaveImage(filename, m_image);
 
 
-  m_yuv444toyuv422.iplImage2AVFrame(m_image, yuv444Frame);
+  //m_yuv444toyuv422.iplImage2AVFrame(m_image, yuv444Frame);
 
   //  Encode to the stream
     //reactor::MediaFrame frame = reactor::MediaFrame(yuv444Frame, PIX_FMT_YUV444P);

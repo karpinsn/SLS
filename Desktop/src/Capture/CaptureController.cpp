@@ -212,7 +212,8 @@ void CaptureController::save(void)
 		//	Create a codec and outputStream
 		shared_ptr<Holoencoder> codec(new Holoencoder());
 		codec->init(576, 576);
-		shared_ptr<IOutputStream> outStream(new FileOutputStream());
+		string filename = "D:/temp.avi";
+		shared_ptr<IOutputStream> outStream(new FileOutputStream(filename, 576, 576));
 
 		//	Create the save stream and open it
 		m_outputStream = shared_ptr<SaveStream>(new SaveStream());

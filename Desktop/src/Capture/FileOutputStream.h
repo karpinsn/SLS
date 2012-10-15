@@ -18,9 +18,13 @@ class FileOutputStream : public IOutputStream
 {
 private:
 	VideoIO m_io;
+	string m_filename;
+	int m_width;
+	int m_height;
 
 public:
-    
+    FileOutputStream::FileOutputStream(string& filename, int width, int height);
+
     /**
      * Opens the output stream for writing.
      *

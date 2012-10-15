@@ -58,6 +58,7 @@ public slots:
   void newScalingFactor(double scalingFactor);
   void newViewMode(QString viewMode);
   void updateFPS(void);
+  void save(void);
 
 public:
     CaptureController(QWidget* parent = 0);

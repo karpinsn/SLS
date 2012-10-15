@@ -205,6 +205,11 @@ void CaptureController::newFrame(IplImage *frame)
   }
 }
 
+void CaptureController::save(void)
+{
+
+}
+
 shared_ptr<IplImage> CaptureController::_newFrameFromFileCallback(void* callbackInstance)
 {
   CaptureController* controller = (CaptureController*) callbackInstance;
@@ -235,6 +240,7 @@ void CaptureController::_connectSignalsWithController(void)
   connect(scalingFactorBox,		SIGNAL(valueChanged(double)),         this, SLOT(newScalingFactor(double)));
   connect(viewModeBox,			SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
   connect(&m_frameRateTimer,	SIGNAL(timeout()),                    this, SLOT(updateFPS()));
+  connect(saveButton,			SIGNAL(clicked()),					  this, SLOT(save()));
 }
 
 void CaptureController::_readSettings(void)

@@ -171,6 +171,38 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="saveButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+	   <property name="toolTip">
+        <string>Save</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="MainWindow.qrc">
+         <normaloff>:/../../resources/images/resources/images/Save.png</normaloff>:/../../resources/images/resources/images/Save.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -336,6 +368,16 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>openCameraButton</tabstop>
+  <tabstop>closeCameraButton</tabstop>
+  <tabstop>dropFrameButton</tabstop>
+  <tabstop>calibrateButton</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>viewModeBox</tabstop>
+  <tabstop>gammaBox</tabstop>
+  <tabstop>scalingFactorBox</tabstop>
+ </tabstops>
  <resources>
   <include location="MainWindow.qrc"/>
  </resources>

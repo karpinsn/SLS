@@ -6,6 +6,7 @@ include(FileCopyTargets)
 
 set(SHADER_VERT_SOURCES
 
+	Depth2Holo.vert
 	Mesh2Depth.vert
 	Holoencoder.vert
 	MedianFilter3x3.vert
@@ -18,6 +19,7 @@ set(SHADER_VERT_SOURCES
 
 set(SHADER_FRAG_SOURCES
 
+	Depth2Holo.frag
 	Mesh2Depth.frag
     HoloencoderDither.frag
 	Holoencoder.frag

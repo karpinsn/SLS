@@ -47,6 +47,8 @@ class Holoencoder : public IGLContext, public IEncodingGLContext
 private:
         ShaderProgram m_encoderShader;
 		ShaderProgram m_depthShader;
+		ShaderProgram m_depth2HoloShader;
+
 
 		bool m_draw2Holoimage;
 
@@ -93,7 +95,7 @@ public:
 private:
         void _initFBO(void);
         void _initShaders(void);
-	
+
 };
 
 #endif	// _HOLOENCODER_H_

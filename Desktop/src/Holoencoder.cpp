@@ -67,6 +67,13 @@ void Holoencoder::_initShaders(void)
 	m_depthShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Mesh2Depth.frag"));
 	m_depthShader.link();
 
+	m_depth2HoloShader.init();
+	m_depth2HoloShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Depth2Holo.vert"));
+	m_depth2HoloShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Depth2Holo.frag"));
+	m_depth2HoloShader.link();
+	m_depth2HoloShader.uniform("fringeFrequency", 6.0f);
+	m_depth2HoloShader.uniform("depthMap", 0);
+
     m_encoderShader.init();
     m_encoderShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holoencoder.vert"));
     m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holoencoder.frag"));
@@ -78,15 +85,12 @@ void Holoencoder::draw(void)
 {	
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	if(nullptr != m_currentData)
+	{
 	glPushMatrix(); 
     {
       m_camera->applyMatrix();
-
-      //	Draw the currentMesh
-      glm::mat4 projectorModelView = m_projectorModelView;
-      
-      m_controller.applyTransform();
-      projectorModelView = projectorModelView * m_controller.getTransform() * m_scale * m_translate;
+	  m_controller.applyTransform();
 
 	  //  Fetch the modelview, set the transforms, then put it back
 	  glm::mat4 modelView;
@@ -94,40 +98,53 @@ void Holoencoder::draw(void)
 	  modelView = modelView * m_scale * m_translate;
 	  glLoadMatrixf(glm::value_ptr(modelView));
 
-	  //	DepthMap
-	  m_offscreenFBO.bind();
-	  m_offscreenFBO.bindDrawBuffer(m_depthAttachPoint);
-	  m_depthShader.bind();
-	  if(nullptr != m_currentData)
-      {
-		m_currentData->getMesh()->draw();
-      }
-	  m_offscreenFBO.unbind();
+	  //	Need to get our data into a depth format
+	  if(m_currentData->getPreferedFormat() == MeshInterchange::VERTEX_FORMAT)
+	  {
+		  //	DepthMap
+		  m_offscreenFBO.bind();
+		  m_offscreenFBO.bindDrawBuffer(m_depthAttachPoint);
+		  m_depthShader.bind();
+		  if(nullptr != m_currentData)
+		  {
+			m_currentData->getMesh()->draw();
+		  }
+		  m_offscreenFBO.unbind();
 
-      m_encoderShader.bind();
-      m_encoderShader.uniform("projectorModelView", projectorModelView);
+		  m_depth2HoloShader.bind();
+		  m_depthMap.bind(GL_TEXTURE0);
+	  }
+	  else if(m_currentData->getPreferedFormat() == MeshInterchange::IMAGE_FORMAT)
+	  {
+		  m_depthMap.transferToTexture(m_currentData->getIplImage());
+		  m_depth2HoloShader.bind();
+		  m_depthMap.bind(GL_TEXTURE0);
+	  }
+	  else if(m_currentData->getPreferedFormat() == MeshInterchange::TEXTURE_FORMAT)
+	  {
+		  m_depth2HoloShader.bind();
+		  //	We have a depth map, just bind and use it
+		  m_currentData->getTexture()->bind(GL_TEXTURE0);
+	  }
 
-      glColor3f(.8, .8, .8);
-
+	  //	Now do the actual encoding
 	  if(m_draw2Holoimage)
 	  {
 		m_offscreenFBO.bind();
 		m_offscreenFBO.bindDrawBuffer(m_holoimageAttachPoint);
 	  }
 
-      if(nullptr != m_currentData)
-      {
-		m_currentData->getMesh()->draw();
-      }
+	  m_offscreenFBO.process();
 
 	  if(m_draw2Holoimage)
 	  {
 		  m_offscreenFBO.unbind();
 	  }
 
-      m_encoderShader.unbind();
+      m_depth2HoloShader.unbind();
     }
 	glPopMatrix();
+	}
 }
 
 void Holoencoder::resize(int width, int height)
@@ -180,7 +197,7 @@ void Holoencoder::autoFitTransforms(void)
 	//	Calculate the scaling factor
 	glm::vec4 min = glm::vec4(m_currentData->getMesh()->getBoundingBox().min, 1.0);
 	glm::vec4 max = glm::vec4(m_currentData->getMesh()->getBoundingBox().max, 1.0);
-	//	Translate the min and max
+	//	Translate the min and maxz
 	min = m_translate * min;
 	max = m_translate * max;
 	//	Figure out what is the absolute maximum extent

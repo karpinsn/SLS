@@ -113,6 +113,9 @@ private:
 
   OpenGLWidget* m_glContext;
 
+  int m_width;
+  int m_height;
+
   enum DisplayMode
   {
     Geometry,
@@ -131,6 +134,8 @@ public:
   virtual void mousePressEvent(int mouseX, int mouseY);
   virtual void mouseMoveEvent(int mouseX, int mouseY);
 
+  int	  getWidth();
+  int	  getHeight();
   void    init(float width, float height);
   void    resizeInput(float width, float height);
   bool    newImage(IplImage* image);

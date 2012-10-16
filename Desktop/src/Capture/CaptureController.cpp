@@ -211,7 +211,7 @@ void CaptureController::save(void)
 	{
 		//	Create a codec and outputStream
 		shared_ptr<Holoencoder> codec(new Holoencoder());
-		codec->init(576, 576);
+		codec->init(m_gl3DContext->getWidth(), m_gl3DContext->getHeight());
 		string filename = "D:/temp.avi";
 		shared_ptr<IOutputStream> outStream(new FileOutputStream(filename, 576, 576));
 

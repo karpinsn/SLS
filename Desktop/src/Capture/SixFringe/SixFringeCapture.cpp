@@ -49,6 +49,16 @@ void SixFringeCapture::init(float width, float height)
   }
 }
 
+int SixFringeCapture::getWidth()
+{
+	return m_width;
+}
+
+int SixFringeCapture::getHeight()
+{
+	return m_height;
+}
+
 void SixFringeCapture::resizeInput(float width, float height)
 {
   //  Make sure that it has been initalized first.

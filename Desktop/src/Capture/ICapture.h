@@ -21,6 +21,8 @@ class ICapture : public IGLContext
 public:
   virtual ~ICapture(void) { };
 
+  virtual int getWidth() = 0;
+  virtual int getHeight() = 0;
   virtual void resizeInput(float width, float height) = 0;
   virtual void loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance)) = 0;
   virtual void captureReferencePlane(void)			  = 0;

@@ -104,6 +104,9 @@ private:
 
   bool m_hasBeenInit;
 
+  int m_width;
+  int m_height;
+
   int m_frontBufferIndex;		//	Index of the front buffer in m_bufferIds
 
   OpenGLWidget* m_glContext;
@@ -126,6 +129,8 @@ public:
   virtual void mousePressEvent(int mouseX, int mouseY);
   virtual void mouseMoveEvent(int mouseX, int mouseY);
 
+  int	  getWidth();
+  int	  getHeight();
   void    init(float width, float height);
   void    resizeInput(float width, float height);
   bool    newImage(IplImage* image);

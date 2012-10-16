@@ -138,6 +138,9 @@ public:
   virtual void mousePressEvent(int mouseX, int mouseY);
   virtual void mouseMoveEvent(int mouseX, int mouseY);
 
+  
+  int	  getWidth();
+  int	  getHeight();
   void    init(float width, float height);
   void    resizeInput(float width, float height);
   bool    newImage(IplImage* image);

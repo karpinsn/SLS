@@ -26,6 +26,9 @@ void NineFringeCapture::init(float width, float height)
 {
   if(!m_hasBeenInit && width > 0 && height > 0)
   {
+	  m_width = width;
+	  m_height = height;
+
     _initShaders(width, height);
     _initTextures(width, height);
     m_textureDisplay.init();
@@ -47,11 +50,24 @@ void NineFringeCapture::init(float width, float height)
   }
 }
 
+int NineFringeCapture::getWidth()
+{
+	return m_width;
+}
+
+int NineFringeCapture::getHeight()
+{
+	return m_height;
+}
+
 void NineFringeCapture::resizeInput(float width, float height)
 {
   //  Make sure that it has been initalized first.
   if(m_hasBeenInit)
   {
+	  m_width = width;
+	  m_height = height;
+
     //  Resize all of the textures
     m_fringeImage1.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
     m_fringeImage2.reinit     (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);

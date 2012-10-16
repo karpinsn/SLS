@@ -1,0 +1,27 @@
+Structured Light Suite (SLS)
+==============
+SLS is a suite of tools for rapidly prototyping real-time 3D scanning techniques
+and aquiring real-time 3D data. Its basic functions include
+* Viewing - In this function a user can load 3D file formats including XYZM, Holoimage, and Holovideo
+* Capture - In this function a user can capture real-time 3D geometry with a variety of different cameras
+* Encoding - In this function a user can encode 3D geometry from one format to another
+
+Requirements
+------------
+* CMake - Used to build the build files
+* Doxygen - If you want to build documentation
+* GLEW - Used to load up OpenGL extensions
+* QT - Used for the windowing library
+
+### Included Libraries
+* Antenna - Used for streaming captured geometry across a network
+* glm - Used for matrix and vector calculations
+* Lens - Used for interfacing with machine vision cameras
+* Reactor - Used for writing real-time 3D scans to compressed video files
+* Wrench - Used for OpenGL bindings that are compatable in immersive VR environments
+
+Configuration
+-------------
+Once you grab a copy of the repository, simply point your CMake source directory 
+to Desktop/src. This will build the desktop version of SLS. The immersive client
+can be built by pointing the CMake source directory to Immersive/src

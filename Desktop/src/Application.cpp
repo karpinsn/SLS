@@ -1,6 +1,4 @@
-#include <QtGui/QApplication>
-
-#include "MainWindowController.h"
+#include "Application.h"
 
 int main(int argc, char **argv)
 {

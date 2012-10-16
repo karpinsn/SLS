@@ -86,7 +86,8 @@ set(LIBS ${LIBS} lens "${LENS_LIBRARIES}")
 #	-----------------------------------------
 add_subdirectory(../../Libraries/Antenna/src/antenna ${PROJECT_BINARY_DIR}/Libraries/Antenna)
 include_directories(../../Libraries/Antenna/src)
-set(LIBS ${LIBS} antenna)
+include_directories(${ANTENNA_INCLUDE_DIRS})
+set(LIBS ${LIBS} antenna "${ANTENNA_LIBRARIES}")
 
 #	-----------------------------------------
 #	Common
@@ -119,6 +120,7 @@ set(SOURCES
     EncoderController.cpp
     ImageBuffer.cpp
     
+	Application.h
 	MainWindowView.h
 	MainWindowController.h
 	OpenGLWidget.h
@@ -157,7 +159,9 @@ SET(SOURCES_CAPTURE
 	Capture/CaptureTypeSelectDialog.cpp
 	Capture/FrameCapture.cpp
 	Capture/FileOutputStream.cpp
-	
+    Capture/WebsocketOutputStream.cpp
+
+    Capture/WebsocketOutputStream.h
 	Capture/FileOutputStream.h
 	Capture/IOutputStream.h
 	Capture/SaveStream.h

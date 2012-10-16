@@ -3,27 +3,32 @@
     @author		Nikolaus Karpinsky
 
     @section DESCRIPTION
-    FileOutputStream is an IOutputStream that streams its data to a video file
+    WebsocketOutputStream is an IOutputStream that streams its data to a websocket
 */
 
-#ifndef _FILE_OUTPUT_STREAM_H_
-#define _FILE_OUTPUT_STREAM_H_
+#ifndef _WEBSOCKET_OUTPUT_STREAM_H_
+#define _WEBSOCKET_OUTPUT_STREAM_H_
+
+//	Needed so that windows.h does not include Winsock.h
+#ifdef _WIN32
+	#include <WinSock2.h>
+	#include <windows.h>
+#endif
 
 #include "IOutputStream.h"
 #include "MeshInterchange.h"
 
-#include "VideoIO.h"
+#include <antenna/BaseStation.h>
 
-class FileOutputStream : public IOutputStream
+class WebsocketOutputStream : public IOutputStream
 {
 private:
-	VideoIO m_io;
 	string m_filename;
 	int m_width;
 	int m_height;
 
 public:
-    FileOutputStream(string& filename, int width, int height);
+    WebsocketOutputStream(int port);
 
     /**
      * Opens the output stream for writing.
@@ -51,4 +56,4 @@ public:
     void Close(void);
 };
 
-#endif	// _FILE_OUTPUT_STREAM_H_
+#endif	// _WEB_SOCKET_OUTPUT_STREAM_H_

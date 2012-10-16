@@ -18,16 +18,6 @@ public:
   virtual shared_ptr<MeshInterchange> process(shared_ptr<MeshInterchange> data) = 0;
   virtual shared_ptr<MeshInterchange> previewProcess(shared_ptr<MeshInterchange> data) = 0;
 
-  //virtual void openEncodeStream(EncodingOpenGLWidget* glWidget) = 0;
-  //virtual void encode(MeshInterchange& data) = 0;
-  //virtual void previewEncode(MeshInterchange& data) = 0;
-  //virtual void closeEncodeStream(void) = 0;
-
-  //virtual void openDecodeStream(EncodingOpenGLWidget* glWidget) = 0;
-  //virtual MeshInterchange* decode() = 0;
-  //virtual void closeDecodeStream(void) = 0;
-  //virtual float getDecodeStreamProgress(void) = 0;
-
   virtual int getWidth(void)
   {
 	return m_width;

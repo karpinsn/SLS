@@ -39,6 +39,14 @@ public:
   shared_ptr<MeshInterchange> previewProcess(shared_ptr<MeshInterchange> data);
   void autoFitData(void);
   static string codecName(void);
+
+  //	Overrides. Since we can have width and height different than
+  //	the decoder override so our settings are not overrides
+  virtual void setWidth(int width)
+  { }
+
+  virtual void setHeight(int height)
+  { }
 };
 
 #endif  //_HOLOIMAGE_ENCODER_H_

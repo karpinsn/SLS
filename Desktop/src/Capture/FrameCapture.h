@@ -1,5 +1,5 @@
 /*
- Filename:		CameraCapture.h
+ Filename:		FrameCapture.h
  Author:		Nikolaus Karpinsky
  Date Created:	03/23/11
  Last Edited:	03/23/11

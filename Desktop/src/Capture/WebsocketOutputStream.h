@@ -15,17 +15,22 @@
 	#include <windows.h>
 #endif
 
+#include <QThread>
+
 #include "IOutputStream.h"
 #include "MeshInterchange.h"
 
 #include <antenna/BaseStation.h>
 
-class WebsocketOutputStream : public IOutputStream
+class WebsocketOutputStream : public IOutputStream, public QThread
 {
 private:
-	string m_filename;
-	int m_width;
-	int m_height;
+	//	Socket and port that we are connected with
+	antenna::BaseStation	m_socket;
+	const int				m_port;
+
+	//	Thread related things so that we can allow the socket to run
+	bool m_running;
 
 public:
     WebsocketOutputStream(int port);
@@ -54,6 +59,9 @@ public:
      * to anymore.
      */
     void Close(void);
+
+protected:
+	void run(void);
 };
 
 #endif	// _WEB_SOCKET_OUTPUT_STREAM_H_

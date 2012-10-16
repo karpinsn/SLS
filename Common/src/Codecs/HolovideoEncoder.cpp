@@ -25,8 +25,8 @@ HolovideoEncoder::~HolovideoEncoder()
 
 void HolovideoEncoder::initCodec(string& filename, int width, int height)
 {
-  setWidth(width);
-  setHeight(height);
+  m_width = width;
+  m_height = height;
   m_filename  = filename;
 }
 

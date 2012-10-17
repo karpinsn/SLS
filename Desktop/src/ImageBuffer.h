@@ -29,7 +29,7 @@ public:
   ~ImageBuffer();
 
   void pushFrame(const IplImage *image);
-  IplImage* popFrame(void);
+  shared_ptr<IplImage> popFrame(void);
   int bufferSize(void);
 
 private:
@@ -37,7 +37,7 @@ private:
   unique_ptr<QSemaphore> m_freeImages;
   unique_ptr<QSemaphore> m_queuedImages;
   QMutex     m_lock;
-  QQueue<IplImage*> m_imageQueue;
+  QQueue<shared_ptr<IplImage> > m_imageQueue;
 
 };
 

@@ -12,6 +12,7 @@
 #define _FRAME_CAPTURE_H_
 
 #include <QThread>
+#include <QMetaType>
 
 #include <cv.h>
 #include <highgui.h>
@@ -27,7 +28,7 @@ private:
   ImageBuffer* m_buffer;
 
 signals:
-  void newFrame(IplImage*);
+  void newFrame(shared_ptr<IplImage>);
 
 public:
     FrameCapture();

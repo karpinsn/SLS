@@ -55,7 +55,7 @@ private:
   QTimer                  m_frameRateTimer;
 
 public slots:
-  void newFrame(IplImage *frame);
+  void newFrame(shared_ptr<IplImage> frame);
   void captureReference(void);
   void connectCamera(void);
   void disconnectCamera(void);

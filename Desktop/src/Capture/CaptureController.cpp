@@ -173,31 +173,25 @@ void CaptureController::updateFPS(void)
   m_3dpsLabel.setText(threeDRateMessage);
 }
 
-void CaptureController::newFrame(IplImage *frame)
+void CaptureController::newFrame(shared_ptr<IplImage> frame)
 {
   if(!m_dropFrame)  //  If we dont drop a frame then process it
   {
-    IplImage *im_gray = frame;
-    bool releaseGray = false;
+    shared_ptr<IplImage> im_gray = frame;
 
     if(frame->nChannels > 1)
     {
-      im_gray = cvCreateImage(cvGetSize(frame),IPL_DEPTH_8U,1);
-      cvCvtColor(frame, im_gray, CV_RGB2GRAY);
-      releaseGray = true;
+      im_gray = shared_ptr<IplImage>(
+		  cvCreateImage(cvGetSize(frame.get()),IPL_DEPTH_8U,1),
+		  [](IplImage* ptr) { cvReleaseImage(&ptr); });
+
+      cvCvtColor(frame.get(), im_gray.get(), CV_RGB2GRAY);
     }
 
-    if(m_gl3DContext->newImage(im_gray))
+    if(m_gl3DContext->newImage(im_gray.get()))
     {
       captureGLWidget->updateScene();
     }
-
-    if(releaseGray)
-    {
-      cvReleaseImage(&im_gray);
-    }
-
-    cvReleaseImage(&frame);
   }
   else  // Drop a frame
   {
@@ -253,7 +247,7 @@ shared_ptr<IplImage> CaptureController::_newFrameFromFile(void)
 
 void CaptureController::_connectSignalsWithController(void)
 {
-  connect(m_frameCapture.get(), SIGNAL(newFrame(IplImage*)),		  this, SLOT(newFrame(IplImage*)));
+  connect(m_frameCapture.get(), SIGNAL(newFrame(shared_ptr<IplImage>)),		  this, SLOT(newFrame(shared_ptr<IplImage>)));
   connect(openCameraButton,		SIGNAL(clicked()),                    this, SLOT(connectCamera()));
   connect(closeCameraButton,	SIGNAL(clicked()),                    this, SLOT(disconnectCamera()));
   connect(calibrateButton,		SIGNAL(clicked()),                    this, SLOT(captureReference()));

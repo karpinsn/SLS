@@ -17,14 +17,14 @@ using namespace wrench::gl;
 class VideoIO
 {
 private:
-    CvVideoWriter *m_videoWriterHandle;
+    shared_ptr<CvVideoWriter> m_videoWriterHandle;
     bool m_videoWriterInUse;
 
-    CvCapture *m_videoReaderHandle;
+    shared_ptr<CvCapture> m_videoReaderHandle;
     bool m_videoReaderInUse;
 
-    IplImage *m_imageHandle;
-	IplImage *m_floatImageHandle;
+    shared_ptr<IplImage> m_imageHandle;
+	shared_ptr<IplImage> m_floatImageHandle;
 
     unsigned int m_imageHeight;
     unsigned int m_imageWidth;

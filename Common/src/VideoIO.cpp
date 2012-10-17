@@ -7,18 +7,21 @@ VideoIO::VideoIO(void)
   m_imageWidth = 1;
   m_imageHeight = 1;
 
-  m_imageHandle = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_8U, 3);
-  m_floatImageHandle = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 3);
+  m_imageHandle = shared_ptr<IplImage>(
+	  cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_8U, 3),
+	  [](IplImage* ptr) { cvReleaseImage(&ptr); });
+
+  m_floatImageHandle = shared_ptr<IplImage>(
+	  cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_32F, 3),
+	  [](IplImage* ptr) { cvReleaseImage(&ptr); });
 }
 
 VideoIO::~VideoIO()
 {
-  if (m_videoWriterInUse)
-  {
-    clog << "Video writer stream not properly closed. Closing video writer stream" << endl;
-    cvReleaseVideoWriter(&m_videoWriterHandle);
-  }
-  cvReleaseImage(&m_imageHandle);   //  TODO comeback and fix this
+	m_videoReaderHandle = nullptr;
+	m_videoWriterHandle = nullptr;
+	m_imageHandle = nullptr;
+	m_floatImageHandle = nullptr;
 }
 
 bool VideoIO::openSaveStream(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps)
@@ -27,7 +30,9 @@ bool VideoIO::openSaveStream(const string &filename, const unsigned int videoWid
 
   if(!m_videoWriterInUse)
   {
-    m_videoWriterHandle = cvCreateVideoWriter(filename.c_str(), -1, fps, cvSize(videoWidth, videoHeight), 1);
+    m_videoWriterHandle = shared_ptr<CvVideoWriter>(
+		cvCreateVideoWriter(filename.c_str(), -1, fps, cvSize(videoWidth, videoHeight), 1), 
+		[](CvVideoWriter* ptr) { cvReleaseVideoWriter(&ptr); });
     m_videoWriterInUse = true;
 
     openedVideoWriter = m_videoWriterInUse;
@@ -69,12 +74,12 @@ bool VideoIO::saveStream(Texture& texture)
   if(GL_FLOAT == texture.getDataType())
   {
     //  Floating point texture that needs to be converted to 8 bit before being saved
-    texture.transferFromTexture(m_floatImageHandle);
-    cvConvertScale(m_floatImageHandle, m_imageHandle, 1.0/256.0);
+    texture.transferFromTexture(m_floatImageHandle.get());
+    cvConvertScale(m_floatImageHandle.get(), m_imageHandle.get(), 1.0/256.0);
   }
   else if(GL_UNSIGNED_BYTE == texture.getDataType())
   {
-    texture.transferFromTexture(m_imageHandle);
+    texture.transferFromTexture(m_imageHandle.get());
   }
   else
   {
@@ -86,28 +91,28 @@ bool VideoIO::saveStream(Texture& texture)
   {
     if(3 == m_imageHandle->nChannels)
     {
-      cvCvtColor(m_imageHandle, m_imageHandle, CV_RGB2BGR);
+      cvCvtColor(m_imageHandle.get(), m_imageHandle.get(), CV_RGB2BGR);
     }
     else if(4 == m_imageHandle->nChannels)
     {
-      cvCvtColor(m_imageHandle, m_imageHandle, CV_RGBA2BGRA);
+      cvCvtColor(m_imageHandle.get(), m_imageHandle.get(), CV_RGBA2BGRA);
     }
   }
 
-  cvWriteFrame(m_videoWriterHandle, m_imageHandle);
+  cvWriteFrame(m_videoWriterHandle.get(), m_imageHandle.get());
 
   return m_videoWriterInUse;
 }
 
 bool VideoIO::saveStream(IplImage* image)
 {
-  if(!m_videoWriterInUse)
+  if(!m_videoWriterInUse || !m_videoWriterHandle)
   {
     clog << "Unable to write frame out to file as no current video writer handle exists" << endl;
     return false;
   }
 
-  cvWriteFrame(m_videoWriterHandle, image);
+  cvWriteFrame(m_videoWriterHandle.get(), image);
 
   return m_videoWriterInUse;
 }
@@ -118,7 +123,7 @@ bool VideoIO::closeSaveStream(void)
 
   if (m_videoWriterInUse)
   {
-    cvReleaseVideoWriter(&m_videoWriterHandle);
+    m_videoWriterHandle = nullptr;
     m_videoWriterInUse = false;
     successfullyClosed = true;
   }
@@ -136,7 +141,9 @@ bool VideoIO::openReadStream(const string &filename)
 
   if(!m_videoReaderInUse)
   {
-    m_videoReaderHandle = cvCaptureFromAVI(filename.c_str());
+    m_videoReaderHandle = shared_ptr<CvCapture>(
+		cvCaptureFromAVI(filename.c_str()),
+		[](CvCapture* ptr) { cvReleaseCapture(&ptr); });
     m_videoReaderInUse = true;
 
     openedVideoReader = m_videoReaderInUse;
@@ -155,7 +162,7 @@ IplImage* VideoIO::readStream()
 
   if(m_videoReaderInUse)
   {
-    frame = cvQueryFrame(m_videoReaderHandle);
+    frame = cvQueryFrame(m_videoReaderHandle.get());
     if(nullptr != frame)
     {
       cvCvtColor(frame, frame, CV_BGR2RGB);
@@ -175,7 +182,7 @@ bool VideoIO::closeReadStream(void)
 
   if (m_videoReaderInUse)
   {
-    cvReleaseCapture(&m_videoReaderHandle);
+    m_videoReaderHandle = nullptr;
     m_videoReaderInUse = false;
     successfullyClosed = true;
   }
@@ -194,46 +201,46 @@ bool VideoIO::readStreamIsOpen(void)
 
 int VideoIO::readStreamWidth(void)
 {
-  if(!m_videoReaderInUse)
+  if(!m_videoReaderInUse || !m_videoReaderHandle)
   {
 	clog << "Unable to get width as no current video reader handle exists" << endl;
 	return 0;
   }
 
-  return cvGetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_FRAME_WIDTH);
+  return cvGetCaptureProperty(m_videoReaderHandle.get(), CV_CAP_PROP_FRAME_WIDTH);
 }
 
 int VideoIO::readStreamHeight(void)
 {
-  if(!m_videoReaderInUse)
+  if(!m_videoReaderInUse || !m_videoReaderHandle)
   {
 	clog << "Unable to get height as no current video reader handle exists" << endl;
 	return 0;
   }
 
-  return cvGetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_FRAME_HEIGHT);
+  return cvGetCaptureProperty(m_videoReaderHandle.get(), CV_CAP_PROP_FRAME_HEIGHT);
 }
 
 void VideoIO::setReadStreamPosition(float position)
 {
-  if(position < 0.0 || position > 1.0)
+  if(position < 0.0 || position > 1.0 || !m_videoReaderHandle)
   {
 	//	Invalid seeking location
 	return;
   }
-  cvSetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_POS_FRAMES, position);
+  cvSetCaptureProperty(m_videoReaderHandle.get(), CV_CAP_PROP_POS_FRAMES, position);
   //cvSetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_POS_AVI_RATIO, position);
 }
 
 float VideoIO::readStreamPosition(void)
 {
-  if(!m_videoReaderInUse)
+  if(!m_videoReaderInUse || !m_videoReaderHandle)
   {
 	clog << "Unable to get stream position as no current video reader handle exists" << endl;
 	return 0.0;
   }
 
-  return cvGetCaptureProperty(m_videoReaderHandle, CV_CAP_PROP_POS_AVI_RATIO);
+  return cvGetCaptureProperty(m_videoReaderHandle.get(), CV_CAP_PROP_POS_AVI_RATIO);
 }
 
 void VideoIO::ensureImageSize(const unsigned int imageWidth, const unsigned int imageHeight, const unsigned int channelCount)
@@ -241,13 +248,16 @@ void VideoIO::ensureImageSize(const unsigned int imageWidth, const unsigned int 
   //	Check and see if the image is the correct size. If it is do nothing
   if (m_imageWidth != imageWidth || m_imageHeight != imageHeight || (unsigned int)m_imageHandle->nChannels != channelCount)
   {
-    cvReleaseImage(&m_imageHandle);
-    cvReleaseImage(&m_floatImageHandle);
     m_imageWidth = imageWidth;
     m_imageHeight = imageHeight;
 
-    m_imageHandle = cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_8U, channelCount);
-    m_floatImageHandle = cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_32F, channelCount);
+	m_imageHandle = shared_ptr<IplImage>(
+	  cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_8U, channelCount),
+	  [](IplImage* ptr) { cvReleaseImage(&ptr); });
+
+	m_floatImageHandle = shared_ptr<IplImage>(
+	  cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_32F, channelCount),
+	  [](IplImage* ptr) { cvReleaseImage(&ptr); });
   }
 }
 

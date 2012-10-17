@@ -13,7 +13,7 @@ void ImageBuffer::pushFrame(const IplImage *image)
 {
   m_freeImages->acquire();
 
-  IplImage* temp = cvCloneImage(image);
+  shared_ptr<IplImage> temp = shared_ptr<IplImage>(cvCloneImage(image), [](IplImage* ptr) { cvReleaseImage(&ptr); });
 
   m_lock.lock();
   m_imageQueue.enqueue(temp);
@@ -22,12 +22,12 @@ void ImageBuffer::pushFrame(const IplImage *image)
   m_queuedImages->release();
 }
 
-IplImage* ImageBuffer::popFrame(void)
+shared_ptr<IplImage> ImageBuffer::popFrame(void)
 {
   m_queuedImages->acquire();
 
   m_lock.lock();
-  IplImage* temp = m_imageQueue.dequeue();
+  shared_ptr<IplImage> temp = m_imageQueue.dequeue();
   m_lock.unlock();
 
   m_freeImages->release();

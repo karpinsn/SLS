@@ -3,6 +3,8 @@
 FrameCapture::FrameCapture() : QThread()
 {	
   m_running = false;
+  //	Needed so that we can emit shared_ptr<IplImage> with newFrame
+  qRegisterMetaType<shared_ptr<IplImage> >("shared_ptr<IplImage>");
 }
 
 FrameCapture::~FrameCapture()
@@ -20,7 +22,7 @@ void FrameCapture::run()
 {
   while(m_running)
   {
-    IplImage* frame = m_buffer->popFrame();
+    shared_ptr<IplImage> frame = m_buffer->popFrame();
 
     emit(newFrame(frame));
   }

@@ -20,6 +20,9 @@
 
 #include <QThread>
 
+#include <cv.h>
+#include <highgui.h>
+
 #include "IOutputStream.h"
 #include "MeshInterchange.h"
 
@@ -34,6 +37,8 @@ private:
 
 	//	Thread related things so that we can allow the socket to run
 	bool m_running;
+
+	shared_ptr<IplImage> m_transferImage;
 
 public:
     WebsocketOutputStream(int port);

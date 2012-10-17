@@ -17,7 +17,7 @@ void main()
 
 	vec4 vertPosition = vec4(fragTexCoord.s - .5, fragTexCoord.t - .5, 0.0, 0.0);
 	float phaseR = (vertPosition.x * W) * ((2.0*pi*cos(theta))/P);
-	float phaseA = texture2D(phaseMap, fragTexCoord).x;
+	float phaseA = texture(phaseMap, fragTexCoord).x;
 			
 	if(0.0 == phaseA)
 	{

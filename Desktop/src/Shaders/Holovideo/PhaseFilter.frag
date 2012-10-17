@@ -39,7 +39,7 @@ void main(void)
     {
       vec2 offset = vec2(float(dX), float(dY));
 
-      v[dX * 3 + dY + 4] = texture2D(image, fragTexCoord + vec2(float(dX) * step_w, float(dY) * step_h)).x;
+      v[dX * 3 + dY + 4] = texture(image, fragTexCoord + vec2(float(dX) * step_w, float(dY) * step_h)).x;
     }
   }
 
@@ -49,7 +49,7 @@ void main(void)
   m3(v[3], v[4], v[8]);
   
   // Using the median phase value and the actual find the correct number of phase jumps
-  float originalValue = texture2D(image, fragTexCoord).x;
+  float originalValue = texture(image, fragTexCoord).x;
   float phaseJump = (v[4] - originalValue) / twoPi;
   int jumps = phaseJump < 0 ? int(phaseJump - .5) : int(phaseJump + .5); 
 

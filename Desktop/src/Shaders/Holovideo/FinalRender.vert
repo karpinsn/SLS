@@ -1,4 +1,4 @@
-#version 120
+#version 130
 
 uniform sampler2D depthMap;
 uniform float width;
@@ -13,7 +13,7 @@ void main()
 	gl_TexCoord[0].st = vertTexCoord;
 
 	vec4 newVertexPosition = vert;		
-	newVertexPosition.z = texture2D(depthMap, vertTexCoord).x;
+	newVertexPosition.z = texture(depthMap, vertTexCoord).x;
 
 	v = vec3(gl_ModelViewMatrix * newVertexPosition);
 	gl_Position = gl_ModelViewProjectionMatrix * newVertexPosition;

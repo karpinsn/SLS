@@ -24,7 +24,7 @@ void HoloimageEncoderOptionsController::selectFile(void)
 
 void HoloimageEncoderOptionsController::autoFitData(void)
 {
-  if(nullptr != m_codec)
+  if(m_codec)
   {
 	m_codec->autoFitData();
   }
@@ -33,9 +33,9 @@ void HoloimageEncoderOptionsController::autoFitData(void)
 shared_ptr<Codec> HoloimageEncoderOptionsController::getCodec(void)
 {
   // Lazy init
-  if(m_codec == nullptr)
+  if(!m_codec)
   {
-    m_codec = shared_ptr<HoloimageEncoder>(new HoloimageEncoder());
+    m_codec = make_shared<HoloimageEncoder>();
   }
 
   QString sourceFilename = sourceFileBox->text();

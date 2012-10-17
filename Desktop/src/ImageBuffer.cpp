@@ -2,15 +2,12 @@
 
 ImageBuffer::ImageBuffer(int size) : m_bufferSize(size)
 {	
-  m_freeImages = new QSemaphore(size);
-  m_queuedImages = new QSemaphore(0);
+  m_freeImages = unique_ptr<QSemaphore>(new QSemaphore(size));
+  m_queuedImages = unique_ptr<QSemaphore>(new QSemaphore(0));
 }
 
 ImageBuffer::~ImageBuffer()
-{
-  delete m_freeImages;
-  delete m_queuedImages;
-}
+{ }
 
 void ImageBuffer::pushFrame(const IplImage *image)
 {

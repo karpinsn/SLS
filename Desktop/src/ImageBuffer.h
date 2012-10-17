@@ -11,12 +11,16 @@
 #ifndef _IMAGE_BUFFER_H_
 #define _IMAGE_BUFFER_H_
 
+#include <memory>
+
 #include <QWaitCondition>
 #include <QMutex>
 #include <QQueue>
 #include <QSemaphore>
 
 #include <cv.h>
+
+using namespace std;
 
 class ImageBuffer
 {
@@ -30,8 +34,8 @@ public:
 
 private:
   const int m_bufferSize;
-  QSemaphore *m_freeImages;
-  QSemaphore *m_queuedImages;
+  unique_ptr<QSemaphore> m_freeImages;
+  unique_ptr<QSemaphore> m_queuedImages;
   QMutex     m_lock;
   QQueue<IplImage*> m_imageQueue;
 

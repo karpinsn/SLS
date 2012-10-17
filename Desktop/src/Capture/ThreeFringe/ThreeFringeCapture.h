@@ -15,6 +15,9 @@
 #include <glew.h>
 #include <OpenGL/gl.h>
 #elif _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #include <GL/glew.h>
 #include <GL/gl.h>

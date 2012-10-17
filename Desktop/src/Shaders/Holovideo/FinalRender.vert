@@ -6,7 +6,7 @@ uniform float width;
 in vec4 vert;
 in vec2 vertTexCoord;
 
-varying vec3 v;
+out vec3 fragVert;
 
 void main()
 {	
@@ -15,6 +15,6 @@ void main()
 	vec4 newVertexPosition = vert;		
 	newVertexPosition.z = texture(depthMap, vertTexCoord).x;
 
-	v = vec3(gl_ModelViewMatrix * newVertexPosition);
+	fragVert = vec3(gl_ModelViewMatrix * newVertexPosition);
 	gl_Position = gl_ModelViewProjectionMatrix * newVertexPosition;
 } 

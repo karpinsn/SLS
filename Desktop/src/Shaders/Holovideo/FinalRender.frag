@@ -3,14 +3,14 @@
 uniform sampler2D normals;
 uniform sampler2D holoImage;
 
-varying vec3 v;
+in vec3 fragVert;
 
 void main()
 {
 	vec3 Normal = normalize(gl_NormalMatrix * vec3(texture(normals, gl_TexCoord[0].st)));
 	vec3 holoFrag = vec3(texture(holoImage, gl_TexCoord[0].st));
-	vec3 L = normalize(gl_LightSource[0].position.xyz - v);
-	vec3 E = normalize(-v);
+	vec3 L = normalize(gl_LightSource[0].position.xyz - fragVert);
+	vec3 E = normalize(-fragVert);
 	vec3 R = normalize(-reflect(L,Normal));
 	
 	//	Ambient light

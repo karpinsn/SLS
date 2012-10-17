@@ -8,14 +8,6 @@ ViewController::ViewController(QWidget* parent) : QWidget(parent)
   m_reader = nullptr;
 }
 
-ViewController::~ViewController()
-{
-  if(nullptr != m_reader)
-  {
-	delete m_reader;
-  }
-}
-
 void ViewController::init(void)
 {
   viewGLWidget->setGLContext(&m_decoder);
@@ -38,8 +30,7 @@ void ViewController::openHoloImage(void)
     IplImage* image = io.readImage(filename.c_str());
 
     if(nullptr != image)
-    {
-
+	{
       m_decoder.setBackHoloBuffer(image);
       m_decoder.swapBuffers();
 
@@ -50,17 +41,12 @@ void ViewController::openHoloImage(void)
 
 void ViewController::playMovie(string movieFile)
 {
-  if(nullptr != m_reader)
-  {
-	delete m_reader;
-  }
-
   if(!m_aviIO.readStreamIsOpen())
   {
 	reactor::VideoFileReader* reader = new reactor::VideoFileReader();
-	bool fileOpened = reader->openFile(movieFile);
+	bool fileOpened = reader->openFile(movieFile); 
 	
-	m_reader = new reactor::DeplanarReaderFilter(new reactor::ColorSpaceReaderFilter(reader, PIX_FMT_YUV444P));
+	m_reader = unique_ptr<reactor::MediaFrameReader>(new reactor::DeplanarReaderFilter(new reactor::ColorSpaceReaderFilter(reader, PIX_FMT_YUV444P)));
 
     if(fileOpened)
     {

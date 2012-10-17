@@ -1,5 +1,6 @@
 /**
- @file DepthmapCodecOptionsController.h
+  @file
+  @author Nikolaus Karpinsky
  */
 
 #ifndef _DEPTHMAP_CODEC_OPTIONS_CONTROLLER_H_

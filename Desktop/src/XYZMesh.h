@@ -43,18 +43,55 @@ private:
   int m_meshWidth;
   int m_meshHeight;
   shared_ptr<XYZPoint> m_meshPoints;
-  glm::vec4 m_normalVectors;
-
+  
 public:
+	/**
+	* Creates a new XYZ mesh with the specified width, height, and points
+	*
+	* @param meshWidth Width of the XYZ mesh
+	* @param meshHeight Height of the XYZ mesh
+	* @param meshPoints Ordered list of the XYZ points
+	*/
 	XYZMesh(int meshWidth, int meshHeight, shared_ptr<XYZPoint> meshPoints);
 	~XYZMesh(void);
 
+	/**
+	* Initializes this mesh (Does nothing)
+	*/
 	virtual void initMesh(void);
+
+	/**
+	* Draws this mesh using direct drawing (depracated). This should only be
+	* called from the OpenGL draw thread.
+	*/
 	virtual void draw(void);
+
+	/**
+	* Returns the width of this mesh
+	*
+	* @return Width of this mesh
+	*/
 	int getMeshWidth(void);
+
+	/**
+	* Returns the height of this mesh
+	*
+	* @return Height of this mesh
+	*/
 	int getMeshHeight(void);
+
+	/**
+	* Returns the total number of verticies in this mesh (MeshWidth * MeshHeight)
+	*
+	* @return Total number of verticies in this mesh
+	*/
 	int getMeshSize(void);
 
+	/**
+	* Sets the bounding box for this mesh
+	*
+	* @param BoundingBox corresponding the the bounding box of this mesh
+	*/
 	void setBoundingBox(BoundingBox& boundingBox);
 };
 

@@ -1,13 +1,5 @@
 #include "XYZFileIO.h"
 
-XYZFileIO::XYZFileIO()
-{
-}
-
-XYZFileIO::~XYZFileIO()
-{
-}
-
 AbstractMesh* XYZFileIO::newMeshFromFile(const string &fileName)
 {
 	XYZMesh *mesh;

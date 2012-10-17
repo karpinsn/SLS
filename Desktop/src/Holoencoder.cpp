@@ -33,13 +33,9 @@ void Holoencoder::init(float width, float height)
 	  m_controller.init(0.0,0.0,0.0,.5);
       _initShaders();
 
-      m_camera = new Camera();
+      m_camera = unique_ptr<Camera>(new Camera());
       m_camera->init(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
       m_camera->setMode(4);
-
-      //	Define the projector projection matrix
-      m_projectorModelView = glm::mat4();
-      m_projectorModelView = m_projectorModelView * glm::rotate(30.0f, 0.0f, 1.0f, 0.0f);
 
       m_hasBeenInit = true;
   }

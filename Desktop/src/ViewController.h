@@ -37,14 +37,11 @@ private:
   QTime m_movieTimer;
   VideoIO m_aviIO;
 
-  reactor::MediaFrameReader* m_reader;
-
+  unique_ptr<reactor::MediaFrameReader> m_reader;
 
 public:
   ViewController(QWidget* parent = 0);
-  ~ViewController();
-
-
+ 
   void init(void);
   void cameraSelectMode(int mode);
   void playMovie(string movieFile);

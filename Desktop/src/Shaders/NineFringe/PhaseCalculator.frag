@@ -16,9 +16,9 @@ void main(void)
 	float pi = 3.14159;
 	float twoPi = 2.0 * pi;
 
-	vec3 fringe1 = texture2D(fringeImage1, fragTexCoord).rgb;
-	vec3 fringe2 = texture2D(fringeImage2, fragTexCoord).rgb;
-	vec3 fringe3 = texture2D(fringeImage3, fragTexCoord).rgb;
+	vec3 fringe1 = texture(fringeImage1, fragTexCoord).rgb;
+	vec3 fringe2 = texture(fringeImage2, fragTexCoord).rgb;
+	vec3 fringe3 = texture(fringeImage3, fragTexCoord).rgb;
 
 	float phi1 = atan(sqrt(3.0) * (fringe1.r - fringe1.b), 2.0 * fringe1.g - fringe1.r - fringe1.b) / twoPi + .5;
 	float phi2 = atan(sqrt(3.0) * (fringe2.r - fringe2.b), 2.0 * fringe2.g - fringe2.r - fringe2.b) / twoPi + .5;

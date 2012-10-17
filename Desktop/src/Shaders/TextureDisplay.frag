@@ -7,6 +7,6 @@ out vec4 fragmentColor;
 
 void main()
 {
-	vec3 tex = texture2D(texture, fragTexCoord).rgb;
+	vec3 tex = texture(texture, fragTexCoord).rgb;
 	fragmentColor = vec4(tex, 1.0);
 }

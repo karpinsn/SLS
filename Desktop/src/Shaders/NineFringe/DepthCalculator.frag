@@ -10,8 +10,8 @@ out vec4 depthMap;
 
 void main(void)
 {
-	float aPhase = texture2D(actualPhase, fragTexCoord).r;
-	float rPhase = texture2D(referencePhase, fragTexCoord).r;
+	float aPhase = texture(actualPhase, fragTexCoord).r;
+	float rPhase = texture(referencePhase, fragTexCoord).r;
 
 	depthMap = vec4((rPhase - aPhase) * scalingFactor);
 }

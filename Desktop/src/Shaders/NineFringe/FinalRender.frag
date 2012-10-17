@@ -16,13 +16,13 @@ out vec4 fragColor;
 
 void main()
 {
-	float phase = texture2D(phaseMap, fragTexCoord).r;
+	float phase = texture(phaseMap, fragTexCoord).r;
 	if(phase == 0)	// If the phase is 0 we should just get rid of this fragment
 	{
 		discard;
 	}
 
-	vec3 normal = normalize(normalMatrix * texture2D(normals, fragTexCoord)).xyz;
+	vec3 normal = normalize(normalMatrix * texture(normals, fragTexCoord)).xyz;
 	vec3 L = normalize(lightDirection);		// Light direction
 	vec3 R = normalize(-reflect(L, normal));	// Reflection direction
 

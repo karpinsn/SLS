@@ -18,8 +18,8 @@ void main(void)
 	float pitch1 = 30;
     float pitch2 = 768;
 
-	vec2 phaseGamma = texture2D(unfilteredWrappedPhase, fragTexCoord).rg;
-	vec2 cs2 = texture2D(filteredWrappedPhase, fragTexCoord).ba;
+	vec2 phaseGamma = texture(unfilteredWrappedPhase, fragTexCoord).rg;
+	vec2 cs2 = texture(filteredWrappedPhase, fragTexCoord).ba;
 
 	float phase1 = phaseGamma.x;
 	float phase2 = atan(cs2.x, cs2.y);

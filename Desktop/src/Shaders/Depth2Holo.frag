@@ -14,7 +14,7 @@ void main()
 	float stepWidth = 2.0 / (2.0 * fringeFrequency);
 	float angularFrequency = 2.0 * pi * fringeFrequency;
 	float stairAngularFrequency = angularFrequency * (4.0 + .5);
-	float depth = texture2D(depthMap, fragTexCoord).x;
+	float depth = texture(depthMap, fragTexCoord).x;
 	
 	float k = (floor(depth * fringeFrequency) * stepHeight) + .5;
 	

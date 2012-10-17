@@ -16,8 +16,8 @@ void main(void)
 	float pitch1 = 30;
     float pitch2 = 768;
 
-	vec3 fringe1 = texture2D(fringeImage1, fragTexCoord).rgb;
-	vec3 fringe2 = texture2D(fringeImage2, fragTexCoord).rgb;
+	vec3 fringe1 = texture(fringeImage1, fragTexCoord).rgb;
+	vec3 fringe2 = texture(fringeImage2, fragTexCoord).rgb;
 
     float sine1 = sqrt(3.0) * (fringe1.r - fringe1.b);
     float cosine1 = 2.0 * fringe1.g - fringe1.r - fringe1.b;	

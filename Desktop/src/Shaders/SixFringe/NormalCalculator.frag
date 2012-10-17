@@ -26,11 +26,11 @@ void main(void)
   {
     vec3 currentNeighbor = newVertex;
     currentNeighbor.xy = currentNeighbor.xy + offset[i];
-    currentNeighbor.z = texture2D(depthMap, fragTexCoord + offset[i]).x;
+    currentNeighbor.z = texture(depthMap, fragTexCoord + offset[i]).x;
 
     vec3 nextNeighbor = newVertex;
     nextNeighbor.xy = nextNeighbor.xy + offset[i+1];
-    nextNeighbor.z = texture2D(depthMap, fragTexCoord + offset[i]).x;
+    nextNeighbor.z = texture(depthMap, fragTexCoord + offset[i]).x;
 
     vec3 v1 = normalize(currentNeighbor - newVertex);
     vec3 v2 = normalize(nextNeighbor - newVertex);

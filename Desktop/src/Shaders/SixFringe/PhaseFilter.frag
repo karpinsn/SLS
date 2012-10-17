@@ -38,7 +38,7 @@ void main(void)
     {
       vec2 offset = vec2(float(dX), float(dY));
 
-      v[dX * 3 + dY + 4] = texture2D(image, fragTexCoord + vec2(float(dX) * step_w, float(dY) * step_h)).x;
+      v[dX * 3 + dY + 4] = texture(image, fragTexCoord + vec2(float(dX) * step_w, float(dY) * step_h)).x;
     }
   }
 

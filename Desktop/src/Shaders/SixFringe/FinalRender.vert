@@ -17,7 +17,7 @@ void main()
 {	
 	fragTexCoord = vertTexCoord;
 		
-	float depth = texture2D(depthMap, vertTexCoord).x;
+	float depth = texture(depthMap, vertTexCoord).x;
 			
 	vec4 newVertexPosition = vert;	
 	newVertexPosition.z = depth;

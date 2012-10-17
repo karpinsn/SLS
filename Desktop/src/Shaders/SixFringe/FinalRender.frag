@@ -16,13 +16,13 @@ out vec4 fragColor;
 
 void main()
 {
-	float phase = texture2D(phaseMap, fragTexCoord).r;
+	float phase = texture(phaseMap, fragTexCoord).r;
 	if(isnan(phase) || isinf(phase))	// If we dont have phase discard
 	{
 		discard;
 	}
 
-	vec3 normal = normalize(normalMatrix * texture2D(normals, fragTexCoord)).xyz;
+	vec3 normal = normalize(normalMatrix * texture(normals, fragTexCoord)).xyz;
 	vec3 L = normalize(lightDirection);		// Light direction
 	vec3 R = normalize(-reflect(L, normal));	// Reflection direction
 

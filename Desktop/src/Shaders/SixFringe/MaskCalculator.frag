@@ -18,7 +18,7 @@ void main(void)
   	offset[4] = vec2(-step_w, 0.0);   					offset[0] = vec2(step_w, 0.0);		offset[8] = vec2(step_w, 0.0);
   	offset[5] = vec2(-step_w, -step_h);  	offset[6] = vec2(0.0, -step_h);	offset[7] = vec2(step_w, -step_h); 
 
-	float phaseValue = texture2D(phase, fragTexCoord).r;
+	float phaseValue = texture(phase, fragTexCoord).r;
 
 	for(int i = 0; i < 8; ++i)
 	{

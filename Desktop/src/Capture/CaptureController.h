@@ -19,6 +19,7 @@
 #include "OpenGLWidget.h"
 #include "CameraConnectDialog.h"
 
+#include "WebsocketOutputStream.h"
 #include "FileOutputStream.h"
 #include "Codecs\HolovideoEncoder.h"
 

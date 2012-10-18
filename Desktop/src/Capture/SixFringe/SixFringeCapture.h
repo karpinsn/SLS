@@ -26,6 +26,7 @@
 #include <GL/gl.h>
 #endif
 
+#include <qsemaphore.h>
 #include <QMutex>
 #include <cv.h>
 
@@ -130,6 +131,8 @@ private:
   };
   DisplayMode m_displayMode;
 
+  QSemaphore m_testSem;
+
 public:
   SixFringeCapture(void);
   ~SixFringeCapture();
@@ -147,7 +150,7 @@ public:
   void    init(int width, int height);
   void    resizeInput(int width, int height);
   bool    newImage(IplImage* image);
-  void    swapBuffers(void);
+  void    swapFringeBuffers(void);
   void	  loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance));
   void    captureReferencePlane(void);
   void    setGammaCutoff(float gamma);

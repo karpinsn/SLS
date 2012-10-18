@@ -13,6 +13,8 @@
 
 #include <memory>
 
+#include <qthread.h>
+
 #include <QWaitCondition>
 #include <QMutex>
 #include <QQueue>
@@ -25,12 +27,25 @@ using namespace std;
 class ImageBuffer
 {
 public:
-  ImageBuffer(int size = 256);
+  ImageBuffer(int size = 60);
   ~ImageBuffer();
 
   void pushFrame(const IplImage *image);
   shared_ptr<IplImage> popFrame(void);
+
+  /**
+  *	Returns the maximum size of this ImageBuffer
+  *
+  *	@return Maximum size of this ImageBuffer
+  */
   int bufferSize(void);
+
+  /**
+  * Returns the current number of images in this ImageBuffer
+  *
+  *	@return Number of images in this ImageBuffer
+  */
+  int bufferCurrentCount(void);
 
 private:
   const int m_bufferSize;

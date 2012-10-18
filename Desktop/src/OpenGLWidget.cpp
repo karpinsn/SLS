@@ -55,7 +55,10 @@ void OpenGLWidget::paintGL()
 
   glPushMatrix();
 
-  m_glContext->draw();
+  if(nullptr != m_glContext)
+  {
+	m_glContext->draw();
+  }
 
   glPopMatrix();
 

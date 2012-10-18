@@ -14,6 +14,8 @@
 //	Qt auto generated headers
 #include "ui_Capture.h"
 
+#include <memory>
+
 #include <QWidget>
 
 #include "OpenGLWidget.h"
@@ -50,9 +52,11 @@ private:
   QStatusBar*             m_infoBar;
   QLabel                  m_fpsLabel;
   QLabel                  m_3dpsLabel;
+  QLabel				  m_bufferStatus;
 
   QSettings               m_settings;
   QTimer                  m_frameRateTimer;
+  QTimer				  m_3DUpdateTimer;
 
 public slots:
   void newFrame(shared_ptr<IplImage> frame);
@@ -63,8 +67,11 @@ public slots:
   void newGammaValue(double gammaValue);
   void newScalingFactor(double scalingFactor);
   void newViewMode(QString viewMode);
-  void updateFPS(void);
+  void updateInfoBar(void);
   void save(void);
+
+signals:
+  void crossThreadGLUpdate(void);
 
 public:
     CaptureController(QWidget* parent = 0);
@@ -79,6 +86,8 @@ protected:
     virtual void hideEvent(QHideEvent *);
 
 private:
+	static void testNewFrame(void* callbackInstance, shared_ptr<IplImage> image);
+
 	static shared_ptr<IplImage> _newFrameFromFileCallback(void* callbackInstance);
     shared_ptr<IplImage> _newFrameFromFile(void);
     void _connectSignalsWithController(void);

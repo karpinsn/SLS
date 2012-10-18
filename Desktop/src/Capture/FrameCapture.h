@@ -17,6 +17,7 @@
 #include <cv.h>
 #include <highgui.h>
 
+#include "OpenGLWidget.h"
 #include "ImageBuffer.h"
 
 class FrameCapture : public QThread
@@ -26,15 +27,18 @@ class FrameCapture : public QThread
 private:
   bool m_running;
   ImageBuffer* m_buffer;
+  unique_ptr<QGLWidget> m_oglContext;
+  void* m_callbackInstance;
+  void (*m_newFrameTest)(void* callbackInstance, shared_ptr<IplImage> newFrame);
 
 signals:
   void newFrame(shared_ptr<IplImage>);
 
 public:
-    FrameCapture();
+    FrameCapture(void* callbackInstance, void (*newFrameTest)(void* callbackInstance, shared_ptr<IplImage> newFrame));
     ~FrameCapture();
 
-    void init(ImageBuffer* buffer);
+    void init(ImageBuffer* buffer, OpenGLWidget* context);
 
 protected:
   void run();

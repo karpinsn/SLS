@@ -37,5 +37,10 @@ shared_ptr<IplImage> ImageBuffer::popFrame(void)
 
 int ImageBuffer::bufferSize(void)
 {
+  return m_bufferSize;
+}
+
+int ImageBuffer::bufferCurrentCount(void)
+{
   return m_imageQueue.size();
 }

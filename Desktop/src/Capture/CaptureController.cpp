@@ -1,11 +1,14 @@
 #include "CaptureController.h"
 
-CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
+CaptureController::CaptureController(QWidget* parent) : 
+QWidget(parent)
 {
+  int bufferSize = 60;
+
   m_gl3DContext	  = make_shared<NineFringeCapture>();
   m_camera		  = make_shared<CameraCapture>();
-  m_frameCapture  = make_shared<FrameCapture>();
-  m_buffer		  = make_shared<ImageBuffer>();
+  m_frameCapture  = shared_ptr<FrameCapture>(new FrameCapture(this, CaptureController::testNewFrame));
+  m_buffer		  = make_shared<ImageBuffer>(bufferSize);
 
   setupUi(this);                    //  Creates the UI objects
   _connectSignalsWithController();  //  Connects the UI objects to the slots in the controller
@@ -14,6 +17,7 @@ CaptureController::CaptureController(QWidget* parent) : QWidget(parent)
   m_dropFrame = false;
   m_fpsLabel.setText(QString(""));
   m_3dpsLabel.setText(QString(""));
+  m_bufferStatus.setText(QString(""));
   m_infoBar = nullptr;
 }
 
@@ -36,10 +40,12 @@ void CaptureController::showEvent(QShowEvent *event)
   //  Connect to camera
   m_frameCapture->start();
   m_frameRateTimer.start(1000);
+  //m_3DUpdateTimer.start(1000/30);
 
   //  Display the current FPS
   m_infoBar->addPermanentWidget(&m_fpsLabel);
   m_infoBar->addPermanentWidget(&m_3dpsLabel);
+  m_infoBar->addPermanentWidget(&m_bufferStatus);
 
   captureGLWidget->updateScene();
 }
@@ -51,6 +57,7 @@ void CaptureController::hideEvent(QHideEvent *)
   {
     m_infoBar->removeWidget(&m_fpsLabel);
     m_infoBar->removeWidget(&m_3dpsLabel);
+	m_infoBar->removeWidget(&m_bufferStatus);
   }
 
   //  Stop our camera capture
@@ -63,7 +70,7 @@ void CaptureController::hideEvent(QHideEvent *)
 void CaptureController::init(void)
 {
   m_camera->init(m_buffer.get());
-  m_frameCapture->init(m_buffer.get());
+  m_frameCapture->init(m_buffer.get(), captureGLWidget);
   captureGLWidget->setGLContext(m_gl3DContext.get());
 }
 
@@ -160,13 +167,20 @@ void CaptureController::newViewMode(QString viewMode)
   }
 }
 
-void CaptureController::updateFPS(void)
+void CaptureController::updateInfoBar(void)
 {
+  //  Update the current size of the image buffer
+  float bufferFill = (float)m_buffer->bufferCurrentCount()/(float)m_buffer->bufferSize() * 100;
+  QString bufferStatusMessage = QString("Buffer Status: %1%").arg(bufferFill, 0, 'f', 0);
+  m_bufferStatus.setText(bufferStatusMessage);
+
+  //  Update our current framerate (2D framerate)
   double frameRate = m_gl3DContext->getFrameRate();
   QString frameRateMessage = QString("FPS: ");
   frameRateMessage.append(QString("%1").arg(frameRate, 0, 'f', 3));
   m_fpsLabel.setText(frameRateMessage);
 
+  //  Update our current framerate (3D framerate)
   double threeDRate = m_gl3DContext->get3DRate();
   QString threeDRateMessage = QString("3DPS: ");
   threeDRateMessage.append(QString("%1").arg(threeDRate, 0, 'f', 3));
@@ -190,13 +204,21 @@ void CaptureController::newFrame(shared_ptr<IplImage> frame)
 
     if(m_gl3DContext->newImage(im_gray.get()))
     {
-      captureGLWidget->updateScene();
+	  emit(crossThreadGLUpdate());		// Slow jerky animation
+      //captureGLWidget->updateScene();		// Crashes
+	  //QMetaObject::invokeMethod(captureGLWidget, "updateGL", Qt::AutoConnection);
     }
   }
   else  // Drop a frame
   {
     m_dropFrame = false;  //  We only want to drop one frame so set it back
   }
+}
+
+void CaptureController::testNewFrame(void* callbackInstance, shared_ptr<IplImage> newFrame)
+{
+  CaptureController* controller = (CaptureController*) callbackInstance;
+  controller->newFrame(newFrame);
 }
 
 void CaptureController::save(void)
@@ -255,8 +277,10 @@ void CaptureController::_connectSignalsWithController(void)
   connect(gammaBox,				SIGNAL(valueChanged(double)),         this, SLOT(newGammaValue(double)));
   connect(scalingFactorBox,		SIGNAL(valueChanged(double)),         this, SLOT(newScalingFactor(double)));
   connect(viewModeBox,			SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
-  connect(&m_frameRateTimer,	SIGNAL(timeout()),                    this, SLOT(updateFPS()));
+  connect(&m_frameRateTimer,	SIGNAL(timeout()),                    this, SLOT(updateInfoBar()));
+  connect(&m_3DUpdateTimer,		SIGNAL(timeout()),	captureGLWidget, SLOT(updateGL()));
   connect(saveButton,			SIGNAL(clicked()),					  this, SLOT(save()));
+  connect(this,					SIGNAL(crossThreadGLUpdate()), captureGLWidget, SLOT(updateGL())); 
 }
 
 void CaptureController::_readSettings(void)

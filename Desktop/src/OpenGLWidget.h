@@ -57,7 +57,7 @@ public:
   void cameraSelectMode(int mode);
 
   IGLContext*    m_glContext;
-  Holodecoder*          m_holoDecoder;
+  Holodecoder*   m_holoDecoder;
 
 protected:
   void paintGL();

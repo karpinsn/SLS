@@ -52,6 +52,6 @@ void WebsocketOutputStream::Close(void)
 void WebsocketOutputStream::run()
 {
 	//	Tight loop here. The socket will ensure that we wont sit and spin idly
-  while(m_running && m_socket.yieldTime())
+  while(m_running && 0 <= m_socket.yieldTime())
   { }
 }

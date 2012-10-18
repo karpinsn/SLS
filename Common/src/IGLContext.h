@@ -19,7 +19,7 @@ public:
 	virtual ~IGLContext(void) {};
 
 	virtual void init(void) = 0;
-    virtual void init(float width, float height) = 0;
+    virtual void init(int width, int height) = 0;
 	virtual void draw(void) = 0;
 	virtual void resize(int width, int height) = 0;
 	virtual void cameraSelectMode(int mode) = 0;

@@ -144,8 +144,8 @@ public:
   
   int	  getWidth();
   int	  getHeight();
-  void    init(float width, float height);
-  void    resizeInput(float width, float height);
+  void    init(int width, int height);
+  void    resizeInput(int width, int height);
   bool    newImage(IplImage* image);
   void    swapBuffers(void);
   void	  loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance));

@@ -88,7 +88,7 @@ public:
   *	@param width Width of the encoded holoimage (Does not need to match the input mesh)
   * @param height Height of the encoded holoimage (Does not need to match the input mesh)
   */
-  virtual void init(float width, float height);
+  virtual void init(int width, int height);
 
   /**
   *	Draw method that encodes the holoimage and displays. This may only be called from the OpenGL draw thread.

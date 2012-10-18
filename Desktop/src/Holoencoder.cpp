@@ -14,7 +14,7 @@ void Holoencoder::init()
   init(512, 512);
 }
 
-void Holoencoder::init(float width, float height)
+void Holoencoder::init(int width, int height)
 {
   if(!m_hasBeenInit)
   {

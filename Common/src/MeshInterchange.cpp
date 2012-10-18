@@ -59,7 +59,7 @@ MeshInterchange& MeshInterchange::operator=(MeshInterchange&& rhs)
 	  // the memory is not freed.
       rhs.m_image = nullptr;
       rhs.m_texture = nullptr;
-	  rhs.m_mesh;
+	  rhs.m_mesh = nullptr;
    }
    return *this;
 }

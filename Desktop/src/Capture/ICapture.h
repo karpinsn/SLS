@@ -23,7 +23,7 @@ public:
 
   virtual int getWidth() = 0;
   virtual int getHeight() = 0;
-  virtual void resizeInput(float width, float height) = 0;
+  virtual void resizeInput(int width, int height) = 0;
   virtual void loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance)) = 0;
   virtual void captureReferencePlane(void)			  = 0;
   virtual void setGammaCutoff(float gammaValue)		  = 0;

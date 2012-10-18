@@ -22,7 +22,7 @@ void NineFringeCapture::init()
   init(256,256);
 }
 
-void NineFringeCapture::init(float width, float height)
+void NineFringeCapture::init(int width, int height)
 {
   if(!m_hasBeenInit && width > 0 && height > 0)
   {
@@ -60,7 +60,7 @@ int NineFringeCapture::getHeight()
 	return m_height;
 }
 
-void NineFringeCapture::resizeInput(float width, float height)
+void NineFringeCapture::resizeInput(int width, int height)
 {
   //  Make sure that it has been initalized first.
   if(m_hasBeenInit)
@@ -92,10 +92,10 @@ void NineFringeCapture::resizeInput(float width, float height)
     m_imageProcessor.unbind();
 
     //  Send the new size to all of the shaders
-    m_phaseFilter.uniform("width", width);
-    m_phaseFilter.uniform("height", height);
-    m_normalCalculator.uniform("width", width);
-    m_normalCalculator.uniform("height", height);
+    m_phaseFilter.uniform("width", (float)width);
+    m_phaseFilter.uniform("height", (float)height);
+    m_normalCalculator.uniform("width", (float)width);
+    m_normalCalculator.uniform("height", (float)height);
 
     //  Resize the display mesh
     m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));

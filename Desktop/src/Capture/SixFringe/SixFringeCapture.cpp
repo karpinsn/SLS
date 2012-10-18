@@ -22,7 +22,7 @@ void SixFringeCapture::init()
   init(256,256);
 }
 
-void SixFringeCapture::init(float width, float height)
+void SixFringeCapture::init(int width, int height)
 {
   if(!m_hasBeenInit && width > 0 && height > 0)
   {
@@ -59,7 +59,7 @@ int SixFringeCapture::getHeight()
 	return m_height;
 }
 
-void SixFringeCapture::resizeInput(float width, float height)
+void SixFringeCapture::resizeInput(int width, int height)
 {
   //  Make sure that it has been initalized first.
   if(m_hasBeenInit && width > 0 && height > 0 && (m_width != width || m_height != height))
@@ -88,15 +88,15 @@ void SixFringeCapture::resizeInput(float width, float height)
     m_imageProcessor.unbind();
 
     //  Send the new size to all of the shaders
-	m_gaussianFilterVertical.uniform("width", width);
-	m_gaussianFilterVertical.uniform("height", height);
-	m_gaussianFilterHorizontal.uniform("width", width);
-	m_gaussianFilterHorizontal.uniform("height", height);
+	m_gaussianFilterVertical.uniform("width", (float)width);
+	m_gaussianFilterVertical.uniform("height", (float)height);
+	m_gaussianFilterHorizontal.uniform("width", (float)width);
+	m_gaussianFilterHorizontal.uniform("height", (float)height);
 
-    m_phaseFilter.uniform("width", width);
-    m_phaseFilter.uniform("height", height);
-    m_normalCalculator.uniform("width", width);
-    m_normalCalculator.uniform("height", height);
+    m_phaseFilter.uniform("width", (float)width);
+    m_phaseFilter.uniform("height", (float)height);
+    m_normalCalculator.uniform("width", (float)width);
+    m_normalCalculator.uniform("height", (float)height);
 
     //  Resize the display mesh
 	m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));

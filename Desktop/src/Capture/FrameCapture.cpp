@@ -1,16 +1,11 @@
 #include "FrameCapture.h"
 
-FrameCapture::FrameCapture(void* callbackInstance, void (*newFrameTest)(void* callbackInstance, shared_ptr<IplImage> newFrame)) : 
-QThread(), m_callbackInstance(callbackInstance), m_newFrameTest(newFrameTest)
+FrameCapture::FrameCapture(void* callbackInstance, void (*newFrameCallback)(void* callbackInstance, shared_ptr<IplImage> newFrame)) : 
+QThread(), m_callbackInstance(callbackInstance), m_newFrameCallback(newFrameCallback)
 {	
   m_running = false;
   //	Needed so that we can emit shared_ptr<IplImage> with newFrame
   qRegisterMetaType<shared_ptr<IplImage> >("shared_ptr<IplImage>");
-}
-
-FrameCapture::~FrameCapture()
-{
-
 }
 
 void FrameCapture::init(ImageBuffer* buffer, OpenGLWidget* context)
@@ -27,9 +22,6 @@ void FrameCapture::run()
   while(m_running)
   {
     shared_ptr<IplImage> frame = m_buffer->popFrame();
-    //emit(newFrame(frame));
-	m_newFrameTest(m_callbackInstance, frame);
-	//	Give a little sleep time so as not to overwhelm the thread
-	msleep(1000/6);
+	m_newFrameCallback(m_callbackInstance, frame);
   }
 }

@@ -7,7 +7,7 @@ QWidget(parent)
 
   m_gl3DContext	  = make_shared<NineFringeCapture>();
   m_camera		  = make_shared<CameraCapture>();
-  m_frameCapture  = shared_ptr<FrameCapture>(new FrameCapture(this, CaptureController::testNewFrame));
+  m_frameCapture  = shared_ptr<FrameCapture>(new FrameCapture(this, CaptureController::newFrameCallback));
   m_buffer		  = make_shared<ImageBuffer>(bufferSize);
 
   setupUi(this);                    //  Creates the UI objects
@@ -19,10 +19,6 @@ QWidget(parent)
   m_3dpsLabel.setText(QString(""));
   m_bufferStatus.setText(QString(""));
   m_infoBar = nullptr;
-}
-
-CaptureController::~CaptureController()
-{
 }
 
 void CaptureController::showEvent(QShowEvent *event)
@@ -40,7 +36,6 @@ void CaptureController::showEvent(QShowEvent *event)
   //  Connect to camera
   m_frameCapture->start();
   m_frameRateTimer.start(1000);
-  //m_3DUpdateTimer.start(1000/30);
 
   //  Display the current FPS
   m_infoBar->addPermanentWidget(&m_fpsLabel);
@@ -204,9 +199,7 @@ void CaptureController::newFrame(shared_ptr<IplImage> frame)
 
     if(m_gl3DContext->newImage(im_gray.get()))
     {
-	  emit(crossThreadGLUpdate());		// Slow jerky animation
-      //captureGLWidget->updateScene();		// Crashes
-	  //QMetaObject::invokeMethod(captureGLWidget, "updateGL", Qt::AutoConnection);
+	  emit(crossThreadGLUpdate());
     }
   }
   else  // Drop a frame
@@ -215,7 +208,7 @@ void CaptureController::newFrame(shared_ptr<IplImage> frame)
   }
 }
 
-void CaptureController::testNewFrame(void* callbackInstance, shared_ptr<IplImage> newFrame)
+void CaptureController::newFrameCallback(void* callbackInstance, shared_ptr<IplImage> newFrame)
 {
   CaptureController* controller = (CaptureController*) callbackInstance;
   controller->newFrame(newFrame);

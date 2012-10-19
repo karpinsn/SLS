@@ -275,7 +275,6 @@ MeshInterchange* SixFringeCapture::decode(void)
 
 void SixFringeCapture::draw(void)
 {
-    m_testSem.acquire();
   if(m_captureReferencePhase)
   {
     //  If we dont have the reference phase then we are calculating it and we redraw
@@ -393,7 +392,6 @@ void SixFringeCapture::draw(void)
     m_textureDisplay.draw(&m_referencePhase);
   }
 
-    m_testSem.release();
   m_fpsCalculator.frameUpdate();
   OGLStatus::logOGLErrors("SixFringeCapture - draw()");
 }
@@ -427,8 +425,6 @@ void SixFringeCapture::mouseMoveEvent(int mouseX, int mouseY)
 
 bool SixFringeCapture::newImage(IplImage* image)
 {
-  m_testSem.acquire();
-
   bool needRedraw = false;
 
   cvSetImageCOI(image, 1);
@@ -460,14 +456,11 @@ bool SixFringeCapture::newImage(IplImage* image)
     swapFringeBuffers();
     m_3dpsCalculator.frameUpdate();
     needRedraw = true;
-	cout << "Redraw" << endl;
   }
 
-  cout << "newFrame" << endl;
   //	Make sure we dont have any errors
   OGLStatus::logOGLErrors("SixFringeCapture - setBackHoloBuffer()");
 
-  m_testSem.release();
   return needRedraw;
 }
 
@@ -543,6 +536,7 @@ void SixFringeCapture::_drawCalculatePhase()
 {
   m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
   m_phaseWrapper.bind();
+  //  Grab so that it doesn't change during a draw
   int frontBuffer = m_frontBufferIndex;
   m_fringeImages[frontBuffer][0]->bind(GL_TEXTURE0);
   m_fringeImages[frontBuffer][1]->bind(GL_TEXTURE1); 

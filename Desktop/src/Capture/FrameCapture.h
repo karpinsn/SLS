@@ -29,14 +29,13 @@ private:
   ImageBuffer* m_buffer;
   unique_ptr<QGLWidget> m_oglContext;
   void* m_callbackInstance;
-  void (*m_newFrameTest)(void* callbackInstance, shared_ptr<IplImage> newFrame);
+  void (*m_newFrameCallback)(void* callbackInstance, shared_ptr<IplImage> newFrame);
 
 signals:
   void newFrame(shared_ptr<IplImage>);
 
 public:
-    FrameCapture(void* callbackInstance, void (*newFrameTest)(void* callbackInstance, shared_ptr<IplImage> newFrame));
-    ~FrameCapture();
+    FrameCapture(void* callbackInstance, void (*newFrameCallback)(void* callbackInstance, shared_ptr<IplImage> newFrame));
 
     void init(ImageBuffer* buffer, OpenGLWidget* context);
 

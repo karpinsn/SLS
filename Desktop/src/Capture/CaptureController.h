@@ -59,7 +59,6 @@ private:
   QTimer				  m_3DUpdateTimer;
 
 public slots:
-  void newFrame(shared_ptr<IplImage> frame);
   void captureReference(void);
   void connectCamera(void);
   void disconnectCamera(void);
@@ -75,7 +74,6 @@ signals:
 
 public:
     CaptureController(QWidget* parent = 0);
-    ~CaptureController();
 
   void init(void);
   void setInfoBar(QStatusBar* infoBar);
@@ -86,7 +84,8 @@ protected:
     virtual void hideEvent(QHideEvent *);
 
 private:
-	static void testNewFrame(void* callbackInstance, shared_ptr<IplImage> image);
+    void newFrame(shared_ptr<IplImage> frame);
+	static void newFrameCallback(void* callbackInstance, shared_ptr<IplImage> image);
 
 	static shared_ptr<IplImage> _newFrameFromFileCallback(void* callbackInstance);
     shared_ptr<IplImage> _newFrameFromFile(void);

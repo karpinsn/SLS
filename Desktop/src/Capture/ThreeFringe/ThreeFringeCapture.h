@@ -104,6 +104,7 @@ private:
   int m_currentChannelLoad;
   float m_gammaCutoff;
   float m_scalingFactor;
+  float m_shiftFactor;
 
   bool m_hasBeenInit;
 
@@ -141,6 +142,7 @@ public:
   void	  loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance));
   void    captureReferencePlane(void);
   void    setGammaCutoff(float gamma);
+  void	  setShiftFactor(float shiftFactor);
   void    setScalingFactor(float scalingFactor);
   void    show3D(void);
   void    showPhase(void);

@@ -10,6 +10,7 @@ SixFringeCapture::SixFringeCapture(void)
   m_frontBufferIndex = 0;
   m_gammaCutoff = 0.1f;
   m_scalingFactor = 0.04f;
+  m_shiftFactor = 0.0f;
   m_displayMode = Geometry;
 }
 
@@ -265,6 +266,11 @@ void SixFringeCapture::setGammaCutoff(float gamma)
 void SixFringeCapture::setScalingFactor(float scalingFactor)
 {
   m_scalingFactor = scalingFactor;
+}
+
+void SixFringeCapture::setShiftFactor(float shiftFactor)
+{
+  m_shiftFactor = shiftFactor;
 }
 
 MeshInterchange* SixFringeCapture::decode(void)

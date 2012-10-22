@@ -375,7 +375,7 @@
         </size>
        </property>
        <property name="decimals">
-        <number>3</number>
+        <number>2</number>
        </property>
        <property name="maximum">
         <double>1.000000000000000</double>
@@ -385,6 +385,23 @@
        </property>
        <property name="value">
         <double>0.040000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Shift</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="shiftFactorBox">
+       <property name="maximum">
+        <double>1.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.010000000000000</double>
        </property>
       </widget>
      </item>

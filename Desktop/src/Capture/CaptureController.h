@@ -35,6 +35,7 @@
 
 #define SettingsScalingFactor "CaptureScalingFactor"
 #define SettingsGammaValue    "CaptureGammaFactor"
+#define SettingsShiftFactor	  "CaptureShiftFactor"
 
 class CaptureController : public QWidget, private Ui::Capture
 {
@@ -65,6 +66,7 @@ public slots:
   void dropFrame(void);
   void newGammaValue(double gammaValue);
   void newScalingFactor(double scalingFactor);
+  void newShiftFactor(double shiftFactor);
   void newViewMode(QString viewMode);
   void updateInfoBar(void);
   void save(void);

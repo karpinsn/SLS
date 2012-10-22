@@ -148,6 +148,14 @@ void CaptureController::newScalingFactor(double scalingFactor)
   m_settings.setValue(SettingsScalingFactor, scalingFactor);
 }
 
+void CaptureController::newShiftFactor(double shiftFactor)
+{
+  m_gl3DContext->setShiftFactor(shiftFactor);
+
+  //  Persist the new scaling factor
+  m_settings.setValue(SettingsShiftFactor, shiftFactor);
+}
+
 void CaptureController::newViewMode(QString viewMode)
 {
   if(0 == viewMode.compare(QString("3D")))
@@ -218,7 +226,7 @@ void CaptureController::save(void)
 {
 	if(nullptr == m_outputStream)
 	{
-	  QString file = QFileDialog::getOpenFileName(nullptr, "Save as", "/", "Video (*.avi)");
+	  QString file = QFileDialog::getSaveFileName(nullptr, "Save as", "/", "Video (*.avi)");
 
 	  if(!file.isEmpty())
 	  {
@@ -297,10 +305,12 @@ void CaptureController::_connectSignalsWithController(void)
   connect(dropFrameButton,		SIGNAL(clicked()),                    this, SLOT(dropFrame()));
   connect(gammaBox,				SIGNAL(valueChanged(double)),         this, SLOT(newGammaValue(double)));
   connect(scalingFactorBox,		SIGNAL(valueChanged(double)),         this, SLOT(newScalingFactor(double)));
+  connect(shiftFactorBox,		SIGNAL(valueChanged(double)),		  this, SLOT(newShiftFactor(double)));
   connect(viewModeBox,			SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
   connect(&m_frameRateTimer,	SIGNAL(timeout()),                    this, SLOT(updateInfoBar()));
   connect(&m_3DUpdateTimer,		SIGNAL(timeout()),	captureGLWidget, SLOT(updateGL()));
   connect(saveButton,			SIGNAL(clicked()),					  this, SLOT(save()));
+  connect(streamButton,			SIGNAL(clicked()),					  this, SLOT(stream()));
   connect(this,					SIGNAL(crossThreadGLUpdate()), captureGLWidget, SLOT(updateGL())); 
 }
 

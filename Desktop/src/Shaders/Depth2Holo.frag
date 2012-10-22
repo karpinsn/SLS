@@ -10,13 +10,13 @@ void main()
 {
 	//	Constants for encoding
 	float pi = 3.14159265;
-	float stepHeight = 1.0 / (2.0 * fringeFrequency);
-	float stepWidth = 2.0 / (2.0 * fringeFrequency);
+	float stepHeight = 1.0 / fringeFrequency;
+	float stepWidth = 1.0 / fringeFrequency;
 	float angularFrequency = 2.0 * pi * fringeFrequency;
 	float stairAngularFrequency = angularFrequency * (4.0 + .5);
 	float depth = texture(depthMap, fragTexCoord).x;
 	
-	float k = (floor(depth * fringeFrequency) * stepHeight) + .5;
+	float k = (floor(depth * fringeFrequency) * stepHeight);
 	
 	holoimage = vec4((1.0 - sin(angularFrequency * depth)) * .5, 
 						(1.0 - cos(angularFrequency * depth)) * .5, 

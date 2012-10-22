@@ -10,6 +10,7 @@ ThreeFringeCapture::ThreeFringeCapture(void)
   m_frontBufferIndex = 0;
   m_gammaCutoff = 0.1f;
   m_scalingFactor = 0.04f;
+  m_shiftFactor = 0.0f;
   m_displayMode = Geometry;
 }
 
@@ -218,6 +219,11 @@ void ThreeFringeCapture::setGammaCutoff(float gamma)
 void ThreeFringeCapture::setScalingFactor(float scalingFactor)
 {
   m_scalingFactor = scalingFactor;
+}
+
+void ThreeFringeCapture::setShiftFactor(float shiftFactor)
+{
+  m_shiftFactor = shiftFactor;
 }
 
 MeshInterchange* ThreeFringeCapture::decode(void)

@@ -10,6 +10,7 @@ NineFringeCapture::NineFringeCapture(void)
   m_frontBufferIndex = 0;
   m_gammaCutoff = 0.1f;
   m_scalingFactor = 0.04f;
+  m_shiftFactor = 0.0f;
   m_displayMode = Geometry;
 }
 
@@ -38,7 +39,7 @@ void NineFringeCapture::init(int width, int height)
 
     //m_controller.init(512, 512);
 	m_controller.init(0.0f, 0.0f, 0.0f, .5f);
-    m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f);
+    m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, -1.0f, 0.0f);
     m_camera.setMode(1);
 
     m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
@@ -133,6 +134,7 @@ void NineFringeCapture::_initShaders(float width, float height)
   m_depthCalculator.uniform("actualPhase", 0);
   m_depthCalculator.uniform("referencePhase", 1);
   m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
+  m_depthCalculator.uniform("shiftFactor", m_shiftFactor);
 
   m_phaseFilter.init();
   m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/PhaseFilter.vert"));
@@ -230,6 +232,11 @@ void NineFringeCapture::setGammaCutoff(float gamma)
 void NineFringeCapture::setScalingFactor(float scalingFactor)
 {
   m_scalingFactor = scalingFactor;
+}
+
+void NineFringeCapture::setShiftFactor(float shiftFactor)
+{
+  m_shiftFactor = shiftFactor;
 }
 
 MeshInterchange* NineFringeCapture::decode(void)
@@ -487,6 +494,7 @@ void NineFringeCapture::_drawCalculateDepthMap()
 {
   m_imageProcessor.bindDrawBuffer(m_depthMapAttachPoint);
   m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
+  m_depthCalculator.uniform("shiftFactor", m_shiftFactor);
   m_depthCalculator.bind();
   m_phaseMap0.bind(GL_TEXTURE0);
   m_referencePhase.bind(GL_TEXTURE1);

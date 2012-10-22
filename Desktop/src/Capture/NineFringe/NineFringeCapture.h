@@ -116,6 +116,8 @@ private:
 
   OpenGLWidget* m_glContext;
 
+  shared_ptr<SaveStream> m_saveStream;
+
   int m_width;
   int m_height;
 

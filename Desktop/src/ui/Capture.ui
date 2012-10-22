@@ -184,7 +184,7 @@
          <height>48</height>
         </size>
        </property>
-	   <property name="toolTip">
+       <property name="toolTip">
         <string>Save</string>
        </property>
        <property name="text">
@@ -193,6 +193,38 @@
        <property name="icon">
         <iconset resource="MainWindow.qrc">
          <normaloff>:/../../resources/images/resources/images/Save.png</normaloff>:/../../resources/images/resources/images/Save.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="streamButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Stream current scan</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="MainWindow.qrc">
+         <normaloff>:/../../resources/images/resources/images/Stream.png</normaloff>:/../../resources/images/resources/images/Stream.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -374,6 +406,7 @@
   <tabstop>dropFrameButton</tabstop>
   <tabstop>calibrateButton</tabstop>
   <tabstop>saveButton</tabstop>
+  <tabstop>streamButton</tabstop>
   <tabstop>viewModeBox</tabstop>
   <tabstop>gammaBox</tabstop>
   <tabstop>scalingFactorBox</tabstop>

@@ -5,6 +5,7 @@
     <file>../../resources/images/CameraOpen.png</file>
     <file>../../resources/images/DropFrame.png</file>
 	<file>../../resources/images/Save.png</file>
+    <file>../../resources/images/Stream.png</file>
 	<file>../../resources/SLS.qss</file>
     <file alias="Zoom Tool">../../resources/images/ZoomTool.png</file>
     <file alias="Orbit Tool">../../resources/images/OrbitTool.png</file>

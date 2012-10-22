@@ -85,7 +85,15 @@ bool ImageIO::saveTexture(const string &filename, Texture *texture)
 		bool reorderChannels = texture->getFormat() == GL_RGBA || texture->getFormat() == GL_RGB;
 		saved = saveImage(filename, m_imageHandle, reorderChannels);
 	}
-	
+	else if(GL_FLOAT == texture->getDataType())
+	{
+	  shared_ptr<IplImage> floatImage = shared_ptr<IplImage>(
+		cvCreateImage(cvSize(texture->getWidth(), texture->getHeight()), IPL_DEPTH_32F, 3),
+		[](IplImage* ptr){ cvReleaseImage(&ptr); });
+	  texture->transferFromTexture(floatImage.get());
+	  cvSave(filename.c_str(), floatImage.get()); 
+	}
+
 	return saved;
 }
 
@@ -99,10 +107,9 @@ IplImage* ImageIO::readImage(const string &filename)
 	}
 	else
 	{
-            cvCvtColor(image, image, CV_BGR2RGB);
+        cvCvtColor(image, image, CV_BGR2RGB);
 	}
 
-	
 	return image;
 }
 

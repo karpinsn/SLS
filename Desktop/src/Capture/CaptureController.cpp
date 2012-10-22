@@ -218,11 +218,39 @@ void CaptureController::save(void)
 {
 	if(nullptr == m_outputStream)
 	{
+	  QString file = QFileDialog::getOpenFileName(nullptr, "Save as", "/", "Video (*.avi)");
+
+	  if(!file.isEmpty())
+	  {
 		//	Create a codec and outputStream
 		shared_ptr<Holoencoder> codec(new Holoencoder());
 		codec->init(m_gl3DContext->getWidth(), m_gl3DContext->getHeight());
-		string filename = "D:/temp.avi";
-		//shared_ptr<IOutputStream> outStream(new FileOutputStream(filename, 576, 576));
+		shared_ptr<IOutputStream> outStream(new FileOutputStream(file.toStdString(), 576, 576));
+		
+		//	Create the save stream and open it
+		m_outputStream = shared_ptr<SaveStream>(new SaveStream());
+		m_outputStream->open(codec, outStream);
+
+		//	Send the save stream to our current context
+		m_gl3DContext->setSaveStream(m_outputStream);
+	  }
+	}
+	else
+	{
+		//	Clear out the save stream and close it down
+		m_gl3DContext->setSaveStream(nullptr);
+		m_outputStream->close();
+		m_outputStream = nullptr;
+	}
+}
+
+void CaptureController::stream(void)
+{
+  if(nullptr == m_outputStream)
+	{
+		//	Create a codec and outputStream
+		shared_ptr<Holoencoder> codec(new Holoencoder());
+		codec->init(m_gl3DContext->getWidth(), m_gl3DContext->getHeight());
 		shared_ptr<IOutputStream> outStream(new WebsocketOutputStream(7681));
 
 		//	Create the save stream and open it

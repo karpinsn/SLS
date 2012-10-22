@@ -63,7 +63,7 @@ int NineFringeCapture::getHeight()
 void NineFringeCapture::resizeInput(int width, int height)
 {
   //  Make sure that it has been initalized first.
-  if(m_hasBeenInit)
+  if(m_hasBeenInit && width > 0 && height > 0 && (width != m_width || height != m_height))
   {
 	  m_width = width;
 	  m_height = height;
@@ -311,6 +311,11 @@ void NineFringeCapture::draw(void)
 	}
 	m_finalRender.unbind();
 
+	if(m_saveStream)
+	{
+		m_saveStream->encodeAndStream(shared_ptr<MeshInterchange>(new MeshInterchange(&m_depthMap, false)));
+	}
+
     glPopMatrix();
   }
   else if(m_haveReferencePhase && Phase == m_displayMode)
@@ -404,13 +409,16 @@ void NineFringeCapture::loadReferencePlane(void* callbackInstance, shared_ptr<Ip
 	return;
   }
 
+  //  We need to resize according to our image size
+  resizeInput(fringe1->width, fringe1->height);
+
   //  Signify that we want to capture the reference plane
   captureReferencePlane();
 
   int backBufferIndex = (m_frontBufferIndex + 1) % 2;
   m_fringeImages[backBufferIndex][0]->transferToTexture(fringe1.get());
   m_fringeImages[backBufferIndex][1]->transferToTexture(fringe2.get());
-  m_fringeImages[backBufferIndex][1]->transferToTexture(fringe3.get());
+  m_fringeImages[backBufferIndex][2]->transferToTexture(fringe3.get());
 
   swapBuffers();
 }
@@ -432,7 +440,7 @@ void NineFringeCapture::showPhase(void)
 
 void NineFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)
 {
-
+  m_saveStream = saveStream;
 }
 
 double NineFringeCapture::getFrameRate(void)

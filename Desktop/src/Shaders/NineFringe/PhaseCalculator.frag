@@ -20,34 +20,32 @@ void main(void)
 	vec3 fringe2 = texture(fringeImage2, fragTexCoord).rgb;
 	vec3 fringe3 = texture(fringeImage3, fragTexCoord).rgb;
 
-	float phi1 = atan(sqrt(3.0) * (fringe1.r - fringe1.b), 2.0 * fringe1.g - fringe1.r - fringe1.b) / twoPi + .5;
-	float phi2 = atan(sqrt(3.0) * (fringe2.r - fringe2.b), 2.0 * fringe2.g - fringe2.r - fringe2.b) / twoPi + .5;
-	float phi3 = atan(sqrt(3.0) * (fringe3.r - fringe3.b), 2.0 * fringe3.g - fringe3.r - fringe3.b) / twoPi + .5;
+	float phi1 = atan(sqrt(3.0) * (fringe1.r - fringe1.b), 2.0 * fringe1.g - fringe1.r - fringe1.b);
+	float phi2 = atan(sqrt(3.0) * (fringe2.r - fringe2.b), 2.0 * fringe2.g - fringe2.r - fringe2.b);
+	float phi3 = atan(sqrt(3.0) * (fringe3.r - fringe3.b), 2.0 * fringe3.g - fringe3.r - fringe3.b);
 
-	float phi12 = mod(phi2 - phi1, 1.0);
-	float phi13 = mod(phi3 - phi1, 1.0);
-	float phi123 = mod(phi12 - phi13, 1.0);
+	float phi12 = -mod(phi2 - phi1, twoPi);
+	float phi13 = -mod(phi3 - phi1, twoPi);
+
+    //  Remove the phase jump
+    phi12 = atan(sin(phi12),cos(phi12));
 	
-	float P1=60.0;
-	float P2=96.0;
-	float P3=90.0;
-	float P12=(P1*P2)/(P2-P1);
-	float P13=(P1*P3)/(P3-P1);
-	float P123=(P13*P12)/(P13-P12);
+	float P1=90.0;
+	float P2=102.0;
+	float P3=135.0;
+	float P12=(P1*P2)/abs(P1-P2);
+	float P13=(P1*P3)/abs(P1-P3);
 
-	float k13 = round(phi123 * (P123/P13) - phi13);
-	float phase13 = k13 + phi13;
+	float k13 = round((phi12 * (P12/P13) - phi13) / twoPi);
+	float phase13 = phi13 + k13 * twoPi;
 
-	float k3 = round(phase13 * (P13/P3) + phi3);
-	float phase3 = phi3 - k3;
-	
-	float k = round(phi1 - (phase3 * (P3/P1)));	
+	float k = round((phase13 * (P13/P1) - phi1) / twoPi);	
 
 	float gamma = sqrt(pow((2 * fringe1.g - fringe1.r - fringe1.b), 2) + 3 * pow((fringe1.r - fringe1.b), 2)) / (fringe1.r + fringe1.g + fringe1.b);
 
 	if(gamma >= gammaCutoff)
 	{	
-		phase = vec4(phi1 - k);
+		phase = vec4(phi1 + k * twoPi);
 	}
 	else
 	{

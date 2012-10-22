@@ -68,6 +68,7 @@ public slots:
   void newViewMode(QString viewMode);
   void updateInfoBar(void);
   void save(void);
+  void stream(void);
 
 signals:
   void crossThreadGLUpdate(void);

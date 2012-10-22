@@ -131,8 +131,6 @@ private:
   };
   DisplayMode m_displayMode;
 
-  QSemaphore m_testSem;
-
 public:
   SixFringeCapture(void);
   ~SixFringeCapture();

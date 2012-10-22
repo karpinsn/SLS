@@ -1,6 +1,6 @@
 #include "SixFringeCapture.h"
 
-SixFringeCapture::SixFringeCapture(void) : m_testSem(1)
+SixFringeCapture::SixFringeCapture(void)
 {
   m_hasBeenInit = false;
   m_haveReferencePhase = false;

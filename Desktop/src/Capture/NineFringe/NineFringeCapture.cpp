@@ -77,6 +77,7 @@ void NineFringeCapture::resizeInput(int width, int height)
     m_phaseMap1.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
     m_depthMap.reinit         (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
     m_normalMap.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+	m_textureMap.reinit		  (width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
     m_referencePhase.reinit   (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
     //  Resize the image processor
@@ -85,8 +86,15 @@ void NineFringeCapture::resizeInput(int width, int height)
     m_imageProcessor.setTextureAttachPoint(m_phaseMap1, m_phaseMap1AttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_depthMap, m_depthMapAttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
+	m_imageProcessor.setTextureAttachPoint(m_textureMap, m_textureMapAttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
     m_imageProcessor.unbind();
+
+	//  Send the new size to all of the shaders
+	m_gaussianFilterVertical.uniform("width", (float)width);
+	m_gaussianFilterVertical.uniform("height", (float)height);
+	m_gaussianFilterHorizontal.uniform("width", (float)width);
+	m_gaussianFilterHorizontal.uniform("height", (float)height);
 
     //  Send the new size to all of the shaders
     m_phaseFilter.uniform("width", (float)width);
@@ -107,7 +115,32 @@ void NineFringeCapture::resizeInput(int width, int height)
 
 void NineFringeCapture::_initShaders(float width, float height)
 {
+  //  Kernel used by gaussian filter
+  float kernel[11] = {.0495, .0692, .0897, .1081, .1208, .1254, .1208, .1081, .0897, .0692, .0495};
+
   // Create the shaders
+  m_gaussianFilterVertical.init();
+  m_gaussianFilterVertical.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/Gaussian11x11Vertical.vert"));
+  m_gaussianFilterVertical.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/Gaussian11x11.frag"));
+  m_gaussianFilterVertical.bindAttributeLocation("vert", 0);
+  m_gaussianFilterVertical.bindAttributeLocation("vertTexCoord", 1);
+  m_gaussianFilterVertical.link();
+  m_gaussianFilterVertical.uniform("image", 0);
+  m_gaussianFilterVertical.uniform("width", width);
+  m_gaussianFilterVertical.uniform("height", height);
+  m_gaussianFilterVertical.uniform("kernel", kernel, 11); 
+
+  m_gaussianFilterHorizontal.init();
+  m_gaussianFilterHorizontal.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/Gaussian11x11Horizontal.vert"));
+  m_gaussianFilterHorizontal.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/Gaussian11x11.frag"));
+  m_gaussianFilterHorizontal.bindAttributeLocation("vert", 0);
+  m_gaussianFilterHorizontal.bindAttributeLocation("vertTexCoord", 1);
+  m_gaussianFilterHorizontal.link();
+  m_gaussianFilterHorizontal.uniform("image", 0);
+  m_gaussianFilterHorizontal.uniform("width", width);
+  m_gaussianFilterHorizontal.uniform("height", height);
+  m_gaussianFilterHorizontal.uniform("kernel", kernel, 11);
+
   m_phaseCalculator.init();
   m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/PhaseCalculator.vert"));
   m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/PhaseCalculator.frag"));
@@ -154,6 +187,14 @@ void NineFringeCapture::_initShaders(float width, float height)
   m_normalCalculator.uniform("width", width);
   m_normalCalculator.uniform("height", height);
 
+  m_textureCalculator.init();
+  m_textureCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/TextureCalculator.vert"));
+  m_textureCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/TextureCalculator.frag"));
+  m_textureCalculator.bindAttributeLocation("vert", 0);
+  m_textureCalculator.bindAttributeLocation("vertTexCoord", 1);
+  m_textureCalculator.link();
+  m_phaseCalculator.uniform("fringe", 0);
+
   m_finalRender.init();
   m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/FinalRender.vert"));
   m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/FinalRender.frag"));
@@ -172,11 +213,12 @@ void NineFringeCapture::_initTextures(GLuint width, GLuint height)
 {
   Logger::logDebug("NineFringeCapture - initTextures(): Creating textures for phase map and normal map");
 
-  m_phaseMap0AttachPoint      = GL_COLOR_ATTACHMENT0_EXT;
-  m_phaseMap1AttachPoint      = GL_COLOR_ATTACHMENT1_EXT;
-  m_depthMapAttachPoint       = GL_COLOR_ATTACHMENT2_EXT;
-  m_normalMapAttachPoint      = GL_COLOR_ATTACHMENT3_EXT;
-  m_referencePhaseAttachPoint = GL_COLOR_ATTACHMENT4_EXT;
+  m_phaseMap0AttachPoint      = GL_COLOR_ATTACHMENT0;
+  m_phaseMap1AttachPoint      = GL_COLOR_ATTACHMENT1;
+  m_depthMapAttachPoint       = GL_COLOR_ATTACHMENT2;
+  m_normalMapAttachPoint      = GL_COLOR_ATTACHMENT3;
+  m_textureMapAttachPoint	  = GL_COLOR_ATTACHMENT4;
+  m_referencePhaseAttachPoint = GL_COLOR_ATTACHMENT5;
 
   m_fringeImage1.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
   m_fringeImage2.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
@@ -196,6 +238,7 @@ void NineFringeCapture::_initTextures(GLuint width, GLuint height)
   m_phaseMap1.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_depthMap.init         (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
   m_normalMap.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+  m_textureMap.init		  (width, height, GL_RGB,		 GL_RGB, GL_UNSIGNED_BYTE);
   m_referencePhase.init   (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
   m_imageProcessor.init(width, height);
@@ -203,6 +246,7 @@ void NineFringeCapture::_initTextures(GLuint width, GLuint height)
   m_imageProcessor.setTextureAttachPoint(m_phaseMap1, m_phaseMap1AttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_depthMap, m_depthMapAttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
+  m_imageProcessor.setTextureAttachPoint(m_textureMap, m_textureMapAttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
   m_imageProcessor.unbind();
 
@@ -248,12 +292,32 @@ void NineFringeCapture::draw(void)
     //  If we dont have the reference phase then we are calculating it and we redraw
     m_imageProcessor.bind();
     {
-      m_imageProcessor.bindDrawBuffer(m_referencePhaseAttachPoint);
+      m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
       m_phaseCalculator.bind();
       m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
       m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1);
       m_fringeImages[m_frontBufferIndex][2]->bind(GL_TEXTURE2);
       m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
+	  m_gaussianFilterVertical.bind();
+	  m_phaseMap1.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
+	  m_gaussianFilterHorizontal.bind();
+	  m_phaseMap0.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
+	  m_gaussianFilterVertical.bind();
+	  m_phaseMap1.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
+
+	  m_imageProcessor.bindDrawBuffer(m_referencePhaseAttachPoint);
+	  m_gaussianFilterHorizontal.bind();
+	  m_phaseMap0.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
     }
     m_imageProcessor.unbind();
 

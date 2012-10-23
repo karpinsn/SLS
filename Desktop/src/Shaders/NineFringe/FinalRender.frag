@@ -17,7 +17,7 @@ out vec4 fragColor;
 void main()
 {
 	float phase = texture(phaseMap, fragTexCoord).r;
-	if(phase == 0)	// If the phase is 0 we should just get rid of this fragment
+	if(isnan(phase) || isinf(phase))	// If we dont have phase just get rid of this fragment
 	{
 		discard;
 	}

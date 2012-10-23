@@ -11,6 +11,7 @@ set(SHADER_VERT_SOURCES
 	FinalRender.vert
 	NormalCalculator.vert
 	PhaseFilter.vert
+	TextureCalculator.vert
 )
 
 set(SHADER_FRAG_SOURCES
@@ -20,6 +21,7 @@ set(SHADER_FRAG_SOURCES
 	FinalRender.frag
 	NormalCalculator.frag
 	PhaseFilter.frag
+	TextureCalculator.frag
 )
 
 set(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})

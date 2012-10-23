@@ -43,18 +43,14 @@ void main(void)
 
 	float gamma = sqrt(pow((2 * fringe1.g - fringe1.r - fringe1.b), 2) + 3 * pow((fringe1.r - fringe1.b), 2)) / (fringe1.r + fringe1.g + fringe1.b);
 
-	if(gamma >= gammaCutoff)
+	if(gamma >= gammaCutoff && gamma <= 1.0 && !isnan(phi1))
 	{	
 		phase = vec4(phi1 + k * twoPi);
 	}
 	else
 	{
-		phase = vec4(0.0);
+        //  Sets the phase to inf
+		phase = vec4(1.0/0.0);
 	}	
-
-	if(isnan(phi1))
-	{
-		phase = vec4(0.0);
-	}
 }
 

@@ -64,16 +64,20 @@ class NineFringeCapture : public IDecodingGLContext, public ICapture
 private:
   AxisDisplay m_axis;
 
+  ShaderProgram m_gaussianFilterVertical;
+  ShaderProgram m_gaussianFilterHorizontal;
   ShaderProgram m_phaseCalculator;
   ShaderProgram m_phaseFilter;
   ShaderProgram m_depthCalculator;
   ShaderProgram m_normalCalculator;
+  ShaderProgram m_textureCalculator;
   ShaderProgram m_finalRender;
 
   GLenum m_phaseMap0AttachPoint;
   GLenum m_phaseMap1AttachPoint;
   GLenum m_depthMapAttachPoint;
   GLenum m_normalMapAttachPoint;
+  GLenum m_textureMapAttachPoint;
   GLenum m_referencePhaseAttachPoint;
 
   shared_ptr<IplImage> m_fringeLoadingImage;
@@ -91,6 +95,7 @@ private:
   Texture m_phaseMap1;
   Texture m_depthMap;
   Texture m_normalMap;
+  Texture m_textureMap;
 
   FBO m_imageProcessor;
   TextureDisplay m_textureDisplay;

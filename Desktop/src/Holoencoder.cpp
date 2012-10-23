@@ -67,14 +67,14 @@ void Holoencoder::_initShaders(void)
 	m_depth2HoloShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Depth2Holo.vert"));
 	m_depth2HoloShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Depth2Holo.frag"));
 	m_depth2HoloShader.link();
-	m_depth2HoloShader.uniform("fringeFrequency", 12.0f);
+	m_depth2HoloShader.uniform("fringeFrequency", 16.0f);
 	m_depth2HoloShader.uniform("depthMap", 0);
 
     m_encoderShader.init();
     m_encoderShader.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/Holoencoder.vert"));
     m_encoderShader.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/Holoencoder.frag"));
     m_encoderShader.link();
-    m_encoderShader.uniform("fringeFrequency", 12.0f);
+    m_encoderShader.uniform("fringeFrequency", 16.0f);
 }
 
 void Holoencoder::draw(void)

@@ -8,10 +8,6 @@ DepthmapCodecOptionsController::DepthmapCodecOptionsController(QWidget* parent) 
   _connectSignalsWithController();
 }
 
-DepthmapCodecOptionsController::~DepthmapCodecOptionsController()
-{
-}
-
 void DepthmapCodecOptionsController::contrastStretchValueChange(int checkState)
 {
   if(Qt::Checked == checkState)

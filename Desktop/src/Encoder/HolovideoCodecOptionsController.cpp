@@ -8,10 +8,6 @@ HolovideoCodecOptionsController::HolovideoCodecOptionsController(QWidget* parent
   _connectSignalsWithController();
 }
 
-HolovideoCodecOptionsController::~HolovideoCodecOptionsController()
-{
-}
-
 void HolovideoCodecOptionsController::selectFile(void)
 {
   QString file = QFileDialog::getOpenFileName(this, "Select source file to Open", "/", "Video (*.avi)");

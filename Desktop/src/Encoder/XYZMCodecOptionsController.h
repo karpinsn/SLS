@@ -20,7 +20,6 @@ private:
 
 public:
   XYZMCodecOptionsController(QWidget* parent = 0);
-  ~XYZMCodecOptionsController();
 
   shared_ptr<Codec> getCodec(void);
 

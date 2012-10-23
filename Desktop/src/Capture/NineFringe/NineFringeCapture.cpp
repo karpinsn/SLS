@@ -14,10 +14,6 @@ NineFringeCapture::NineFringeCapture(void)
   m_displayMode = Geometry;
 }
 
-NineFringeCapture::~NineFringeCapture()
-{
-}
-
 void NineFringeCapture::init()
 {
   init(256,256);
@@ -264,7 +260,7 @@ void NineFringeCapture::draw(void)
     m_haveReferencePhase = true;
     m_captureReferencePhase = false;
   }
-  else if(m_haveReferencePhase && Geometry == m_displayMode)
+  else if(m_haveReferencePhase)
   {
 	m_imageProcessor.bind();
 	{
@@ -281,13 +277,15 @@ void NineFringeCapture::draw(void)
       _drawCalculateNormalMap();
 	}
     m_imageProcessor.unbind();
+  }
 
+  if(m_haveReferencePhase && Geometry == m_displayMode)
+  {
 	glMatrixMode(GL_MODELVIEW);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
 	glLoadIdentity();
 
-    //glRotatef(180, 0.0, 0.0, 1.0);
     m_camera.applyMatrix();
     m_controller.applyTransform();
 
@@ -327,7 +325,13 @@ void NineFringeCapture::draw(void)
   }
   else if(m_haveReferencePhase && Phase == m_displayMode)
   {
-    m_textureDisplay.draw(&m_referencePhase);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    m_textureDisplay.draw(&m_phaseMap0);
+  }
+  else if(m_haveReferencePhase && Depth == m_displayMode)
+  {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_textureDisplay.draw(&m_depthMap);
   }
 
   m_fpsCalculator.frameUpdate();
@@ -337,7 +341,6 @@ void NineFringeCapture::draw(void)
 void NineFringeCapture::resize(int width, int height)
 {
   m_camera.reshape(width, height);
-  m_textureDisplay.resize(width, height);
 
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
@@ -435,14 +438,9 @@ void NineFringeCapture::captureReferencePlane(void)
   m_captureReferencePhase = true;
 }
 
-void NineFringeCapture::show3D(void)
+void NineFringeCapture::setDisplayMode(enum DisplayMode mode)
 {
-  m_displayMode = Geometry;
-}
-
-void NineFringeCapture::showPhase(void)
-{
-  m_displayMode = Phase;
+  m_displayMode = mode;
 }
 
 void NineFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)

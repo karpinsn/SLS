@@ -49,11 +49,10 @@ private:
 
   string m_filename;
 
-  IplImage* m_image;
+  shared_ptr<IplImage> m_image;
 
 public:
   HolovideoEncoder();
-  ~HolovideoEncoder();
   void initCodec(string& filename, int width, int height);
 
   void openCodec(EncodingOpenGLWidget* glWidget);

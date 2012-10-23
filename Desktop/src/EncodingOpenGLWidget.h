@@ -55,7 +55,6 @@ private:
 public:
   EncodingOpenGLWidget(QWidget *parent);
   EncodingOpenGLWidget(QWidget* parent, IGLContext* glContext, QColor clearColor);
-  virtual ~EncodingOpenGLWidget();
 
   void reinit(float width, float height);
   void initializeGL();

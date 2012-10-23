@@ -14,10 +14,6 @@ SixFringeCapture::SixFringeCapture(void)
   m_displayMode = Geometry;
 }
 
-SixFringeCapture::~SixFringeCapture()
-{
-}
-
 void SixFringeCapture::init()
 {
   init(256,256);
@@ -273,6 +269,11 @@ void SixFringeCapture::setShiftFactor(float shiftFactor)
   m_shiftFactor = shiftFactor;
 }
 
+void SixFringeCapture::setDisplayMode(enum DisplayMode mode)
+{
+
+}
+
 MeshInterchange* SixFringeCapture::decode(void)
 {
   OGLStatus::logOGLErrors("SixFringeCapture - decode()");
@@ -405,7 +406,6 @@ void SixFringeCapture::draw(void)
 void SixFringeCapture::resize(int width, int height)
 {
   m_camera.reshape(width, height);
-  m_textureDisplay.resize(width, height);
 
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
@@ -506,16 +506,6 @@ void SixFringeCapture::loadReferencePlane(void* callbackInstance, shared_ptr<Ipl
   m_fringeImages[backBufferIndex][1]->transferToTexture(fringe2.get());
 
   swapFringeBuffers();
-}
-
-void SixFringeCapture::show3D(void)
-{
-  m_displayMode = Geometry;
-}
-
-void SixFringeCapture::showPhase(void)
-{
-  m_displayMode = Phase;
 }
 
 void SixFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)

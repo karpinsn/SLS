@@ -21,11 +21,19 @@ class ICapture : public IGLContext
 public:
   virtual ~ICapture(void) { };
 
+  enum DisplayMode 
+  {
+	Geometry,
+	Phase,
+	Depth
+  };
+
   virtual int getWidth() = 0;
   virtual int getHeight() = 0;
   virtual void resizeInput(int width, int height) = 0;
   virtual void loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance)) = 0;
   virtual void captureReferencePlane(void)			  = 0;
+  virtual void setDisplayMode(enum DisplayMode mode)  = 0;
   virtual void setGammaCutoff(float gammaValue)		  = 0;
   virtual void setScalingFactor(float scalingFactor)  = 0;
   virtual void setShiftFactor(float shiftFactor)	  = 0;

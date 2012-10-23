@@ -49,7 +49,6 @@ private:
 public:
   OpenGLWidget(QWidget *parent);
   OpenGLWidget(QWidget* parent, IGLContext* glContext, QColor clearColor);
-  virtual ~OpenGLWidget();
 
   void initializeGL();
   void updateScene();

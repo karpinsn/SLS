@@ -28,7 +28,6 @@ class ImageBuffer
 {
 public:
   ImageBuffer(int size = 60);
-  ~ImageBuffer();
 
   void pushFrame(const IplImage *image);
   shared_ptr<IplImage> popFrame(void);

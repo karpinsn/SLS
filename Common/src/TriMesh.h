@@ -27,6 +27,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <wrench/gl/IBO.h>
 #include <wrench/gl/VBO.h>
 #include <wrench/gl/VAO.h>
@@ -35,20 +38,7 @@ using namespace wrench::gl;
 
 class TriMesh : public AbstractMesh
 {
-private:
-	struct Vertex 
-	{
-      float x;
-      float y;
-      float z;
-	};
-
-    struct TextureCoordinate
-    {
-      float s;
-      float t;
-    };
-	
+private:	
     VAO m_mesh;
     IBO m_meshIndices;
     VBO m_meshVertices;
@@ -60,7 +50,6 @@ private:
 		
 public:
 	TriMesh(int width, int height);
-	~TriMesh();
 	virtual void initMesh(void);
 	
 	void draw();

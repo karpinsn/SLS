@@ -1,12 +1,7 @@
 #include "TriMesh.h"
 
 TriMesh::TriMesh(int width, int height) : m_width(width), m_height(height)
-{	
-}
-
-TriMesh::~TriMesh()
-{
-}
+{ }
 
 void TriMesh::initMesh(void)
 {
@@ -32,7 +27,7 @@ void TriMesh::_generateIndices(void)
 {
   //  More elements than the width * height due to genenerate verticies
   m_elementCount = (m_width * 2) * (m_height - 1) + (m_height - 2);
-  GLuint *indicies = new GLuint[m_elementCount];
+  unique_ptr<GLuint[]> indicies = unique_ptr<GLuint[]>(new GLuint[m_elementCount]);
 
   int index = 0;
   for(unsigned int row = 0; row < m_height - 1; row++)
@@ -70,15 +65,13 @@ void TriMesh::_generateIndices(void)
   }
 
   m_meshIndices.init(1, GL_UNSIGNED_INT);
-  m_meshIndices.bufferData(m_elementCount, indicies, GL_STATIC_DRAW);
-
-  delete [] indicies;
+  m_meshIndices.bufferData(m_elementCount, indicies.get(), GL_STATIC_DRAW);
 }
 
 void TriMesh::_generateTexturedVertices(void)
 {
-  Vertex *verticies = new Vertex[m_height * m_width];
-  TextureCoordinate *texCoord = new TextureCoordinate[m_height * m_width];
+  unique_ptr<glm::vec3[]> verticies = unique_ptr<glm::vec3[]>(new glm::vec3[m_height * m_width]);
+  unique_ptr<glm::vec2[]> texCoord = unique_ptr<glm::vec2[]>(new glm::vec2[m_height * m_width]);
 
   for(unsigned int row = 0; row < m_height; row++)
   {
@@ -95,13 +88,11 @@ void TriMesh::_generateTexturedVertices(void)
   }
 
   m_meshVertices.init(3, GL_FLOAT, GL_ARRAY_BUFFER);
-  m_meshVertices.bufferData(m_height * m_width, verticies, GL_STATIC_DRAW);
+  m_meshVertices.bufferData(m_height * m_width, glm::value_ptr(verticies[0]), GL_STATIC_DRAW);
 
   m_meshTextureCoords.init(2, GL_FLOAT, GL_ARRAY_BUFFER);
-  m_meshTextureCoords.bufferData(m_height * m_width, texCoord, GL_STATIC_DRAW);
+  m_meshTextureCoords.bufferData(m_height * m_width, glm::value_ptr(texCoord[0]), GL_STATIC_DRAW);
 
-  delete [] verticies;
-  delete [] texCoord;
 }
 
 void TriMesh::_cacheTriMesh(void)

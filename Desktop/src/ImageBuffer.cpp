@@ -6,9 +6,6 @@ ImageBuffer::ImageBuffer(int size) : m_bufferSize(size)
   m_queuedImages = unique_ptr<QSemaphore>(new QSemaphore(0));
 }
 
-ImageBuffer::~ImageBuffer()
-{ }
-
 void ImageBuffer::pushFrame(const IplImage *image)
 {
   m_freeImages->acquire();

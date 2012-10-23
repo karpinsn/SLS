@@ -9,10 +9,6 @@ XYZMCodecOptionsController::XYZMCodecOptionsController(QWidget* parent) : QWidge
   _connectSignalsWithController();
 }
 
-XYZMCodecOptionsController::~XYZMCodecOptionsController()
-{
-}
-
 shared_ptr<Codec> XYZMCodecOptionsController::getCodec(void)
 {
   // Lazy init

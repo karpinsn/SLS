@@ -31,7 +31,6 @@ private:
 
 public:
     VideoIO(void);
-    ~VideoIO();
 
     //	Save Avi File Methods
     bool openSaveStream(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps);

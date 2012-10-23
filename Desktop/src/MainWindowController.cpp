@@ -6,10 +6,6 @@ MainWindowController::MainWindowController()
 	m_mainWindow->connectSignalsWithController(this);
 }
 
-MainWindowController::~MainWindowController()
-{
-}
-
 void MainWindowController::showWidget()
 {
   m_mainWindow->mainView->setCurrentWidget(m_mainWindow->viewController);

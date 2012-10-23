@@ -5,7 +5,9 @@ HolovideoEncoder::HolovideoEncoder()
   m_filename  = "";
   m_videoWriter = new reactor::VideoFileWriter();
   m_video = (reactor::VideoFileWriter*)m_videoWriter;
-  m_image = cvCreateImage(cvSize(512, 512), IPL_DEPTH_8U, 3);
+  m_image = shared_ptr<IplImage>(
+	cvCreateImage(cvSize(512, 512), IPL_DEPTH_8U, 3),
+	[](IplImage* ptr){ cvReleaseImage(&ptr); });
   m_yuv444toyuv422.init(PIX_FMT_YUV444P, PIX_FMT_YUV422P); 
 
   yuv444Frame = avcodec_alloc_frame();
@@ -16,11 +18,6 @@ HolovideoEncoder::HolovideoEncoder()
   int numBytes = avpicture_get_size(PIX_FMT_YUV444P, 512, 512);
   yuv444Buffer = (uint8_t*)av_malloc(numBytes * sizeof(uint8_t));
   avpicture_fill((AVPicture*)yuv444Frame, yuv444Buffer, PIX_FMT_YUV444P, 512, 512);
-}
-
-HolovideoEncoder::~HolovideoEncoder()
-{
-  cvReleaseImage(&m_image);
 }
 
 void HolovideoEncoder::initCodec(string& filename, int width, int height)

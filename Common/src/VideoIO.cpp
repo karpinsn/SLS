@@ -16,14 +16,6 @@ VideoIO::VideoIO(void)
 	  [](IplImage* ptr) { cvReleaseImage(&ptr); });
 }
 
-VideoIO::~VideoIO()
-{
-	m_videoReaderHandle = nullptr;
-	m_videoWriterHandle = nullptr;
-	m_imageHandle = nullptr;
-	m_floatImageHandle = nullptr;
-}
-
 bool VideoIO::openSaveStream(const string &filename, const unsigned int videoWidth, const unsigned int videoHeight, const unsigned int fps)
 {
   bool openedVideoWriter = false;
@@ -165,6 +157,7 @@ IplImage* VideoIO::readStream()
     frame = cvQueryFrame(m_videoReaderHandle.get());
     if(nullptr != frame)
     {
+	  cvFlip(frame, frame, 1);
       cvCvtColor(frame, frame, CV_BGR2RGB);
     }
   }

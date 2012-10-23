@@ -5,12 +5,9 @@ ImageIO::ImageIO(void)
 	m_imageWidth = 1;
 	m_imageHeight = 1;
 	
-	m_imageHandle = cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_8U, 3);
-}
-
-ImageIO::~ImageIO()
-{
-    cvReleaseImage(&m_imageHandle);   //  TODO comeback and fix this
+	m_imageHandle = shared_ptr<IplImage>(
+	  cvCreateImage(cvSize(m_imageWidth, m_imageHeight), IPL_DEPTH_8U, 3),
+	  [](IplImage* ptr){ cvReleaseImage(&ptr); });
 }
 
 bool ImageIO::saveRGBImage(const string &filename, const unsigned int imageWidth, const unsigned int imageHeight)
@@ -21,10 +18,10 @@ bool ImageIO::saveRGBImage(const string &filename, const unsigned int imageWidth
 	glReadPixels(0, 0, imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, m_imageHandle->imageData);
 	
 	//	Flip the image and convert to BGR since that is how OpenCV is looking for it
-	//cvFlip(m_imageHandle, 0);
-	cvCvtColor(m_imageHandle, m_imageHandle, CV_RGB2BGR);
+	cvFlip(m_imageHandle.get(), 0);
+	cvCvtColor(m_imageHandle.get(), m_imageHandle.get(), CV_RGB2BGR);
 	
-	return cvSaveImage(filename.c_str(), m_imageHandle);
+	return cvSaveImage(filename.c_str(), m_imageHandle.get());
 }
 
 bool ImageIO::saveImage(const string &filename, const IplImage* image, bool needChannelReorder)
@@ -38,17 +35,20 @@ bool ImageIO::saveImage(const string &filename, const IplImage* image, bool need
 		{
 			if(3 == image->nChannels)
 			{
-				cvCvtColor(image, m_imageHandle, CV_RGB2BGR);
-				saved = cvSaveImage(filename.c_str(), m_imageHandle);
+				cvFlip(m_imageHandle.get(), 0);
+				cvCvtColor(image, m_imageHandle.get(), CV_RGB2BGR);
+				saved = cvSaveImage(filename.c_str(), m_imageHandle.get());
 			}
 			else if(4 == image->nChannels)
 			{
-				cvCvtColor(image, m_imageHandle, CV_RGBA2BGRA);
-				saved = cvSaveImage(filename.c_str(), m_imageHandle);
+				cvFlip(m_imageHandle.get(), 0);
+				cvCvtColor(image, m_imageHandle.get(), CV_RGBA2BGRA);
+				saved = cvSaveImage(filename.c_str(), m_imageHandle.get());
 			}
 		}
 		else
 		{
+			cvFlip(m_imageHandle.get(), 0);
 			saved = cvSaveImage(filename.c_str(), image);
 		}
 	}
@@ -58,18 +58,6 @@ bool ImageIO::saveImage(const string &filename, const IplImage* image, bool need
 
 bool ImageIO::saveTexture(const string &filename, Texture &texture)
 {
-	//ensureImageSize(texture.getWidth(), texture.getHeight(), texture.getChannelCount());
-	//
-	//bool saved = false;
-	//if(GL_UNSIGNED_BYTE == texture.getDataType())
-	//{
-	//	texture.transferFromTexture(m_imageHandle);
-	//	
-	//	bool reorderChannels = texture.getFormat() == GL_RGBA || texture.getFormat() == GL_RGB;
-	//	saved = saveImage(filename, m_imageHandle, reorderChannels);
-	//}
-	//
-	//return saved;
   return saveTexture(filename, &texture);
 }
 
@@ -80,10 +68,11 @@ bool ImageIO::saveTexture(const string &filename, Texture *texture)
 	bool saved = false;
 	if(GL_UNSIGNED_BYTE == texture->getDataType())
 	{
-		texture->transferFromTexture(m_imageHandle);
+		texture->transferFromTexture(m_imageHandle.get());
 		
 		bool reorderChannels = texture->getFormat() == GL_RGBA || texture->getFormat() == GL_RGB;
-		saved = saveImage(filename, m_imageHandle, reorderChannels);
+		cvFlip(m_imageHandle.get(), 0);
+		saved = saveImage(filename, m_imageHandle.get(), reorderChannels);
 	}
 	else if(GL_FLOAT == texture->getDataType())
 	{
@@ -107,6 +96,7 @@ IplImage* ImageIO::readImage(const string &filename)
 	}
 	else
 	{
+		cvFlip(m_imageHandle.get(), 0);
         cvCvtColor(image, image, CV_BGR2RGB);
 	}
 
@@ -118,8 +108,10 @@ void ImageIO::ensureImageSize(const unsigned int imageWidth, const unsigned int 
 	//	Check and see if the image is the correct size. If it is do nothing
 	if (m_imageWidth != imageWidth || m_imageHeight != imageHeight || (unsigned int)m_imageHandle->nChannels != channelCount)
 	{
-		cvReleaseImage(&m_imageHandle);
-		m_imageHandle = cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_8U, channelCount);
+		m_imageHandle = shared_ptr<IplImage>(
+		  cvCreateImage(cvSize(imageWidth, imageHeight), IPL_DEPTH_8U, channelCount),
+		  [](IplImage* ptr){ cvReleaseImage(&ptr); });
+
 		m_imageWidth = imageWidth;
 		m_imageHeight = imageHeight;
 	}

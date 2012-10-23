@@ -125,16 +125,10 @@ private:
 
   shared_ptr<SaveStream> m_saveStream;
 
-  enum DisplayMode
-  {
-    Geometry,
-    Phase
-  };
   DisplayMode m_displayMode;
 
 public:
   SixFringeCapture(void);
-  ~SixFringeCapture();
 
   virtual void init(void);
   virtual void draw(void);
@@ -152,11 +146,10 @@ public:
   void    swapFringeBuffers(void);
   void	  loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance));
   void    captureReferencePlane(void);
+  void	  setDisplayMode(enum DisplayMode mode);
   void    setGammaCutoff(float gamma);
   void    setScalingFactor(float scalingFactor);
   void	  setShiftFactor(float shiftFactor);
-  void    show3D(void);
-  void    showPhase(void);
   void	  setSaveStream(shared_ptr<SaveStream> saveStream);
   double  getFrameRate(void);
   double  get3DRate(void);

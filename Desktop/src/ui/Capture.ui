@@ -287,12 +287,12 @@
        </item>
        <item>
         <property name="text">
-         <string>Camera</string>
+         <string>Phase</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Phase</string>
+         <string>Depth</string>
         </property>
        </item>
       </widget>

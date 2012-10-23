@@ -56,7 +56,6 @@ public:
 	* @param meshPoints Ordered list of the XYZ points
 	*/
 	XYZMesh(int meshWidth, int meshHeight, shared_ptr<XYZPoint> meshPoints);
-	~XYZMesh(void);
 
 	/**
 	* Initializes this mesh (Does nothing)

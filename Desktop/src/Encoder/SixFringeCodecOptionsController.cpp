@@ -7,10 +7,6 @@ SixFringeCodecOptionsController::SixFringeCodecOptionsController(QWidget* parent
   _connectSignalsWithController();
 }
 
-SixFringeCodecOptionsController::~SixFringeCodecOptionsController()
-{
-}
-
 shared_ptr<Codec> SixFringeCodecOptionsController::getCodec(void)
 {
   QString sourceFilename = sourceFileBox->text();

@@ -7,10 +7,6 @@ XYZMesh::XYZMesh(int meshWidth, int meshHeight, shared_ptr<XYZPoint> meshPoints)
 	m_meshPoints = meshPoints;
 }
 
-XYZMesh::~XYZMesh(void)
-{
-}
-
 void XYZMesh::initMesh(void)
 {
 }

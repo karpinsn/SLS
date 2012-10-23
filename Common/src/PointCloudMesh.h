@@ -57,7 +57,6 @@ private:
 	
 public:
 	PointCloudMesh(int width, int height, int pixelsPerPoint);
-	~PointCloudMesh();
 	virtual void initMesh(void);
 	
 	void draw();

@@ -14,10 +14,6 @@ OpenGLWidget::OpenGLWidget(QWidget *parent, IGLContext* glContext, QColor clearC
   m_clearColor = clearColor;
 }
 
-OpenGLWidget::~OpenGLWidget()
-{
-}
-
 void OpenGLWidget::initializeGL()
 {	
   GLenum err = glewInit();

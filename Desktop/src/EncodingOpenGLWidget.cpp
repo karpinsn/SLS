@@ -17,10 +17,6 @@ EncodingOpenGLWidget::EncodingOpenGLWidget(QWidget *parent, IGLContext* glContex
   m_clearColor = clearColor;
 }
 
-EncodingOpenGLWidget::~EncodingOpenGLWidget()
-{
-}
-
 void EncodingOpenGLWidget::reinit(float width, float height)
 {
   m_width = width;

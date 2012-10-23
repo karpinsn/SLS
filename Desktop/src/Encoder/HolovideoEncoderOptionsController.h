@@ -21,7 +21,6 @@ private:
 
 public:
   HolovideoEncoderOptionsController(QWidget* parent = 0);
-  ~HolovideoEncoderOptionsController();
 
   shared_ptr<Codec> getCodec(void);
 

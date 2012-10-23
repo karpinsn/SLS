@@ -18,7 +18,6 @@ class NineFringeCodecOptionsController : public QWidget, private Ui::NineFringeC
 
 public:
   NineFringeCodecOptionsController(QWidget* parent = 0);
-  ~NineFringeCodecOptionsController();
 
   shared_ptr<Codec> getCodec(void);
 

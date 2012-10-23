@@ -38,7 +38,6 @@ class EncoderController : public QWidget, private Ui::Encode
 
 public:
   EncoderController(QWidget* parent = 0);
-  ~EncoderController();
 
   void init(void);
 

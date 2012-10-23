@@ -5,9 +5,6 @@ CameraCapture::CameraCapture()
   m_camera = nullptr;
 }
 
-CameraCapture::~CameraCapture()
-{ }
-
 void CameraCapture::init(ImageBuffer *buffer)
 {
   m_buffer = buffer;

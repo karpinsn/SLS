@@ -33,6 +33,9 @@ void CaptureController::showEvent(QShowEvent *event)
   captureGLWidget->setGLContext(m_gl3DContext.get());
   m_gl3DContext->init();
 
+  //  Since we changed our capture context, read and set settings
+  _readSettings();
+
   //  Connect to camera
   m_frameCapture->start();
   m_frameRateTimer.start(1000);
@@ -160,13 +163,15 @@ void CaptureController::newViewMode(QString viewMode)
 {
   if(0 == viewMode.compare(QString("3D")))
   {
-	//	TODO - Comeback and fix this
-    //m_gl3DContext->show3D();
+	m_gl3DContext->setDisplayMode(ICapture::Geometry);    
   }
   else if(0 == viewMode.compare(QString("Phase")))
   {
-	//	TODO - Comeback and fix this
-    //m_gl3DContext->showPhase();
+	m_gl3DContext->setDisplayMode(ICapture::Phase);
+  }
+  else if(0 == viewMode.compare(QString("Depth")))
+  {
+	m_gl3DContext->setDisplayMode(ICapture::Depth);
   }
 }
 
@@ -230,10 +235,12 @@ void CaptureController::save(void)
 
 	  if(!file.isEmpty())
 	  {
+		std::string current_locale_filename = file.toLocal8Bit().constData();
+
 		//	Create a codec and outputStream
 		shared_ptr<Holoencoder> codec(new Holoencoder());
 		codec->init(m_gl3DContext->getWidth(), m_gl3DContext->getHeight());
-		shared_ptr<IOutputStream> outStream(new FileOutputStream(file.toStdString(), 576, 576));
+		shared_ptr<IOutputStream> outStream(new FileOutputStream(current_locale_filename, 576, 576));
 		
 		//	Create the save stream and open it
 		m_outputStream = shared_ptr<SaveStream>(new SaveStream());
@@ -317,6 +324,15 @@ void CaptureController::_connectSignalsWithController(void)
 void CaptureController::_readSettings(void)
 {
   //  Read in the settings file and set the settings
-  gammaBox->setValue(         m_settings.value(QString("CaptureGammaValue"),    .10).toDouble());
-  scalingFactorBox->setValue( m_settings.value(QString("CaptureScalingFactor"), .05).toDouble());
+  gammaBox->setValue(         m_settings.value(SettingsGammaValue,    .10).toDouble());
+  scalingFactorBox->setValue( m_settings.value(SettingsScalingFactor, .05).toDouble());
+  shiftFactorBox->setValue(	  m_settings.value(SettingsShiftFactor,	  .00).toDouble());
+
+  //  If we have an active Capture context then set the values there as well
+  if(nullptr != m_gl3DContext)
+  {
+	m_gl3DContext->setGammaCutoff(gammaBox->value());
+	m_gl3DContext->setScalingFactor(scalingFactorBox->value());
+	m_gl3DContext->setShiftFactor(shiftFactorBox->value());
+  }
 }

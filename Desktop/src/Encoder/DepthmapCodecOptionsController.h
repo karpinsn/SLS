@@ -22,7 +22,6 @@ private:
 
 public:
   DepthmapCodecOptionsController(QWidget* parent = 0);
-  ~DepthmapCodecOptionsController();
 
   shared_ptr<Codec> getCodec(void);
 

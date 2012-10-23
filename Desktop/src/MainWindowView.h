@@ -42,7 +42,6 @@ class MainWindowView : public QMainWindow, private Ui::MainWindow
   friend class MainWindowController;
 public:
   MainWindowView(QMainWindow* parent);
-  ~MainWindowView();
 
   // Connect up the signals with the controller
   void connectSignalsWithController(QObject* controller);

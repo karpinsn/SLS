@@ -8,10 +8,6 @@ HoloimageEncoderOptionsController::HoloimageEncoderOptionsController(QWidget* pa
   _connectSignalsWithController();
 }
 
-HoloimageEncoderOptionsController::~HoloimageEncoderOptionsController()
-{
-}
-
 void HoloimageEncoderOptionsController::selectFile(void)
 {
   QString file = QFileDialog::getSaveFileName(this, "Save File As", "/", "Images (*.png)");

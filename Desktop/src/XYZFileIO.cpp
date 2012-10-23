@@ -8,7 +8,6 @@ AbstractMesh* XYZFileIO::newMeshFromFile(const string &fileName)
 	inFile.open(fileName.c_str(), ios::in | ios::binary);
 	if (inFile.is_open())
 	{	
-		
 		XYZHeader header;
 
 		//See if we're using the new format or old format
@@ -41,13 +40,13 @@ AbstractMesh* XYZFileIO::newMeshFromFile(const string &fileName)
 			//	Read in a version 1 file
 			int meshSize = header.meshWidth * header.meshHeight;
 
-			glm::vec3 *vertices = new glm::vec3[meshSize];
-			TextureVertex *textureVertices = new TextureVertex[meshSize];
-			unsigned char *valid = new unsigned char[meshSize];
+			unique_ptr<glm::vec3[]> vertices = unique_ptr<glm::vec3[]>(new glm::vec3[meshSize]);
+			unique_ptr<TextureVertex[]> textureVertices = unique_ptr<TextureVertex[]>(new TextureVertex[meshSize]);
+			unique_ptr<unsigned char[]> valid = unique_ptr<unsigned char[]>(new unsigned char[meshSize]);
 
-			inFile.read(reinterpret_cast<char *>(vertices), sizeof(glm::vec3) * meshSize);
-			inFile.read(reinterpret_cast<char *>(textureVertices), sizeof(TextureVertex) * meshSize);
-			inFile.read(reinterpret_cast<char *>(valid), sizeof(unsigned char) *meshSize);
+			inFile.read(reinterpret_cast<char *>(vertices.get()), sizeof(glm::vec3) * meshSize);
+			inFile.read(reinterpret_cast<char *>(textureVertices.get()), sizeof(TextureVertex) * meshSize);
+			inFile.read(reinterpret_cast<char *>(valid.get()), sizeof(unsigned char) *meshSize);
 
 			shared_ptr<XYZPoint> points = shared_ptr<XYZPoint>(new XYZPoint[meshSize]);
 			
@@ -76,11 +75,6 @@ AbstractMesh* XYZFileIO::newMeshFromFile(const string &fileName)
 				//	If the point is valid then store 255 otherwise store 0
 				points.get()[point].valid = valid[point] != 0 ? 255 : 0;
 			}
-
-			//	Clean up our arrays now that we are done with them
-			delete [] vertices;
-			delete [] textureVertices;
-			delete [] valid;
 
 			//	Calculate the boundingbox - Center
 			boundingBox.center.x = (boundingBox.max.x + boundingBox.min.x) / 2.0f;

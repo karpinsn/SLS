@@ -42,7 +42,6 @@ class MainWindowController : public QObject
 	
 public:
 	MainWindowController();
-	~MainWindowController();
 	
 	void showWidget();
 

@@ -18,7 +18,6 @@ class SixFringeCodecOptionsController : public QWidget, private Ui::SixFringeCod
 
 public:
   SixFringeCodecOptionsController(QWidget* parent = 0);
-  ~SixFringeCodecOptionsController();
 
   shared_ptr<Codec> getCodec(void);
 

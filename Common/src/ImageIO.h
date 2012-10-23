@@ -40,13 +40,12 @@ using namespace wrench::gl;
 class ImageIO
 {
 private:
-	IplImage *m_imageHandle;
+	shared_ptr<IplImage> m_imageHandle;
 	unsigned int m_imageHeight;
 	unsigned int m_imageWidth;
 	
 public:
 	ImageIO(void);
-	~ImageIO();
 	
 	//	Save Image Methods
 	bool saveImage(const string &filename, const IplImage* image, bool needChannelReorder = false);

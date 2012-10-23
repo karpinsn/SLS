@@ -115,16 +115,10 @@ private:
 
   OpenGLWidget* m_glContext;
 
-  enum DisplayMode
-  {
-    Geometry,
-    Phase
-  };
   DisplayMode m_displayMode;
 
 public:
   ThreeFringeCapture(void);
-  ~ThreeFringeCapture();
 
   virtual void init(void);
   virtual void draw(void);
@@ -141,11 +135,10 @@ public:
   void    swapBuffers(void);
   void	  loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance));
   void    captureReferencePlane(void);
+  void	  setDisplayMode(enum DisplayMode mode);
   void    setGammaCutoff(float gamma);
   void	  setShiftFactor(float shiftFactor);
   void    setScalingFactor(float scalingFactor);
-  void    show3D(void);
-  void    showPhase(void);
   void	  setSaveStream(shared_ptr<SaveStream> saveStream);
   double  getFrameRate(void);
   double  get3DRate(void);

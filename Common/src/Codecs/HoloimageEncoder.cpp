@@ -6,10 +6,6 @@ HoloimageEncoder::HoloimageEncoder()
   m_frameNumber = 0;
 }
 
-HoloimageEncoder::~HoloimageEncoder()
-{
-}
-
 void HoloimageEncoder::initCodec(string& filename, int width, int height)
 {
   m_width = width;

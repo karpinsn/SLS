@@ -18,10 +18,6 @@ MainWindowView::MainWindowView(QMainWindow* parent) : QMainWindow(parent)
   _initTopMenu();
 }
 
-MainWindowView::~MainWindowView()
-{
-}
-
 void MainWindowView::_initTopMenu()
 {
   QActionGroup* toolGroup = new QActionGroup(this);

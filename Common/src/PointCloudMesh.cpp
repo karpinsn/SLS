@@ -7,10 +7,6 @@ PointCloudMesh::PointCloudMesh(int width, int height, int pixelsPerPoint)
 	m_pixelsPerPoint = pixelsPerPoint;
 }
 
-PointCloudMesh::~PointCloudMesh()
-{
-}
-
 void PointCloudMesh::initMesh(void)
 {
   	_generateTexturedVertices();
@@ -34,7 +30,7 @@ void PointCloudMesh::draw()
 void PointCloudMesh::_generateIndices(void)
 {	
 	unsigned int elementCount = (m_meshHeight / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint);
-	GLuint* meshIndices = new GLuint[elementCount];
+	unique_ptr<GLuint[]> meshIndices = unique_ptr<GLuint[]>(new GLuint[elementCount]);
 	
 	for(unsigned int point = 0; point < elementCount; point++)
 	{
@@ -42,16 +38,14 @@ void PointCloudMesh::_generateIndices(void)
 	}
 	
 	m_meshIndices.init(1, GL_UNSIGNED_INT);
-	m_meshIndices.bufferData(elementCount, meshIndices, GL_STATIC_DRAW);
-
-	delete [] meshIndices;
+	m_meshIndices.bufferData(elementCount, meshIndices.get(), GL_STATIC_DRAW);
 }
 
 void PointCloudMesh::_generateTexturedVertices(void)
 {
 	unsigned int elementCount = (m_meshHeight / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint);
-	glm::vec3* meshVertices = new glm::vec3[elementCount];
-	glm::vec2* texCoord = new glm::vec2[elementCount];
+	unique_ptr<glm::vec3[]> meshVertices = unique_ptr<glm::vec3[]>(new glm::vec3[elementCount]);
+	unique_ptr<glm::vec2[]> texCoord = unique_ptr<glm::vec2[]>(new glm::vec2[elementCount]);
 
 	for(int row = 0; row < m_meshHeight; row += m_pixelsPerPoint)
 	{
@@ -71,12 +65,7 @@ void PointCloudMesh::_generateTexturedVertices(void)
 
 	m_meshTextureCoords.init(2, GL_FLOAT, GL_ARRAY_BUFFER);
 	m_meshTextureCoords.bufferData(m_meshHeight * m_meshWidth, glm::value_ptr(texCoord[0]), GL_STATIC_DRAW);
-
-	delete [] meshVertices;
-	delete [] texCoord;
 }
-
-
 
 void PointCloudMesh::_cacheMesh(void)
 {

@@ -122,16 +122,10 @@ private:
   int m_width;
   int m_height;
 
-  enum DisplayMode
-  {
-    Geometry,
-    Phase
-  };
   DisplayMode m_displayMode;
 
 public:
   NineFringeCapture(void);
-  ~NineFringeCapture();
 
   virtual void init(void);
   virtual void draw(void);
@@ -151,8 +145,7 @@ public:
   void    setGammaCutoff(float gamma);
   void    setScalingFactor(float scalingFactor);
   void	  setShiftFactor(float shiftFactor);
-  void    show3D(void);
-  void    showPhase(void);
+  void	  setDisplayMode(enum ICapture::DisplayMode mode);
   void	  setSaveStream(shared_ptr<SaveStream> saveStream);
   double  getFrameRate(void);
   double  get3DRate(void);

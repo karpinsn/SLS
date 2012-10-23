@@ -32,7 +32,6 @@ private:
 
 public:
     CameraCapture();
-    ~CameraCapture();
 
     void init(ImageBuffer *buffer);
     void start();

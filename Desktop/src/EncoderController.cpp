@@ -7,10 +7,6 @@ EncoderController::EncoderController(QWidget* parent) : QWidget(parent)
   _addCodecs();
 }
 
-EncoderController::~EncoderController()
-{
-}
-
 void EncoderController::init(void)
 {
 }

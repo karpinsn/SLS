@@ -30,7 +30,6 @@ private:
 
 public:
   HoloimageEncoder();
-  ~HoloimageEncoder();
   void initCodec(string& filename, int width, int height);
 
   void openCodec(EncodingOpenGLWidget* glWidget);

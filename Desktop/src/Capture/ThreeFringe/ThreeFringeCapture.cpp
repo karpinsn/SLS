@@ -14,10 +14,6 @@ ThreeFringeCapture::ThreeFringeCapture(void)
   m_displayMode = Geometry;
 }
 
-ThreeFringeCapture::~ThreeFringeCapture()
-{
-}
-
 void ThreeFringeCapture::init()
 {
   init(256,256);
@@ -316,7 +312,6 @@ void ThreeFringeCapture::draw(void)
 void ThreeFringeCapture::resize(int width, int height)
 {
   m_camera.reshape(width, height);
-  m_textureDisplay.resize(width, height);
 
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
@@ -401,17 +396,12 @@ void ThreeFringeCapture::captureReferencePlane(void)
   m_captureReferencePhase = true;
 }
 
-void ThreeFringeCapture::show3D(void)
-{
-  m_displayMode = Geometry;
-}
-
-void ThreeFringeCapture::showPhase(void)
-{
-  m_displayMode = Phase;
-}
-
 void ThreeFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)
+{
+
+}
+
+void ThreeFringeCapture::setDisplayMode(enum DisplayMode mode)
 {
 
 }

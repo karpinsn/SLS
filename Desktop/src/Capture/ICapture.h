@@ -35,6 +35,7 @@ public:
   virtual void captureReferencePlane(void)			  = 0;
   virtual void setDisplayMode(enum DisplayMode mode)  = 0;
   virtual void setGammaCutoff(float gammaValue)		  = 0;
+  virtual void setBlackLevel(float blackLevel)		  = 0;
   virtual void setScalingFactor(float scalingFactor)  = 0;
   virtual void setShiftFactor(float shiftFactor)	  = 0;
   virtual void setSaveStream(shared_ptr<SaveStream> saveStream) = 0;

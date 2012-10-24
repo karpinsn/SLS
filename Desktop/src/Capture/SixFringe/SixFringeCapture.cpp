@@ -259,6 +259,11 @@ void SixFringeCapture::setGammaCutoff(float gamma)
   m_gammaCutoff = gamma;
 }
 
+void SixFringeCapture::setBlackLevel(float blackLevel)
+{
+  m_blackLevel = blackLevel;
+}
+
 void SixFringeCapture::setScalingFactor(float scalingFactor)
 {
   m_scalingFactor = scalingFactor;

@@ -269,6 +269,11 @@ void NineFringeCapture::setGammaCutoff(float gamma)
   m_gammaCutoff = gamma;
 }
 
+void NineFringeCapture::setBlackLevel(float blackLevel)
+{
+  m_blackLevel = blackLevel;
+}
+
 void NineFringeCapture::setScalingFactor(float scalingFactor)
 {
   m_scalingFactor = scalingFactor;
@@ -334,6 +339,9 @@ void NineFringeCapture::draw(void)
       //	Pass 2 - Phase filtering
       _drawFilterPhase();
 
+	  //	Pass 3 - Texture calculation
+	  _drawCalculateTexture();
+
       //    Pass 3 - Depth Calculator
       _drawCalculateDepthMap();
 
@@ -345,23 +353,17 @@ void NineFringeCapture::draw(void)
 
   if(m_haveReferencePhase && Geometry == m_displayMode)
   {
-	glMatrixMode(GL_MODELVIEW);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glPushMatrix();
-	glLoadIdentity();
-
-    m_camera.applyMatrix();
-    m_controller.applyTransform();
-
 	glColor3f(0.0f, 1.0f, 0.0f);
 
-    glm::mat4 modelViewMatrix;
-    glm::mat4 projectionMatrix;
-    glm::mat4 normalMatrix;
+	glm::mat4 modelViewMatrix;
+	modelViewMatrix *= m_camera.getMatrix();
+	modelViewMatrix *= m_controller.getTransform();
 
-    glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(modelViewMatrix));
+	glm::mat4 projectionMatrix;
     glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(projectionMatrix));
-    normalMatrix = glm::transpose(glm::inverse(modelViewMatrix));   //  This is needed for lighting calculations
+    
+	glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelViewMatrix));   //  This is needed for lighting calculations
 
     m_axis.draw(modelViewMatrix);
 
@@ -384,8 +386,6 @@ void NineFringeCapture::draw(void)
 	{
 		m_saveStream->encodeAndStream(shared_ptr<MeshInterchange>(new MeshInterchange(&m_depthMap, false)));
 	}
-
-    glPopMatrix();
   }
   else if(m_haveReferencePhase && Phase == m_displayMode)
   {
@@ -549,6 +549,14 @@ void NineFringeCapture::_drawFilterPhase()
   m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
   m_phaseFilter.bind();
   m_phaseMap1.bind(GL_TEXTURE0);
+  m_imageProcessor.process();
+}
+
+void NineFringeCapture::_drawCalculateTexture()
+{
+  m_imageProcessor.bindDrawBuffer(m_textureMapAttachPoint);
+  m_textureCalculator.bind();
+  m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
   m_imageProcessor.process();
 }
 

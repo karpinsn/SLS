@@ -112,6 +112,7 @@ private:
   int m_currentFringeLoad;
   int m_currentChannelLoad;
   float m_gammaCutoff;
+  float m_blackLevel;
   float m_scalingFactor;
   float m_shiftFactor;
   float m_width;
@@ -148,6 +149,7 @@ public:
   void    captureReferencePlane(void);
   void	  setDisplayMode(enum DisplayMode mode);
   void    setGammaCutoff(float gamma);
+  void	  setBlackLevel(float blackLevel);
   void    setScalingFactor(float scalingFactor);
   void	  setShiftFactor(float shiftFactor);
   void	  setSaveStream(shared_ptr<SaveStream> saveStream);

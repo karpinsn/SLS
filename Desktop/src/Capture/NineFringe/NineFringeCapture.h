@@ -113,6 +113,7 @@ private:
   int m_currentFringeLoad;
   int m_currentChannelLoad;
   float m_gammaCutoff;
+  float m_blackLevel;
   float m_shiftFactor;
   float m_scalingFactor;
 
@@ -148,6 +149,7 @@ public:
   void	  loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance));
   void    captureReferencePlane(void);
   void    setGammaCutoff(float gamma);
+  void	  setBlackLevel(float blackLevel);
   void    setScalingFactor(float scalingFactor);
   void	  setShiftFactor(float shiftFactor);
   void	  setDisplayMode(enum ICapture::DisplayMode mode);
@@ -165,6 +167,7 @@ private:
 
   void _drawCalculatePhase();
   void _drawFilterPhase();
+  void _drawCalculateTexture();
   void _drawCalculateDepthMap();
   void _drawCalculateNormalMap();
 };

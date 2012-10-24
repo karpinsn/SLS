@@ -136,26 +136,29 @@ void CaptureController::dropFrame(void)
 
 void CaptureController::newGammaValue(double gammaValue)
 {
-  //  Set the new gamma value
+  //  Set the new value then persist the settings
   m_gl3DContext->setGammaCutoff(gammaValue);
-
-  //  Persist the new gamma value
   m_settings.setValue(SettingsGammaValue, gammaValue);
+}
+
+void CaptureController::newBlackLevel(double blackLevel)
+{
+  //  Set the new value then persist the settings
+  m_gl3DContext->setBlackLevel(blackLevel);
+  m_settings.setValue(SettingsBlackLevelValue, blackLevel);
 }
 
 void CaptureController::newScalingFactor(double scalingFactor)
 {
+  //  Set the new value then persist the settings
   m_gl3DContext->setScalingFactor(scalingFactor);
-
-  //  Persist the new scaling factor
   m_settings.setValue(SettingsScalingFactor, scalingFactor);
 }
 
 void CaptureController::newShiftFactor(double shiftFactor)
 {
+  //  Set the new value then persist the settings
   m_gl3DContext->setShiftFactor(shiftFactor);
-
-  //  Persist the new scaling factor
   m_settings.setValue(SettingsShiftFactor, shiftFactor);
 }
 

@@ -212,6 +212,11 @@ void ThreeFringeCapture::setGammaCutoff(float gamma)
   m_gammaCutoff = gamma;
 }
 
+void ThreeFringeCapture::setBlackLevel(float blackLevel)
+{
+  m_blackLevel = blackLevel;
+}
+
 void ThreeFringeCapture::setScalingFactor(float scalingFactor)
 {
   m_scalingFactor = scalingFactor;

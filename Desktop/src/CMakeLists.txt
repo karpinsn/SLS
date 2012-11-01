@@ -258,6 +258,8 @@ set(UIS
 	ui/HolovideoEncoderOptions.ui)
 
 set(MOCS 
+	../../Libraries/Lens/src/lens/Camera.h
+	../../Libraries/Lens/src/lens/FileCamera.h
 	MainWindowView.h 
 	MainWindowController.h 
 	OpenGLWidget.h 

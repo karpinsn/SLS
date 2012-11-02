@@ -1,12 +1,8 @@
-/*
- Filename:		IGLContext.h
- Author:		Nikolaus Karpinsky
- Date Created:	09/01/09
- Last Edited:	09/01/09
- 
- Revision Log:
- 09/01/09 - Nik Karpinsky - Original creation.
- */
+/**
+@file
+@author Nikolaus Karpinsky
+@since  09/01/09
+*/
 
 #ifndef _ABSTRACT_GL_CONTEXT_H_
 #define _ABSTRACT_GL_CONTEXT_H_

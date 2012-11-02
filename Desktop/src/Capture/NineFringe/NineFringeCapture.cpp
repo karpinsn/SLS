@@ -195,16 +195,28 @@ void NineFringeCapture::_initShaders(float width, float height)
   m_textureCalculator.link();
   m_phaseCalculator.uniform("fringe", 0);
 
-  m_finalRender.init();
-  m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/FinalRender.vert"));
-  m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/FinalRender.frag"));
-  m_finalRender.bindAttributeLocation("vert", 0);
-  m_finalRender.bindAttributeLocation("vertTexCoord", 1);
+  m_finalRenderColor.init();
+  m_finalRenderColor.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/FinalRenderColor.vert"));
+  m_finalRenderColor.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/FinalRenderColor.frag"));
+  m_finalRenderColor.bindAttributeLocation("vert", 0);
+  m_finalRenderColor.bindAttributeLocation("vertTexCoord", 1);
 
-  m_finalRender.link();
-  m_finalRender.uniform("normals", 0);
-  m_finalRender.uniform("depthMap", 1);
-  m_finalRender.uniform("phaseMap", 2);
+  m_finalRenderColor.link();
+  m_finalRenderColor.uniform("normals", 0);
+  m_finalRenderColor.uniform("depthMap", 1);
+  m_finalRenderColor.uniform("phaseMap", 2);
+
+  m_finalRenderTexture.init();
+  m_finalRenderTexture.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/FinalRenderTexture.vert"));
+  m_finalRenderTexture.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/FinalRenderTexture.frag"));
+  m_finalRenderTexture.bindAttributeLocation("vert", 0);
+  m_finalRenderTexture.bindAttributeLocation("vertTexCoord", 1);
+
+  m_finalRenderTexture.link();
+  m_finalRenderTexture.uniform("normals", 0);
+  m_finalRenderTexture.uniform("depthMap", 1);
+  m_finalRenderTexture.uniform("phaseMap", 2);
+  m_finalRenderTexture.uniform("textureMap", 3);
 
   OGLStatus::logOGLErrors("NineFringeCapture - initShaders()");
 }
@@ -258,10 +270,13 @@ void NineFringeCapture::_initLighting(void)
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
 
-  m_finalRender.uniform("lightPosition", glm::vec3(0.5f, 0.5f, 4.0f));
-  m_finalRender.uniform("ambientColor", glm::vec4(.1, .1, .1, 1.0));
-  m_finalRender.uniform("diffuseColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
-  m_finalRender.uniform("specularColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
+  m_finalRenderColor.uniform("lightPosition", glm::vec3(0.5f, 0.5f, 4.0f));
+  m_finalRenderColor.uniform("ambientColor", glm::vec4(.1, .1, .1, 1.0));
+  m_finalRenderColor.uniform("diffuseColor", glm::vec4(.9, .9, .9, 1.0));
+  m_finalRenderColor.uniform("specularColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
+
+  m_finalRenderTexture.uniform("diffuseColor", glm::vec4(.7, .7, .7, 1.0));
+  m_finalRenderTexture.uniform("specularColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
 }
 
 void NineFringeCapture::setGammaCutoff(float gamma)
@@ -354,7 +369,6 @@ void NineFringeCapture::draw(void)
   if(m_haveReferencePhase && Geometry == m_displayMode)
   {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glColor3f(0.0f, 1.0f, 0.0f);
 
 	glm::mat4 modelViewMatrix;
 	modelViewMatrix *= m_camera.getMatrix();
@@ -364,14 +378,13 @@ void NineFringeCapture::draw(void)
     glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(projectionMatrix));
     
 	glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelViewMatrix));   //  This is needed for lighting calculations
-
     m_axis.draw(modelViewMatrix);
 
-	m_finalRender.bind();
+	m_finalRenderColor.bind();
 	{
-      m_finalRender.uniform("modelViewMatrix", modelViewMatrix);
-      m_finalRender.uniform("projectionMatrix", projectionMatrix);
-      m_finalRender.uniform("normalMatrix", normalMatrix);
+      m_finalRenderColor.uniform("modelViewMatrix", modelViewMatrix);
+      m_finalRenderColor.uniform("projectionMatrix", projectionMatrix);
+      m_finalRenderColor.uniform("normalMatrix", normalMatrix);
 
       m_normalMap.bind(GL_TEXTURE0);
       m_depthMap.bind(GL_TEXTURE1);
@@ -380,7 +393,42 @@ void NineFringeCapture::draw(void)
       // Draw a plane of pixels
       m_mesh->draw();
 	}
-	m_finalRender.unbind();
+	m_finalRenderColor.unbind();
+
+	if(m_saveStream)
+	{
+		m_saveStream->encodeAndStream(shared_ptr<MeshInterchange>(new MeshInterchange(&m_depthMap, false)));
+	}
+  }
+  else if(m_haveReferencePhase && GeometryTexture == m_displayMode)
+  {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glm::mat4 modelViewMatrix;
+	modelViewMatrix *= m_camera.getMatrix();
+	modelViewMatrix *= m_controller.getTransform();
+
+	glm::mat4 projectionMatrix;
+    glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(projectionMatrix));
+    
+	glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelViewMatrix));   //  This is needed for lighting calculations
+    m_axis.draw(modelViewMatrix);
+
+	m_finalRenderTexture.bind();
+	{
+      m_finalRenderTexture.uniform("modelViewMatrix", modelViewMatrix);
+      m_finalRenderTexture.uniform("projectionMatrix", projectionMatrix);
+      m_finalRenderTexture.uniform("normalMatrix", normalMatrix);
+
+      m_normalMap.bind(GL_TEXTURE0);
+      m_depthMap.bind(GL_TEXTURE1);
+      m_phaseMap0.bind(GL_TEXTURE2);
+	  m_textureMap.bind(GL_TEXTURE3);
+
+      // Draw a plane of pixels
+      m_mesh->draw();
+	}
+	m_finalRenderTexture.unbind();
 
 	if(m_saveStream)
 	{

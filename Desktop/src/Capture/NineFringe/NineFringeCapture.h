@@ -71,7 +71,8 @@ private:
   ShaderProgram m_depthCalculator;
   ShaderProgram m_normalCalculator;
   ShaderProgram m_textureCalculator;
-  ShaderProgram m_finalRender;
+  ShaderProgram m_finalRenderColor;
+  ShaderProgram m_finalRenderTexture;
 
   GLenum m_phaseMap0AttachPoint;
   GLenum m_phaseMap1AttachPoint;

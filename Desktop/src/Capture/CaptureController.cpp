@@ -168,6 +168,10 @@ void CaptureController::newViewMode(QString viewMode)
   {
 	m_gl3DContext->setDisplayMode(ICapture::Geometry);    
   }
+  else if(0 == viewMode.compare(QString("3D Tex")))
+  {
+	m_gl3DContext->setDisplayMode(ICapture::GeometryTexture);
+  }
   else if(0 == viewMode.compare(QString("Phase")))
   {
 	m_gl3DContext->setDisplayMode(ICapture::Phase);

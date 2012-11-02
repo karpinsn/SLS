@@ -24,6 +24,7 @@ public:
   enum DisplayMode 
   {
 	Geometry,
+	GeometryTexture,
 	Phase,
 	Depth
   };

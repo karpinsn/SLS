@@ -312,7 +312,6 @@ shared_ptr<IplImage> CaptureController::_newFrameFromFile(void)
 
 void CaptureController::_connectSignalsWithController(void)
 {
-  connect(m_frameCapture.get(), SIGNAL(newFrame(shared_ptr<IplImage>)),		  this, SLOT(newFrame(shared_ptr<IplImage>)));
   connect(openCameraButton,		SIGNAL(clicked()),                    this, SLOT(connectCamera()));
   connect(closeCameraButton,	SIGNAL(clicked()),                    this, SLOT(disconnectCamera()));
   connect(calibrateButton,		SIGNAL(clicked()),                    this, SLOT(captureReference()));

@@ -9,7 +9,6 @@ set(SHADER_VERT_SOURCES
 	Gaussian11x11Horizontal.vert
 	Gaussian11x11Vertical.vert
     DepthCalculator.vert
-	FinalRender.vert
     NormalCalculator.vert
 	PhaseFilter.vert
 	PhaseUnwrap.vert
@@ -20,7 +19,6 @@ set(SHADER_FRAG_SOURCES
 	
 	Gaussian11x11.frag
     DepthCalculator.frag
-	FinalRender.frag
     NormalCalculator.frag
 	PhaseFilter.frag
 	PhaseUnwrap.frag

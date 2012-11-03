@@ -273,31 +273,31 @@ void NineFringeCapture::draw(void)
     //  If we dont have the reference phase then we are calculating it and we redraw
     m_imageProcessor.bind();
     {
-      m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
-      m_phaseCalculator.bind();
-      m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
-      m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1);
-      m_fringeImages[m_frontBufferIndex][2]->bind(GL_TEXTURE2);
-      m_imageProcessor.process();
+	  // Pass 1 - Phase Calculation
+	  // Save the gamma so we can restore it
+	  float currentGamma = m_gammaCutoff;
+	  m_gammaCutoff = 0.0f;
+      _drawCalculatePhase();
+	  m_gammaCutoff = currentGamma;
+
+	  m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
+	  m_gaussianFilterVertical.bind();
+	  m_phaseMap0.bind(GL_TEXTURE0);
+	  m_imageProcessor.process();
 
 	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
-	  m_gaussianFilterVertical.bind();
+	  m_gaussianFilterHorizontal.bind();
 	  m_phaseMap1.bind(GL_TEXTURE0);
 	  m_imageProcessor.process();
 
 	  m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
-	  m_gaussianFilterHorizontal.bind();
-	  m_phaseMap0.bind(GL_TEXTURE0);
-	  m_imageProcessor.process();
-
-	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
 	  m_gaussianFilterVertical.bind();
-	  m_phaseMap1.bind(GL_TEXTURE0);
+	  m_phaseMap0.bind(GL_TEXTURE0);
 	  m_imageProcessor.process();
 
 	  m_imageProcessor.bindDrawBuffer(m_referencePhaseAttachPoint);
 	  m_gaussianFilterHorizontal.bind();
-	  m_phaseMap0.bind(GL_TEXTURE0);
+	  m_phaseMap1.bind(GL_TEXTURE0);
 	  m_imageProcessor.process();
     }
     m_imageProcessor.unbind();
@@ -327,7 +327,6 @@ void NineFringeCapture::draw(void)
     m_imageProcessor.unbind();
   }
 
-  m_fpsCalculator.frameUpdate();
   OGLStatus::logOGLErrors("NineFringeCapture - draw()");
 }
 
@@ -356,7 +355,6 @@ bool NineFringeCapture::newImage(IplImage* image)
     m_currentChannelLoad = 0;
     m_currentFringeLoad = 0;
     swapBuffers();
-    m_3dpsCalculator.frameUpdate();
     needRedraw = true;
   }
 
@@ -408,16 +406,6 @@ void NineFringeCapture::captureReferencePlane(void)
 void NineFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)
 {
   m_saveStream = saveStream;
-}
-
-double NineFringeCapture::getFrameRate(void)
-{
-  return m_fpsCalculator.getFrameRate();
-}
-
-double NineFringeCapture::get3DRate(void)
-{
-  return m_3dpsCalculator.getFrameRate();
 }
 
 string NineFringeCapture::getCaptureName(void)

@@ -14,7 +14,7 @@ class NineFringeDecoder : public Codec
 {
 private:
   VideoIO				  m_io;
-  NineFringeCapture  m_coder;
+  NineFringeCapture		  m_coder;
   bool					  m_calculateReference;
   EncodingOpenGLWidget*	  m_glWidget;
   string				  m_filename;

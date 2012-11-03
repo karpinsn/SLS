@@ -54,7 +54,6 @@ private:
 
   QSettings               m_settings;
   QTimer                  m_frameRateTimer;
-  QTimer				  m_3DUpdateTimer;
 
 public slots:
   void captureReference(void);
@@ -69,9 +68,6 @@ public slots:
   void updateInfoBar(void);
   void save(void);
   void stream(void);
-
-signals:
-  void crossThreadGLUpdate(void);
 
 public:
     CaptureController(QWidget* parent = 0);

@@ -8,8 +8,6 @@ set(SHADER_VERT_SOURCES
 
 	PhaseCalculator.vert
 	DepthCalculator.vert
-    FinalRenderColor.vert
-    FinalRenderTexture.vert
     NormalCalculator.vert
 	PhaseFilter.vert
 	TextureCalculator.vert
@@ -19,8 +17,6 @@ set(SHADER_FRAG_SOURCES
 	
 	PhaseCalculator.frag
 	DepthCalculator.frag
-    FinalRenderColor.frag
-    FinalRenderTexture.frag
 	NormalCalculator.frag
 	PhaseFilter.frag
 	TextureCalculator.frag

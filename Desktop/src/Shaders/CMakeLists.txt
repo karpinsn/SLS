@@ -16,6 +16,7 @@ set(SHADER_VERT_SOURCES
 	TextureDisplay.vert
     RotationManipulator.vert
 	FinalRenderColor.vert
+	FinalRenderTexture.vert
 )
 
 set(SHADER_FRAG_SOURCES
@@ -31,6 +32,7 @@ set(SHADER_FRAG_SOURCES
 	TextureDisplay.frag
     RotationManipulator.frag
 	FinalRenderColor.frag
+	FinalRenderTexture.frag
 )
 
 set(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})

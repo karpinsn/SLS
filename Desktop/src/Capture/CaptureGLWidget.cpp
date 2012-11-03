@@ -7,6 +7,9 @@ CaptureGLWidget::CaptureGLWidget(QWidget *parent) : QGLWidget(QGLFormat(QGL::Sam
   m_width = 0;
   m_height = 0;
   m_displayMode = Geometry;
+  
+  //  This is needed so that we can trigger an update from another thread
+  connect(this,	SIGNAL(crossThreadGLUpdate()), this, SLOT(updateGL())); 
 }
 
 void CaptureGLWidget::initializeGL()
@@ -35,8 +38,19 @@ void CaptureGLWidget::initializeGL()
   m_finalRenderColor.bindAttributeLocation("vertTexCoord", 1);
 
   m_finalRenderColor.link();
-  m_finalRenderColor.uniform("normals", 0);
-  m_finalRenderColor.uniform("depthMap", 1);
+  m_finalRenderColor.uniform("depthMap", 0);
+  m_finalRenderColor.uniform("normals", 1);
+
+  m_finalRenderTexture.init();
+  m_finalRenderTexture.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/FinalRenderTexture.vert"));
+  m_finalRenderTexture.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/FinalRenderTexture.frag"));
+  m_finalRenderTexture.bindAttributeLocation("vert", 0);
+  m_finalRenderTexture.bindAttributeLocation("vertTexCoord", 1);
+
+  m_finalRenderTexture.link();
+  m_finalRenderTexture.uniform("depthMap", 0);
+  m_finalRenderTexture.uniform("normals", 1);
+  m_finalRenderTexture.uniform("textureMap", 2);
 
   m_textureDisplay.init();
 
@@ -47,6 +61,10 @@ void CaptureGLWidget::initializeGL()
   m_finalRenderColor.uniform("ambientColor", glm::vec4(.1, .1, .1, 1.0));
   m_finalRenderColor.uniform("diffuseColor", glm::vec4(.9, .9, .9, 1.0));
   m_finalRenderColor.uniform("specularColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
+
+  m_finalRenderTexture.uniform("lightPosition", glm::vec3(0.5f, 0.5f, 4.0f));
+  m_finalRenderTexture.uniform("diffuseColor", glm::vec4(.1, .1, .1, 1.0));
+  m_finalRenderTexture.uniform("specularColor", glm::vec4(.0, .0, .0, 1.0));
 
   // Set the clear color
   qglClearColor(m_clearColor);
@@ -69,12 +87,6 @@ void CaptureGLWidget::resizeCapture(int width, int height)
 void CaptureGLWidget::setCaptureContext(ICapture* glContext)
 {
   m_captureDecoder = glContext;
-  makeCurrent();
-}
-
-void CaptureGLWidget::updateScene()
-{
-  updateGL();
 }
 
 void CaptureGLWidget::paintGL()
@@ -83,7 +95,7 @@ void CaptureGLWidget::paintGL()
   {
 	m_captureDecoder->draw();
 
-	if(Geometry == m_displayMode)
+	if(Geometry == m_displayMode || GeometryTexture == m_displayMode)
 	{
 	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -92,21 +104,28 @@ void CaptureGLWidget::paintGL()
 	  glm::mat4 projectionMatrix = glm::perspective(45.0f, 1.0f, .1f, 10.0f);
 	  glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelViewMatrix));
 
+	  //  Draw helper geometry
 	  m_axis.draw(modelViewMatrix);
 
-	  m_finalRenderColor.bind();
-	  {
-		m_finalRenderColor.uniform("modelViewMatrix", modelViewMatrix);
-		m_finalRenderColor.uniform("projectionMatrix", projectionMatrix);
-		m_finalRenderColor.uniform("normalMatrix", normalMatrix);
+	  //  Figure out what shader to use
+	  ShaderProgram* m_finalShader;
+	  if(Geometry == m_displayMode)
+		m_finalShader = &m_finalRenderColor;
+	  else
+		m_finalShader = &m_finalRenderTexture;
 
-		m_captureDecoder->getNormalMap().bind(GL_TEXTURE0);
-		m_captureDecoder->getDepthMap().bind(GL_TEXTURE1);
+	  //  Draw our geometry
+	  m_finalShader->bind();
+	  m_finalShader->uniform("modelViewMatrix", modelViewMatrix);
+	  m_finalShader->uniform("projectionMatrix", projectionMatrix);
+	  m_finalShader->uniform("normalMatrix", normalMatrix);
 
-		// Draw a plane of pixels
-		m_mesh->draw();
-	  }
-	  m_finalRenderColor.unbind();
+	  m_captureDecoder->getDepthMap().bind(GL_TEXTURE0);
+	  m_captureDecoder->getNormalMap().bind(GL_TEXTURE1);
+	  m_captureDecoder->getTextureMap().bind(GL_TEXTURE2);
+
+	  // Draw a plane of pixels
+	  m_mesh->draw();
 	}
 	else if(Depth == m_displayMode)
 	{
@@ -114,6 +133,8 @@ void CaptureGLWidget::paintGL()
 	  m_textureDisplay.draw(&m_captureDecoder->getDepthMap());
 	}
   }
+
+  m_fpsCalculator.frameUpdate();
   //	Make sure we dont have any errors
   OGLStatus::logOGLErrors("OpenGLWidget - paintGL()");
 }
@@ -134,6 +155,26 @@ void CaptureGLWidget::cameraSelectMode(int mode)
 void CaptureGLWidget::setDisplayMode(enum DisplayMode mode)
 {
   m_displayMode = mode;
+}
+
+double CaptureGLWidget::getFrameRate(void)
+{
+  return m_fpsCalculator.getFrameRate();
+}
+
+double CaptureGLWidget::get3DRate(void)
+{
+  return m_3dpsCalculator.getFrameRate();
+}
+
+void CaptureGLWidget::newFringe(IplImage* fringeImage)
+{
+  if(m_captureDecoder->newImage(fringeImage))
+  {
+	m_3dpsCalculator.frameUpdate();
+	//	Since we could be on another thread, we need to dispatch through Signals/Slots
+	emit(crossThreadGLUpdate());
+  }
 }
 
 void CaptureGLWidget::mousePressEvent(QMouseEvent *event)

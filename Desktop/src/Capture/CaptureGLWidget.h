@@ -35,8 +35,11 @@
 #include <wrench/gl/ShaderProgram.h>
 #include <wrench/gl/Shader.h>
 #include <wrench/gl/Texture.h>
+
+#include <wrench/gl/utils/Arcball.h>
 #include <wrench/gl/utils/AxisDisplay.h>
 #include <wrench/gl/utils/TextureDisplay.h>
+#include <wrench/gl/utils/FPSCalculator.h>
 
 #include "Holoencoder.h"
 #include "Holodecoder.h"
@@ -68,7 +71,11 @@ private:
   shared_ptr<TriMesh> m_mesh;
   AxisDisplay		  m_axis;
 
+  FPSCalculator		  m_fpsCalculator;
+  FPSCalculator		  m_3dpsCalculator; // 3D frames per second
+
   ShaderProgram		  m_finalRenderColor;
+  ShaderProgram		  m_finalRenderTexture;
   TextureDisplay	  m_textureDisplay;
   DisplayMode		  m_displayMode;
 
@@ -77,16 +84,21 @@ public:
 
   void initializeGL();
   void resizeCapture(int width, int height);
-  void updateScene();
   void setCaptureContext(ICapture* glContext);
   void cameraSelectMode(int mode);
   void setDisplayMode(enum DisplayMode mode);
+  double getFrameRate(void);
+  double get3DRate(void);
+  void newFringe(IplImage* fringeImage);
 
 protected:
   void paintGL();
   void resizeGL(int width, int height);
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
+
+signals:
+  void crossThreadGLUpdate(void);
 };
 
 #endif	// _CAPTURE_GL_WIDGET_H_

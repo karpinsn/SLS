@@ -44,8 +44,6 @@ void CaptureController::showEvent(QShowEvent *event)
   m_infoBar->addPermanentWidget(&m_fpsLabel);
   m_infoBar->addPermanentWidget(&m_3dpsLabel);
   m_infoBar->addPermanentWidget(&m_bufferStatus);
-
-  captureGLWidget->updateScene();
 }
 
 void CaptureController::hideEvent(QHideEvent *)
@@ -190,13 +188,13 @@ void CaptureController::updateInfoBar(void)
   m_bufferStatus.setText(bufferStatusMessage);
 
   //  Update our current framerate (2D framerate)
-  double frameRate = m_gl3DContext->getFrameRate();
+  double frameRate = captureGLWidget->getFrameRate();
   QString frameRateMessage = QString("FPS: ");
   frameRateMessage.append(QString("%1").arg(frameRate, 0, 'f', 3));
   m_fpsLabel.setText(frameRateMessage);
 
   //  Update our current framerate (3D framerate)
-  double threeDRate = m_gl3DContext->get3DRate();
+  double threeDRate = captureGLWidget->get3DRate();
   QString threeDRateMessage = QString("3DPS: ");
   threeDRateMessage.append(QString("%1").arg(threeDRate, 0, 'f', 3));
   m_3dpsLabel.setText(threeDRateMessage);
@@ -217,10 +215,7 @@ void CaptureController::newFrame(shared_ptr<IplImage> frame)
       cvCvtColor(frame.get(), im_gray.get(), CV_RGB2GRAY);
     }
 
-    if(m_gl3DContext->newImage(im_gray.get()))
-    {
-	  emit(crossThreadGLUpdate());
-    }
+	captureGLWidget->newFringe(im_gray.get());
   }
   else  // Drop a frame
   {
@@ -247,7 +242,7 @@ void CaptureController::save(void)
 		//	Create a codec and outputStream
 		shared_ptr<Holoencoder> codec(new Holoencoder());
 		codec->init(m_gl3DContext->getWidth(), m_gl3DContext->getHeight());
-		shared_ptr<IOutputStream> outStream(new FileOutputStream(current_locale_filename, 576, 576));
+		shared_ptr<IOutputStream> outStream(new FileOutputStream(current_locale_filename, m_gl3DContext->getWidth(), m_gl3DContext->getHeight()));
 		
 		//	Create the save stream and open it
 		m_outputStream = shared_ptr<SaveStream>(new SaveStream());
@@ -321,10 +316,8 @@ void CaptureController::_connectSignalsWithController(void)
   connect(shiftFactorBox,		SIGNAL(valueChanged(double)),		  this, SLOT(newShiftFactor(double)));
   connect(viewModeBox,			SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
   connect(&m_frameRateTimer,	SIGNAL(timeout()),                    this, SLOT(updateInfoBar()));
-  connect(&m_3DUpdateTimer,		SIGNAL(timeout()),	captureGLWidget, SLOT(updateGL()));
   connect(saveButton,			SIGNAL(clicked()),					  this, SLOT(save()));
   connect(streamButton,			SIGNAL(clicked()),					  this, SLOT(stream()));
-  connect(this,					SIGNAL(crossThreadGLUpdate()), captureGLWidget, SLOT(updateGL())); 
 }
 
 void CaptureController::_readSettings(void)

@@ -43,15 +43,9 @@
 #include <wrench/gl/Texture.h>
 #include <wrench/gl/FBO.h>
 
-#include <wrench/gl/utils/AxisDisplay.h>
-#include <wrench/gl/utils/FPSCalculator.h>
-
 #include "OpenGLWidget.h"
 
 #include <wrench/gl/OGLStatus.h>
-
-#include <wrench/gl/utils/TextureDisplay.h>
-#include <wrench/gl/utils/Arcball.h>
 
 class OpenGLWidget;
 
@@ -96,9 +90,6 @@ private:
 
   FBO m_imageProcessor;
 
-  FPSCalculator m_fpsCalculator;
-  FPSCalculator m_3dpsCalculator; // 3D frames per second
-
   bool haveFringeImages;
   bool m_haveReferencePhase;
   bool m_captureReferencePhase;
@@ -140,8 +131,6 @@ public:
   void    setScalingFactor(float scalingFactor);
   void	  setShiftFactor(float shiftFactor);
   void	  setSaveStream(shared_ptr<SaveStream> saveStream);
-  double  getFrameRate(void);
-  double  get3DRate(void);
   MeshInterchange* decode(void);
 
   static string getCaptureName(void);

@@ -38,8 +38,6 @@ public:
   virtual Texture& getNormalMap(void)				  = 0;
   virtual void draw(void)							  = 0;
 
-  virtual double getFrameRate(void)					  = 0;
-  virtual double get3DRate(void)					  = 0;
   virtual bool newImage(IplImage *frame)			  = 0;
 };
 

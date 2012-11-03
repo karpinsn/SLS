@@ -11,7 +11,6 @@ SixFringeCapture::SixFringeCapture(void)
   m_gammaCutoff = 0.1f;
   m_scalingFactor = 0.04f;
   m_shiftFactor = 0.0f;
-  m_displayMode = Geometry;
 }
 
 void SixFringeCapture::init()
@@ -25,17 +24,6 @@ void SixFringeCapture::init(int width, int height)
   {
     _initShaders(width, height);
     _initTextures(width, height);
-    m_textureDisplay.init();
-    _initLighting();
-
-    m_axis.init();
-
-	m_controller.init(0.5f, 0.5f, 0.0f, .5f);
-    m_camera.init(0.5f, 0.5f, 2.0f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f);
-    m_camera.setMode(1);
-
-    m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
-    m_mesh->initMesh();
 
 	m_fringeLoadingImage = shared_ptr<IplImage>(cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3), [](IplImage* ptr) { cvReleaseImage(&ptr); });
 
@@ -94,10 +82,6 @@ void SixFringeCapture::resizeInput(int width, int height)
     m_phaseFilter.uniform("height", (float)height);
     m_normalCalculator.uniform("width", (float)width);
     m_normalCalculator.uniform("height", (float)height);
-
-    //  Resize the display mesh
-	m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
-    m_mesh->initMesh();
 
 	m_width = width;
 	m_height = height;
@@ -189,17 +173,6 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_normalCalculator.uniform("width", width);
   m_normalCalculator.uniform("height", height);
 
-  m_finalRender.init();
-  m_finalRender.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/FinalRender.vert"));
-  m_finalRender.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/FinalRender.frag"));
-  m_finalRender.bindAttributeLocation("vert", 0);
-  m_finalRender.bindAttributeLocation("vertTexCoord", 1);
-
-  m_finalRender.link();
-  m_finalRender.uniform("normals", 0);
-  m_finalRender.uniform("depthMap", 1);
-  m_finalRender.uniform("phaseMap", 2);
-
   OGLStatus::logOGLErrors("SixFringeCapture - initShaders()");
 }
 
@@ -243,17 +216,6 @@ void SixFringeCapture::_initTextures(GLuint width, GLuint height)
   OGLStatus::logOGLErrors("SixFringeCapture - initTextures()");
 }
 
-void SixFringeCapture::_initLighting(void)
-{
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
-
-  m_finalRender.uniform("lightPosition", glm::vec3(0.5f, 0.5f, 4.0f));
-  m_finalRender.uniform("ambientColor", glm::vec4(.1, .1, .1, 1.0));
-  m_finalRender.uniform("diffuseColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
-  m_finalRender.uniform("specularColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
-}
-
 void SixFringeCapture::setGammaCutoff(float gamma)
 {
   m_gammaCutoff = gamma;
@@ -274,9 +236,20 @@ void SixFringeCapture::setShiftFactor(float shiftFactor)
   m_shiftFactor = shiftFactor;
 }
 
-void SixFringeCapture::setDisplayMode(enum DisplayMode mode)
+Texture& SixFringeCapture::getDepthMap(void)
 {
+  return m_depthMap;
+}
 
+Texture& SixFringeCapture::getTextureMap(void)
+{
+  //  TODO - Put the texture map here
+  return m_depthMap;
+}
+
+Texture& SixFringeCapture::getNormalMap(void)
+{
+  return m_normalMap;
 }
 
 MeshInterchange* SixFringeCapture::decode(void)
@@ -341,7 +314,7 @@ void SixFringeCapture::draw(void)
     m_haveReferencePhase = true;
     m_captureReferencePhase = false;
   }
-  else if(m_haveReferencePhase && Geometry == m_displayMode)
+  else if(m_haveReferencePhase)
   {
 	m_imageProcessor.bind();
 	{
@@ -358,80 +331,10 @@ void SixFringeCapture::draw(void)
       _drawCalculateNormalMap();
 	}
     m_imageProcessor.unbind();
-
-	glMatrixMode(GL_MODELVIEW);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glPushMatrix();
-	glLoadIdentity();
-
-    m_camera.applyMatrix();
-    m_controller.applyTransform();
-
-    glm::mat4 modelViewMatrix;
-    glm::mat4 projectionMatrix;
-    glm::mat4 normalMatrix;
-
-    glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(modelViewMatrix));
-    glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(projectionMatrix));
-    normalMatrix = glm::transpose(glm::inverse(modelViewMatrix));   //  This is needed for lighting calculations
-
-    m_axis.draw(modelViewMatrix);
-
-	m_finalRender.bind();
-	{
-	  m_finalRender.uniform("modelViewMatrix", modelViewMatrix);
-      m_finalRender.uniform("projectionMatrix", projectionMatrix);
-      m_finalRender.uniform("normalMatrix", normalMatrix);
-
-      m_normalMap.bind(GL_TEXTURE0);
-      m_depthMap.bind(GL_TEXTURE1);
-      m_phaseMap0.bind(GL_TEXTURE2);
-
-      // Draw a plane of pixels
-      m_mesh->draw();
-	}
-	m_finalRender.unbind();
-
-	if(m_saveStream)
-	{
-		m_saveStream->encodeAndStream(shared_ptr<MeshInterchange>(new MeshInterchange(&m_depthMap, false)));
-	}
-
-    glPopMatrix();
-  }
-  else if(m_haveReferencePhase && Phase == m_displayMode)
-  {
-    m_textureDisplay.draw(&m_referencePhase);
   }
 
   m_fpsCalculator.frameUpdate();
   OGLStatus::logOGLErrors("SixFringeCapture - draw()");
-}
-
-void SixFringeCapture::resize(int width, int height)
-{
-  m_camera.reshape(width, height);
-
-  glViewport(0, 0, width, height);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluPerspective(45.0, 1.0, .00001, 1000.0);
-  glMatrixMode(GL_MODELVIEW);
-}
-
-void SixFringeCapture::cameraSelectMode(int mode)
-{
-  m_camera.setMode(mode);
-}
-
-void SixFringeCapture::mousePressEvent(int mouseX, int mouseY)
-{
-  m_camera.mousePressed(mouseX, mouseY);
-}
-
-void SixFringeCapture::mouseMoveEvent(int mouseX, int mouseY)
-{
-  m_camera.mouseMotion(mouseX, mouseY);
 }
 
 bool SixFringeCapture::newImage(IplImage* image)

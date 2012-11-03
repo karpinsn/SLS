@@ -17,7 +17,7 @@
    <item row="0" column="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="OpenGLWidget" name="captureGLWidget" native="true">
+      <widget class="CaptureGLWidget" name="captureGLWidget" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -498,9 +498,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>OpenGLWidget</class>
+   <class>CaptureGLWidget</class>
    <extends>QWidget</extends>
-   <header>OpenGLWidget.h</header>
+   <header>CaptureGLWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

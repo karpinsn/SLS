@@ -8,7 +8,7 @@ QThread(), m_callbackInstance(callbackInstance), m_newFrameCallback(newFrameCall
   qRegisterMetaType<shared_ptr<IplImage> >("shared_ptr<IplImage>");
 }
 
-void FrameCapture::init(ImageBuffer* buffer, OpenGLWidget* context)
+void FrameCapture::init(ImageBuffer* buffer, QGLWidget* context)
 {
   m_oglContext = unique_ptr<QGLWidget>(new QGLWidget(QGLFormat(QGL::SampleBuffers), 0, context));
    m_buffer = buffer;

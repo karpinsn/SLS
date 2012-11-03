@@ -18,7 +18,8 @@ void SixFringeDecoder::openCodec(EncodingOpenGLWidget* glWidget)
   m_calculateReference = true;
   m_glWidget = glWidget;
 
-  m_glWidget->setGLContext(&m_coder);
+  // TODO
+  //m_glWidget->setGLContext(&m_coder);
   m_glWidget->setDecodingContext(&m_coder);
   m_glWidget->reinit(getWidth(), getHeight());
 }

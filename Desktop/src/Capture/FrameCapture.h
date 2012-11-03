@@ -37,7 +37,7 @@ signals:
 public:
     FrameCapture(void* callbackInstance, void (*newFrameCallback)(void* callbackInstance, shared_ptr<IplImage> newFrame));
 
-    void init(ImageBuffer* buffer, OpenGLWidget* context);
+    void init(ImageBuffer* buffer, QGLWidget* context);
 
 protected:
   void run();

@@ -160,6 +160,7 @@ SET(SOURCES_CAPTURE
 	Capture/FrameCapture.cpp
 	Capture/FileOutputStream.cpp
     Capture/WebsocketOutputStream.cpp
+	Capture/CaptureGLWidget.cpp
 
     Capture/WebsocketOutputStream.h
 	Capture/FileOutputStream.h
@@ -171,6 +172,7 @@ SET(SOURCES_CAPTURE
 	Capture/CameraConnectDialog.h
 	Capture/CaptureTypeSelectDialog.h
 	Capture/FrameCapture.h
+	Capture/CaptureGLWidget.h
 )
 
 SET(SOURCES_THREEFRINGE
@@ -263,6 +265,7 @@ set(MOCS
 	MainWindowView.h 
 	MainWindowController.h 
 	OpenGLWidget.h 
+	Capture/CaptureGLWidget.h
 	EncodingOpenGLWidget.h 
 	Capture/CaptureController.h 
 	ViewController.h 

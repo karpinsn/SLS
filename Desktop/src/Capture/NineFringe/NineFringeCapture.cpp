@@ -11,7 +11,6 @@ NineFringeCapture::NineFringeCapture(void)
   m_gammaCutoff = 0.1f;
   m_scalingFactor = 0.04f;
   m_shiftFactor = 0.0f;
-  m_displayMode = Geometry;
 }
 
 void NineFringeCapture::init()
@@ -28,18 +27,6 @@ void NineFringeCapture::init(int width, int height)
 
     _initShaders(width, height);
     _initTextures(width, height);
-    m_textureDisplay.init();
-    _initLighting();
-
-    m_axis.init();
-
-    //m_controller.init(512, 512);
-	m_controller.init(0.0f, 0.0f, 0.0f, .5f);
-    m_camera.init(0.0f, 0.75f, 1.0f, 0.0f, 0.75f, 0.0f, 0.0f, -1.0f, 0.0f);
-    m_camera.setMode(1);
-
-    m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
-    m_mesh->initMesh();
 
 	m_fringeLoadingImage = shared_ptr<IplImage>(cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3), [](IplImage* ptr) { cvReleaseImage(&ptr); });
 
@@ -101,10 +88,6 @@ void NineFringeCapture::resizeInput(int width, int height)
     m_phaseFilter.uniform("height", (float)height);
     m_normalCalculator.uniform("width", (float)width);
     m_normalCalculator.uniform("height", (float)height);
-
-    //  Resize the display mesh
-    m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
-    m_mesh->initMesh();
 
     //  Resize the fringe loader
 	m_fringeLoadingImage = shared_ptr<IplImage>(cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3), [](IplImage* ptr) { cvReleaseImage(&ptr); });
@@ -195,29 +178,6 @@ void NineFringeCapture::_initShaders(float width, float height)
   m_textureCalculator.link();
   m_phaseCalculator.uniform("fringe", 0);
 
-  m_finalRenderColor.init();
-  m_finalRenderColor.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/FinalRenderColor.vert"));
-  m_finalRenderColor.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/FinalRenderColor.frag"));
-  m_finalRenderColor.bindAttributeLocation("vert", 0);
-  m_finalRenderColor.bindAttributeLocation("vertTexCoord", 1);
-
-  m_finalRenderColor.link();
-  m_finalRenderColor.uniform("normals", 0);
-  m_finalRenderColor.uniform("depthMap", 1);
-  m_finalRenderColor.uniform("phaseMap", 2);
-
-  m_finalRenderTexture.init();
-  m_finalRenderTexture.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/FinalRenderTexture.vert"));
-  m_finalRenderTexture.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/FinalRenderTexture.frag"));
-  m_finalRenderTexture.bindAttributeLocation("vert", 0);
-  m_finalRenderTexture.bindAttributeLocation("vertTexCoord", 1);
-
-  m_finalRenderTexture.link();
-  m_finalRenderTexture.uniform("normals", 0);
-  m_finalRenderTexture.uniform("depthMap", 1);
-  m_finalRenderTexture.uniform("phaseMap", 2);
-  m_finalRenderTexture.uniform("textureMap", 3);
-
   OGLStatus::logOGLErrors("NineFringeCapture - initShaders()");
 }
 
@@ -265,20 +225,6 @@ void NineFringeCapture::_initTextures(GLuint width, GLuint height)
   OGLStatus::logOGLErrors("NineFringeCapture - initTextures()");
 }
 
-void NineFringeCapture::_initLighting(void)
-{
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
-
-  m_finalRenderColor.uniform("lightPosition", glm::vec3(0.5f, 0.5f, 4.0f));
-  m_finalRenderColor.uniform("ambientColor", glm::vec4(.1, .1, .1, 1.0));
-  m_finalRenderColor.uniform("diffuseColor", glm::vec4(.9, .9, .9, 1.0));
-  m_finalRenderColor.uniform("specularColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
-
-  m_finalRenderTexture.uniform("diffuseColor", glm::vec4(.7, .7, .7, 1.0));
-  m_finalRenderTexture.uniform("specularColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
-}
-
 void NineFringeCapture::setGammaCutoff(float gamma)
 {
   m_gammaCutoff = gamma;
@@ -303,6 +249,21 @@ MeshInterchange* NineFringeCapture::decode(void)
 {
   OGLStatus::logOGLErrors("NineFringeCapture - decode()");
   return new MeshInterchange(&m_depthMap, false);
+}
+
+Texture& NineFringeCapture::getDepthMap(void)
+{
+  return m_depthMap;
+}
+
+Texture& NineFringeCapture::getTextureMap(void)
+{
+  return m_textureMap;
+}
+
+Texture& NineFringeCapture::getNormalMap(void)
+{
+  return m_normalMap;
 }
 
 void NineFringeCapture::draw(void)
@@ -366,114 +327,8 @@ void NineFringeCapture::draw(void)
     m_imageProcessor.unbind();
   }
 
-  if(m_haveReferencePhase && Geometry == m_displayMode)
-  {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glm::mat4 modelViewMatrix;
-	modelViewMatrix *= m_camera.getMatrix();
-	modelViewMatrix *= m_controller.getTransform();
-
-	glm::mat4 projectionMatrix;
-    glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(projectionMatrix));
-    
-	glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelViewMatrix));   //  This is needed for lighting calculations
-    m_axis.draw(modelViewMatrix);
-
-	m_finalRenderColor.bind();
-	{
-      m_finalRenderColor.uniform("modelViewMatrix", modelViewMatrix);
-      m_finalRenderColor.uniform("projectionMatrix", projectionMatrix);
-      m_finalRenderColor.uniform("normalMatrix", normalMatrix);
-
-      m_normalMap.bind(GL_TEXTURE0);
-      m_depthMap.bind(GL_TEXTURE1);
-      m_phaseMap0.bind(GL_TEXTURE2);
-
-      // Draw a plane of pixels
-      m_mesh->draw();
-	}
-	m_finalRenderColor.unbind();
-
-	if(m_saveStream)
-	{
-		m_saveStream->encodeAndStream(shared_ptr<MeshInterchange>(new MeshInterchange(&m_depthMap, false)));
-	}
-  }
-  else if(m_haveReferencePhase && GeometryTexture == m_displayMode)
-  {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glm::mat4 modelViewMatrix;
-	modelViewMatrix *= m_camera.getMatrix();
-	modelViewMatrix *= m_controller.getTransform();
-
-	glm::mat4 projectionMatrix;
-    glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(projectionMatrix));
-    
-	glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelViewMatrix));   //  This is needed for lighting calculations
-    m_axis.draw(modelViewMatrix);
-
-	m_finalRenderTexture.bind();
-	{
-      m_finalRenderTexture.uniform("modelViewMatrix", modelViewMatrix);
-      m_finalRenderTexture.uniform("projectionMatrix", projectionMatrix);
-      m_finalRenderTexture.uniform("normalMatrix", normalMatrix);
-
-      m_normalMap.bind(GL_TEXTURE0);
-      m_depthMap.bind(GL_TEXTURE1);
-      m_phaseMap0.bind(GL_TEXTURE2);
-	  m_textureMap.bind(GL_TEXTURE3);
-
-      // Draw a plane of pixels
-      m_mesh->draw();
-	}
-	m_finalRenderTexture.unbind();
-
-	if(m_saveStream)
-	{
-		m_saveStream->encodeAndStream(shared_ptr<MeshInterchange>(new MeshInterchange(&m_depthMap, false)));
-	}
-  }
-  else if(m_haveReferencePhase && Phase == m_displayMode)
-  {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    m_textureDisplay.draw(&m_phaseMap0);
-  }
-  else if(m_haveReferencePhase && Depth == m_displayMode)
-  {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	m_textureDisplay.draw(&m_depthMap);
-  }
-
   m_fpsCalculator.frameUpdate();
   OGLStatus::logOGLErrors("NineFringeCapture - draw()");
-}
-
-void NineFringeCapture::resize(int width, int height)
-{
-  m_camera.reshape(width, height);
-
-  glViewport(0, 0, width, height);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluPerspective(45.0, 1.0, .00001, 1000.0);
-  glMatrixMode(GL_MODELVIEW);
-}
-
-void NineFringeCapture::cameraSelectMode(int mode)
-{
-  m_camera.setMode(mode);
-}
-
-void NineFringeCapture::mousePressEvent(int mouseX, int mouseY)
-{
-  m_camera.mousePressed(mouseX, mouseY);
-}
-
-void NineFringeCapture::mouseMoveEvent(int mouseX, int mouseY)
-{
-  m_camera.mouseMotion(mouseX, mouseY);
 }
 
 bool NineFringeCapture::newImage(IplImage* image)
@@ -548,11 +403,6 @@ void NineFringeCapture::loadReferencePlane(void* callbackInstance, shared_ptr<Ip
 void NineFringeCapture::captureReferencePlane(void)
 {
   m_captureReferencePhase = true;
-}
-
-void NineFringeCapture::setDisplayMode(enum DisplayMode mode)
-{
-  m_displayMode = mode;
 }
 
 void NineFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)

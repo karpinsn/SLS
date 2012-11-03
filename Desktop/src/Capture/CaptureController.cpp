@@ -30,7 +30,7 @@ void CaptureController::showEvent(QShowEvent *event)
 	throw new exception("No capture type selected");
   }
 
-  captureGLWidget->setGLContext(m_gl3DContext.get());
+  captureGLWidget->setCaptureContext(m_gl3DContext.get());
   m_gl3DContext->init();
 
   //  Since we changed our capture context, read and set settings
@@ -69,7 +69,7 @@ void CaptureController::init(void)
 {
   m_camera->init(m_buffer.get());
   m_frameCapture->init(m_buffer.get(), captureGLWidget);
-  captureGLWidget->setGLContext(m_gl3DContext.get());
+  captureGLWidget->setCaptureContext(m_gl3DContext.get());
 }
 
 void CaptureController::setInfoBar(QStatusBar* infoBar)
@@ -93,7 +93,7 @@ void CaptureController::captureReference(void)
 
 void CaptureController::cameraSelectMode(int mode)
 {
-  m_gl3DContext->cameraSelectMode(mode);
+  captureGLWidget->cameraSelectMode(mode);
 }
 
 void CaptureController::connectCamera(void)
@@ -110,7 +110,7 @@ void CaptureController::connectCamera(void)
 	camera->init();
 
     //  Reinitalize OpenGL stuff
-    m_gl3DContext->resizeInput(camera->getWidth(), camera->getHeight());
+	captureGLWidget->resizeCapture(camera->getWidth(), camera->getHeight());
     
 	//	Transfer ownership and start up
 	m_camera->setCamera(::move(camera));
@@ -166,19 +166,19 @@ void CaptureController::newViewMode(QString viewMode)
 {
   if(0 == viewMode.compare(QString("3D")))
   {
-	m_gl3DContext->setDisplayMode(ICapture::Geometry);    
+	captureGLWidget->setDisplayMode(CaptureGLWidget::Geometry);    
   }
   else if(0 == viewMode.compare(QString("3D Tex")))
   {
-	m_gl3DContext->setDisplayMode(ICapture::GeometryTexture);
+	captureGLWidget->setDisplayMode(CaptureGLWidget::GeometryTexture);
   }
   else if(0 == viewMode.compare(QString("Phase")))
   {
-	m_gl3DContext->setDisplayMode(ICapture::Phase);
+	captureGLWidget->setDisplayMode(CaptureGLWidget::Phase);
   }
   else if(0 == viewMode.compare(QString("Depth")))
   {
-	m_gl3DContext->setDisplayMode(ICapture::Depth);
+	captureGLWidget->setDisplayMode(CaptureGLWidget::Depth);
   }
 }
 

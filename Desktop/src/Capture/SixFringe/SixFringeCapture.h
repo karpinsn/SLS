@@ -54,8 +54,6 @@
 #include <wrench/gl/utils/TextureDisplay.h>
 #include <wrench/gl/utils/Arcball.h>
 
-class OpenGLWidget;
-
 using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
@@ -63,8 +61,6 @@ using namespace wrench::gl::utils;
 class SixFringeCapture : public IDecodingGLContext, public ICapture
 {
 private:
-  AxisDisplay m_axis;
-
   ShaderProgram m_gaussianFilterVertical;
   ShaderProgram m_gaussianFilterHorizontal;
 
@@ -73,7 +69,6 @@ private:
   ShaderProgram m_phaseFilter;
   ShaderProgram m_depthCalculator;
   ShaderProgram m_normalCalculator;
-  ShaderProgram m_finalRender;
 
   GLenum m_phaseMap0AttachPoint;
   GLenum m_phaseMap1AttachPoint;
@@ -97,11 +92,6 @@ private:
   Texture m_normalMap;
 
   FBO m_imageProcessor;
-  TextureDisplay m_textureDisplay;
-
-  Camera m_camera;
-  Arcball m_controller;
-  shared_ptr<AbstractMesh> m_mesh;
 
   FPSCalculator m_fpsCalculator;
   FPSCalculator m_3dpsCalculator; // 3D frames per second
@@ -122,22 +112,13 @@ private:
 
   int m_frontBufferIndex;		//	Index of the front buffer in m_bufferIds
 
-  OpenGLWidget* m_glContext;
-
   shared_ptr<SaveStream> m_saveStream;
-
-  DisplayMode m_displayMode;
 
 public:
   SixFringeCapture(void);
 
   virtual void init(void);
   virtual void draw(void);
-  virtual void resize(int width, int height);
-  virtual void cameraSelectMode(int mode);
-  virtual void mousePressEvent(int mouseX, int mouseY);
-  virtual void mouseMoveEvent(int mouseX, int mouseY);
-
   
   int	  getWidth();
   int	  getHeight();
@@ -147,7 +128,10 @@ public:
   void    swapFringeBuffers(void);
   void	  loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance));
   void    captureReferencePlane(void);
-  void	  setDisplayMode(enum DisplayMode mode);
+
+  Texture& getDepthMap(void);
+  Texture& getTextureMap(void);
+  Texture& getNormalMap(void);
   void    setGammaCutoff(float gamma);
   void	  setBlackLevel(float blackLevel);
   void    setScalingFactor(float scalingFactor);
@@ -162,7 +146,6 @@ public:
 private:
   void _initShaders(float width, float height);
   void _initTextures(GLuint width, GLuint height);
-  void _initLighting(void);
 
   void _drawCalculatePhase();
   void _drawFilterPhase();

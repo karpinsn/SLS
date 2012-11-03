@@ -204,10 +204,10 @@ Texture& ThreeFringeCapture::getNormalMap(void)
   return m_normalMap;
 }
 
-MeshInterchange* ThreeFringeCapture::decode(void)
+void ThreeFringeCapture::decode(void)
 {
   OGLStatus::logOGLErrors("ThreeFringeCapture - decode()");
-  return new MeshInterchange(&m_depthMap, false);
+  draw();
 }
 
 void ThreeFringeCapture::draw(void)

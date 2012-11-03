@@ -35,7 +35,6 @@
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
 #include "IGLContext.h"
-#include "IDecodingGLContext.h"
 
 #include <wrench/gl/Camera.h>
 #include <wrench/gl/ShaderProgram.h>
@@ -57,7 +56,7 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class ThreeFringeCapture : public IDecodingGLContext, public ICapture
+class ThreeFringeCapture : public ICapture
 {
 private:
   ShaderProgram m_phaseCalculator;
@@ -128,7 +127,7 @@ public:
   void	  setSaveStream(shared_ptr<SaveStream> saveStream);
   double  getFrameRate(void);
   double  get3DRate(void);
-  MeshInterchange* decode(void);
+  void	  decode(void);
   static string getCaptureName(void);
 
 private:

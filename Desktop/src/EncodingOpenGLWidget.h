@@ -33,7 +33,7 @@
 
 #include "IGLContext.h"
 #include "IEncodingGLContext.h"
-#include "IDecodingGLContext.h"
+#include "IDecoder.h"
 
 class EncodingOpenGLWidget : public QGLWidget
 {
@@ -50,7 +50,7 @@ private:
   float m_height;
 
   IEncodingGLContext* m_encodingContext;
-  IDecodingGLContext* m_decodingContext;
+  IDecoder* m_decodingContext;
 
 public:
   EncodingOpenGLWidget(QWidget *parent);
@@ -59,13 +59,13 @@ public:
   void reinit(float width, float height);
   void initializeGL();
   void updateScene();
-  void setGLContext(IGLContext* glContext);
   void setEncodingContext(IEncodingGLContext* encodingContext);
-  void setDecodingContext(IDecodingGLContext* decodingContext);
+  void setDecodingContext(IDecoder* decodingContext);
   void cameraSelectMode(int mode);
   MeshInterchange* decode();
   MeshInterchange* encode();
 
+  //  TODO - get rid of this
   IGLContext*    m_glContext;
 
 protected:
@@ -73,7 +73,6 @@ protected:
   void resizeGL(int width, int height);
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent* event);
 };
 
 #endif	// _ENCODING_OPEN_GL_WIDGET_H_

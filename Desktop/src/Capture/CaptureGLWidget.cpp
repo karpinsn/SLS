@@ -93,7 +93,7 @@ void CaptureGLWidget::paintGL()
 {
   if(nullptr != m_captureDecoder)
   {
-	m_captureDecoder->draw();
+	m_captureDecoder->decode();
 
 	if(Geometry == m_displayMode || GeometryTexture == m_displayMode)
 	{

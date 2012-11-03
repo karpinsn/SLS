@@ -35,7 +35,7 @@
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
 #include "IGLContext.h"
-#include "IDecodingGLContext.h"
+#include "IDecoder.h"
 
 #include <wrench/gl/Camera.h>
 #include <wrench/gl/ShaderProgram.h>
@@ -53,7 +53,7 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class NineFringeCapture : public IDecodingGLContext, public ICapture
+class NineFringeCapture : public ICapture
 {
 private:
   ShaderProgram m_gaussianFilterVertical;
@@ -131,7 +131,7 @@ public:
   void    setScalingFactor(float scalingFactor);
   void	  setShiftFactor(float shiftFactor);
   void	  setSaveStream(shared_ptr<SaveStream> saveStream);
-  MeshInterchange* decode(void);
+  void	  decode(void);
 
   static string getCaptureName(void);
 

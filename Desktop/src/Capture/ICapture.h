@@ -16,7 +16,7 @@
 #include "IGLContext.h"
 #include "SaveStream.h"
 
-class ICapture
+class ICapture : public IDecoder
 {
 public:
   virtual ~ICapture(void) { };
@@ -33,10 +33,8 @@ public:
   virtual void setShiftFactor(float shiftFactor)	  = 0;
   virtual void setSaveStream(shared_ptr<SaveStream> saveStream) = 0;
 
-  virtual Texture& getDepthMap(void)				  = 0;
   virtual Texture& getTextureMap(void)				  = 0;
   virtual Texture& getNormalMap(void)				  = 0;
-  virtual void draw(void)							  = 0;
 
   virtual bool newImage(IplImage *frame)			  = 0;
 };

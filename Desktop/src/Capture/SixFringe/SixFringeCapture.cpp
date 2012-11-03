@@ -252,10 +252,10 @@ Texture& SixFringeCapture::getNormalMap(void)
   return m_normalMap;
 }
 
-MeshInterchange* SixFringeCapture::decode(void)
+void SixFringeCapture::decode(void)
 {
   OGLStatus::logOGLErrors("SixFringeCapture - decode()");
-  return new MeshInterchange(&m_depthMap, false);
+  draw();
 }
 
 void SixFringeCapture::draw(void)

@@ -17,8 +17,8 @@ void NineFringeDecoder::openCodec(EncodingOpenGLWidget* glWidget)
   m_calculateReference = true;
   m_glWidget = glWidget;
 
-  // TODO
-  //m_glWidget->setGLContext(&m_coder);
+  //  Need to set the size on the coder and our OpenGL widget
+  m_coder.init(getWidth(), getHeight());
   m_glWidget->setDecodingContext(&m_coder);
   m_glWidget->reinit(getWidth(), getHeight());
 }

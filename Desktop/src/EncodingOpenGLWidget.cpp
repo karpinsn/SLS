@@ -21,8 +21,7 @@ void EncodingOpenGLWidget::reinit(float width, float height)
 {
   m_width = width;
   m_height = height;
-  glInit();
-
+  
   resizeGL(width, height);
 }
 
@@ -33,25 +32,9 @@ void EncodingOpenGLWidget::initializeGL()
   {
     cout << "Failed to init GLEW: " << glewGetErrorString(err) << endl;
   }
-  std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << endl;
-
-  if(nullptr != m_glContext)
-  {
-    m_glContext->init(m_width, m_height);
-  }
 
   // Set the clear color
   qglClearColor(m_clearColor);
-
-  // Set up the rest of the rendering
-  glEnable(GL_CULL_FACE);
-  glShadeModel(GL_SMOOTH);
-}
-
-void EncodingOpenGLWidget::setGLContext(IGLContext* glContext)
-{
-  m_glContext = glContext;
-  makeCurrent();
 }
 
 void EncodingOpenGLWidget::setEncodingContext(IEncodingGLContext* encodingContext)
@@ -59,7 +42,7 @@ void EncodingOpenGLWidget::setEncodingContext(IEncodingGLContext* encodingContex
   m_encodingContext = encodingContext;
 }
 
-void EncodingOpenGLWidget::setDecodingContext(IDecodingGLContext* decodingContext)
+void EncodingOpenGLWidget::setDecodingContext(IDecoder* decodingContext)
 {
   m_decodingContext = decodingContext;
 }
@@ -71,7 +54,6 @@ void EncodingOpenGLWidget::updateScene()
 
 MeshInterchange* EncodingOpenGLWidget::encode()
 {
-	cout << m_codecLock->available() << endl;
   //  Lock the mutex
   m_codecLock->acquire();
   m_encode = true;
@@ -91,78 +73,44 @@ MeshInterchange* EncodingOpenGLWidget::decode()
   m_codecLock->acquire();
   m_codecLock->release();
 
-  return m_decodingContext->decode();
+  return new MeshInterchange(&m_decodingContext->getDepthMap(), false);
 }
 
 void EncodingOpenGLWidget::paintGL()
 {
-  glMatrixMode(GL_MODELVIEW);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glPushMatrix();
-
-  if(nullptr != m_glContext)
+  if(m_encode && nullptr != m_encodingContext)
   {
-	if(m_encode)
-	{
-	  m_encodingContext->encode();
-	}
-	else if(m_decode)
-	{
-	  m_glContext->draw();
-	}
-	else
-	{
-	  //  Neither encode or decode, probably preview. Just draw
-	  m_glContext->draw();
-	}
+	m_encodingContext->encode();
+  }
+  else if(m_decode && nullptr != m_decodingContext)
+  {
+	m_decodingContext->decode();
+  }
+  else
+  {
+	//  Neither encode or decode, probably preview. Just draw
+	//m_glContext->draw();
+	//  TODO - Come and fix preview
   }
 
-  glPopMatrix();
-
-  //	Print any errors if we have them
-  GLenum error = glGetError();
-  if (error != GL_NO_ERROR)
-  {
-    cout << "OpenGL Error: " << gluErrorString(error) << endl;
-  }
+  // Make sure we dont have any errors
+  OGLStatus::logOGLErrors("EncodingOpenGLWidget - paintGL()");
   m_codecLock->release();
 }
 
 void EncodingOpenGLWidget::resizeGL(int width, int height)
 {
   glViewport(0, 0, width, height);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-
-  if(nullptr != m_glContext)
-  {
-    m_glContext->resize(width, height);
-  }
-
-  cout << "Width x Height: " << width << " x " << height << endl;
-  glMatrixMode(GL_MODELVIEW);
 }
 
 void EncodingOpenGLWidget::mousePressEvent(QMouseEvent *event)
 {
-  if(nullptr != m_glContext)
-  {
-	m_glContext->mousePressEvent(event->pos().x(), event->pos().y());
-	updateGL();
-  }
+  updateGL();
 }
 
 void EncodingOpenGLWidget::mouseMoveEvent(QMouseEvent *event)
-{
-  if(nullptr != m_glContext)
-  {
-	m_glContext->mouseMoveEvent(event->pos().x(), event->pos().y());
-	updateGL();
-  }
-}
-
-void EncodingOpenGLWidget::mouseReleaseEvent(QMouseEvent* event)
 {
   updateGL();
 }

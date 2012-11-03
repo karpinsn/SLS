@@ -32,7 +32,7 @@
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
 #include "IGLContext.h"
-#include "IDecodingGLContext.h"
+#include "IDecoder.h"
 
 #include <reactor/MediaFrame.h>
 
@@ -51,7 +51,7 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class Holodecoder : public IGLContext, public IDecodingGLContext
+class Holodecoder : public IGLContext, public IDecoder
 {
 private:
     ShaderProgram m_phaseCalculator;
@@ -103,8 +103,9 @@ public:
 	void setBackHoloBuffer(reactor::MediaFrame& frame);
 	void swapBuffers(void);
 	
-	MeshInterchange* decode(void);
-	
+	void decode(void);
+	Texture& getDepthMap(void);
+
 private:
 	void initShaders(float width, float height);
 	void _initTextures(GLuint width, GLuint height);

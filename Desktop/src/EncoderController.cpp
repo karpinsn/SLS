@@ -95,8 +95,8 @@ void EncoderController::encode(void)
   decoder->closeCodec();
 
   //  Make sure our codec widgets are not pointing to anything
-  encoderGLWidget->setGLContext(nullptr);
-  decoderGLWidget->setGLContext(nullptr);
+  encoderGLWidget->setEncodingContext(nullptr);
+  decoderGLWidget->setDecodingContext(nullptr);
 }
 
 void EncoderController::_connectSignalsWithController(void)

@@ -245,10 +245,10 @@ void NineFringeCapture::setShiftFactor(float shiftFactor)
   m_shiftFactor = shiftFactor;
 }
 
-MeshInterchange* NineFringeCapture::decode(void)
+void NineFringeCapture::decode(void)
 {
   OGLStatus::logOGLErrors("NineFringeCapture - decode()");
-  return new MeshInterchange(&m_depthMap, false);
+  draw();
 }
 
 Texture& NineFringeCapture::getDepthMap(void)

@@ -36,7 +36,7 @@
 #include "PointCloudMesh.h"
 #include "ImageIO.h"
 #include "IGLContext.h"
-#include "IDecodingGLContext.h"
+#include "IDecoder.h"
 
 #include <wrench/gl/Camera.h>
 #include <wrench/gl/ShaderProgram.h>
@@ -58,7 +58,7 @@ using namespace wrench;
 using namespace wrench::gl;
 using namespace wrench::gl::utils;
 
-class SixFringeCapture : public IDecodingGLContext, public ICapture
+class SixFringeCapture : public ICapture
 {
 private:
   ShaderProgram m_gaussianFilterVertical;
@@ -139,7 +139,7 @@ public:
   void	  setSaveStream(shared_ptr<SaveStream> saveStream);
   double  getFrameRate(void);
   double  get3DRate(void);
-  MeshInterchange* decode(void);
+  void	  decode(void);
 
   static string getCaptureName(void);
 

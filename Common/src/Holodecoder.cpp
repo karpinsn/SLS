@@ -184,10 +184,15 @@ void Holodecoder::draw(void)
 }
 
 
-MeshInterchange* Holodecoder::decode(void)
+void Holodecoder::decode(void)
 {
   OGLStatus::logOGLErrors("Holodecoder - decode()");
-  return new MeshInterchange(&m_depthMap, false);
+  draw();
+}
+
+Texture& Holodecoder::getDepthMap(void)
+{
+  return m_depthMap;
 }
 
 void Holodecoder::resize(int width, int height)

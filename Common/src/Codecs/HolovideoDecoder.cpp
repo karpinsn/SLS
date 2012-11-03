@@ -21,7 +21,8 @@ void HolovideoDecoder::openCodec(EncodingOpenGLWidget* glWidget)
   m_io.openReadStream(m_filename);
   m_glWidget = glWidget;
 
-  m_glWidget->setGLContext(&m_decoder);
+  //  Need to set the size on the coder and our OpenGL widget
+  m_decoder.init(getWidth(), getHeight());
   m_glWidget->setDecodingContext(&m_decoder);
   m_glWidget->reinit(getWidth(), getHeight());
 }

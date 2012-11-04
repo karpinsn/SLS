@@ -79,6 +79,7 @@ private:
   TextureDisplay	  m_textureDisplay;
   DisplayMode		  m_displayMode;
 
+  shared_ptr<SaveStream> m_saveStream;
 public:
   CaptureGLWidget(QWidget *parent);
 
@@ -90,6 +91,7 @@ public:
   double getFrameRate(void);
   double get3DRate(void);
   void newFringe(IplImage* fringeImage);
+  void setSaveStream(shared_ptr<SaveStream> saveStream);
 
 protected:
   void paintGL();

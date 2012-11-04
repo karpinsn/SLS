@@ -273,6 +273,7 @@ set(MOCS
 	Capture/FrameCapture.h 
 	Capture/CameraConnectDialog.h 
 	Capture/CaptureTypeSelectDialog.h 
+	Capture/WebsocketOutputStream.h
 	Encoder/DepthmapCodecOptionsController.h 
 	Encoder/SixFringeCodecOptionsController.h
 	Encoder/NineFringeCodecOptionsController.h 

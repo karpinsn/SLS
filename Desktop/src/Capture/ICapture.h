@@ -31,7 +31,6 @@ public:
   virtual void setBlackLevel(float blackLevel)		  = 0;
   virtual void setScalingFactor(float scalingFactor)  = 0;
   virtual void setShiftFactor(float shiftFactor)	  = 0;
-  virtual void setSaveStream(shared_ptr<SaveStream> saveStream) = 0;
 
   virtual Texture& getTextureMap(void)				  = 0;
   virtual Texture& getNormalMap(void)				  = 0;

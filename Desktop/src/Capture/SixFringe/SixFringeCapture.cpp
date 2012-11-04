@@ -416,11 +416,6 @@ void SixFringeCapture::loadReferencePlane(void* callbackInstance, shared_ptr<Ipl
   swapFringeBuffers();
 }
 
-void SixFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)
-{
-	m_saveStream = saveStream;
-}
-
 double SixFringeCapture::getFrameRate(void)
 {
   return m_fpsCalculator.getFrameRate();

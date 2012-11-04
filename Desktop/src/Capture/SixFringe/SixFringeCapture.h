@@ -112,8 +112,6 @@ private:
 
   int m_frontBufferIndex;		//	Index of the front buffer in m_bufferIds
 
-  shared_ptr<SaveStream> m_saveStream;
-
 public:
   SixFringeCapture(void);
 

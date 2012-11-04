@@ -25,9 +25,7 @@ void CameraCapture::stop()
     m_camera->close();
   }
 
-  //m_camera = nullptr;
-  lens::Camera* cam = m_camera.release();
-  delete cam;
+  m_camera = nullptr;
 }
 
 void CameraCapture::newFrame(IplImage* frame)

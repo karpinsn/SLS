@@ -16,15 +16,15 @@ void Holoencoder::init()
 
 void Holoencoder::init(int width, int height)
 {
+  m_width = width;
+  m_height = height;
+  m_currentData = nullptr;
+
   if(!m_hasBeenInit)
   {
-      m_width = width;
-      m_height = height;
-
 	  m_holoimage.init(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 	  m_depthMap.init(m_width, m_height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
-      m_currentData = nullptr;
 	  m_offscreenFBO.init(m_width, m_height);
 	  m_offscreenFBO.setTextureAttachPoint(m_depthMap, m_depthAttachPoint);
 	  m_offscreenFBO.setTextureAttachPoint(m_holoimage, m_holoimageAttachPoint);
@@ -41,15 +41,10 @@ void Holoencoder::init(int width, int height)
   }
   else
   {
-	  // We are doing a reinit
-	  m_width = width;
-      m_height = height;
-
 	  m_holoimage.reinit(m_width, m_height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 	  m_depthMap.reinit(m_width, m_height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
-      m_currentData = nullptr;
-	  m_offscreenFBO.reinit(m_width, m_height);
+      m_offscreenFBO.reinit(m_width, m_height);
 	  m_offscreenFBO.setTextureAttachPoint(m_depthMap, m_depthAttachPoint);
 	  m_offscreenFBO.setTextureAttachPoint(m_holoimage, m_holoimageAttachPoint);
 	  m_offscreenFBO.unbind();

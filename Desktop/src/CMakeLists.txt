@@ -207,7 +207,7 @@ SET(SOURCES_COMMON_HEADERS
 	../../Common/src/PointCloudMesh.h
 	../../Common/src/TriMesh.h
 	../../Common/src/IGLContext.h
-	../../Common/src/IEncodingGLContext.h
+	../../Common/src/IEncoder.h
 	../../Common/src/IDecoder.h
 	../../Common/src/Holodecoder.h
 	../../Common/src/MeshInterchange.h

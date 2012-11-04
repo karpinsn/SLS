@@ -20,27 +20,46 @@
 #include "OpenGLWidget.h"
 #include "ImageBuffer.h"
 
-class FrameCapture : public QThread
+/**
+* Worker class that runs on the thread. It pulls from the image buffer and
+* then calls the callback
+*/
+class FrameCaptureWorker : public QObject
+{
+  Q_OBJECT
+
+  private:
+	bool m_running;
+	ImageBuffer* m_buffer;
+	void* m_callbackInstance;
+	void (*m_newFrameCallback)(void* callbackInstance, shared_ptr<IplImage> newFrame);
+	unique_ptr<QGLWidget> m_oglContext;
+
+  public:
+	FrameCaptureWorker(void* callbackInstance, void (*newFrameCallback)(void* callbackInstance, shared_ptr<IplImage> newFrame));
+	void init(ImageBuffer* buffer, QGLWidget* context);
+	void stop(void);
+
+  signals:
+	void finished(void);
+
+  public slots:
+	void grabFrames();
+};
+
+class FrameCapture : public QObject
 {
   Q_OBJECT
 
 private:
-  bool m_running;
-  ImageBuffer* m_buffer;
-  unique_ptr<QGLWidget> m_oglContext;
-  void* m_callbackInstance;
-  void (*m_newFrameCallback)(void* callbackInstance, shared_ptr<IplImage> newFrame);
-
-signals:
-  void newFrame(shared_ptr<IplImage>);
+  QThread* m_workerThread;
+  FrameCaptureWorker* m_worker;
 
 public:
     FrameCapture(void* callbackInstance, void (*newFrameCallback)(void* callbackInstance, shared_ptr<IplImage> newFrame));
-
     void init(ImageBuffer* buffer, QGLWidget* context);
-
-protected:
-  void run();
+	void start(void);
  };
+
 
 #endif	// _FRAME_CAPTURE_H_

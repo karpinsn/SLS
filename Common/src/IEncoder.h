@@ -1,19 +1,18 @@
 /**
- @file		IEncodingGLContext.h
+ @file
  */
 
-#ifndef _I_ENCODING_GL_CONTEXT_H_
-#define _I_ENCODING_GL_CONTEXT_H_
+#ifndef _I_ENCODER_H_
+#define _I_ENCODER_H_
 
 #include "MeshInterchange.h"
 
 using namespace std;
 
-class IEncodingGLContext
+class IEncoder
 {
 public:
-  virtual ~IEncodingGLContext(void) { };
-
+  virtual ~IEncoder(void) { };
   virtual void encode() = 0;
   virtual MeshInterchange* getEncodedData() = 0;
 };

@@ -3,18 +3,11 @@
 EncodingOpenGLWidget::EncodingOpenGLWidget(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
   m_clearColor = QColor::fromRgb(0, 0, 0, 0);
-  m_glContext = nullptr;
   m_width = 512;
   m_height = 512;
   m_encode = false;
   m_decode = false;
   m_codecLock = shared_ptr<QSemaphore>(new QSemaphore(1));
-}
-
-EncodingOpenGLWidget::EncodingOpenGLWidget(QWidget *parent, IGLContext* glContext, QColor clearColor) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
-{
-  m_glContext = glContext;
-  m_clearColor = clearColor;
 }
 
 void EncodingOpenGLWidget::reinit(float width, float height)
@@ -37,7 +30,7 @@ void EncodingOpenGLWidget::initializeGL()
   qglClearColor(m_clearColor);
 }
 
-void EncodingOpenGLWidget::setEncodingContext(IEncodingGLContext* encodingContext)
+void EncodingOpenGLWidget::setEncodingContext(IEncoder* encodingContext)
 {
   m_encodingContext = encodingContext;
 }
@@ -91,7 +84,6 @@ void EncodingOpenGLWidget::paintGL()
   else
   {
 	//  Neither encode or decode, probably preview. Just draw
-	//m_glContext->draw();
 	//  TODO - Come and fix preview
   }
 

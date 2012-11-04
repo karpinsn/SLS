@@ -32,7 +32,7 @@
 #include <iostream>
 
 #include "IGLContext.h"
-#include "IEncodingGLContext.h"
+#include "IEncoder.h"
 #include "IDecoder.h"
 
 class EncodingOpenGLWidget : public QGLWidget
@@ -49,24 +49,20 @@ private:
   float m_width;
   float m_height;
 
-  IEncodingGLContext* m_encodingContext;
+  IEncoder* m_encodingContext;
   IDecoder* m_decodingContext;
 
 public:
   EncodingOpenGLWidget(QWidget *parent);
-  EncodingOpenGLWidget(QWidget* parent, IGLContext* glContext, QColor clearColor);
 
   void reinit(float width, float height);
   void initializeGL();
   void updateScene();
-  void setEncodingContext(IEncodingGLContext* encodingContext);
+  void setEncodingContext(IEncoder* encodingContext);
   void setDecodingContext(IDecoder* decodingContext);
   void cameraSelectMode(int mode);
   MeshInterchange* decode();
   MeshInterchange* encode();
-
-  //  TODO - get rid of this
-  IGLContext*    m_glContext;
 
 protected:
   void paintGL();

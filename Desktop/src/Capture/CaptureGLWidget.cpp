@@ -132,6 +132,12 @@ void CaptureGLWidget::paintGL()
 	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	  m_textureDisplay.draw(&m_captureDecoder->getDepthMap());
 	}
+
+	//	If we have a save stream then stream the data out
+	if(nullptr != m_saveStream)
+	{
+	  m_saveStream->encodeAndStream(shared_ptr<MeshInterchange>(new MeshInterchange(&m_captureDecoder->getDepthMap(), false)));
+	}
   }
 
   m_fpsCalculator.frameUpdate();
@@ -175,6 +181,11 @@ void CaptureGLWidget::newFringe(IplImage* fringeImage)
 	//	Since we could be on another thread, we need to dispatch through Signals/Slots
 	emit(crossThreadGLUpdate());
   }
+}
+
+void CaptureGLWidget::setSaveStream(shared_ptr<SaveStream> saveStream)
+{
+  m_saveStream = saveStream;
 }
 
 void CaptureGLWidget::mousePressEvent(QMouseEvent *event)

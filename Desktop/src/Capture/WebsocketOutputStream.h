@@ -28,15 +28,35 @@
 
 #include <antenna/BaseStation.h>
 
-class WebsocketOutputStream : public IOutputStream, public QThread
+class WebsocketOutputStreamWorker : public QObject
 {
+  Q_OBJECT
+
+  private:
+	bool m_running;
+	antenna::BaseStation& m_socket;
+
+  public:
+	WebsocketOutputStreamWorker(antenna::BaseStation& socket) : m_socket(socket), m_running(true) { };
+	void stop(void);
+
+  signals:
+	void finished(void);
+
+  public slots:
+    void processSocket();
+};
+
+class WebsocketOutputStream : public QObject, public IOutputStream
+{
+  Q_OBJECT
+
 private:
 	//	Socket and port that we are connected with
 	antenna::BaseStation	m_socket;
 	const int				m_port;
-
-	//	Thread related things so that we can allow the socket to run
-	bool m_running;
+	QThread*				m_socketThread;
+	WebsocketOutputStreamWorker* m_socketWorker;
 
 	shared_ptr<IplImage> m_transferImage;
 

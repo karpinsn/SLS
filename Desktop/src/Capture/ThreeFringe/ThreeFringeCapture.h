@@ -124,7 +124,6 @@ public:
   void	  setBlackLevel(float blackLevel);
   void	  setShiftFactor(float shiftFactor);
   void    setScalingFactor(float scalingFactor);
-  void	  setSaveStream(shared_ptr<SaveStream> saveStream);
   double  getFrameRate(void);
   double  get3DRate(void);
   void	  decode(void);

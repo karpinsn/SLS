@@ -313,11 +313,6 @@ void ThreeFringeCapture::captureReferencePlane(void)
   m_captureReferencePhase = true;
 }
 
-void ThreeFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)
-{
-
-}
-
 double ThreeFringeCapture::getFrameRate(void)
 {
   return m_fpsCalculator.getFrameRate();

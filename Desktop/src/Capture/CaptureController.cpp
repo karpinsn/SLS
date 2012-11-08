@@ -249,13 +249,13 @@ void CaptureController::save(void)
 		m_outputStream->open(codec, outStream);
 
 		//	Send the save stream to our current context
-		m_gl3DContext->setSaveStream(m_outputStream);
+		captureGLWidget->setSaveStream(m_outputStream);
 	  }
 	}
 	else
 	{
 		//	Clear out the save stream and close it down
-		m_gl3DContext->setSaveStream(nullptr);
+		captureGLWidget->setSaveStream(nullptr);
 		m_outputStream->close();
 		m_outputStream = nullptr;
 	}
@@ -275,12 +275,12 @@ void CaptureController::stream(void)
 		m_outputStream->open(codec, outStream);
 
 		//	Send the save stream to our current context
-		m_gl3DContext->setSaveStream(m_outputStream);
+		captureGLWidget->setSaveStream(m_outputStream);
 	}
 	else
 	{
 		//	Clear out the save stream and close it down
-		m_gl3DContext->setSaveStream(nullptr);
+		captureGLWidget->setSaveStream(nullptr);
 		m_outputStream->close();
 		m_outputStream = nullptr;
 	}

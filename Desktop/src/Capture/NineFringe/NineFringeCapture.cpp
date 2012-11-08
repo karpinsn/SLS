@@ -403,11 +403,6 @@ void NineFringeCapture::captureReferencePlane(void)
   m_captureReferencePhase = true;
 }
 
-void NineFringeCapture::setSaveStream(shared_ptr<SaveStream> saveStream)
-{
-  m_saveStream = saveStream;
-}
-
 string NineFringeCapture::getCaptureName(void)
 {
   return "Nine Fringe Capture";

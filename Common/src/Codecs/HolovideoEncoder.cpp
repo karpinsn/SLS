@@ -106,7 +106,7 @@ shared_ptr<MeshInterchange> HolovideoEncoder::previewProcess(shared_ptr<MeshInte
   m_encoder.setCurrentMesh(data);
 
   //  Dont want to encode, only draw
-  m_glWidget->updateScene();
+  m_glWidget->previewEncode();
 
   return nullptr;
 }

@@ -233,7 +233,7 @@ void Holodecoder::setBackHoloBuffer(IplImage* image)
 void Holodecoder::setBackHoloBuffer(reactor::MediaFrame& frame)
 {
   int backBufferIndex = (m_frontBufferIndex + 1) % 2;
-  m_holoImages[backBufferIndex]->transferToTexture(frame);
+  //m_holoImages[backBufferIndex]->transferToTexture(frame);
 
   //	Make sure we dont have any errors
   OGLStatus::logOGLErrors("Holodecoder - setBackHoloBuffer()");

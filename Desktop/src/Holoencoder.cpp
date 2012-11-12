@@ -93,6 +93,7 @@ void Holoencoder::draw(void)
 			  //	DepthMap
 			  m_offscreenFBO.bind();
 			  m_offscreenFBO.bindDrawBuffer(m_depthAttachPoint);
+			  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			  m_depthShader.bind();
 			  if(nullptr != m_currentData)
 			  {
@@ -109,7 +110,6 @@ void Holoencoder::draw(void)
 			  m_depth2HoloShader.bind();
 			  m_depthMap.bind(GL_TEXTURE0);
 		  }
-		  //else if(m_currentData->getPreferedFormat() == MeshInterchange::TEXTURE_FORMAT)
 		  else
 		  {
 			  m_depth2HoloShader.bind();
@@ -195,7 +195,7 @@ void Holoencoder::autoFitTransforms(void)
 	scaleFactor = glm::max(glm::max(glm::abs(min.y), glm::abs(max.y)), scaleFactor);
 	scaleFactor = glm::max(glm::max(glm::abs(min.z), glm::abs(max.z)), scaleFactor);
 
-	//	Scale is just 1 / scaleFactor since we are in a -1 to 1 Ortho projection
-	m_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f/scaleFactor));
+	//	Scale is 1 / scaleFactor since we are in a 0 to 1 Ortho projection
+	m_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f / scaleFactor));
   }
 }

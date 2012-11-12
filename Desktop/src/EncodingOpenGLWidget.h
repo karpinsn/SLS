@@ -26,6 +26,8 @@
 #include <QtOpenGL/QGLWidget>
 #endif
 
+#include <wrench/gl/utils/TextureDisplay.h>
+
 #include <QtCore/QTimer>
 #include <QSemaphore>
 #include <QtGui>
@@ -43,8 +45,11 @@ private:
   QColor		m_clearColor;
   shared_ptr<QSemaphore>	m_codecLock;
 
+  wrench::gl::utils::TextureDisplay	  m_textureDisplay;
+
   bool m_encode;
   bool m_decode;
+  bool m_preview;
 
   float m_width;
   float m_height;
@@ -63,6 +68,8 @@ public:
   void cameraSelectMode(int mode);
   MeshInterchange* decode();
   MeshInterchange* encode();
+  void previewDecode();
+  void previewEncode();
 
 protected:
   void paintGL();

@@ -7,6 +7,7 @@ EncodingOpenGLWidget::EncodingOpenGLWidget(QWidget *parent) : QGLWidget(QGLForma
   m_height = 512;
   m_encode = false;
   m_decode = false;
+  m_preview = false;
   m_codecLock = shared_ptr<QSemaphore>(new QSemaphore(1));
 }
 
@@ -25,9 +26,15 @@ void EncodingOpenGLWidget::initializeGL()
   {
     cout << "Failed to init GLEW: " << glewGetErrorString(err) << endl;
   }
+  std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << endl;
+
+  //  Used for previews
+  m_textureDisplay.init();
 
   // Set the clear color
   qglClearColor(m_clearColor);
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LEQUAL);
 }
 
 void EncodingOpenGLWidget::setEncodingContext(IEncoder* encodingContext)
@@ -50,6 +57,7 @@ MeshInterchange* EncodingOpenGLWidget::encode()
   //  Lock the mutex
   m_codecLock->acquire();
   m_encode = true;
+  m_preview = false;
   updateGL(); //  Once this is finished it will unlock the mutex
   m_codecLock->acquire();
   m_codecLock->release();
@@ -62,6 +70,7 @@ MeshInterchange* EncodingOpenGLWidget::decode()
   //  Lock the mutex
   m_codecLock->acquire();
   m_decode = true;
+  m_preview = false;
   updateGL(); //  Once this is finished it will unlock the mutex
   m_codecLock->acquire();
   m_codecLock->release();
@@ -69,27 +78,51 @@ MeshInterchange* EncodingOpenGLWidget::decode()
   return new MeshInterchange(&m_decodingContext->getDepthMap(), false);
 }
 
+void EncodingOpenGLWidget::previewEncode(void)
+{
+  //  Just request the draw which will go to the screen
+  m_encode = true;
+  m_preview = true;
+  updateGL();
+}
+
+void EncodingOpenGLWidget::previewDecode(void)
+{
+  //  Just request the draw which will go to the screen
+  m_decode = true;
+  m_preview = true;
+  updateGL();
+}
+
 void EncodingOpenGLWidget::paintGL()
 {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  if(m_encode && nullptr != m_encodingContext)
+  if(m_encode && m_preview && nullptr != m_encodingContext)
   {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_encodingContext->encode();
+	m_textureDisplay.draw(m_encodingContext->getEncodedData()->getTexture());
+  }
+  else if(m_decode && m_preview && nullptr != m_decodingContext)
+  {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_decodingContext->decode();
+	m_textureDisplay.draw(&m_decodingContext->getDepthMap());
+  }
+  else if(m_encode && nullptr != m_encodingContext)
+  {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_encodingContext->encode();
+	m_codecLock->release();
   }
   else if(m_decode && nullptr != m_decodingContext)
   {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_decodingContext->decode();
-  }
-  else
-  {
-	//  Neither encode or decode, probably preview. Just draw
-	//  TODO - Come and fix preview
+	m_codecLock->release();
   }
 
   // Make sure we dont have any errors
   OGLStatus::logOGLErrors("EncodingOpenGLWidget - paintGL()");
-  m_codecLock->release();
 }
 
 void EncodingOpenGLWidget::resizeGL(int width, int height)

@@ -71,10 +71,12 @@ void EncoderController::encode(void)
 	return;
   }
 
-  //  Setup decoder
+  //  Setup decoder: Make sure our calls go to the decoder widget
+  decoderGLWidget->makeCurrent();
   decoder->openCodec(decoderGLWidget);
 
-  //  Setup encoder
+  //  Setup encoder: Make sure our calls go to the decoder widget
+  encoderGLWidget->makeCurrent();
   encoder->setWidth(decoder->getWidth());
   encoder->setHeight(decoder->getHeight());
   encoder->openCodec(encoderGLWidget);
@@ -130,8 +132,15 @@ void EncoderController::_previewEncoding(void)
 	//	Invalid codec
 	return;
   }
-
+  
+  //  Make sure our calls go to the decoder widget
+  decoderGLWidget->makeCurrent();
   decoder->openCodec(decoderGLWidget);
+
+  //  Now switch to the encoder widget
+  encoderGLWidget->makeCurrent();
+  encoder->setWidth(decoder->getWidth());
+  encoder->setHeight(decoder->getHeight());
   encoder->openCodec(encoderGLWidget);
 
   //  Set the size back to whatever the preview window is

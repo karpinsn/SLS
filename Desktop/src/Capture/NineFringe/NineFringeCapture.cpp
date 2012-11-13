@@ -145,6 +145,7 @@ void NineFringeCapture::_initShaders(float width, float height)
   m_depthCalculator.link();
   m_depthCalculator.uniform("actualPhase", 0);
   m_depthCalculator.uniform("referencePhase", 1);
+  m_depthCalculator.uniform("textureMap", 2);
   m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
   m_depthCalculator.uniform("shiftFactor", m_shiftFactor);
 
@@ -446,9 +447,11 @@ void NineFringeCapture::_drawCalculateDepthMap()
   m_imageProcessor.bindDrawBuffer(m_depthMapAttachPoint);
   m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
   m_depthCalculator.uniform("shiftFactor", m_shiftFactor);
+  m_depthCalculator.uniform("blackLevelThreshold", m_blackLevel);
   m_depthCalculator.bind();
   m_phaseMap0.bind(GL_TEXTURE0);
   m_referencePhase.bind(GL_TEXTURE1);
+  m_textureMap.bind(GL_TEXTURE2);
   m_imageProcessor.process();
 }
 

@@ -314,6 +314,7 @@ void CaptureController::_connectSignalsWithController(void)
   connect(gammaBox,				SIGNAL(valueChanged(double)),         this, SLOT(newGammaValue(double)));
   connect(scalingFactorBox,		SIGNAL(valueChanged(double)),         this, SLOT(newScalingFactor(double)));
   connect(shiftFactorBox,		SIGNAL(valueChanged(double)),		  this, SLOT(newShiftFactor(double)));
+  connect(blackLevelBox,		SIGNAL(valueChanged(double)),		  this, SLOT(newBlackLevel(double)));
   connect(viewModeBox,			SIGNAL(currentIndexChanged(QString)), this, SLOT(newViewMode(QString)));
   connect(&m_frameRateTimer,	SIGNAL(timeout()),                    this, SLOT(updateInfoBar()));
   connect(saveButton,			SIGNAL(clicked()),					  this, SLOT(save()));
@@ -326,6 +327,7 @@ void CaptureController::_readSettings(void)
   gammaBox->setValue(         m_settings.value(SettingsGammaValue,    .10).toDouble());
   scalingFactorBox->setValue( m_settings.value(SettingsScalingFactor, .05).toDouble());
   shiftFactorBox->setValue(	  m_settings.value(SettingsShiftFactor,	  .00).toDouble());
+  blackLevelBox->setValue(	  m_settings.value(SettingsBlackLevelValue,.00).toDouble());
 
   //  If we have an active Capture context then set the values there as well
   if(nullptr != m_gl3DContext)

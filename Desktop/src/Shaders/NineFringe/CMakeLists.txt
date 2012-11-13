@@ -10,7 +10,8 @@ set(SHADER_VERT_SOURCES
 	DepthCalculator.vert
     NormalCalculator.vert
 	PhaseFilter.vert
-	TextureCalculator.vert
+    VerticalPhaseFilter.vert
+    TextureCalculator.vert
 )
 
 set(SHADER_FRAG_SOURCES
@@ -19,6 +20,7 @@ set(SHADER_FRAG_SOURCES
 	DepthCalculator.frag
 	NormalCalculator.frag
 	PhaseFilter.frag
+    VerticalPhaseFilter.frag
 	TextureCalculator.frag
 )
 

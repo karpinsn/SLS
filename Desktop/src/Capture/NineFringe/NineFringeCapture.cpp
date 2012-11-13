@@ -149,8 +149,8 @@ void NineFringeCapture::_initShaders(float width, float height)
   m_depthCalculator.uniform("shiftFactor", m_shiftFactor);
 
   m_phaseFilter.init();
-  m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/PhaseFilter.vert"));
-  m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/PhaseFilter.frag"));
+  m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/NineFringe/VerticalPhaseFilter.vert"));
+  m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/NineFringe/VerticalPhaseFilter.frag"));
   m_phaseFilter.bindAttributeLocation("vert", 0);
   m_phaseFilter.bindAttributeLocation("vertTexCoord", 1);
 

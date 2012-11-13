@@ -294,7 +294,7 @@
   <customwidget>
    <class>EncoderController</class>
    <extends>QWidget</extends>
-   <header>EncoderController.h</header>
+   <header>Encode/EncoderController.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -2,7 +2,7 @@
 #define _CODEC_H_
 
 #include "MeshInterchange.h"
-#include "EncodingOpenGLWidget.h"
+#include "Encode/EncodingOpenGLWidget.h"
 
 class Codec
 {

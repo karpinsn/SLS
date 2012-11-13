@@ -12,7 +12,7 @@
 
 #include <memory>
 
-#include "Holoencoder.h"
+#include "Encode/Holoencoder.h"
 #include "Codecs/Codec.h"
 
 #include "IOutputStream.h"

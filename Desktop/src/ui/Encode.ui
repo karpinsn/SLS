@@ -232,37 +232,37 @@
   <customwidget>
    <class>DepthmapCodecOptionsController</class>
    <extends>QWidget</extends>
-   <header>Encoder/DepthmapCodecOptionsController.h</header>
+   <header>Encode/DepthmapCodecOptionsController.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>NineFringeCodecOptionsController</class>
    <extends>QWidget</extends>
-   <header>Encoder/NineFringeCodecOptionsController.h</header>
+   <header>Encode/NineFringeCodecOptionsController.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>SixFringeCodecOptionsController</class>
    <extends>QWidget</extends>
-   <header>Encoder/SixFringeCodecOptionsController.h</header>
+   <header>Encode/SixFringeCodecOptionsController.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>XYZMCodecOptionsController</class>
    <extends>QWidget</extends>
-   <header>Encoder/XYZMCodecOptionsController.h</header>
+   <header>Encode/XYZMCodecOptionsController.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>HolovideoEncoderOptionsController</class>
    <extends>QWidget</extends>
-   <header>Encoder/HolovideoEncoderOptionsController.h</header>
+   <header>Encode/HolovideoEncoderOptionsController.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>HoloimageEncoderOptionsController</class>
    <extends>QWidget</extends>
-   <header>Encoder/HoloimageEncoderOptionsController.h</header>
+   <header>Encode/HoloimageEncoderOptionsController.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

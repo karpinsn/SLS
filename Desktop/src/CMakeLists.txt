@@ -112,43 +112,43 @@ set(SOURCES
 	MainWindowView.cpp
 	MainWindowController.cpp
 	OpenGLWidget.cpp
-    EncodingOpenGLWidget.cpp
-    Holoencoder.cpp
     XYZFileIO.cpp
 	XYZMesh.cpp
     ViewController.cpp
-    EncoderController.cpp
     ImageBuffer.cpp
     
 	Application.h
 	MainWindowView.h
 	MainWindowController.h
 	OpenGLWidget.h
-    EncodingOpenGLWidget.h
-	Holoencoder.h
 	XYZFileIO.h
 	XYZMesh.h
     ViewController.h
-    EncoderController.h
     ImageBuffer.h
 	)	
 
 SET(SOURCES_ENCODER
-    Encoder/DepthmapCodecOptionsController.cpp
-	Encoder/SixFringeCodecOptionsController.cpp
-    Encoder/NineFringeCodecOptionsController.cpp
-    Encoder/HolovideoCodecOptionsController.cpp
-	Encoder/HoloimageEncoderOptionsController.cpp
-    Encoder/XYZMCodecOptionsController.cpp
-    Encoder/HolovideoEncoderOptionsController.cpp
+    Encode/Holoencoder.cpp
+    Encode/EncoderController.cpp
+    Encode/EncodingOpenGLWidget.cpp
+    Encode/DepthmapCodecOptionsController.cpp
+	Encode/SixFringeCodecOptionsController.cpp
+    Encode/NineFringeCodecOptionsController.cpp
+    Encode/HolovideoCodecOptionsController.cpp
+	Encode/HoloimageEncoderOptionsController.cpp
+    Encode/XYZMCodecOptionsController.cpp
+    Encode/HolovideoEncoderOptionsController.cpp
 
-    Encoder/DepthmapCodecOptionsController.h
-	Encoder/SixFringeCodecOptionsController.h
-    Encoder/NineFringeCodecOptionsController.h
-    Encoder/HolovideoCodecOptionsController.h
-	Encoder/HoloimageEncoderOptionsController.h
-    Encoder/XYZMCodecOptionsController.h
-    Encoder/HolovideoEncoderOptionsController.h
+    Encode/Holoencoder.h
+    Encode/EncoderController.cpp
+    Encode/EncodingOpenGLWidget.cpp
+    Encode/DepthmapCodecOptionsController.h
+	Encode/SixFringeCodecOptionsController.h
+    Encode/NineFringeCodecOptionsController.h
+    Encode/HolovideoCodecOptionsController.h
+	Encode/HoloimageEncoderOptionsController.h
+    Encode/XYZMCodecOptionsController.h
+    Encode/HolovideoEncoderOptionsController.h
 )
 
 SET(SOURCES_CAPTURE
@@ -263,22 +263,22 @@ set(MOCS
 	MainWindowView.h 
 	MainWindowController.h 
 	OpenGLWidget.h 
-	Capture/CaptureGLWidget.h
-	EncodingOpenGLWidget.h 
-	Capture/CaptureController.h 
 	ViewController.h 
-	EncoderController.h 
+	Capture/CaptureGLWidget.h
+	Capture/CaptureController.h 
 	Capture/FrameCapture.h 
 	Capture/CameraConnectDialog.h 
 	Capture/CaptureTypeSelectDialog.h 
 	Capture/WebsocketOutputStream.h
-	Encoder/DepthmapCodecOptionsController.h 
-	Encoder/SixFringeCodecOptionsController.h
-	Encoder/NineFringeCodecOptionsController.h 
-	Encoder/HolovideoCodecOptionsController.h 
-	Encoder/HoloimageEncoderOptionsController.h 
-	Encoder/XYZMCodecOptionsController.h 
-	Encoder/HolovideoEncoderOptionsController.h)
+	Encode/DepthmapCodecOptionsController.h 
+    Encode/EncoderController.h 
+    Encode/EncodingOpenGLWidget.h 
+	Encode/SixFringeCodecOptionsController.h
+	Encode/NineFringeCodecOptionsController.h 
+	Encode/HolovideoCodecOptionsController.h 
+	Encode/HoloimageEncoderOptionsController.h 
+	Encode/XYZMCodecOptionsController.h 
+	Encode/HolovideoEncoderOptionsController.h)
 set(RESOURCES ui/MainWindow.qrc)
 
 #	---------------------------------------------------------------------------------------

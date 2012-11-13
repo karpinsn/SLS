@@ -30,7 +30,7 @@
 #include "XYZFileIO.h"
 #include <wrench/Logger.h>
 
-#include "Holoencoder.h"
+#include "Encode/Holoencoder.h"
 #include "Holodecoder.h"
 #include "Capture\NineFringe\NineFringeCapture.h"
 

@@ -23,7 +23,7 @@
 
 #include <wrench/gl/Camera.h>
 #include "OpenGLWidget.h"
-#include "Holoencoder.h"
+#include "Encode/Holoencoder.h"
 #include "Holodecoder.h"
 #include "ImageIO.h"
 #include "AbstractMesh.h"

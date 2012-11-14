@@ -1,4 +1,4 @@
-    #include "MainWindowController.h"
+#include "MainWindowController.h"
 
 MainWindowController::MainWindowController()
 {

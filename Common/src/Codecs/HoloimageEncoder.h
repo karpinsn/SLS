@@ -9,14 +9,14 @@
 #include "../ImageIO.h"
 
 #include "Holodecoder.h"
-#include "Encode/Holoencoder.h"
+#include "Encode/SpatialHoloencoder.h"
 
 using namespace std;
 
 class HoloimageEncoder : public Codec
 {
 private:
-  Holoencoder m_encoder;
+  SpatialHoloencoder m_encoder;
   EncodingOpenGLWidget* m_glWidget;
 
   ImageIO m_io;

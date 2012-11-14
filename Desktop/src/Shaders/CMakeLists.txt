@@ -6,9 +6,6 @@ include(FileCopyTargets)
 
 set(SHADER_VERT_SOURCES
 
-	Depth2Holo.vert
-	Mesh2Depth.vert
-	Holoencoder.vert
 	MedianFilter3x3.vert
 	NormalCalculator.vert	
 	Phong.vert
@@ -21,10 +18,6 @@ set(SHADER_VERT_SOURCES
 
 set(SHADER_FRAG_SOURCES
 
-	Depth2Holo.frag
-	Mesh2Depth.frag
-    HoloencoderDither.frag
-	Holoencoder.frag
 	MedianFilter3x3.frag
 	NormalCalculator.frag
 	Phong.frag
@@ -53,3 +46,5 @@ add_dependencies(${PROJECT_NAME} MainShaders)
 add_subdirectory(Holovideo)
 add_subdirectory(SixFringe)
 add_subdirectory(NineFringe)
+add_subdirectory(DepthHoloencoder)
+add_subdirectory(SpatialHoloencoder)

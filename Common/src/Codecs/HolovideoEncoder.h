@@ -8,7 +8,7 @@
 #include "../VideoIO.h"
 
 #include "Holodecoder.h"
-#include "Encode/Holoencoder.h"
+#include "Encode/DepthHoloencoder.h"
 
 #include <reactor/VideoFileWriter.h>
 #include <Reactor/FormatConverter.h>
@@ -44,7 +44,7 @@ private:
   uint8_t* yuv422Buffer;
 
 
-  Holoencoder m_encoder;
+  DepthHoloencoder m_encoder;
   EncodingOpenGLWidget* m_glWidget;
 
   string m_filename;

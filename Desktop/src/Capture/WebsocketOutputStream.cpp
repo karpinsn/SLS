@@ -9,17 +9,29 @@ void WebsocketOutputStream::Open(void)
 	m_socket.start(m_port);
 
 	//	Start our background thread that the socket can broadcast on
-	m_socketThread = new QThread(this);
-	m_socketWorker = new WebsocketOutputStreamWorker(m_socket);
-	m_socketWorker->moveToThread(m_socketThread);
+	m_socketProcessorThread = new QThread(this);
+	m_socketProcessor = new WebsocketProcessor(m_socket);
+	m_socketProcessor->moveToThread(m_socketProcessorThread);
 
-	  //  Connect the thread and its timer 
-	connect(m_socketThread, SIGNAL(started()),  m_socketWorker, SLOT(processSocket()));
-	connect(m_socketWorker, SIGNAL(finished()), m_socketThread, SLOT(quit()));
-	connect(m_socketThread, SIGNAL(finished()), m_socketThread, SLOT(deleteLater()));
-	connect(m_socketWorker, SIGNAL(finished()), m_socketWorker, SLOT(deleteLater())); 
+	//  Connect the thread and its timer 
+	connect(m_socketProcessorThread, SIGNAL(started()),  m_socketProcessor, SLOT(processSocket()));
+	connect(m_socketProcessor, SIGNAL(finished()), m_socketProcessorThread, SLOT(quit()));
+	connect(m_socketProcessorThread, SIGNAL(finished()), m_socketProcessorThread, SLOT(deleteLater()));
+	connect(m_socketProcessor, SIGNAL(finished()), m_socketProcessor, SLOT(deleteLater())); 
 
-	m_socketThread->start();
+	//	Start our background thread that will process the output stream
+	m_streamProcessorThread = new QThread(this);
+	m_streamProcessor = new OutstreamProcessor(m_socket);
+	m_streamProcessor->moveToThread(m_streamProcessorThread);
+
+	//	Connect the thread and its timer
+	connect(m_streamProcessorThread, SIGNAL(started()), m_streamProcessor, SLOT(processOutputStream()));
+	connect(m_streamProcessor, SIGNAL(finished()), m_streamProcessorThread, SLOT(quit()));
+	connect(m_streamProcessorThread, SIGNAL(finished()), m_streamProcessorThread, SLOT(deleteLater()));
+	connect(m_streamProcessor, SIGNAL(finished()), m_streamProcessor, SLOT(deleteLater()));
+
+	m_socketProcessorThread->start();
+	m_streamProcessorThread->start();
 }
 
 void WebsocketOutputStream::WriteStream(shared_ptr<MeshInterchange> mesh)
@@ -53,23 +65,37 @@ void WebsocketOutputStream::WriteStream(shared_ptr<MeshInterchange> mesh)
 
 void WebsocketOutputStream::Close(void)
 {
-	//	Let the thread know that we are stopping
-	m_socketWorker->stop();
+	//	Let the threads know that we are stopping
+	m_socketProcessor->stop();
+	m_streamProcessor->stop();
 
 	//	Stop / close our socket connection
 	m_socket.stop();
 }
 
-void WebsocketOutputStreamWorker::stop(void)
+void WebsocketProcessor::stop(void)
 {
   m_running = false;
 }
 
-void WebsocketOutputStreamWorker::processSocket()
+void WebsocketProcessor::processSocket()
 {
 	//	Tight loop here. The socket will ensure that we wont sit and spin idly
   while(m_running && 0 <= m_socket.yieldTime())
   { }
 
   emit finished();
+}
+
+void OutstreamProcessor::stop(void)
+{
+  m_running = false;
+}
+
+void OutstreamProcessor::processOutputStream(void)
+{
+  while(m_running)
+  {
+	//	Do our image pulling stuff
+  }
 }

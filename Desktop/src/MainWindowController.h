@@ -30,7 +30,7 @@
 #include "XYZFileIO.h"
 #include <wrench/Logger.h>
 
-#include "Encode/Holoencoder.h"
+#include "Encode/DepthHoloencoder.h"
 #include "Holodecoder.h"
 #include "Capture\NineFringe\NineFringeCapture.h"
 
@@ -50,11 +50,11 @@ public slots:
 	void playVideo(void);
 	void openHoloImage(void);
 	
-        void toolSelect(int tool);
+    void toolSelect(int tool);
 
-        void viewMode();
-        void encodeMode();
-        void captureMode();
+    void viewMode();
+    void encodeMode();
+    void captureMode();
 	
 private:
 	MainWindowView* m_mainWindow;

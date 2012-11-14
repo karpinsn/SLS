@@ -240,7 +240,7 @@ void CaptureController::save(void)
 		std::string current_locale_filename = file.toLocal8Bit().constData();
 
 		//	Create a codec and outputStream
-		shared_ptr<Holoencoder> codec(new Holoencoder());
+		shared_ptr<DepthHoloencoder> codec(new DepthHoloencoder());
 		codec->init(m_gl3DContext->getWidth(), m_gl3DContext->getHeight());
 		shared_ptr<IOutputStream> outStream(new FileOutputStream(current_locale_filename, m_gl3DContext->getWidth(), m_gl3DContext->getHeight()));
 		
@@ -266,7 +266,7 @@ void CaptureController::stream(void)
   if(nullptr == m_outputStream)
 	{
 		//	Create a codec and outputStream
-		shared_ptr<Holoencoder> codec(new Holoencoder());
+		shared_ptr<DepthHoloencoder> codec(new DepthHoloencoder());
 		codec->init(m_gl3DContext->getWidth(), m_gl3DContext->getHeight());
 		shared_ptr<IOutputStream> outStream(new WebsocketOutputStream(7681));
 

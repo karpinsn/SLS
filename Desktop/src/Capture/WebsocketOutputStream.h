@@ -28,7 +28,7 @@
 
 #include <antenna/BaseStation.h>
 
-class WebsocketOutputStreamWorker : public QObject
+class WebsocketProcessor : public QObject
 {
   Q_OBJECT
 
@@ -37,7 +37,7 @@ class WebsocketOutputStreamWorker : public QObject
 	antenna::BaseStation& m_socket;
 
   public:
-	WebsocketOutputStreamWorker(antenna::BaseStation& socket) : m_socket(socket), m_running(true) { };
+	WebsocketProcessor(antenna::BaseStation& socket) : m_socket(socket), m_running(true) { };
 	void stop(void);
 
   signals:
@@ -45,6 +45,25 @@ class WebsocketOutputStreamWorker : public QObject
 
   public slots:
     void processSocket();
+};
+
+class OutstreamProcessor : public QObject
+{
+  Q_OBJECT
+
+  private:
+	bool m_running;
+	antenna::BaseStation& m_socket;
+
+  public:
+	OutstreamProcessor(antenna::BaseStation& socket) : m_socket(socket), m_running(true) { };
+	void stop(void);
+
+  signals:
+	void finished(void);
+
+  public slots:
+    void processOutputStream(void);
 };
 
 class WebsocketOutputStream : public QObject, public IOutputStream
@@ -55,8 +74,12 @@ private:
 	//	Socket and port that we are connected with
 	antenna::BaseStation	m_socket;
 	const int				m_port;
-	QThread*				m_socketThread;
-	WebsocketOutputStreamWorker* m_socketWorker;
+	
+	QThread*				m_socketProcessorThread;
+	QThread*				m_streamProcessorThread;
+
+	WebsocketProcessor*		m_socketProcessor;
+	OutstreamProcessor*		m_streamProcessor;
 
 	shared_ptr<IplImage> m_transferImage;
 

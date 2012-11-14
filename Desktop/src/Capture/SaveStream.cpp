@@ -5,7 +5,7 @@ SaveStream::SaveStream()
   m_encoder = nullptr;
 }
 
-void SaveStream::open(shared_ptr<Holoencoder> encoder, shared_ptr<IOutputStream> outStream)
+void SaveStream::open(shared_ptr<DepthHoloencoder> encoder, shared_ptr<IOutputStream> outStream)
 {
     m_encoder = encoder;
     m_outStream = outStream;

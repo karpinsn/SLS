@@ -30,7 +30,7 @@
 #include <QtGui>
 #include <iostream>
 
-#include "Encode/Holoencoder.h"
+#include "Encode/DepthHoloencoder.h"
 #include "Holodecoder.h"
 #include <wrench/gl/Camera.h>
 #include "IGLContext.h"

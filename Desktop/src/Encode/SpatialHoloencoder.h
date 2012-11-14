@@ -4,8 +4,8 @@
 @since  09/30/10
 */
 
-#ifndef _HOLOENCODER_H_
-#define _HOLOENCODER_H_
+#ifndef _SPATIAL_HOLOENCODER_H_
+#define _SPATIAL_HOLOENCODER_H_
 
 #ifdef __APPLE__
 #include <glew.h>
@@ -41,7 +41,7 @@
 using namespace std;
 using namespace wrench::gl;
 
-class Holoencoder : public IGLContext, public IEncoder
+class SpatialHoloencoder : public IGLContext, public IEncoder
 {
 private:
   ShaderProgram m_encoderShader;
@@ -56,6 +56,7 @@ private:
   unique_ptr<Camera> m_camera;
   Arcball m_controller;
 
+  glm::mat4 m_projectorModelView;
   glm::mat4 m_translate;
   glm::mat4 m_scale;
 
@@ -73,17 +74,17 @@ private:
 public:
 
   /**
-  * Creates a new Holoencoder that can be used to encode any type of MeshInterchange
+  * Creates a new SpatialHoloencoder that can be used to encode any type of MeshInterchange
   */
-  Holoencoder(void);
+  SpatialHoloencoder(void);
 
   /**
-  *	Initializes the Holoencoder with default values (width and height = 512).
+  *	Initializes the SpatialHoloencoder with default values (width and height = 512).
   */
   virtual void init();
 
   /**
-  *	Initializes the Holoencoder with the specified values.
+  *	Initializes the SpatialHoloencoder with the specified values.
   *
   *	@param width Width of the encoded holoimage (Does not need to match the input mesh)
   * @param height Height of the encoded holoimage (Does not need to match the input mesh)

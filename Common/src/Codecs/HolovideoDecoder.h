@@ -8,7 +8,7 @@
 #include "../VideoIO.h"
 
 #include "Holodecoder.h"
-#include "Encode/Holoencoder.h"
+#include "Encode/DepthHoloencoder.h"
 
 using namespace std;
 

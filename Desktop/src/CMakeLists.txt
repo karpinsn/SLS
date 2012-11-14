@@ -128,7 +128,8 @@ set(SOURCES
 	)	
 
 SET(SOURCES_ENCODER
-    Encode/Holoencoder.cpp
+    Encode/DepthHoloencoder.cpp
+    Encode/SpatialHoloencoder.cpp
     Encode/EncoderController.cpp
     Encode/EncodingOpenGLWidget.cpp
     Encode/DepthmapCodecOptionsController.cpp
@@ -139,7 +140,8 @@ SET(SOURCES_ENCODER
     Encode/XYZMCodecOptionsController.cpp
     Encode/HolovideoEncoderOptionsController.cpp
 
-    Encode/Holoencoder.h
+    Encode/DepthHoloencoder.h
+    Encode/SpatialHoloencoder.h
     Encode/EncoderController.cpp
     Encode/EncodingOpenGLWidget.cpp
     Encode/DepthmapCodecOptionsController.h
@@ -355,6 +357,8 @@ source_group("Capture" FILES ${SOURCES_CAPTURE})
 source_group("Capture/ThreeFringe" FILES ${SOURCES_THREEFRINGE})
 source_group("Capture/SixFringe" FILES ${SOURCES_SIXFRINGE})
 source_group("Capture/NineFringe" FILES ${SOURCES_NINEFRINGE})
+
+source_group("Encode" FILES ${SOURCES_ENCODER})
 
 source_group("Common/Source Files" FILES ${SOURCES_COMMON_SOURCES})
 source_group("Common/Header Files" FILES ${SOURCES_COMMON_HEADERS})

@@ -23,7 +23,7 @@
 
 #include <wrench/gl/Camera.h>
 #include "OpenGLWidget.h"
-#include "Encode/Holoencoder.h"
+#include "Encode/DepthHoloencoder.h"
 #include "Holodecoder.h"
 #include "ImageIO.h"
 #include "AbstractMesh.h"
@@ -50,7 +50,7 @@ public:
   void hideFileList(void);
 
 private:
-  Holoencoder* m_holoEncoder;
+  DepthHoloencoder* m_holoEncoder;
   Holodecoder* m_holoDecoder;
 
   // Used to animate the GUI

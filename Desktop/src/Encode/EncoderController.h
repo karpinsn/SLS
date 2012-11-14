@@ -17,7 +17,7 @@
 #include <QWidget>
 
 #include "OpenGLWidget.h"
-#include "Holoencoder.h"
+#include "DepthHoloencoder.h"
 #include "XYZFileIO.h"
 
 #include "Codecs/DepthEncoder.h"

@@ -41,7 +41,7 @@
 #include <wrench/gl/utils/TextureDisplay.h>
 #include <wrench/gl/utils/FPSCalculator.h>
 
-#include "Encode/Holoencoder.h"
+#include "Encode/DepthHoloencoder.h"
 #include "Holodecoder.h"
 #include <wrench/gl/Camera.h>
 #include "IGLContext.h"

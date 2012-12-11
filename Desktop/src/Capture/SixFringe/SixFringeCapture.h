@@ -64,8 +64,7 @@ private:
   ShaderProgram m_gaussianFilterVertical;
   ShaderProgram m_gaussianFilterHorizontal;
 
-  ShaderProgram m_phaseWrapper;
-  ShaderProgram m_phaseUnwrapper;
+  ShaderProgram m_phaseCalculator;
   ShaderProgram m_phaseFilter;
   ShaderProgram m_depthCalculator;
   ShaderProgram m_normalCalculator;

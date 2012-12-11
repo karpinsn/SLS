@@ -11,8 +11,7 @@ set(SHADER_VERT_SOURCES
     DepthCalculator.vert
     NormalCalculator.vert
 	PhaseFilter.vert
-	PhaseUnwrap.vert
-	PhaseWrap.vert
+	PhaseCalculator.vert
 )
 
 set(SHADER_FRAG_SOURCES
@@ -21,8 +20,7 @@ set(SHADER_FRAG_SOURCES
     DepthCalculator.frag
     NormalCalculator.frag
 	PhaseFilter.frag
-	PhaseUnwrap.frag
-	PhaseWrap.frag
+	PhaseCalculator.frag
 )
 
 set(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})

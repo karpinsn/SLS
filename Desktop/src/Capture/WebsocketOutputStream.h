@@ -25,6 +25,7 @@
 
 #include "IOutputStream.h"
 #include "MeshInterchange.h"
+#include "ImageBuffer.h"
 
 #include <antenna/BaseStation.h>
 
@@ -81,7 +82,8 @@ private:
 	WebsocketProcessor*		m_socketProcessor;
 	OutstreamProcessor*		m_streamProcessor;
 
-	shared_ptr<IplImage> m_transferImage;
+	ImageBuffer				m_imageBuffer;
+	shared_ptr<IplImage>	m_transferImage;
 
 public:
     WebsocketOutputStream(int port);

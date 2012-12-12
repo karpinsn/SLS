@@ -311,6 +311,12 @@ void SixFringeCapture::draw(void)
   OGLStatus::logOGLErrors("SixFringeCapture - draw()");
 }
 
+int	SixFringeCapture::getFringeCount()
+{
+  //  This capture requires six fringes
+  return 6;
+}
+
 bool SixFringeCapture::newImage(IplImage* image)
 {
   bool needRedraw = false;

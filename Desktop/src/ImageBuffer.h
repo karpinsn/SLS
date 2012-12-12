@@ -26,8 +26,18 @@ using namespace std;
 
 class ImageBuffer
 {
+private:
+  const int m_bufferSize;
+  const int m_dropCount;
+
+  unique_ptr<QSemaphore> m_freeImages;
+  unique_ptr<QSemaphore> m_queuedImages;
+  QMutex     m_lock;
+  QQueue<shared_ptr<IplImage> > m_imageQueue;
+
 public:
-  ImageBuffer(int size = 60);
+
+  ImageBuffer(int size = 60, int imagesToDrop = 1);
 
   void pushFrame(const IplImage *image);
   shared_ptr<IplImage> popFrame(void);
@@ -45,14 +55,6 @@ public:
   *	@return Number of images in this ImageBuffer
   */
   int bufferCurrentCount(void);
-
-private:
-  const int m_bufferSize;
-  unique_ptr<QSemaphore> m_freeImages;
-  unique_ptr<QSemaphore> m_queuedImages;
-  QMutex     m_lock;
-  QQueue<shared_ptr<IplImage> > m_imageQueue;
-
 };
 
 #endif	// _IMAGE_BUFFER_H_

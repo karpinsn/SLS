@@ -252,6 +252,11 @@ void ThreeFringeCapture::draw(void)
   OGLStatus::logOGLErrors("ThreeFringeCapture - draw()");
 }
 
+int	ThreeFringeCapture::getFringeCount()
+{
+  return 3;
+}
+
 bool ThreeFringeCapture::newImage(IplImage* image)
 {
   bool needRedraw = false;

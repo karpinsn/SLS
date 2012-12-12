@@ -331,6 +331,11 @@ void NineFringeCapture::draw(void)
   OGLStatus::logOGLErrors("NineFringeCapture - draw()");
 }
 
+int NineFringeCapture::getFringeCount()
+{
+  return 9;
+}
+
 bool NineFringeCapture::newImage(IplImage* image)
 {
   bool needRedraw = false;

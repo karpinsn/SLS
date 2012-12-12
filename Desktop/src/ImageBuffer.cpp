@@ -1,6 +1,6 @@
 #include "ImageBuffer.h"
 
-ImageBuffer::ImageBuffer(int size) : m_bufferSize(size)
+ImageBuffer::ImageBuffer(int size, int imagesToDrop) : m_bufferSize(size), m_dropCount(imagesToDrop)
 {	
   m_freeImages = unique_ptr<QSemaphore>(new QSemaphore(size));
   m_queuedImages = unique_ptr<QSemaphore>(new QSemaphore(0));
@@ -8,15 +8,38 @@ ImageBuffer::ImageBuffer(int size) : m_bufferSize(size)
 
 void ImageBuffer::pushFrame(const IplImage *image)
 {
-  m_freeImages->acquire();
-
-  shared_ptr<IplImage> temp = shared_ptr<IplImage>(cvCloneImage(image), [](IplImage* ptr) { cvReleaseImage(&ptr); });
-
   m_lock.lock();
-  m_imageQueue.enqueue(temp);
-  m_lock.unlock();
 
-  m_queuedImages->release();
+  if(m_freeImages->tryAcquire())
+  {
+	//	Yay! We got the resources, continue as usual
+	shared_ptr<IplImage> temp = shared_ptr<IplImage>(cvCloneImage(image), [](IplImage* ptr) { cvReleaseImage(&ptr); });
+	m_imageQueue.enqueue(temp);
+	m_queuedImages->release();
+  }
+  else
+  {
+	// Make sure this works. Make sure we can drop this many
+	assert(m_queuedImages->available() >= m_dropCount);
+
+	//	Shoot! Our buffer is full. Drop some images so we can add more
+	for(int i = 0; i < m_dropCount; ++i)
+	{
+	  m_queuedImages->acquire();
+	  m_imageQueue.dequeue();
+	  m_freeImages->release();
+	}
+
+	//	Should be able to get room now
+	assert(m_freeImages->tryAcquire());
+
+	//	We have room now. Now enqueue
+	shared_ptr<IplImage> temp = shared_ptr<IplImage>(cvCloneImage(image), [](IplImage* ptr) { cvReleaseImage(&ptr); });
+	m_imageQueue.enqueue(temp);
+	m_queuedImages->release();
+  }
+
+  m_lock.unlock();
 }
 
 shared_ptr<IplImage> ImageBuffer::popFrame(void)

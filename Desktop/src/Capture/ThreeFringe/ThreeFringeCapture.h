@@ -113,6 +113,7 @@ public:
   int	  getHeight();
   void    init(int width, int height);
   void    resizeInput(int width, int height);
+  int	  getFringeCount();
   bool    newImage(IplImage* image);
   void    swapBuffers(void);
   void	  loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance));

@@ -21,8 +21,6 @@ void CaptureGLWidget::initializeGL()
   }
   std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << endl;
 
-  m_captureDecoder->init();
-
   m_axis.init();
   m_controller.init(0.0f, 0.0f, 0.0f, .5f);
   m_camera.init(.5f, .5f, 2.5f, .5f, .5f, 0.0f, 0.0f, -1.0f, 0.0f);

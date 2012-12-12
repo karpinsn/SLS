@@ -38,7 +38,7 @@ void WebsocketOutputStream::WriteStream(shared_ptr<MeshInterchange> mesh)
 {
 	//	Encoding properties
 	//int encodingProperties[] = {CV_IMWRITE_JPEG_QUALITY, 90, 0};
-	int encodingProperties[] = {CV_IMWRITE_PNG_COMPRESSION, 3, 0 };
+	//int encodingProperties[] = {CV_IMWRITE_PNG_COMPRESSION, 3, 0 };
 
 	if(!m_transferImage)
 	{
@@ -54,13 +54,15 @@ void WebsocketOutputStream::WriteStream(shared_ptr<MeshInterchange> mesh)
 	}
 
 	mesh->getTexture()->transferFromTexture(m_transferImage.get());
-	cvCvtColor(m_transferImage.get(), m_transferImage.get(), CV_RGB2BGR);
+	m_imageBuffer.pushFrame(m_transferImage.get());
 
+	//cvCvtColor(m_transferImage.get(), m_transferImage.get(), CV_RGB2BGR);
+	/*
 	auto buffer = shared_ptr<CvMat>(
 					cvEncodeImage(".png", m_transferImage.get(), encodingProperties), 
 					[](CvMat* ptr){cvReleaseMat(&ptr);});
 	
-	m_socket.broadcastData(buffer->data.ptr, buffer->width);
+	m_socket.broadcastData(buffer->data.ptr, buffer->width);*/
 }
 
 void WebsocketOutputStream::Close(void)

@@ -13,7 +13,7 @@ set(SHADER_VERT_SOURCES
 set(SHADER_FRAG_SOURCES
 
     Mesh2Depth.frag
-    Depth2Holo.vert    
+    Depth2Holo.frag   
 )
 
 set(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})

@@ -35,6 +35,12 @@ public:
   virtual Texture& getTextureMap(void)				  = 0;
   virtual Texture& getNormalMap(void)				  = 0;
 
+  /**
+	* Returns the number of fringes required for this capture
+	* 
+	* @return Number of fringes required for this capture
+	*/
+  virtual int getFringeCount()						  = 0;
   virtual bool newImage(IplImage *frame)			  = 0;
 };
 

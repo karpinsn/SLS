@@ -3,13 +3,6 @@
 CaptureController::CaptureController(QWidget* parent) : 
 QWidget(parent)
 {
-  int bufferSize = 60;
-
-  m_gl3DContext	  = make_shared<NineFringeCapture>();
-  m_camera		  = make_shared<CameraCapture>();
-  m_frameCapture  = shared_ptr<FrameCapture>(new FrameCapture(this, CaptureController::newFrameCallback));
-  m_buffer		  = make_shared<ImageBuffer>(bufferSize);
-
   setupUi(this);                    //  Creates the UI objects
   _connectSignalsWithController();  //  Connects the UI objects to the slots in the controller
   _readSettings();                  //  Reads the persisted settings
@@ -29,9 +22,18 @@ void CaptureController::showEvent(QShowEvent *event)
   {
 	throw new exception("No capture type selected");
   }
+  //  Now that we have a capture type, put the settings in
+  _readSettings();                  //  Reads the persisted settings
 
   captureGLWidget->setCaptureContext(m_gl3DContext.get());
   m_gl3DContext->init();
+
+  m_buffer = make_shared<ImageBuffer>(60, m_gl3DContext->getFringeCount());
+  m_camera = make_shared<CameraCapture>();
+  m_camera->init(m_buffer.get());
+  
+  m_frameCapture  = shared_ptr<FrameCapture>(new FrameCapture(this, CaptureController::newFrameCallback));
+  m_frameCapture->init(m_buffer.get(), captureGLWidget);
 
   //  Since we changed our capture context, read and set settings
   _readSettings();
@@ -65,8 +67,6 @@ void CaptureController::hideEvent(QHideEvent *)
 
 void CaptureController::init(void)
 {
-  m_camera->init(m_buffer.get());
-  m_frameCapture->init(m_buffer.get(), captureGLWidget);
   captureGLWidget->setCaptureContext(m_gl3DContext.get());
 }
 
@@ -135,28 +135,40 @@ void CaptureController::dropFrame(void)
 void CaptureController::newGammaValue(double gammaValue)
 {
   //  Set the new value then persist the settings
-  m_gl3DContext->setGammaCutoff(gammaValue);
+  if(nullptr != m_gl3DContext)
+  {
+	m_gl3DContext->setGammaCutoff(gammaValue);
+  }
   m_settings.setValue(SettingsGammaValue, gammaValue);
 }
 
 void CaptureController::newBlackLevel(double blackLevel)
 {
   //  Set the new value then persist the settings
-  m_gl3DContext->setBlackLevel(blackLevel);
+  if(nullptr != m_gl3DContext)
+  {
+	m_gl3DContext->setBlackLevel(blackLevel);
+  }
   m_settings.setValue(SettingsBlackLevelValue, blackLevel);
 }
 
 void CaptureController::newScalingFactor(double scalingFactor)
 {
   //  Set the new value then persist the settings
-  m_gl3DContext->setScalingFactor(scalingFactor);
+  if(nullptr != m_gl3DContext)
+  {
+	m_gl3DContext->setScalingFactor(scalingFactor);
+  }
   m_settings.setValue(SettingsScalingFactor, scalingFactor);
 }
 
 void CaptureController::newShiftFactor(double shiftFactor)
 {
   //  Set the new value then persist the settings
-  m_gl3DContext->setShiftFactor(shiftFactor);
+  if(nullptr != m_gl3DContext)
+  {
+	m_gl3DContext->setShiftFactor(shiftFactor);
+  }
   m_settings.setValue(SettingsShiftFactor, shiftFactor);
 }
 
@@ -328,12 +340,4 @@ void CaptureController::_readSettings(void)
   scalingFactorBox->setValue( m_settings.value(SettingsScalingFactor, .05).toDouble());
   shiftFactorBox->setValue(	  m_settings.value(SettingsShiftFactor,	  .00).toDouble());
   blackLevelBox->setValue(	  m_settings.value(SettingsBlackLevelValue,.00).toDouble());
-
-  //  If we have an active Capture context then set the values there as well
-  if(nullptr != m_gl3DContext)
-  {
-	m_gl3DContext->setGammaCutoff(gammaBox->value());
-	m_gl3DContext->setScalingFactor(scalingFactorBox->value());
-	m_gl3DContext->setShiftFactor(shiftFactorBox->value());
-  }
 }

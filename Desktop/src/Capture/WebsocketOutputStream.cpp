@@ -36,10 +36,6 @@ void WebsocketOutputStream::Open(void)
 
 void WebsocketOutputStream::WriteStream(shared_ptr<MeshInterchange> mesh)
 {
-	//	Encoding properties
-	//int encodingProperties[] = {CV_IMWRITE_JPEG_QUALITY, 90, 0};
-
-
 	if(!m_transferImage)
 	{
 		//	Creates an OpenCV image that we can use to fetch the texture with
@@ -55,14 +51,6 @@ void WebsocketOutputStream::WriteStream(shared_ptr<MeshInterchange> mesh)
 
 	mesh->getTexture()->transferFromTexture(m_transferImage.get());
 	m_imageBuffer.pushFrame(m_transferImage.get());
-
-	//cvCvtColor(m_transferImage.get(), m_transferImage.get(), CV_RGB2BGR);
-	/*
-	auto buffer = shared_ptr<CvMat>(
-					cvEncodeImage(".png", m_transferImage.get(), encodingProperties), 
-					[](CvMat* ptr){cvReleaseMat(&ptr);});
-	
-	m_socket.broadcastData(buffer->data.ptr, buffer->width);*/
 }
 
 void WebsocketOutputStream::Close(void)
@@ -96,6 +84,7 @@ void OutstreamProcessor::stop(void)
 
 void OutstreamProcessor::processOutputStream(void)
 {
+  //int encodingProperties[] = {CV_IMWRITE_JPEG_QUALITY, 90, 0};
   int encodingProperties[] = {CV_IMWRITE_PNG_COMPRESSION, 3, 0 };
 
   while(m_running)

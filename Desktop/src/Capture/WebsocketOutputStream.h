@@ -55,9 +55,10 @@ class OutstreamProcessor : public QObject
   private:
 	bool m_running;
 	antenna::BaseStation& m_socket;
+	ImageBuffer& m_buffer;
 
   public:
-	OutstreamProcessor(antenna::BaseStation& socket) : m_socket(socket), m_running(true) { };
+	OutstreamProcessor(antenna::BaseStation& socket, ImageBuffer& buffer) : m_socket(socket), m_buffer(buffer), m_running(true) { };
 	void stop(void);
 
   signals:

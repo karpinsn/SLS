@@ -21,7 +21,7 @@ void WebsocketOutputStream::Open(void)
 
 	//	Start our background thread that will process the output stream
 	m_streamProcessorThread = new QThread(this);
-	m_streamProcessor = new OutstreamProcessor(m_socket);
+	m_streamProcessor = new OutstreamProcessor(m_socket, m_imageBuffer);
 	m_streamProcessor->moveToThread(m_streamProcessorThread);
 
 	//	Connect the thread and its timer
@@ -38,7 +38,7 @@ void WebsocketOutputStream::WriteStream(shared_ptr<MeshInterchange> mesh)
 {
 	//	Encoding properties
 	//int encodingProperties[] = {CV_IMWRITE_JPEG_QUALITY, 90, 0};
-	//int encodingProperties[] = {CV_IMWRITE_PNG_COMPRESSION, 3, 0 };
+
 
 	if(!m_transferImage)
 	{
@@ -96,8 +96,16 @@ void OutstreamProcessor::stop(void)
 
 void OutstreamProcessor::processOutputStream(void)
 {
+  int encodingProperties[] = {CV_IMWRITE_PNG_COMPRESSION, 3, 0 };
+
   while(m_running)
   {
 	//	Do our image pulling stuff
+	auto frame = m_buffer.popFrame();
+	cvCvtColor(frame.get(), frame.get(), CV_RGB2BGR);
+	auto buffer = shared_ptr<CvMat>(
+				cvEncodeImage(".png", frame.get(), encodingProperties), 
+				[](CvMat* ptr){cvReleaseMat(&ptr);});
+	m_socket.broadcastData(buffer->data.ptr, buffer->width);
   }
 }

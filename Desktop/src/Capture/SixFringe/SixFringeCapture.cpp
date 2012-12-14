@@ -321,11 +321,9 @@ bool SixFringeCapture::newImage(IplImage* image)
 {
   bool needRedraw = false;
 
-  cvSetImageCOI(image, 1);
   cvSetImageCOI(m_fringeLoadingImage.get(), (m_currentChannelLoad + 1));
   cvCopy(image, m_fringeLoadingImage.get());
   cvSetImageCOI(m_fringeLoadingImage.get(), 0);
-  cvSetImageCOI(image, 0);
 
   m_currentChannelLoad++;
 

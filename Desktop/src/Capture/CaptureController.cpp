@@ -220,11 +220,11 @@ void CaptureController::newFrame(shared_ptr<IplImage> frame)
 
     if(frame->nChannels > 1)
     {
-      im_gray = shared_ptr<IplImage>(
-		  cvCreateImage(cvGetSize(frame.get()),IPL_DEPTH_8U,1),
-		  [](IplImage* ptr) { cvReleaseImage(&ptr); });
-
-      cvCvtColor(frame.get(), im_gray.get(), CV_RGB2GRAY);
+	  //  PROFILED: cvCvtColor(frame.get(), im_gray.get(), CV_RGB2GRAY);
+	  //  This is slow due to having to average all three channels. 
+	  //  Instead just we are just going to set the COI and let the captureGLWidget
+	  //  handle it accordinly
+	  cvSetImageCOI(frame.get(), 1);
     }
 
 	captureGLWidget->newFringe(im_gray.get());

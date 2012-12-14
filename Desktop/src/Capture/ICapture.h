@@ -41,6 +41,14 @@ public:
 	* @return Number of fringes required for this capture
 	*/
   virtual int getFringeCount()						  = 0;
+
+  /**
+	* Takes a new fringe image for decoding.
+	*
+	* @param frame New fringe frame. This frame should either be
+	* a single channel, grayscale image or have the approprate 
+	* channel of interest (COI) set.
+	*/
   virtual bool newImage(IplImage *frame)			  = 0;
 };
 

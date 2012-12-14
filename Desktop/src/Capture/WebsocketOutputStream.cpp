@@ -92,9 +92,10 @@ void OutstreamProcessor::processOutputStream(void)
 	//	Do our image pulling stuff
 	auto frame = m_buffer.popFrame();
 	cvCvtColor(frame.get(), frame.get(), CV_RGB2BGR);
+	/*
 	auto buffer = shared_ptr<CvMat>(
 				cvEncodeImage(".png", frame.get(), encodingProperties), 
 				[](CvMat* ptr){cvReleaseMat(&ptr);});
-	m_socket.broadcastData(buffer->data.ptr, buffer->width);
+	m_socket.broadcastData(buffer->data.ptr, buffer->width);*/
   }
 }

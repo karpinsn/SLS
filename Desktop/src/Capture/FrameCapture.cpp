@@ -51,7 +51,7 @@ void FrameCaptureWorker::grabFrames()
 
   while(m_running)
   {
-    shared_ptr<IplImage> frame = m_buffer->popFrame();
+	shared_ptr<IplImage> frame = m_buffer->popFrame();
 	m_newFrameCallback(m_callbackInstance, frame);
   }
 

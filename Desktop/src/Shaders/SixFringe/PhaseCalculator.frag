@@ -14,7 +14,6 @@ void main(void)
 {
 	float pi = 3.14159;
 	float twoPi = 2.0 * pi;
-	float tolerance = .01;
 	
 	float pitch1 = 74;
     float pitch2 = 79;
@@ -27,7 +26,7 @@ void main(void)
 	float phi2 = atan(sqrt(3.0) * (fringe2.r - fringe2.b), 2.0 * fringe2.g - fringe2.r - fringe2.b);
 
     float phi12 = mod(phi1 - phi2, 2.0 * pi);
-    float k = round(((phi12 * (pitch12/pitch1) - phi1) - tolerance) / twoPi);
+    float k = floor((phi12 * (pitch12/pitch1) - phi1) / twoPi);
  
     float gamma = sqrt(pow((2 * fringe1.g - fringe1.r - fringe1.b), 2) + 3 * pow((fringe1.r - fringe1.b), 2)) / (fringe1.r + fringe1.g + fringe1.b);
      		

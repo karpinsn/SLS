@@ -14,7 +14,7 @@ void CameraCapture::start()
 {
   if(nullptr != m_camera)
   {
-    m_camera->open();
+	m_camera->open();
   }
 }
 
@@ -22,7 +22,7 @@ void CameraCapture::stop()
 {
   if(nullptr != m_camera)
   {
-    m_camera->close();
+	m_camera->close();
   }
 
   m_camera = nullptr;
@@ -45,8 +45,8 @@ void CameraCapture::setCamera(unique_ptr<lens::Camera> camera)
 {
   if(nullptr != camera)
   {
-    m_camera = ::move(camera);
-    m_camera->addObserver(this);
+	m_camera = ::move(camera);
+	m_camera->addObserver(this);
   }
 }
 

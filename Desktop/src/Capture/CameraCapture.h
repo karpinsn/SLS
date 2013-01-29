@@ -31,12 +31,12 @@ private:
   ImageBuffer   *m_buffer;
 
 public:
-    CameraCapture();
+	CameraCapture();
 
-    void init(ImageBuffer *buffer);
-    void start();
-    void stop();
-    virtual void newFrame(IplImage* frame);
+	void init(ImageBuffer *buffer);
+	void start();
+	void stop();
+	virtual void newFrame(IplImage* frame);
 
 	/**
 	* Sets the camera to be used by this CameraCapture. 
@@ -47,7 +47,7 @@ public:
 	*
 	* @param camera Camera to use for capture.
 	*/
-    void setCamera(unique_ptr<lens::Camera> camera);
+	void setCamera(unique_ptr<lens::Camera> camera);
 	
 	/**
 	* Returns true or false of whether or not the CameraCapture has a camera.

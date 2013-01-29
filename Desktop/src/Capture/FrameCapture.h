@@ -56,8 +56,8 @@ private:
   FrameCaptureWorker* m_worker;
 
 public:
-    FrameCapture(void* callbackInstance, void (*newFrameCallback)(void* callbackInstance, shared_ptr<IplImage> newFrame));
-    void init(ImageBuffer* buffer, QGLWidget* context);
+	FrameCapture(void* callbackInstance, void (*newFrameCallback)(void* callbackInstance, shared_ptr<IplImage> newFrame));
+	void init(ImageBuffer* buffer, QGLWidget* context);
 	void start(void);
  };
 

@@ -3,6 +3,7 @@
 CameraCapture::CameraCapture()
 {	
   m_camera = nullptr;
+  frameGrabber = nullptr;
 }
 
 void CameraCapture::init(ImageBuffer *buffer)
@@ -12,9 +13,11 @@ void CameraCapture::init(ImageBuffer *buffer)
 
 void CameraCapture::start()
 {
-  if(nullptr != m_camera)
+
+  if(nullptr != m_camera && nullptr !=frameGrabber)
   {
 	m_camera->open();
+	frameGrabber->open();
   }
 }
 
@@ -22,9 +25,11 @@ void CameraCapture::stop()
 {
   if(nullptr != m_camera)
   {
+	frameGrabber->close();
 	m_camera->close();
+	
   }
-
+  frameGrabber = nullptr;
   m_camera = nullptr;
 }
 
@@ -41,16 +46,18 @@ void CameraCapture::newFrame(IplImage* frame)
   }
 }
 
-void CameraCapture::setCamera(unique_ptr<lens::Camera> camera)
+void CameraCapture::setCamera(unique_ptr<lens::ICamera> camera)
 {
   if(nullptr != camera)
   {
 	m_camera = ::move(camera);
-	m_camera->addObserver(this);
+	frameGrabber = new lens::FrameGrabber(*m_camera);
+	//m_camera->addObserver(this);
+	frameGrabber ->addObserver(this);
   }
 }
 
 bool CameraCapture::hasCamera(void)
-{
+{ 
   return nullptr != m_camera;
 }

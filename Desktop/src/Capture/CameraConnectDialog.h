@@ -1,7 +1,7 @@
 #ifndef CAMERA_CONNECT_DIALOG_H
 #define CAMERA_CONNECT_DIALOG_H
 
-#include "lens/Camera.h"
+#include "lens/ICamera.h"
 #include "lens/OpenCVCamera.h"
 #include "lens/FileCamera.h"
 
@@ -31,7 +31,7 @@ class CameraConnectDialog : public QDialog, private Ui::CameraConnectDialog
 public:
     CameraConnectDialog(QWidget *parent = 0);
 
-    lens::Camera* getCamera(void);
+    lens::ICamera* getCamera(void);
 
 private:
     void _initCameraDriverList(void);

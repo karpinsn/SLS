@@ -16,19 +16,23 @@
 
 #include <wrench/Logger.h>
 
-#include <lens/Camera.h>
-#include <lens/CameraObserver.h>
+#include <lens/ICamera.h>
+#include <lens/FrameGrabber.h>
 #include <lens/OpenCVCamera.h>
 
 #include "ImageBuffer.h"
 
 using namespace wrench;
 
-class CameraCapture : public lens::CameraObserver
+class CameraCapture : public lens::ICameraObserver
 {
 private:
-  unique_ptr<lens::Camera> m_camera;
+  unique_ptr<lens::ICamera> m_camera;
   ImageBuffer   *m_buffer;
+  lens::FrameGrabber *frameGrabber;
+ 
+
+
 
 public:
 	CameraCapture();
@@ -47,7 +51,7 @@ public:
 	*
 	* @param camera Camera to use for capture.
 	*/
-	void setCamera(unique_ptr<lens::Camera> camera);
+	void setCamera(unique_ptr<lens::ICamera> camera);
 	
 	/**
 	* Returns true or false of whether or not the CameraCapture has a camera.

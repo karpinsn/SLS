@@ -51,7 +51,10 @@ void CameraCapture::setCamera(unique_ptr<lens::ICamera> camera)
   if(nullptr != camera)
   {
 	m_camera = ::move(camera);
-	frameGrabber = new lens::FrameGrabber(*m_camera);
+
+	
+	unique_ptr<lens::FrameGrabber> tmpGrabber(new lens::FrameGrabber(*m_camera));
+	frameGrabber = ::move(tmpGrabber);
 	//m_camera->addObserver(this);
 	frameGrabber ->addObserver(this);
   }

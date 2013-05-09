@@ -29,7 +29,7 @@ class CameraCapture : public lens::ICameraObserver
 private:
   unique_ptr<lens::ICamera> m_camera;
   ImageBuffer   *m_buffer;
-  lens::FrameGrabber *frameGrabber;
+  unique_ptr<lens::FrameGrabber> frameGrabber;
  
 
 

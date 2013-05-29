@@ -9,9 +9,9 @@ CameraConnectDialog::CameraConnectDialog(QWidget *parent) : QDialog(parent)
   setWindowModality(Qt::ApplicationModal);
 }
 
-lens::Camera* CameraConnectDialog::getCamera(void)
+lens::ICamera* CameraConnectDialog::getCamera(void)
 {
-  lens::Camera *m_camera = nullptr;
+  lens::ICamera *m_camera = nullptr;
 
   if(this->exec() == QDialog::Accepted)
   {

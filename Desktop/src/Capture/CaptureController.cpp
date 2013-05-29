@@ -99,13 +99,13 @@ void CaptureController::connectCamera(void)
   m_infoBar->showMessage("Connecting to camera...");
 
   CameraConnectDialog dialog;
-  unique_ptr<lens::Camera> camera(dialog.getCamera());
+  unique_ptr<lens::ICamera> camera(dialog.getCamera());
 
   //  Make sure that we have a new camera
   if(nullptr != camera)
   {
 	//	Initialize our camera
-	camera->init();
+	camera->open();
 
     //  Reinitalize OpenGL stuff
 	captureGLWidget->resizeCapture(camera->getWidth(), camera->getHeight());

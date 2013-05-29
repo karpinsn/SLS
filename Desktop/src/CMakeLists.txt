@@ -36,7 +36,7 @@ set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 #	-----------------------------------------
 find_package(OpenCV REQUIRED)
 include_directories(${OPENCV_INCLUDE_DIRS})
-set(LIBS ${LIBS} ${OPENCV_LIBRARIES})
+set(LIBS ${LIBS} ${OpenCV_LIBS})
 
 #	-----------------------------------------
 #	GLEW

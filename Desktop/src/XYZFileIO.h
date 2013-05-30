@@ -7,6 +7,7 @@
 #ifndef _XYZ_FILE_IO_H_
 #define _XYZ_FILE_IO_H_
 
+#include <memory>
 #include <iostream>
 #include <fstream>
 

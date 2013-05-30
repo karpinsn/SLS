@@ -23,9 +23,9 @@
 	#include <GL/gl.h>
 #endif
 
-#include "AbstractMesh.h"
 #include <stdio.h>
 #include <string.h>
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -33,6 +33,8 @@
 #include <wrench/gl/IBO.h>
 #include <wrench/gl/VBO.h>
 #include <wrench/gl/VAO.h>
+
+#include "AbstractMesh.h"
 
 using namespace wrench::gl;
 

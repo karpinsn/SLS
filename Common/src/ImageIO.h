@@ -26,6 +26,7 @@
 	#include <GL/gl.h>
 #endif
 
+#include <memory>
 #include <iostream>
 #include <string>
 

@@ -28,6 +28,8 @@
 	#include <GL/gl.h>
 #endif
 
+#include <memory>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 

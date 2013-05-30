@@ -26,9 +26,9 @@
 	#include <GL/gl.h>
 #endif
 
-#include "AbstractMesh.h"
 #include <stdio.h>
 #include <string.h>
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -37,9 +37,7 @@
 #include <wrench/gl/VBO.h>
 #include <wrench/gl/VAO.h>
 
-#ifdef USE_VRJ
-#include <vrj/Draw/OpenGL/ContextData.h>
-#endif
+#include "AbstractMesh.h"
 
 using namespace wrench::gl;
 

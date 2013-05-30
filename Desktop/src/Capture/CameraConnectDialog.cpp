@@ -21,8 +21,7 @@ lens::ICamera* CameraConnectDialog::getCamera(void)
     }
     else if(0 == QString(lens::FileCamera::cameraName().c_str()).compare(cameraDriverComboBox->currentText()))
     {
-	  //TODO: Comeback and fix
-      //m_camera = new lens::FileCamera();
+      m_camera = new lens::FileCamera();
     }
 
 #ifdef USE_IC_CAMERA

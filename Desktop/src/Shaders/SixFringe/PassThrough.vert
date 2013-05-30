@@ -1,11 +1,11 @@
-#version 130
+#version 130    // This is needed for the round operator
 
 in vec3 vert;
 in vec2 vertTexCoord;
 
 out vec2 fragTexCoord;
 
-void main(void)
+void main() 
 {
 	fragTexCoord = vertTexCoord;
 

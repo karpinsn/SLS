@@ -5,22 +5,15 @@ include(FileCopyTargets)
 #	---------------------------------------------------------------------------------------
 
 set(SHADER_VERT_SOURCES
-
-	Gaussian11x11Horizontal.vert
-	Gaussian11x11Vertical.vert
-    DepthCalculator.vert
-    NormalCalculator.vert
-	PhaseFilter.vert
-	PhaseCalculator.vert
+	PassThrough.vert
 )
 
 set(SHADER_FRAG_SOURCES
-	
-	Gaussian11x11.frag
-    DepthCalculator.frag
+	PhaseWrapper.frag
+	PhaseUnwrapper.frag
+	DepthCalculator.frag
     NormalCalculator.frag
 	PhaseFilter.frag
-	PhaseCalculator.frag
 )
 
 set(SHADER_SOURCES ${SHADER_VERT_SOURCES} ${SHADER_FRAG_SOURCES})

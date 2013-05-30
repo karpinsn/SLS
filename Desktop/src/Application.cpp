@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 	mainWindowController->showWidget();
 	
 	//	Set the logger level
-	wrench::Logger::setLogLevel(wrench::LogLevel::Error);
+	wrench::Logger::setLogLevel( wrench::Logger::Error );
 
 	// Start up the application run loop
 	return app.exec();

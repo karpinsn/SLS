@@ -1,22 +1,12 @@
 #include "SixFringeCapture.h"
 
-SixFringeCapture::SixFringeCapture(void)
-{
-  m_hasBeenInit = false;
-  m_haveReferencePhase = false;
-  m_captureReferencePhase = false;
-  m_currentFringeLoad = 0;
-  m_currentChannelLoad = 0;
-  m_frontBufferIndex = 0;
-  m_gammaCutoff = 0.1f;
-  m_scalingFactor = 0.04f;
-  m_shiftFactor = 0.0f;
-}
+SixFringeCapture::SixFringeCapture(void) : m_gaussFilter( 9 ), m_hasBeenInit( false ), 
+  m_haveReferencePhase( false ), m_captureReferencePhase( false ), m_currentFringeLoad( 0 ), m_currentChannelLoad(0),
+  m_frontBufferIndex( 0 ), m_gammaCutoff( .1f ), m_scalingFactor( .04f ), m_shiftFactor( 0.0f )
+{ }
 
 void SixFringeCapture::init()
-{
-  init(256,256);
-}
+  { init( 256, 256 ); }
 
 void SixFringeCapture::init(int width, int height)
 {
@@ -35,14 +25,10 @@ void SixFringeCapture::init(int width, int height)
 }
 
 int SixFringeCapture::getWidth()
-{
-	return m_width;
-}
+  { return m_width; }
 
 int SixFringeCapture::getHeight()
-{
-	return m_height;
-}
+  { return m_height; }
 
 void SixFringeCapture::resizeInput(int width, int height)
 {
@@ -73,10 +59,7 @@ void SixFringeCapture::resizeInput(int width, int height)
     m_imageProcessor.unbind();
 
     //  Send the new size to all of the shaders
-	m_gaussianFilterVertical.uniform("width", (float)width);
-	m_gaussianFilterVertical.uniform("height", (float)height);
-	m_gaussianFilterHorizontal.uniform("width", (float)width);
-	m_gaussianFilterHorizontal.uniform("height", (float)height);
+	m_gaussFilter.setImageDimensions( width, height );
 
     m_phaseFilter.uniform("width", (float)width);
     m_phaseFilter.uniform("height", (float)height);
@@ -95,55 +78,34 @@ void SixFringeCapture::resizeInput(int width, int height)
 
 void SixFringeCapture::_initShaders(float width, float height)
 {
-  //  Kernel used by gaussian filter
-  float kernel[11] = {.0495, .0692, .0897, .1081, .1208, .1254, .1208, .1081, .0897, .0692, .0495};
+  // Pass 1 - Phase Wrapping
+  m_phaseWrapper.init();
+  m_phaseWrapper.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PassThrough.vert"));
+  m_phaseWrapper.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseWrapper.frag"));
+  m_phaseWrapper.bindAttributeLocation("vert", 0);
+  m_phaseWrapper.bindAttributeLocation("vertTexCoord", 1);
+  m_phaseWrapper.link();
+  m_phaseWrapper.uniform("fringeImage1", 0);
+  m_phaseWrapper.uniform("fringeImage2", 1); 
+  m_phaseWrapper.uniform("gammaCutoff", m_gammaCutoff);
 
-  // Create the shaders
-  m_gaussianFilterVertical.init();
-  m_gaussianFilterVertical.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/Gaussian11x11Vertical.vert"));
-  m_gaussianFilterVertical.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/Gaussian11x11.frag"));
-  m_gaussianFilterVertical.bindAttributeLocation("vert", 0);
-  m_gaussianFilterVertical.bindAttributeLocation("vertTexCoord", 1);
-  m_gaussianFilterVertical.link();
-  m_gaussianFilterVertical.uniform("image", 0);
-  m_gaussianFilterVertical.uniform("width", width);
-  m_gaussianFilterVertical.uniform("height", height);
-  m_gaussianFilterVertical.uniform("kernel", kernel, 11); 
+  // Pass 2 - Phase Filtering
+  m_gaussFilter.init( );
+  m_gaussFilter.setImageDimensions( width, height );
 
-  m_gaussianFilterHorizontal.init();
-  m_gaussianFilterHorizontal.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/Gaussian11x11Horizontal.vert"));
-  m_gaussianFilterHorizontal.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/Gaussian11x11.frag"));
-  m_gaussianFilterHorizontal.bindAttributeLocation("vert", 0);
-  m_gaussianFilterHorizontal.bindAttributeLocation("vertTexCoord", 1);
-  m_gaussianFilterHorizontal.link();
-  m_gaussianFilterHorizontal.uniform("image", 0);
-  m_gaussianFilterHorizontal.uniform("width", width);
-  m_gaussianFilterHorizontal.uniform("height", height);
-  m_gaussianFilterHorizontal.uniform("kernel", kernel, 11); 
-
-  m_phaseCalculator.init();
-  m_phaseCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PhaseCalculator.vert"));
-  m_phaseCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseCalculator.frag"));
-  m_phaseCalculator.bindAttributeLocation("vert", 0);
-  m_phaseCalculator.bindAttributeLocation("vertTexCoord", 1);
-  m_phaseCalculator.link();
-  m_phaseCalculator.uniform("fringeImage1", 0);
-  m_phaseCalculator.uniform("fringeImage2", 1); 
-  m_phaseCalculator.uniform("gammaCutoff", m_gammaCutoff);
-
-  m_depthCalculator.init();
-  m_depthCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/DepthCalculator.vert"));
-  m_depthCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/DepthCalculator.frag"));
-  m_depthCalculator.bindAttributeLocation("vert", 0);
-  m_depthCalculator.bindAttributeLocation("vertTexCoord", 1);
-
-  m_depthCalculator.link();
-  m_depthCalculator.uniform("actualPhase", 0);
-  m_depthCalculator.uniform("referencePhase", 1);
-  m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
+  m_phaseUnwrapper.init( );
+  m_phaseUnwrapper.attachShader( new Shader( GL_VERTEX_SHADER, "Shaders/SixFringe/PassThrough.vert" ) );
+  m_phaseUnwrapper.attachShader( new Shader( GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseUnwrapper.frag" ) );
+  m_phaseUnwrapper.bindAttributeLocation( "vert", 0 );
+  m_phaseUnwrapper.bindAttributeLocation( "vertTexCoord", 1 );
+  m_phaseUnwrapper.link( );
+  m_phaseUnwrapper.uniform( "pitch1", 74 );
+  m_phaseUnwrapper.uniform( "pitch2", 79 );
+  m_phaseUnwrapper.uniform( "unfilteredWrappedPhase", 0 );
+  m_phaseUnwrapper.uniform( "filteredWrappedPhase", 1 );
 
   m_phaseFilter.init();
-  m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PhaseFilter.vert"));
+  m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PassThrough.vert"));
   m_phaseFilter.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseFilter.frag"));
   m_phaseFilter.bindAttributeLocation("vert", 0);
   m_phaseFilter.bindAttributeLocation("vertTexCoord", 1);
@@ -153,8 +115,21 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_phaseFilter.uniform("width", width);
   m_phaseFilter.uniform("height", height);
 
+  // Pass 3 - Depth Calculation
+  m_depthCalculator.init();
+  m_depthCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PassThrough.vert"));
+  m_depthCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/DepthCalculator.frag"));
+  m_depthCalculator.bindAttributeLocation("vert", 0);
+  m_depthCalculator.bindAttributeLocation("vertTexCoord", 1);
+
+  m_depthCalculator.link();
+  m_depthCalculator.uniform("actualPhase", 0);
+  m_depthCalculator.uniform("referencePhase", 1);
+  m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
+
+  // Pass 4 - Normal Calculation
   m_normalCalculator.init();
-  m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/NormalCalculator.vert"));
+  m_normalCalculator.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PassThrough.vert"));
   m_normalCalculator.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/NormalCalculator.frag"));
   m_normalCalculator.bindAttributeLocation("vert", 0);
   m_normalCalculator.bindAttributeLocation("vertTexCoord", 1);
@@ -208,40 +183,25 @@ void SixFringeCapture::_initTextures(GLuint width, GLuint height)
 }
 
 void SixFringeCapture::setGammaCutoff(float gamma)
-{
-  m_gammaCutoff = gamma;
-}
+  { m_gammaCutoff = gamma; }
 
 void SixFringeCapture::setBlackLevel(float blackLevel)
-{
-  m_blackLevel = blackLevel;
-}
+  { m_blackLevel = blackLevel; }
 
 void SixFringeCapture::setScalingFactor(float scalingFactor)
-{
-  m_scalingFactor = scalingFactor;
-}
+  { m_scalingFactor = scalingFactor; }
 
 void SixFringeCapture::setShiftFactor(float shiftFactor)
-{
-  m_shiftFactor = shiftFactor;
-}
+  { m_shiftFactor = shiftFactor; }
 
 Texture& SixFringeCapture::getDepthMap(void)
-{
-  return m_depthMap;
-}
+  { return m_depthMap; }
 
 Texture& SixFringeCapture::getTextureMap(void)
-{
-  //  TODO - Put the texture map here
-  return m_depthMap;
-}
+  { return m_depthMap; } //  TODO - Put the texture map here
 
 Texture& SixFringeCapture::getNormalMap(void)
-{
-  return m_normalMap;
-}
+  { return m_normalMap; }
 
 void SixFringeCapture::decode(void)
 {
@@ -254,34 +214,18 @@ void SixFringeCapture::draw(void)
   if(m_captureReferencePhase)
   {
     //  If we dont have the reference phase then we are calculating it and we redraw
-    m_imageProcessor.bind();
+    m_imageProcessor.bind( );
     {
 	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
-	  m_phaseCalculator.bind();
+	  m_phaseWrapper.bind();
 	  m_fringeImages[m_frontBufferIndex][0]->bind(GL_TEXTURE0);
 	  m_fringeImages[m_frontBufferIndex][1]->bind(GL_TEXTURE1); 
-	  m_phaseCalculator.uniform("gammaCutoff", 0.0f);
-	  m_imageProcessor.process();
+	  m_phaseWrapper.uniform("gammaCutoff", 0.0f);
+	  m_imageProcessor.process( );
 
-	  m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
-	  m_gaussianFilterVertical.bind();
-	  m_phaseMap0.bind(GL_TEXTURE0);
-	  m_imageProcessor.process();
-
-	  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
-	  m_gaussianFilterHorizontal.bind();
-	  m_phaseMap1.bind(GL_TEXTURE0);
-	  m_imageProcessor.process();
-
-	  m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
-	  m_phaseFilter.bind();
-	  m_phaseMap0.bind(GL_TEXTURE0);
-	  m_imageProcessor.process();
-
-	  m_imageProcessor.bindDrawBuffer(m_referencePhaseAttachPoint);
-	  m_phaseFilter.bind();
-	  m_phaseMap1.bind(GL_TEXTURE0);
-	  m_imageProcessor.process();
+	  _gaussianFilter( m_phaseMap1AttachPoint, m_phaseMap2AttachPoint, m_phaseMap0, m_phaseMap1 );
+	  _unwrapPhase( m_phaseMap1AttachPoint, m_phaseMap0, m_phaseMap2 );
+	  _filterPhase( m_referencePhaseAttachPoint, m_phaseMap0 );
     }
     m_imageProcessor.unbind();
 
@@ -292,17 +236,12 @@ void SixFringeCapture::draw(void)
   {
 	m_imageProcessor.bind();
 	{
-      //	Pass 1 - Phase Calculation
-      _drawCalculatePhase();
-
-      //	Pass 2 - Phase filtering
-      _drawFilterPhase();
-
-      //    Pass 3 - Depth Calculator
-      _drawCalculateDepthMap();
-
-      //	Pass 4 - Normal Calculation
-      _drawCalculateNormalMap();
+      _wrapPhase( m_phaseMap0AttachPoint );
+	  _gaussianFilter( m_phaseMap1AttachPoint, m_phaseMap2AttachPoint, m_phaseMap0, m_phaseMap1 );
+	  _unwrapPhase( m_phaseMap1AttachPoint, m_phaseMap0, m_phaseMap2 );
+	  _filterPhase( m_phaseMap2AttachPoint, m_phaseMap1 );
+      _calculateDepthMap( m_phaseMap2 );
+      _calculateNormalMap( );
 	}
     m_imageProcessor.unbind();
   }
@@ -312,10 +251,7 @@ void SixFringeCapture::draw(void)
 }
 
 int	SixFringeCapture::getFringeCount()
-{
-  //  This capture requires six fringes
-  return 6;
-}
+  { return 6; }
 
 bool SixFringeCapture::newImage(IplImage* image)
 {
@@ -339,9 +275,7 @@ bool SixFringeCapture::newImage(IplImage* image)
   {
 	  //  Capture first 6 images as reference plane
 	if(!m_haveReferencePhase)
-	{
-	  m_captureReferencePhase = true;
-	}
+	  { m_captureReferencePhase = true; }
 
     m_currentChannelLoad = 0;
     m_currentFringeLoad = 0;
@@ -366,9 +300,7 @@ void SixFringeCapture::swapFringeBuffers(void)
 }
 
 void SixFringeCapture::captureReferencePlane(void)
-{
-  m_captureReferencePhase = true;
-}
+  { m_captureReferencePhase = true; }
 
 void SixFringeCapture::loadReferencePlane(void* callbackInstance, shared_ptr<IplImage> (*imageLoaderFunction)(void* callbackInstance))
 {
@@ -376,10 +308,8 @@ void SixFringeCapture::loadReferencePlane(void* callbackInstance, shared_ptr<Ipl
   shared_ptr<IplImage> fringe2 = imageLoaderFunction(callbackInstance);
 
   //  If we didn't get our fringes just abort
-  if(nullptr == fringe1 || nullptr == fringe2)
-  {
-	return;
-  }
+  if( nullptr == fringe1 || nullptr == fringe2 )
+	{ return; }
 
   //  Resize our input to match the loaded reference plane
   resizeInput(fringe1->width, fringe1->height);
@@ -394,58 +324,69 @@ void SixFringeCapture::loadReferencePlane(void* callbackInstance, shared_ptr<Ipl
   swapFringeBuffers();
 }
 
-double SixFringeCapture::getFrameRate(void)
+double SixFringeCapture::getFrameRate( void )
+  { return m_fpsCalculator.getFrameRate(); }
+
+double SixFringeCapture::get3DRate( void )
+  { return m_3dpsCalculator.getFrameRate(); }
+
+string SixFringeCapture::getCaptureName( void )
+  { return "Six Fringe Capture"; }
+
+void SixFringeCapture::_gaussianFilter( GLenum drawBuffer1, GLenum drawBuffer2, Texture& readBuffer1, Texture& readBuffer2 )
 {
-  return m_fpsCalculator.getFrameRate();
+  m_imageProcessor.bindDrawBuffer( drawBuffer1 );
+  m_gaussFilter.bind( );
+  readBuffer1.bind( GL_TEXTURE0 );
+  m_imageProcessor.process( );
+
+  m_imageProcessor.bindDrawBuffer( drawBuffer2 );
+  m_gaussFilter.flipFilter( );
+  readBuffer2.bind( GL_TEXTURE0 );
+  m_imageProcessor.process( );
 }
 
-double SixFringeCapture::get3DRate(void)
+void SixFringeCapture::_wrapPhase( GLenum drawBuffer )
 {
-  return m_3dpsCalculator.getFrameRate();
-}
-
-string SixFringeCapture::getCaptureName(void)
-{
-  return "Six Fringe Capture";
-}
-
-void SixFringeCapture::_drawCalculatePhase()
-{
-  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
-  m_phaseCalculator.bind();
+  m_imageProcessor.bindDrawBuffer( drawBuffer );
+  m_phaseWrapper.bind();
   //  Grab so that it doesn't change during a draw
   int frontBuffer = m_frontBufferIndex;
   m_fringeImages[frontBuffer][0]->bind(GL_TEXTURE0);
   m_fringeImages[frontBuffer][1]->bind(GL_TEXTURE1); 
-  m_phaseCalculator.uniform("gammaCutoff", m_gammaCutoff);
+  m_phaseWrapper.uniform( "gammaCutoff", m_gammaCutoff );
+  m_phaseWrapper.uniform( "intensityCutoff", m_blackLevel );
   m_imageProcessor.process();
 }
 
-void SixFringeCapture::_drawFilterPhase()
+void SixFringeCapture::_unwrapPhase( GLenum drawBuffer, Texture& unfilteredPhase, Texture& filteredPhase )
 {
-  m_imageProcessor.bindDrawBuffer(m_phaseMap1AttachPoint);
-  m_phaseFilter.bind();
-  m_phaseMap0.bind(GL_TEXTURE0);
-  m_imageProcessor.process();
-
-  //	Pass 2 - Phase filtering ... again
-  m_imageProcessor.bindDrawBuffer(m_phaseMap0AttachPoint);
-  m_phaseFilter.bind();
-  m_phaseMap1.bind(GL_TEXTURE0);
-  m_imageProcessor.process();
+  m_imageProcessor.bindDrawBuffer( drawBuffer );
+  m_phaseUnwrapper.bind( );
+  unfilteredPhase.bind( GL_TEXTURE0 );
+  filteredPhase.bind( GL_TEXTURE1 );
+  m_imageProcessor.process( );
 }
 
-void SixFringeCapture::_drawCalculateDepthMap()
+void SixFringeCapture::_filterPhase( GLenum drawBuffer, Texture& readBuffer )
+{
+  m_imageProcessor.bindDrawBuffer( drawBuffer );
+  m_phaseFilter.bind( );
+  readBuffer.bind( GL_TEXTURE0 );
+  m_imageProcessor.process( );
+}
+
+void SixFringeCapture::_calculateDepthMap( Texture& unwrappedPhase )
 {
   m_imageProcessor.bindDrawBuffer(m_depthMapAttachPoint);
   m_depthCalculator.uniform("scalingFactor", m_scalingFactor);
   m_depthCalculator.bind();
-  m_phaseMap0.bind(GL_TEXTURE0);
+  unwrappedPhase.bind(GL_TEXTURE0);
   m_referencePhase.bind(GL_TEXTURE1);
   m_imageProcessor.process();
 }
 
-void SixFringeCapture::_drawCalculateNormalMap()
+void SixFringeCapture::_calculateNormalMap( )
 {
   m_imageProcessor.bindDrawBuffer(m_normalMapAttachPoint);
   m_normalCalculator.bind();

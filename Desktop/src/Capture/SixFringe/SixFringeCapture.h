@@ -41,6 +41,7 @@
 #include <wrench/gl/Camera.h>
 #include <wrench/gl/ShaderProgram.h>
 #include <wrench/gl/Shader.h>
+#include <Wrench/gl/GaussProgram.h>
 #include <wrench/gl/Texture.h>
 #include <wrench/gl/FBO.h>
 
@@ -61,10 +62,10 @@ using namespace wrench::gl::utils;
 class SixFringeCapture : public ICapture
 {
 private:
-  ShaderProgram m_gaussianFilterVertical;
-  ShaderProgram m_gaussianFilterHorizontal;
 
-  ShaderProgram m_phaseCalculator;
+  ShaderProgram m_phaseWrapper;
+  ShaderProgram m_phaseUnwrapper;
+  GaussProgram  m_gaussFilter;
   ShaderProgram m_phaseFilter;
   ShaderProgram m_depthCalculator;
   ShaderProgram m_normalCalculator;
@@ -145,10 +146,12 @@ private:
   void _initShaders(float width, float height);
   void _initTextures(GLuint width, GLuint height);
 
-  void _drawCalculatePhase();
-  void _drawFilterPhase();
-  void _drawCalculateDepthMap();
-  void _drawCalculateNormalMap();
+  void _wrapPhase( GLenum drawBuffer );
+  void _gaussianFilter( GLenum drawBuffer1, GLenum drawBuffer2, Texture& readBuffer1, Texture& readBuffer2 );
+  void _unwrapPhase( GLenum drawBuffer, Texture& unfilteredPhase, Texture& filteredPhase );
+  void _filterPhase( GLenum drawBuffer, Texture& readBuffer );
+  void _calculateDepthMap( Texture& unwrappedPhase );
+  void _calculateNormalMap( );
 };
 
 #endif	// _SIX_FRINGE_CAPTURE_H_

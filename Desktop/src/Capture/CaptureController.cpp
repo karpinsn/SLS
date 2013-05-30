@@ -60,20 +60,14 @@ void CaptureController::hideEvent(QHideEvent *)
 
   //  Stop our camera capture
   if(nullptr != m_camera)
-  {
-	m_camera->stop();
-  }
+	{ m_camera->stop(); }
 }
 
 void CaptureController::init(void)
-{
-  captureGLWidget->setCaptureContext(m_gl3DContext.get());
-}
+  { captureGLWidget->setCaptureContext(m_gl3DContext.get()); }
 
 void CaptureController::setInfoBar(QStatusBar* infoBar)
-{
-  m_infoBar = infoBar;
-}
+  { m_infoBar = infoBar; }
 
 void CaptureController::captureReference(void)
 {
@@ -109,7 +103,7 @@ void CaptureController::connectCamera(void)
 
     //  Reinitalize OpenGL stuff
 	captureGLWidget->resizeCapture(camera->getWidth(), camera->getHeight());
-    
+
 	//	Transfer ownership and start up
 	m_camera->setCamera(::move(camera));
     m_camera->start();
@@ -128,17 +122,13 @@ void CaptureController::disconnectCamera(void)
 }
 
 void CaptureController::dropFrame(void)
-{
-  m_dropFrame = true;
-}
+  { m_dropFrame = true; }
 
 void CaptureController::newGammaValue(double gammaValue)
 {
   //  Set the new value then persist the settings
   if(nullptr != m_gl3DContext)
-  {
-	m_gl3DContext->setGammaCutoff(gammaValue);
-  }
+	{ m_gl3DContext->setGammaCutoff(gammaValue); }
   m_settings.setValue(SettingsGammaValue, gammaValue);
 }
 
@@ -146,9 +136,7 @@ void CaptureController::newBlackLevel(double blackLevel)
 {
   //  Set the new value then persist the settings
   if(nullptr != m_gl3DContext)
-  {
-	m_gl3DContext->setBlackLevel(blackLevel);
-  }
+	{ m_gl3DContext->setBlackLevel(blackLevel); }
   m_settings.setValue(SettingsBlackLevelValue, blackLevel);
 }
 
@@ -156,9 +144,7 @@ void CaptureController::newScalingFactor(double scalingFactor)
 {
   //  Set the new value then persist the settings
   if(nullptr != m_gl3DContext)
-  {
-	m_gl3DContext->setScalingFactor(scalingFactor);
-  }
+	{ m_gl3DContext->setScalingFactor(scalingFactor); }
   m_settings.setValue(SettingsScalingFactor, scalingFactor);
 }
 
@@ -166,30 +152,20 @@ void CaptureController::newShiftFactor(double shiftFactor)
 {
   //  Set the new value then persist the settings
   if(nullptr != m_gl3DContext)
-  {
-	m_gl3DContext->setShiftFactor(shiftFactor);
-  }
+	{ m_gl3DContext->setShiftFactor(shiftFactor); }
   m_settings.setValue(SettingsShiftFactor, shiftFactor);
 }
 
 void CaptureController::newViewMode(QString viewMode)
 {
   if(0 == viewMode.compare(QString("3D")))
-  {
-	captureGLWidget->setDisplayMode(CaptureGLWidget::Geometry);    
-  }
+	{ captureGLWidget->setDisplayMode(CaptureGLWidget::Geometry); }
   else if(0 == viewMode.compare(QString("3D Tex")))
-  {
-	captureGLWidget->setDisplayMode(CaptureGLWidget::GeometryTexture);
-  }
+	{ captureGLWidget->setDisplayMode(CaptureGLWidget::GeometryTexture); }
   else if(0 == viewMode.compare(QString("Phase")))
-  {
-	captureGLWidget->setDisplayMode(CaptureGLWidget::Phase);
-  }
+	{ captureGLWidget->setDisplayMode(CaptureGLWidget::Phase); }
   else if(0 == viewMode.compare(QString("Depth")))
-  {
-	captureGLWidget->setDisplayMode(CaptureGLWidget::Depth);
-  }
+	{ captureGLWidget->setDisplayMode(CaptureGLWidget::Depth); }
 }
 
 void CaptureController::updateInfoBar(void)

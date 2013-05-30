@@ -1,15 +1,15 @@
 [submodule "Libraries/Wrench"]
 	path = Libraries/Wrench
-	url = git@github.com:karpinsn/Wrench.git
+	url = https://github.com:karpinsn/Wrench.git
 [submodule "Libraries/Antenna"]
 	path = Libraries/Antenna
-	url = git@github.com:karpinsn/Antenna.git
+	url = https://github.com:karpinsn/Antenna.git
 [submodule "Libraries/Lens"]
 	path = Libraries/Lens
-	url = git@github.com:karpinsn/Lens.git
+	url = https://github.com:karpinsn/Lens.git
 [submodule "Libraries/Reactor"]
 	path = Libraries/Reactor
-	url = git@github.com:karpinsn/Reactor.git
+	url = https://github.com:karpinsn/Reactor.git
 [submodule "Libraries/3rdParty/glm"]
 	path = Libraries/3rdParty/glm
 	url = https://github.com/karpinsn/glm.git

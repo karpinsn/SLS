@@ -23,8 +23,8 @@ void main( void )
 	float pitch12 = float( pitch1 * pitch2 ) / float( abs( pitch1 - pitch2 ) );
 
 	float phi1 = atan( wPhase.x, wPhase.y );
-	float phi2 = atan( wPhase.z, wPhase.z );
-	float phi12 = mod( phi1 - phi2, twoPi );
+	float phi2 = atan( wPhase.z, wPhase.a );
+	float phi12 = mod( phi2 - phi1, twoPi );
 
 	float k = round( ( phi12 * ( pitch12 / pitch1 ) - phi1 ) / twoPi);
 	phase = vec4( vec3( phi1 + k * twoPi ), 1.0 );

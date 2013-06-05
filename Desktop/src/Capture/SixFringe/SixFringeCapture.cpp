@@ -1,6 +1,6 @@
 #include "SixFringeCapture.h"
 
-SixFringeCapture::SixFringeCapture(void) : m_gaussFilter( 9 ), m_hasBeenInit( false ), 
+SixFringeCapture::SixFringeCapture(void) : m_gaussFilter( 7 ), m_hasBeenInit( false ), 
   m_haveReferencePhase( false ), m_captureReferencePhase( false ), m_currentFringeLoad( 0 ), m_currentChannelLoad(0),
   m_frontBufferIndex( 0 ), m_gammaCutoff( .1f ), m_scalingFactor( .04f ), m_shiftFactor( 0.0f )
 { }
@@ -99,8 +99,8 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_phaseUnwrapper.bindAttributeLocation( "vert", 0 );
   m_phaseUnwrapper.bindAttributeLocation( "vertTexCoord", 1 );
   m_phaseUnwrapper.link( );
-  m_phaseUnwrapper.uniform( "pitch1", 74 );
-  m_phaseUnwrapper.uniform( "pitch2", 79 );
+  m_phaseUnwrapper.uniform( "pitch1", 48 );
+  m_phaseUnwrapper.uniform( "pitch2", 57 );
   m_phaseUnwrapper.uniform( "unfilteredWrappedPhase", 0 );
   m_phaseUnwrapper.uniform( "filteredWrappedPhase", 1 );
 
@@ -225,7 +225,7 @@ void SixFringeCapture::draw(void)
 
 	  _gaussianFilter( m_phaseMap1AttachPoint, m_phaseMap2AttachPoint, m_phaseMap0, m_phaseMap1 );
 	  _unwrapPhase( m_phaseMap1AttachPoint, m_phaseMap0, m_phaseMap2 );
-	  _filterPhase( m_referencePhaseAttachPoint, m_phaseMap0 );
+	  _filterPhase( m_referencePhaseAttachPoint, m_phaseMap1 );
     }
     m_imageProcessor.unbind();
 

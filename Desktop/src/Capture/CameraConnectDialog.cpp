@@ -41,7 +41,10 @@ lens::ICamera* CameraConnectDialog::getCamera(void)
 #ifdef USE_POINT_GREY_CAMERA
 	if(0 == QString(lens::PointGreyCamera::cameraName().c_str()).compare(cameraDriverComboBox->currentText()))
 	{
-	  m_camera = new lens::PointGreyCamera();
+	  auto cam = new lens::PointGreyCamera();
+	  cam->setFrameSetCount(6); // TODO: Fix this
+	  m_camera = cam;
+	  
 	}
 #endif
 

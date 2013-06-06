@@ -2,7 +2,7 @@
 
 SixFringeCapture::SixFringeCapture(void) : m_gaussFilter( 7 ), m_hasBeenInit( false ), 
   m_haveReferencePhase( false ), m_captureReferencePhase( false ), m_currentFringeLoad( 0 ), m_currentChannelLoad(0),
-  m_frontBufferIndex( 0 ), m_gammaCutoff( .1f ), m_scalingFactor( .04f ), m_shiftFactor( 0.0f )
+  m_frontBufferIndex( 0 ), m_gammaCutoff( .1f ), m_scalingFactor( .1f ), m_shiftFactor( 0.0f )
 { }
 
 void SixFringeCapture::init()

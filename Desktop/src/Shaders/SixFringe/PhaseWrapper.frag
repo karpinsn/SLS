@@ -13,8 +13,8 @@ out vec4 phase;
 
 void main(void)
 {	
-	vec3 fringe1 = texture( fringeImage1, fragTexCoord ).rgb;
-	vec3 fringe2 = texture( fringeImage2, fragTexCoord ).rgb;
+	vec3 fringe1 = texture( fringeImage1, fragTexCoord ).rgb / vec3(255.0);
+	vec3 fringe2 = texture( fringeImage2, fragTexCoord ).rgb / vec3(255.0);
 
 	float phi1S = sqrt( 3.0 ) * ( fringe1.r - fringe1.b );	
 	float phi1C = 2.0 * fringe1.g - fringe1.r - fringe1.b;

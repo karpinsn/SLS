@@ -316,4 +316,12 @@ void CaptureController::_readSettings(void)
   scalingFactorBox->setValue( m_settings.value(SettingsScalingFactor, .05).toDouble());
   shiftFactorBox->setValue(	  m_settings.value(SettingsShiftFactor,	  .00).toDouble());
   blackLevelBox->setValue(	  m_settings.value(SettingsBlackLevelValue,.00).toDouble());
+
+  if(nullptr != m_gl3DContext)
+  { 
+	m_gl3DContext->setGammaCutoff(m_settings.value(SettingsGammaValue, .10).toDouble());
+	m_gl3DContext->setScalingFactor(m_settings.value(SettingsScalingFactor, .05).toDouble()); 
+	m_gl3DContext->setShiftFactor(m_settings.value(SettingsShiftFactor, .00).toDouble()); 
+	m_gl3DContext->setBlackLevel(m_settings.value(SettingsBlackLevelValue, .00).toDouble()); 
+  }
 }

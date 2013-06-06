@@ -1,5 +1,7 @@
 #version 130
 
+precision highp float;
+
 /*
   3x3 Median Filter
 

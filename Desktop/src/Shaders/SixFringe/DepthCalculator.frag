@@ -12,7 +12,12 @@ out vec4 depthMap;
 
 void main(void)
 {
-	float aPhase = texture(actualPhase, fragTexCoord).r;
+	vec4 aPhase = texture(actualPhase, fragTexCoord);
+
+	// If the alpha is zero that means we need to filter it off
+	if( 0.0001 >= aPhase.a )
+	{ discard; }
+
 	float rPhase = texture(referencePhase, fragTexCoord).r;
-	depthMap = vec4(vec3((aPhase - rPhase) * scalingFactor), 1.0);
+	depthMap = vec4(vec3((aPhase.r - rPhase) * scalingFactor), 1.0);
 }

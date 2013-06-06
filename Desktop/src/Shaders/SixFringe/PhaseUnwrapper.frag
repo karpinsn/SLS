@@ -14,7 +14,8 @@ out vec4 phase;
 void main( void )
 {
 	// If the components are all zero that means we need to filter it off
-	if( vec4( 0.0 ) == texture( unfilteredWrappedPhase, fragTexCoord ) )
+	if( all( greaterThanEqual( vec4( 0.0001 ), texture( unfilteredWrappedPhase, fragTexCoord ) ) ) && 
+		all( lessThanEqual(    vec4( -.0001 ), texture( unfilteredWrappedPhase, fragTexCoord ) ) ) )
 		{ discard; }
 
 	vec4 wPhase = texture( filteredWrappedPhase, fragTexCoord );

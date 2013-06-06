@@ -44,9 +44,9 @@ void SixFringeCapture::resizeInput(int width, int height)
     m_phaseMap0.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
     m_phaseMap1.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
 	m_phaseMap2.reinit        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-    m_depthMap.reinit         (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+    m_referencePhase.reinit   (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+	m_depthMap.reinit         (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
     m_normalMap.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
-    m_referencePhase.reinit   (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
     //  Resize the image processor
     m_imageProcessor.reinit(width, height);
@@ -166,9 +166,9 @@ void SixFringeCapture::_initTextures(GLuint width, GLuint height)
   m_phaseMap0.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
   m_phaseMap1.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
   m_phaseMap2.init        (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
-  m_depthMap.init         (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+  m_referencePhase.init   (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
+  m_depthMap.init         (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
   m_normalMap.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
-  m_referencePhase.init   (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
 
   m_imageProcessor.init(width, height);
   m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);

@@ -2,6 +2,7 @@
 
 precision highp float;
 
+uniform sampler2D depthMap;
 uniform sampler2D normals;
 
 uniform mat4 normalMatrix;
@@ -11,7 +12,6 @@ uniform vec4 diffuseColor;
 uniform vec4 specularColor;
 uniform float shininess;
 
-in vec4 fragVert;
 in vec2 fragTexCoord;
 in vec3 lightDirection;
 in vec3 eyeVector;
@@ -20,6 +20,10 @@ out vec4 fragColor;
 
 void main()
 {
+	// Alpha 0 means that we are supposed to filter
+	if( 0.0 == texture( depthMap, fragTexCoord ).a )
+	  { discard; }
+
 	vec3 normal = normalize( ( normalMatrix * texture( normals, fragTexCoord ) ).xyz );
 	vec3 L = normalize( lightDirection ); // Light direction
 	vec3 E = normalize( eyeVector );	  // Eye direction

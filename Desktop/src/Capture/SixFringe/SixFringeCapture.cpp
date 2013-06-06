@@ -99,8 +99,8 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_phaseUnwrapper.bindAttributeLocation( "vert", 0 );
   m_phaseUnwrapper.bindAttributeLocation( "vertTexCoord", 1 );
   m_phaseUnwrapper.link( );
-  m_phaseUnwrapper.uniform( "pitch1", 48 );
-  m_phaseUnwrapper.uniform( "pitch2", 57 );
+  m_phaseUnwrapper.uniform( "pitch1", 60 );
+  m_phaseUnwrapper.uniform( "pitch2", 69 );
   m_phaseUnwrapper.uniform( "unfilteredWrappedPhase", 0 );
   m_phaseUnwrapper.uniform( "filteredWrappedPhase", 1 );
 

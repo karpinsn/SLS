@@ -1,0 +1,16 @@
+<RCC>
+  <qresource prefix="images" lang="Tools">
+    <file>resources/images/Calibration.png</file>
+    <file>resources/images/CameraClose.png</file>
+    <file>resources/images/CameraOpen.png</file>
+    <file>resources/images/DropFrame.png</file>
+    <file>resources/images/Save.png</file>
+    <file>resources/images/Stream.png</file>
+    <file alias="Zoom Tool">resources/images/ZoomTool.png</file>
+    <file alias="Orbit Tool">resources/images/OrbitTool.png</file>
+    <file alias="Pan Tool">resources/images/PanTool.png</file>
+  </qresource>
+  <qresource prefix="stylesheets">
+    <file>resources/SLS.qss</file>
+  </qresource>
+</RCC>

@@ -65,6 +65,9 @@ void SixFringeCapture::resizeInput(int width, int height)
     m_phaseFilter.uniform("height", (float)height);
     m_normalCalculator.uniform("width", (float)width);
     m_normalCalculator.uniform("height", (float)height);
+	m_phaseUnwrapper.uniform( "minJump", 286.0f / float( width ) );
+	m_phaseUnwrapper.uniform( "maxJump", 515.0f / float( width ) );
+	m_phaseUnwrapper.uniform( "cameraPitch", ( 286.0f - 22.0f ) / float( width ) );
 
 	m_width = width;
 	m_height = height;
@@ -99,10 +102,13 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_phaseUnwrapper.bindAttributeLocation( "vert", 0 );
   m_phaseUnwrapper.bindAttributeLocation( "vertTexCoord", 1 );
   m_phaseUnwrapper.link( );
-  m_phaseUnwrapper.uniform( "pitch1", 60 );
-  m_phaseUnwrapper.uniform( "pitch2", 69 );
+  m_phaseUnwrapper.uniform( "pitch1", 54 );
+  m_phaseUnwrapper.uniform( "pitch2", 60 );
   m_phaseUnwrapper.uniform( "unfilteredWrappedPhase", 0 );
   m_phaseUnwrapper.uniform( "filteredWrappedPhase", 1 );
+  m_phaseUnwrapper.uniform( "minJump", 286.0f / width );
+  m_phaseUnwrapper.uniform( "maxJump", 515.0f / width );
+  m_phaseUnwrapper.uniform( "cameraPitch", ( 286.0f - 22.0f ) / width );
 
   m_phaseFilter.init();
   m_phaseFilter.attachShader(new Shader(GL_VERTEX_SHADER, "Shaders/SixFringe/PassThrough.vert"));

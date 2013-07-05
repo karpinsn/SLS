@@ -17,7 +17,7 @@ void TriMesh::initMesh(void)
 void TriMesh::draw()
 {
   glDisable(GL_CULL_FACE);
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   m_meshIndices.bind();
   m_mesh.draw();

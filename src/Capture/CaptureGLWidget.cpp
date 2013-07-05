@@ -55,10 +55,11 @@ void CaptureGLWidget::initializeGL()
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
 
-  m_finalRenderColor.uniform("lightPosition", glm::vec3(0.5f, 0.5f, 4.0f));
+  m_finalRenderColor.uniform("lightPosition", glm::vec3(-2.0f, -2.0f, 4.0f));
   m_finalRenderColor.uniform("ambientColor", glm::vec4(.1, .1, .1, 1.0));
-  m_finalRenderColor.uniform("diffuseColor", glm::vec4(.9, .9, .9, 1.0));
-  m_finalRenderColor.uniform("specularColor", glm::vec4(1.0, 1.0, 1.0, 1.0));
+  m_finalRenderColor.uniform("diffuseColor", glm::vec4(0.4, 0.4, 0.4, 1.0));
+  m_finalRenderColor.uniform("specularColor", glm::vec4(.2, .2, .2, 1.0));
+  m_finalRenderColor.uniform("shininess", .4f);
 
   m_finalRenderTexture.uniform("lightPosition", glm::vec3(0.5f, 0.5f, 4.0f));
   m_finalRenderTexture.uniform("diffuseColor", glm::vec4(.1, .1, .1, 1.0));

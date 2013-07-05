@@ -1,5 +1,7 @@
 #version 330
 
+precision highp float;
+
 uniform sampler2D depthMap;
 
 uniform mat4 modelViewMatrix;
@@ -10,22 +12,22 @@ uniform vec3 lightPosition;
 in vec4 vert;
 in vec2 vertTexCoord;
 
-smooth out vec2 fragTexCoord;
-smooth out vec3 lightDirection;
+out vec3 lightDirection;
+out vec3 eyeVector;
+out vec2 fragTexCoord;
 
 void main()
 {	
 	fragTexCoord = vertTexCoord;
 		
-	float depth = texture(depthMap, vertTexCoord).x;
-			
-	vec4 newVertexPosition = vert;	
-	newVertexPosition.z = depth;
-	
-	vec4 mvNewVert = modelViewMatrix * newVertexPosition;
-	vec3 mvNewVert3 = mvNewVert.xyz / mvNewVert.w;
+	vec4 vertex = vert;	
+	// Adjust z by the value in the depth map
+	vertex.z = texture(depthMap, vertTexCoord).x; 
 
-	lightDirection = normalize(lightPosition - mvNewVert3);	
+	vec4 mvVertex = modelViewMatrix * vertex;
 
-	gl_Position = projectionMatrix * mvNewVert;
+	lightDirection = normalize(lightPosition - mvVertex.xyz);
+	eyeVector = -mvVertex.xyz;
+
+	gl_Position = projectionMatrix * mvVertex;
 } 

@@ -1,5 +1,7 @@
 #version 130
 
+precision highp float;
+
 uniform sampler2D actualPhase;
 uniform sampler2D referencePhase;
 
@@ -10,8 +12,12 @@ out vec4 depthMap;
 
 void main(void)
 {
-	float aPhase = texture(actualPhase, fragTexCoord).r;
-	float rPhase = texture(referencePhase, fragTexCoord).r;
+	vec4 aPhase = texture(actualPhase, fragTexCoord);
 
-	depthMap = vec4((rPhase - aPhase) * scalingFactor);
+	// If the alpha is zero that means we need to filter it off
+	if( 0.0001 >= aPhase.a )
+	{ discard; }
+
+	float rPhase = texture(referencePhase, fragTexCoord).r;
+	depthMap = vec4(vec3((aPhase.r - rPhase) * scalingFactor), 1.0);
 }

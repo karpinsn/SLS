@@ -6,7 +6,7 @@ uniform sampler2D fringeImage1;
 uniform sampler2D fringeImage2;
 
 uniform float gammaCutoff;
-uniform float intensityCufoff;
+uniform float intensityCutoff;
 
 in vec2 fragTexCoord;
 out vec4 phase;
@@ -25,11 +25,11 @@ void main(void)
     float gamma2 = sqrt( pow( ( 2.0 * fringe2.g - fringe2.r - fringe2.b ), 2.0 ) + 3.0 * pow( ( fringe2.r - fringe2.b ), 2.0 ) ) / ( fringe2.r + fringe2.g + fringe2.b );
     float gamma = min( gamma1, gamma2 );
 
-    float intensity1 = sqrt(pow((2.0 * fringe1.g - fringe1.r - fringe1.b), 2.0) + 3.0 * pow((fringe1.r - fringe1.b), 2.0));
-    float intensity2 = sqrt(pow((2.0 * fringe2.g - fringe2.r - fringe2.b), 2.0) + 3.0 * pow((fringe2.r - fringe2.b), 2.0));
+    float intensity1 = (fringe1.r + fringe1.g + fringe1.b) / 3.0;
+    float intensity2 = (fringe2.r + fringe2.g + fringe2.b) / 3.0;
     float intensity = min( intensity1, intensity2 );
 
-	if( gammaCutoff <= gamma && intensityCufoff <= intensity )
+	if( gammaCutoff <= gamma && intensityCutoff <= intensity )
 		{ phase = vec4( phi1S, phi1C, phi2S, phi2C ); }
     else
     	{ phase = vec4( 0.0 ); }

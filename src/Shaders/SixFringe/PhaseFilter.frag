@@ -1,5 +1,7 @@
 #version 130
 
+precision highp float;
+
 /*
   3x3 Median Filter
 
@@ -29,6 +31,10 @@ float step_h = 1.0/height;
 
 void main(void)
 {
+  // Alpha zero means filter out
+  if( 0.0001 >= texture(image, fragTexCoord).a )
+	{ discard; }
+
   float v[9];
   float t;
 
@@ -52,5 +58,5 @@ void main(void)
   m4(v[2], v[3], v[4], v[7]);
   m3(v[3], v[4], v[8]); 
   
-  filteredImage = vec4(v[4], 0.0, 0.0, 0.0);
+  filteredImage = vec4(v[4], 0.0, 0.0, 1.0);
 }

@@ -47,6 +47,7 @@ void SixFringeCapture::resizeInput(int width, int height)
     m_referencePhase.reinit   (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
 	m_depthMap.reinit         (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
     m_normalMap.reinit        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+	m_textureMap.reinit       (width, height, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
 
     //  Resize the image processor
     m_imageProcessor.reinit(width, height);
@@ -56,6 +57,7 @@ void SixFringeCapture::resizeInput(int width, int height)
     m_imageProcessor.setTextureAttachPoint(m_depthMap, m_depthMapAttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
     m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
+	m_imageProcessor.setTextureAttachPoint(m_textureMap, m_textureMapAttachPoint);
     m_imageProcessor.unbind();
 
     //  Send the new size to all of the shaders
@@ -86,6 +88,8 @@ void SixFringeCapture::_initShaders(float width, float height)
   m_phaseWrapper.attachShader(new Shader(GL_FRAGMENT_SHADER, "Shaders/SixFringe/PhaseWrapper.frag"));
   m_phaseWrapper.bindAttributeLocation("vert", 0);
   m_phaseWrapper.bindAttributeLocation("vertTexCoord", 1);
+  m_phaseWrapper.bindOutputLocation("phase", 0);
+  m_phaseWrapper.bindOutputLocation("tex", 1);
   m_phaseWrapper.link();
   m_phaseWrapper.uniform("fringeImage1", 0);
   m_phaseWrapper.uniform("fringeImage2", 1); 
@@ -156,6 +160,7 @@ void SixFringeCapture::_initTextures(GLuint width, GLuint height)
   m_depthMapAttachPoint       = GL_COLOR_ATTACHMENT3_EXT;
   m_normalMapAttachPoint      = GL_COLOR_ATTACHMENT4_EXT;
   m_referencePhaseAttachPoint = GL_COLOR_ATTACHMENT5_EXT;
+  m_textureMapAttachPoint	  = GL_COLOR_ATTACHMENT6_EXT;
 
   m_fringeImage1.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
   m_fringeImage2.init(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
@@ -173,6 +178,7 @@ void SixFringeCapture::_initTextures(GLuint width, GLuint height)
   m_referencePhase.init   (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
   m_depthMap.init         (width, height, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT);
   m_normalMap.init        (width, height, GL_RGB32F_ARB, GL_RGB, GL_FLOAT);
+  m_textureMap.init       (width, height, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
 
   m_imageProcessor.init(width, height);
   m_imageProcessor.setTextureAttachPoint(m_phaseMap0, m_phaseMap0AttachPoint);
@@ -181,6 +187,7 @@ void SixFringeCapture::_initTextures(GLuint width, GLuint height)
   m_imageProcessor.setTextureAttachPoint(m_depthMap, m_depthMapAttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_normalMap, m_normalMapAttachPoint);
   m_imageProcessor.setTextureAttachPoint(m_referencePhase, m_referencePhaseAttachPoint);
+  m_imageProcessor.setTextureAttachPoint(m_textureMap, m_textureMapAttachPoint);
   m_imageProcessor.unbind();
 
   OGLStatus::logOGLErrors("SixFringeCapture - initTextures()");
@@ -202,7 +209,7 @@ Texture& SixFringeCapture::getDepthMap(void)
   { return m_depthMap; }
 
 Texture& SixFringeCapture::getTextureMap(void)
-  { return m_depthMap; } //  TODO - Put the texture map here
+  { return m_textureMap; }
 
 Texture& SixFringeCapture::getNormalMap(void)
   { return m_normalMap; }
@@ -240,7 +247,8 @@ void SixFringeCapture::draw(void)
   {
 	m_imageProcessor.bind();
 	{
-      _wrapPhase( m_phaseMap0AttachPoint );
+	  GLenum drawBuffers[] = { m_phaseMap0AttachPoint, m_textureMapAttachPoint };
+	  _wrapPhase( drawBuffers );
 	  _gaussianFilter( m_phaseMap1AttachPoint, m_phaseMap2AttachPoint, m_phaseMap0, m_phaseMap1 );
 	  _unwrapPhase( m_phaseMap1AttachPoint, m_phaseMap0, m_phaseMap2 );
 	  _filterPhase( m_phaseMap2AttachPoint, m_phaseMap1 );
@@ -350,9 +358,9 @@ void SixFringeCapture::_gaussianFilter( GLenum drawBuffer1, GLenum drawBuffer2, 
   m_imageProcessor.process( );
 }
 
-void SixFringeCapture::_wrapPhase( GLenum drawBuffer )
+void SixFringeCapture::_wrapPhase( GLenum* drawBuffers )
 {
-  m_imageProcessor.bindDrawBuffer( drawBuffer );
+  m_imageProcessor.bindDrawBuffers( 2, drawBuffers );
   m_phaseWrapper.bind();
   //  Grab so that it doesn't change during a draw
   int frontBuffer = m_frontBufferIndex;

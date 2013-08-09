@@ -76,6 +76,7 @@ private:
   GLenum m_depthMapAttachPoint;
   GLenum m_normalMapAttachPoint;
   GLenum m_referencePhaseAttachPoint;
+  GLenum m_textureMapAttachPoint;
 
   shared_ptr<IplImage> m_fringeLoadingImage;
   Texture* m_fringeImages[2][2];  // Buffer and Images
@@ -90,6 +91,7 @@ private:
   Texture m_phaseMap2;
   Texture m_depthMap;
   Texture m_normalMap;
+  Texture m_textureMap;
 
   FBO m_imageProcessor;
 
@@ -146,7 +148,7 @@ private:
   void _initShaders(float width, float height);
   void _initTextures(GLuint width, GLuint height);
 
-  void _wrapPhase( GLenum drawBuffer );
+  void _wrapPhase( GLenum* drawBuffers );
   void _gaussianFilter( GLenum drawBuffer1, GLenum drawBuffer2, Texture& readBuffer1, Texture& readBuffer2 );
   void _unwrapPhase( GLenum drawBuffer, Texture& unfilteredPhase, Texture& filteredPhase );
   void _filterPhase( GLenum drawBuffer, Texture& readBuffer );

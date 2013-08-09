@@ -68,7 +68,7 @@ private:
   ICapture*			  m_captureDecoder;
   Camera			  m_camera;
   Arcball			  m_controller;
-  shared_ptr<TriMesh> m_mesh;
+  shared_ptr<AbstractMesh> m_mesh;
   AxisDisplay		  m_axis;
 
   FPSCalculator		  m_fpsCalculator;

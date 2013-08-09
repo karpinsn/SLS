@@ -1,6 +1,7 @@
 #version 130    // This is needed for the round operator
 
 precision highp float;
+precision highp sampler2D;
 
 in vec3 vert;
 in vec2 vertTexCoord;

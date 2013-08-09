@@ -26,7 +26,8 @@ void CaptureGLWidget::initializeGL()
   m_camera.init(.5f, .5f, 2.5f, .5f, .5f, 0.0f, 0.0f, -1.0f, 0.0f);
   m_camera.setMode(1);
 
-  m_mesh = shared_ptr<TriMesh>(new TriMesh(256, 256));
+  //m_mesh = shared_ptr<TriMesh>(new TriMesh(256, 256));
+  m_mesh = shared_ptr<PointCloudMesh>(new PointCloudMesh(256, 256,1));
   m_mesh->initMesh();
 
   m_finalRenderColor.init();
@@ -76,7 +77,8 @@ void CaptureGLWidget::initializeGL()
 void CaptureGLWidget::resizeCapture(int width, int height)
 {
   //  Resize our mesh that is used for display
-  m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
+  //m_mesh = shared_ptr<TriMesh>(new TriMesh(width, height));
+  m_mesh = shared_ptr<PointCloudMesh>(new PointCloudMesh(width, height,1));
   m_mesh->initMesh();
 
   //  Now resize our capture decoder

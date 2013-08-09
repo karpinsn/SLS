@@ -51,12 +51,12 @@ void PointCloudMesh::_generateTexturedVertices(void)
 	{
 		for(int column = 0; column < m_meshWidth; column += m_pixelsPerPoint)
 		{
-			meshVertices[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].x = (float)column / (float)(m_meshWidth - 1.0);
-			meshVertices[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].y = (float)row / (float)(m_meshHeight - 1.0);
-			meshVertices[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].z = 0.0f;
+			meshVertices[(row / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].x = (float)column / (float)(m_meshWidth - 1.0);
+			meshVertices[(row / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].y = (float)row / (float)(m_meshHeight - 1.0);
+			meshVertices[(row / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].z = 0.0f;
 			
-			texCoord[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].x = (float)column / (float)m_meshWidth;
-			texCoord[(row / m_pixelsPerPoint) * (m_meshHeight / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].y = (float)row / (float)m_meshHeight;
+			texCoord[(row / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].x = (float)column / (float)m_meshWidth;
+			texCoord[(row / m_pixelsPerPoint) * (m_meshWidth / m_pixelsPerPoint) + (column / m_pixelsPerPoint)].y = (float)row / (float)m_meshHeight;
 		}
 	}
 

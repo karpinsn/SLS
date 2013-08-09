@@ -1,6 +1,7 @@
 #version 130	// This is needed for the round operator
 
 precision highp float;
+precision highp sampler2D;
 
 uniform sampler2D fringeImage1;
 uniform sampler2D fringeImage2;
